@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="gateway-common" />
+        <module name="gateway-server" />
+        <module name="gateway-utils" />
+        <module name="httpclientutil" />
+        <module name="puller" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="gateway-common" target="1.8" />
+      <module name="gateway-server" target="1.8" />
+      <module name="gateway-utils" target="1.8" />
+      <module name="httpclientutil" target="1.8" />
+      <module name="pkpm-desktop-gateway.server" target="1.8" />
+      <module name="puller" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

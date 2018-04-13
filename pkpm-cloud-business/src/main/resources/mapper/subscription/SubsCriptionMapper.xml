@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cabr.pkpm.mapper.subscription.SubsCriptionMapper">
+
+	<select id="findSubsId" parameterType="java.lang.Integer" resultType="java.lang.Long">
+		select subs_id
+		from pkpm_cloud_subscription
+		where user_id = #{userId,jdbcType=INTEGER} order by create_time
+	</select>
+	<insert id="saveSubscription"  parameterType="com.cabr.pkpm.entity.subscription.SubsCription" useGeneratedKeys="true" keyProperty="id">
+	    insert into pkpm_cloud_subscription(subs_id,user_id,create_time,pay_channel) values(#{subsId},#{userId},#{createTime},#{payChannel});
+	</insert>
+</mapper>

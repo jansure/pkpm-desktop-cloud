@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cabr.pkpm.mapper.workorder.WorkOrderMapper">
+	  <insert id="saveWorkerOrder" parameterType="java.util.List">
+	  		INSERT INTO pkpm_cloud_work_order (
+				work_id,
+				product_id,
+				product_name,
+				user_id,
+				user_name,
+				user_login_password,
+				user_mobile_number,
+				region_id,
+				region_name,
+				component_id,
+				component_name,
+				host_config_id,
+				host_config_name,
+				cloud_storage_time_id,
+				cloud_storage_time_name,
+				create_time
+			)
+			VALUES
+			<foreach collection="list" item="item" index="index" separator=",">
+				(
+					#{item.workId,jdbcType=BIGINT},
+					#{item.productId,jdbcType=INTEGER},
+					#{item.productName,jdbcType=VARCHAR},
+					#{item.userId,jdbcType=INTEGER},
+					#{item.userName,jdbcType=VARCHAR},
+					#{item.userLoginPassWord,jdbcType=VARCHAR},
+					#{item.userMobileNumber,jdbcType=VARCHAR},
+					#{item.regionId,jdbcType=INTEGER},
+					#{item.regionName,jdbcType=VARCHAR},
+					#{item.componentId,jdbcType=INTEGER},
+					#{item.componentName,jdbcType=VARCHAR},
+					#{item.hostConfigId,jdbcType=INTEGER},
+					#{item.hostConfigName,jdbcType=VARCHAR},
+					#{item.cloudStorageTimeId,jdbcType=INTEGER},
+					#{item.cloudStorageTimeName,jdbcType=VARCHAR},
+					#{item.createTime,jdbcType=DATE}
+				)
+		     </foreach>
+	  
+	  </insert>
+	  
+	  <resultMap type="com.cabr.pkpm.entity.workorder.WorkOrder" id="workOrderMap">
+	  		<result column="work_id" property="workId"/>
+	  		<result column="user_id" property="userId"/>
+	  		<result column="user_name" property="userName"/>
+	  		<result column="user_login_password" property="userLoginPassWord"/>
+	  		<result column="region_name" property="regionName"/>
+	  		<result column="component_name" property="componentName"/>
+	  		<result column="host_config_name" property="hostConfigName"/>
+	  		<result column="host_ip" property="hostIp"/>
+	  		<result column="cloud_storage_time_name" property="cloudStorageTimeName"/>
+	  		<result column="create_time" property="createTime"/>
+	  
+	  </resultMap>
+	  <select id="findWorkOrderList" resultMap="workOrderMap">
+		  	SELECT
+				work_id,
+				user_id,
+				user_name,
+				user_login_password,
+				region_name,
+				component_name,
+				host_config_name,
+				host_ip,
+				cloud_storage_time_name,
+			  	create_time
+			FROM
+				pkpm_cloud_work_order 
+	  </select>
+	  
+	   <select id="findWorkOrderListByUserId" resultMap="workOrderMap" parameterType="java.lang.Integer">
+		  	SELECT
+				work_id,
+				user_id,
+				user_name,
+				user_login_password,
+				region_name,
+				component_name,
+				host_config_name,
+				host_ip,
+				cloud_storage_time_name,
+			  	create_time
+			FROM
+				pkpm_cloud_work_order 
+			WHERE
+				user_id = #{userId}
+	  </select>
+	  
+	  <update id="updateWorkOrder" parameterType="java.lang.Integer"> 
+	     update pkpm_cloud_work_order set  open_time=NOW(),status=1	where  id=#{id};
+	  </update>
+	  
+	  <update id="updatePasswordOrMobileNumberByUserID" parameterType="java.util.Map" >
+		      update pkpm_cloud_work_order
+			   <set >
+			     <if test="userLoginPassword != null" >
+			       user_login_password = #{userLoginPassword,jdbcType=VARCHAR},
+			     </if>
+			     <if test="userMobileNumber != null" >
+			       user_mobile_number = #{userMobileNumber,jdbcType=VARCHAR},
+			     </if>
+			   </set>
+			   
+			  where user_id = #{userId,jdbcType=INTEGER}
+	  </update>
+	  
+	  <select id="findHostIp" parameterType="java.util.Map" resultType="java.lang.String">
+	  		select host_ip
+	  		from pkpm_cloud_work_order
+	  		where user_id = #{userId} and work_id = #{workId} and product_id = #{productId};
+	  </select>
+	  
+	  <select id="findStatus" parameterType="java.util.Map" resultType="java.lang.Integer">
+	  		select status
+	  		from pkpm_cloud_work_order
+	  		where user_id = #{userId} and work_id = #{workId} and product_id = #{productId};
+	  </select>
+</mapper>
