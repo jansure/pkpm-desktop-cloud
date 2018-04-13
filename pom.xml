@@ -10,10 +10,10 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>gateway-utils</module>
-        <module>gateway-server</module>
-        <module>httpclientutil</module>
+        <module>desktop-gateway-server</module>
+        <module>http-client-util</module>
         <module>puller</module>
-        <module>gateway-common</module>
+        <module>desktop-request-bean</module>
     </modules>
 
     <!-- 统一版本号依赖 -->
