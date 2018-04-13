@@ -1,4 +1,4 @@
-package com.pkpm.httpclientutil.exception;
+package com.pkpm.http-client-util.exception;
 
 
 /**

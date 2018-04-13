@@ -1,11 +1,12 @@
 package com.desktop.utils;
 
-import com.desktop.http-client-util.builder.HCB;
 import com.pkpm.httpclientutil.common.HttpConfig;
 import com.pkpm.httpclientutil.common.SSLs;
 import com.pkpm.httpclientutil.exception.HttpProcessException;
 import org.apache.http.Header;
 import org.apache.http.client.HttpClient;
+
+-client-util.builder.HCB;
 
 public class HttpConfigBuilder {
     public static HttpConfig buildHttpConfig(String url,

@@ -6,22 +6,20 @@ import org.apache.commons.lang.StringUtils;
 import java.util.Arrays;
 
 /**
- * 
- * @ClassName: SubscriptionStatusEnum  
- * @Description: 订单状态枚举类  
- * @author wangxiulong  
- * @date 2018年4月13日  
- *
+ * @author wangxiulong
+ * @ClassName: SubscriptionStatusEnum
+ * @Description: 订单状态枚举类
+ * @date 2018年4月13日
  */
 public enum SubscriptionStatusEnum {
     /**
-     *  无效
+     * 无效
      */
-	INVALID,
+    INVALID,
     /**
      * 有效
      */
-	VALID;
+    VALID;
 
     public static SubscriptionStatusEnum eval(String code) {
         return Arrays.stream(values())

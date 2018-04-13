@@ -1,4 +1,4 @@
-package com.pkpm.httpclientutil;
+package com.pkpm.http-client-util;
 
 import lombok.Data;
 
