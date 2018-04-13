@@ -63,12 +63,12 @@
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
         </dependency>
-        <dependency>
-            <groupId>com.arronlong</groupId>
-            <artifactId>httpclientutil</artifactId>
-            <version>1.0</version>
-        </dependency>
 
+        <dependency>
+        	<groupId>com.pkpm</groupId>
+        	<artifactId>http-client-util</artifactId>
+        	<version>1.0</version>
+        </dependency>
     </dependencies>
 
 
