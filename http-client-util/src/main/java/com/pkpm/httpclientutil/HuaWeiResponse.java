@@ -1,4 +1,4 @@
-package com.pkpm.http-client-util;
+package com.pkpm.httpclientutil;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;

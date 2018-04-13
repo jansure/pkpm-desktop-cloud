@@ -202,6 +202,10 @@
 		<dependency>
 			<groupId>com.pkpm</groupId>
 			<artifactId>http-client-util</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>http-client-util</groupId>
+			<artifactId>http-client-util</artifactId>
 			<version>1.0</version>
 		</dependency>
 	</dependencies>
