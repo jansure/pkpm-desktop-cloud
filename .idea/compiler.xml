@@ -6,24 +6,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="desktop-gateway-server" />
+        <module name="desktop-request-bean" />
         <module name="gateway-common" />
         <module name="gateway-server" />
         <module name="gateway-utils" />
         <module name="http-client-util" />
+        <module name="http-lientutil" />
         <module name="httpclientutil" />
         <module name="puller" />
-      </profile>
-      <profile name="Annotation profile for pkpm-desktop-gateway.server" enabled="true">
-        <sourceOutputDir name="../gateway-common/target/generated-sources/annotations" />
-        <sourceTestOutputDir name="../gateway-common/target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="desktop-request-bean" />
-      </profile>
-      <profile name="Annotation profile for desktop-gateway-server" enabled="true">
-        <sourceOutputDir name="../gateway-server/target/generated-sources/annotations" />
-        <sourceTestOutputDir name="../gateway-server/target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="desktop-gateway-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -33,6 +24,7 @@
       <module name="gateway-server" target="1.8" />
       <module name="gateway-utils" target="1.8" />
       <module name="http-client-util" target="1.8" />
+      <module name="http-lientutil" target="1.8" />
       <module name="httpclientutil" target="1.8" />
       <module name="pkpm-desktop-cloud" target="1.8" />
       <module name="pkpm-desktop-gateway.server" target="1.8" />
