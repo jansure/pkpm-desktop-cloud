@@ -1,4 +1,4 @@
-package com.pkpm.http-client-util;
+package com.pkpm.httpclientutil;
 
 import com.pkpm.httpclientutil.builder.HCB;
 import com.pkpm.httpclientutil.common.HttpConfig;
