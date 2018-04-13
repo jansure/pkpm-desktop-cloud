@@ -5,7 +5,7 @@
     <file url="file://$PROJECT_DIR$/desktop-gateway-server" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/desktop-request-bean" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/gateway-utils" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/httpclientutil" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/http-client-util" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/puller" charset="UTF-8" />
   </component>
 </project>
