@@ -14,5 +14,10 @@ public class SubsCription implements Serializable {
 	private LocalDateTime createTime;
 	private String remark;
 	private String payChannel;
+	private Integer adId;
+	private String projectId;
+	private String desktopId;
+	private Integer status;
+	
 	
 }

@@ -161,7 +161,7 @@ public class CommonRequestBeanUtil {
         Preconditions.checkArgument(StringUtils.isNotBlank(desktopId), "desktopId不能为空");
         Preconditions.checkArgument(StringUtils.isNotBlank(userName), "userName不能为空");
         Integer userId = commonRequestBean.getUserId();
-        Integer subsId = commonRequestBean.getSubsId();
+        Long subsId = commonRequestBean.getSubsId();
         Integer adId = commonRequestBean.getAdId();
         Preconditions.checkArgument(null != userId, "userId不能为空");
         Preconditions.checkArgument(null != subsId, "subsId不能为空");
@@ -171,7 +171,7 @@ public class CommonRequestBeanUtil {
     public static void checkStatusCommonRequestBean(CommonRequestBean commonRequestBean) {
         Preconditions.checkArgument(null != commonRequestBean, "请传入正确的参数");
         String projectId = commonRequestBean.getProjectId();
-        Integer subsId = commonRequestBean.getSubsId();
+        Long subsId = commonRequestBean.getSubsId();
         Integer userId = commonRequestBean.getUserId();
         Integer adId = commonRequestBean.getAdId();
         Preconditions.checkArgument(StringUtils.isNotBlank(projectId), "projectId不能为空");

@@ -18,7 +18,7 @@ public class PkpmOperatorStatus implements Serializable {
     //默认值为null,强制赋值；
     private String projectId =null;
     private Integer userId =-1;//默认值为-1，
-    private Integer subsId =-1;
+    private Long subsId =-1L;
     private Integer adId=null;
     private String userName=null;
     private String desktopId = "";

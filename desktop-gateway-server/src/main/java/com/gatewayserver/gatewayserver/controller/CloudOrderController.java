@@ -39,14 +39,14 @@ public class CloudOrderController {
 	 * @author yangpengfei
 	 * @time 2018年4月13日 上午11:16:07
 	 */
-	@RequestMapping(value = "/getAdAndProject/{areaCode}", method = RequestMethod.GET)
-    public ResultObject getAdAndProject(@PathVariable(value = "areaCode") String areaCode) {
-        Map<String, String> adAndProject = cloudOrderService.getAdAndProject(areaCode, null);
-
-        if (StringUtils.isNotBlank(adAndProject.get("adId")) && StringUtils.isNotBlank(adAndProject.get("projectId"))) {
-            return ResultObject.success(adAndProject, "获取成功!");
-        }
-
-        return ResultObject.failure("没有获取到AdId和ProjectId！");
-    }
+	@RequestMapping(value = "/getAdAndProject", method = RequestMethod.GET)
+	public ResultObject getAdAndProject( String areaCode) {
+		Map<String, String> adAndProject = cloudOrderService.getAdAndProject(areaCode, null);
+		
+		if (StringUtils.isNotBlank(adAndProject.get("adId")) && StringUtils.isNotBlank(adAndProject.get("projectId"))) {
+			return ResultObject.success(adAndProject, "获取成功!");
+		}
+		
+		return ResultObject.failure("没有获取到AdId和ProjectId！");
+	}
 }

@@ -299,7 +299,7 @@ public class CommonRequestBeanBuilder {
         Desktop desktop = desktopList.get(0);
         String desktopId = desktop.getDesktopId();
         Integer adId = commonRequestBean.getAdId();
-        Integer subsId = commonRequestBean.getSubsId();
+        Long subsId = commonRequestBean.getSubsId();
         Integer userId = commonRequestBean.getUserId();
 
         CommonRequestBean commonReq = new CommonRequestBean();

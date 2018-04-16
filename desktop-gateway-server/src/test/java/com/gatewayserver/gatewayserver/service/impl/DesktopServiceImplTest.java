@@ -35,7 +35,7 @@ public class DesktopServiceImplTest {
         info.setOuName("pkpm");
         info.setAdId(1);
         info.setUserId(145);
-        info.setSubsId(4);
+        info.setSubsId(4L);
         info.setOperatorStatusId(14);// AD
         desktopService.createAdAndDesktop(info);
 
