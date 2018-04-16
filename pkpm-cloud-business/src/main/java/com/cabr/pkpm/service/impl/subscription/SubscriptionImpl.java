@@ -83,13 +83,9 @@ public class SubscriptionImpl implements ISubscription {
 		//String urlGetAdAndProject =serverHost + "/cloudOrder/getAdAndProject/" + areaCode;
 		String urlGetAdAndProject =serverHost + "/cloudOrder/getAdAndProject?areaCode=" + areaCode;
 //		String urlGetAdAndProject =serverHost + "/cloudOrder/getAdAndProject?s=" + "4565";
-		String adAndProjectResponse = HttpClientUtil.mysend(
-				HttpConfigBuilder.buildHttpConfigNoToken(urlGetAdAndProject,  5, "utf-8", 100000).method(HttpMethods.GET));
-		
+		String adAndProjectResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(urlGetAdAndProject,  5, "utf-8", 100000).method(HttpMethods.GET));
 		
 		MyHttpResponse adAndProjectHttpResponse = JsonUtil.deserialize(adAndProjectResponse, MyHttpResponse.class);
-		
-		
 		Integer adStatusCode = adAndProjectHttpResponse.getStatusCode();
 		if( HttpStatus.OK.value() == adStatusCode){
 		
@@ -120,6 +116,7 @@ public class SubscriptionImpl implements ISubscription {
 			this.result.set("创建订单失败,请您重试", 0);
 			return this.result;
 		}
+		
 		SubsDetails subsDetails = new SubsDetails();
 		subsDetails.setSubsId(subsId);
 		Integer productId = (Integer) wo.getProductId();
@@ -135,11 +132,7 @@ public class SubscriptionImpl implements ISubscription {
 		}
 		
 		//1、应该是传入regionCode,获取到adId和projectId
-		
-		
-		
 		String regionName = wo.getRegionName();
-		
 		//2、传入commonrequestbean,创建ad和desktop
 		CommonRequestBean commonRequestBean = new CommonRequestBean();
 		commonRequestBean.setUserId(userId);
@@ -159,11 +152,11 @@ public class SubscriptionImpl implements ISubscription {
 		
 		String urlCreateAdAndDesktop =serverHost + "/desktop/createAdAndDesktop";
 	
-			String strJson = JsonUtil.serialize(commonRequestBean);
-			String strResponse = HttpClientUtil.mysend(
-					HttpConfigBuilder.buildHttpConfigNoToken(urlCreateAdAndDesktop, strJson, 5, "utf-8", 10000).method(HttpMethods.POST));
-			MyHttpResponse myHttpResponse = JsonUtil.deserialize(strResponse, MyHttpResponse.class);
-			Integer statusCode = myHttpResponse.getStatusCode();
+		String strJson = JsonUtil.serialize(commonRequestBean);
+		String strResponse = HttpClientUtil.mysend(
+				HttpConfigBuilder.buildHttpConfigNoToken(urlCreateAdAndDesktop, strJson, 5, "utf-8", 10000).method(HttpMethods.POST));
+		MyHttpResponse myHttpResponse = JsonUtil.deserialize(strResponse, MyHttpResponse.class);
+		Integer statusCode = myHttpResponse.getStatusCode();
 			//3、创建成功后,返回参数给前台
 			if(HttpStatus.OK.value() == statusCode){
 				

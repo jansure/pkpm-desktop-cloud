@@ -44,6 +44,9 @@ public class CloudOrderController {
 		Map<String, String> adAndProject = cloudOrderService.getAdAndProject(areaCode, null);
 		
 		if (StringUtils.isNotBlank(adAndProject.get("adId")) && StringUtils.isNotBlank(adAndProject.get("projectId"))) {
+			log.info(adAndProject.get("adId"));
+			log.info(adAndProject.get("projectId"));
+			
 			return ResultObject.success(adAndProject, "获取成功!");
 		}
 		
