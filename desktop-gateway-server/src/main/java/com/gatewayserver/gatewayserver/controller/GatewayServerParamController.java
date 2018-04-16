@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @RestController
 @Slf4j
-@RequestMapping("param")
+@RequestMapping("params")
 public class GatewayServerParamController {
 
 	@Resource
