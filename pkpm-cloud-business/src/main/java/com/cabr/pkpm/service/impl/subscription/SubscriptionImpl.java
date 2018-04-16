@@ -11,7 +11,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +37,16 @@ import com.cabr.pkpm.utils.StringUtil;
 import com.cabr.pkpm.utils.sdk.ClientDemo;
 import com.cabr.pkpm.utils.sdk.RedisCacheUtil;
 import com.cabr.pkpm.vo.MyProduct;
+import com.desktop.utils.HttpConfigBuilder;
+import com.desktop.utils.JsonUtil;
+import com.desktop.utils.exception.Exceptions;
+import com.desktop.utils.page.ResultObject;
 import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
+import com.gatewayserver.gatewayserver.domain.PkpmOperatorStatus;
+import com.pkpm.httpclientutil.HttpClientUtil;
+import com.pkpm.httpclientutil.MyHttpResponse;
+import com.pkpm.httpclientutil.common.HttpMethods;
+import com.pkpm.httpclientutil.exception.HttpProcessException;
 @Service
 @Transactional
 public class SubscriptionImpl implements ISubscription {
@@ -45,21 +56,48 @@ public class SubscriptionImpl implements ISubscription {
 	@Autowired
 	private SubsDetailsMapper subsDetailsMapper;
 	@Autowired
-	private IProductService productService;
-	@Autowired
-	private WorkOrderMapper workOrderMapper;
-	@Autowired
 	private RedisCacheUtil<MyProduct> redisCacheUtil;
+	@Autowired
+	private StringRedisTemplate stringRedisTemplate;
+
+	@Value("${server.host}")
+	private String serverHost;
 	
 	protected ResponseResult result = new ResponseResult();
 	protected final Log logger = LogFactory.getLog(getClass());
 	/**
-	 * 保存订单，保存工单，保存订单明细
-	 * 
+	 * 1、保存订单，保存订单明细
+	 * 2、获取projectId和AdId
+	 * 3、调用创建桌面接口,返回给前台
 	 */
-	@SuppressWarnings("unused")
+	@SuppressWarnings({ "unused", "unchecked" })
 	@Override
 	public ResponseResult saveSubsDetails(UserInfo userInfo,WorkOrderVO wo) {
+		
+		
+		String adId = "";
+		String projectId = "";
+		
+	try {
+		String areaCode = "cn-north-1";
+		//String urlGetAdAndProject =serverHost + "/cloudOrder/getAdAndProject/" + areaCode;
+		String urlGetAdAndProject =serverHost + "/cloudOrder/getAdAndProject?areaCode=" + areaCode;
+//		String urlGetAdAndProject =serverHost + "/cloudOrder/getAdAndProject?s=" + "4565";
+		String adAndProjectResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(urlGetAdAndProject,  5, "utf-8", 100000).method(HttpMethods.GET));
+		
+		MyHttpResponse adAndProjectHttpResponse = JsonUtil.deserialize(adAndProjectResponse, MyHttpResponse.class);
+		Integer adStatusCode = adAndProjectHttpResponse.getStatusCode();
+		if( HttpStatus.OK.value() == adStatusCode){
+		
+			String body = adAndProjectHttpResponse.getBody();
+			ResultObject result = JsonUtil.deserialize(body, ResultObject.class);
+			Integer code = result.getCode();
+			if(HttpStatus.OK.value() == code){
+				Map<String,String> map = (Map<String, String>) result.getData();
+				 adId = map.get("adId");
+				 projectId = map.get("projectId");
+			}
+		}
 		
 		SubsCription subscription = new SubsCription();
 		long subsId = IDUtil.genOrderId();
@@ -69,14 +107,16 @@ public class SubscriptionImpl implements ISubscription {
 		subscription.setPayChannel("0");
 		Integer userId = userInfo.getUserID();
 		subscription.setUserId(userId);
-		
-		List<WorkOrder> workOrderList = new ArrayList<WorkOrder>();
+		subscription.setProjectId(projectId);
+		subscription.setAdId(Integer.parseInt(adId));
+		subscription.setStatus(0);
 		
 		Integer subscriptionCount = subscriptionMapper.saveSubscription(subscription);
 		if(subscriptionCount<1){
 			this.result.set("创建订单失败,请您重试", 0);
 			return this.result;
 		}
+		
 		SubsDetails subsDetails = new SubsDetails();
 		subsDetails.setSubsId(subsId);
 		Integer productId = (Integer) wo.getProductId();
@@ -91,73 +131,58 @@ public class SubscriptionImpl implements ISubscription {
 			return this.result;
 		}
 		
-//		List<ProductNameVO> productNameVOList = wo.getProductNameVOList();
-//		StringBuilder stringBuilder = new StringBuilder();
-//		for (ProductNameVO productNameVO : productNameVOList) {
-//			WorkOrder workOrder = new WorkOrder();
-//			workOrder.setCreateTime(date);
-//			workOrder.setWorkId(subsId);
-//			workOrder.setProductId(wo.getProductId());
-//			workOrder.setProductName(wo.getProductName());
-//			workOrder.setUserId(userInfo.getUserID());
-//			workOrder.setUserName(userInfo.getUserName());
-//			workOrder.setUserLoginPassWord(userInfo.getUserLoginPassword());
-//			workOrder.setUserMobileNumber(userInfo.getUserMobileNumber());
-//			workOrder.setRegionId(wo.getRegionId());
-//			workOrder.setRegionName(wo.getRegionName());
-//			workOrder.setComponentId(Integer.parseInt(productNameVO.getProductId()));
-//			workOrder.setComponentName(productNameVO.getProductName());
-//			workOrder.setHostConfigId(wo.getHostConfigId());
-//			workOrder.setHostConfigName(wo.getHostConfigName());
-//			workOrder.setCloudStorageTimeId(wo.getCloudStorageTimeId());
-//			workOrder.setCloudStorageTimeName(wo.getCloudStorageTimeName());
-//			workOrderList.add(workOrder);
-//			stringBuilder.append(productNameVO.getProductName()).append(",");
-//		}
-//		Integer workOrderCount = workOrderMapper.saveWorkerOrder(workOrderList);
-//		if(workOrderCount<1){
-//			this.result.set("创建订单失败,请您重试", 0);
-//			return this.result;
-//		}
-		
 		//1、应该是传入regionCode,获取到adId和projectId
 		String regionName = wo.getRegionName();
-		String areaCode = "cn-north-1";
-		
-		
-		
-		
 		//2、传入commonrequestbean,创建ad和desktop
 		CommonRequestBean commonRequestBean = new CommonRequestBean();
+		commonRequestBean.setUserId(userId);
+		commonRequestBean.setUserName(userInfo.getUserName());
+		commonRequestBean.setUserLoginPassword(userInfo.getUserLoginPassword());
+		commonRequestBean.setDataVolumeSize(100);
+		commonRequestBean.setSubsId(subsId);   //   字段不统一？？？  long  - integer
+		commonRequestBean.setOperatorStatusId(null);  
 		
+		commonRequestBean.setHwProductId("workspace.c2.large.windows");   //？？？
+		commonRequestBean.setOuName("pkpm");
+		commonRequestBean.setUserEmail("cherishpf@163.com");
+		commonRequestBean.setProjectId(projectId);   //
+		commonRequestBean.setAdId(Integer.parseInt(adId));
+		commonRequestBean.setImageId("997488ed-fa23-4671-b88c-d364c0405334");   //前端传过来的ID
+		commonRequestBean.setGloryProductName("kbp-test");
 		
-		//3、创建成功后,返回参数给前台
-		
-		
-		
-		
-		
-		this.result.set("申请立即使用成功,稍后为您立即开通", 1);
-		
-		redisCacheUtil.delete("MyProduct:"+userId);
-		
-//		String productNameStr= stringBuilder.toString();
-//		productNameStr = productNameStr.substring(0,productNameStr.length()-1);
-//		try {
-//			String message = "用户名为:" + userInfo.getUserName() + "的客户正在申请"+productNameStr+"云产品服务,请您立即为其开通!";
-//			String operationMobileNumber = "15117963494";
-//			ClientDemo clientDemo = new ClientDemo();
-//			clientDemo.smsPublish(operationMobileNumber, message);
-//			this.result.set("发送短信成功", 1);
-//			logger.debug(this.result.getMessage());
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			logger.error("发送短信产异常:" + e);
-//			this.result.set("发送短信失败", 0);
-//		}
-		
-		
-		return this.result;
+		String urlCreateAdAndDesktop =serverHost + "/desktop/createAdAndDesktop";
+	
+		String strJson = JsonUtil.serialize(commonRequestBean);
+		String strResponse = HttpClientUtil.mysend(
+				HttpConfigBuilder.buildHttpConfigNoToken(urlCreateAdAndDesktop, strJson, 5, "utf-8", 10000).method(HttpMethods.POST));
+		MyHttpResponse myHttpResponse = JsonUtil.deserialize(strResponse, MyHttpResponse.class);
+		Integer statusCode = myHttpResponse.getStatusCode();
+			//3、创建成功后,返回参数给前台
+			if(HttpStatus.OK.value() == statusCode){
+				
+				String body = myHttpResponse.getBody();
+				ResultObject result = JsonUtil.deserialize(body, ResultObject.class);
+				Integer code = result.getCode();
+				if(HttpStatus.OK.value() == code){
+					
+					PkpmOperatorStatus  pkpmOperatorStatus = new PkpmOperatorStatus();
+					pkpmOperatorStatus.setProjectId(projectId);
+					pkpmOperatorStatus.setSubsId(subsId);  //字段不统一
+					pkpmOperatorStatus.setAdId(Integer.parseInt(adId));
+					pkpmOperatorStatus.setUserId(userId);
+					//pkpmOperatorStatus.                   //得setAreaCode字段
+					this.result.set("恭喜您创建桌面成功!", 200, pkpmOperatorStatus);
+					redisCacheUtil.delete("MyProduct:"+userId);
+					return this.result;
+					
+				}
+			}
+			
+		} catch (HttpProcessException e) {
+			e.printStackTrace();
+			throw  Exceptions.newBusinessException("创建桌面失败!请重新尝试!");
+		}
+		throw  Exceptions.newBusinessException("申请试用失败,请稍后重试!");
 		
 	}
 

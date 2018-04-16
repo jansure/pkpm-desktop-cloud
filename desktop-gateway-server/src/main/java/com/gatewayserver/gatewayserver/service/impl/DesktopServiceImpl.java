@@ -205,6 +205,7 @@ public class DesktopServiceImpl implements DesktopService {
 				pkpmJob.setWorkspaceId(projectDef.getWorkspaceId());
 				pkpmJob.setStatus(JobStatusEnum.INITIAL.toString());
 				pkpmJob.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
+				
 				pkpmJobStatusDAO.insert(pkpmJob);
 				// 更新到PkpmOperatorStatus
 				PkpmOperatorStatus pkpmOperatorStatus = new PkpmOperatorStatus();
@@ -321,11 +322,11 @@ public class DesktopServiceImpl implements DesktopService {
 				pkpmOperator.setFinishTime(LocalDateTime.now());
 				pkpmOperatorStatusDAO.save(pkpmOperator);
 
-				ResultObject resultObject = adService.deleteComputer(requestBean.getDesktops().get(0).getComputerName(),
+				adService.deleteComputer(requestBean.getDesktops().get(0).getComputerName(),
 						requestBean.getAdId());
-				if (resultObject.getCode() == HttpStatus.OK.value()) {
+
 					return "正在删除桌面,请稍等!";
-				}
+
 			}
 
 		} catch (HttpProcessException httpProcessException) {

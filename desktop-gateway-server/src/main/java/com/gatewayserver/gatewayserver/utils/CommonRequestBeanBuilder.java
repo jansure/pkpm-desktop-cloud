@@ -96,6 +96,7 @@ public class CommonRequestBeanBuilder {
 		// pkpmToken配置
 		PkpmToken pkpmToken = new PkpmToken();
 		pkpmToken.setToken(workspaceService.createToken(commonRequestBean.getProjectId()));
+		System.out.println("========"+commonRequestBean.getProjectId());
 		commonRequestBean.setPkpmToken(pkpmToken);
 		PkpmProjectDef projectDef = pkpmProjectDefDAO.selectById(commonRequestBean.getProjectId());
 		if (projectDef != null) {
@@ -299,7 +300,7 @@ public class CommonRequestBeanBuilder {
         Desktop desktop = desktopList.get(0);
         String desktopId = desktop.getDesktopId();
         Integer adId = commonRequestBean.getAdId();
-        Integer subsId = commonRequestBean.getSubsId();
+        Long subsId = commonRequestBean.getSubsId();
         Integer userId = commonRequestBean.getUserId();
 
         CommonRequestBean commonReq = new CommonRequestBean();

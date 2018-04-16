@@ -2,12 +2,12 @@ package com.gatewayserver.gatewayserver.controller;
 
 import com.desktop.utils.page.ResultObject;
 import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
-import com.gatewayserver.gatewayserver.dto.AdUser;
+import com.gatewayserver.gatewayserver.dto.ad.AdComputer;
+import com.gatewayserver.gatewayserver.dto.ad.AdUser;
 import com.gatewayserver.gatewayserver.service.AdService;
+import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,10 +28,20 @@ public class AdController {
      * @Param: * @param adUser
      * @Return ResultObject
      */
-    @RequestMapping("/user/add")
-    public ResultObject addUser(CommonRequestBean requestBean) {
-        adService.addAdUser(requestBean);
-        return ResultObject.success("用户添加成功");
+    @RequestMapping(value = "/user/add",method = RequestMethod.POST)
+    public ResultObject addUser(@RequestBody CommonRequestBean requestBean) {
+        String response = adService.addAdUser(requestBean);
+        return ResultObject.success(response,"用户添加成功");
+    }
+    /**
+     * @Description: 添加用户至AD域 根据ADUser内的AdId字段插入对应的AD域；
+     * @Param: * @param adUser
+     * @Return ResultObject
+     */
+    @RequestMapping(value = "/user/update",method = RequestMethod.POST)
+    public ResultObject updateUser(@RequestBody CommonRequestBean requestBean) {
+        String response = adService.updateAdUser(requestBean);
+        return ResultObject.success(response,"密码添加成功");
     }
     /**
      * @Description: 查询某一AD域下的所有用户；
@@ -39,33 +49,26 @@ public class AdController {
      * @Return ResultObject
      */
 
-    @RequestMapping("/user/count")
-    public ResultObject get(@RequestParam("adIpAddress") String adIpAddress) {
-        int count = adService.getUserCountByAdIpAddress(adIpAddress);
-        return ResultObject.success(count,"SUCCESS");
-    }
-
-    /**
-     * @Description: 查询某一AD域下的所有用户；
-     * @Param: * @param adId
-     * @Return ResultObject
-     */
-
-    @RequestMapping("/queryUserList")
+    @RequestMapping(value = "user/list",method = RequestMethod.GET)
     public ResultObject selectUsers(@RequestParam("adId") Integer adId) {
         List<AdUser> adUsers= adService.getUsersByAdId(adId);
         return ResultObject.success(adUsers,"SUCCESS");
     }
 
+
     /**
-     * @Description: 查询某一AD域下的所有计算机；
-     * @Param: * @param adId
+     * @Description: 根据用户名删除用户
+     * @Param: * @param userName,adId
      * @Return ResultObject
      */
-    @RequestMapping("/queryComputerList")
-    public ResultObject selectComputer(@RequestParam("adId") Integer adId) {
-        ResultObject resultObject = adService.getComputersByAdId(adId);
-        return resultObject;
+
+    @RequestMapping(value = "user/delete",method = RequestMethod.POST)
+    public ResultObject deleteUser(CommonRequestBean requestBean) {
+        Preconditions.checkNotNull(requestBean);
+        Integer adId = requestBean.getAdId();
+        String userName = requestBean.getUserName();
+        adService.deleteUser(userName, adId);
+        return ResultObject.success(userName,"删除成功");
     }
 
     /**
@@ -74,22 +77,43 @@ public class AdController {
      * @Return ResultObject
      */
 
-    @RequestMapping("/checkUser")
+    @RequestMapping(value = "user/check",method = RequestMethod.POST)
     public boolean checkUser(@RequestParam("userName") String userName, @RequestParam("adId") Integer adId) {
         boolean result = adService.checkUser(userName, adId);
         return result;
     }
 
     /**
-     * @Description: 根据用户名删除用户
-     * @Param: * @param userName,adId
+     * @Description: 查询AdHost下的用户数量
+     * @Param: * @param adId
      * @Return ResultObject
      */
+    @RequestMapping(value = "/user/count",method = RequestMethod.GET)
+    public ResultObject get(@RequestParam("adIpAddress") String adIpAddress) {
+        int count = adService.getUserCountByAdIpAddress(adIpAddress);
+        return ResultObject.success(count,"SUCCESS");
+    }
 
-    @RequestMapping("/deleteUser")
-    public ResultObject deleteUser(@RequestParam("userName") String userName, @RequestParam("adId") Integer adId) {
-        ResultObject resultObject = adService.deleteUser(userName, adId);
-        return resultObject;
+    /**
+     * @Description: 查询AdHost 某一组织 下的用户数量
+     * @Param: * @param adId
+     * @Return ResultObject
+     */
+    @RequestMapping(value = "/user/count/ou",method = RequestMethod.GET)
+    public ResultObject get(@RequestParam("adId") Integer adId) {
+        int count = adService.getUserOuCountByAdId(adId);
+        return ResultObject.success(count,"列表获取成功");
+    }
+
+    /**
+     * @Description: 查询某一AD域下的所有计算机；
+     * @Param: * @param adId
+     * @Return ResultObject
+     */
+    @RequestMapping("computer/list")
+    public ResultObject selectComputer(@RequestParam("adId") Integer adId) {
+        List<AdComputer> computers= adService.getComputersByAdId(adId);
+        return ResultObject.success(computers,"列表获取成功");
     }
 
     /**
@@ -97,11 +121,13 @@ public class AdController {
      * @Param: * @param userName,adId
      * @Return ResultObject
      */
-
-    @RequestMapping("/deleteComputer")
-    public ResultObject deleteComputer(@RequestParam("computerName") String computerName, @RequestParam("adId") Integer adId) {
-        ResultObject resultObject = adService.deleteUser(computerName, adId);
-        return resultObject;
+    @RequestMapping(value = "computer/delete",method = RequestMethod.POST)
+    public ResultObject deleteComputer(CommonRequestBean requestBean) {
+        Preconditions.checkNotNull(requestBean);
+        Integer adId = requestBean.getAdId();
+        String computerName = requestBean.getDesktops().get(0).getComputerName();
+        adService.deleteComputer(computerName, adId);
+        return ResultObject.success(computerName,"删除成功");
     }
 
 

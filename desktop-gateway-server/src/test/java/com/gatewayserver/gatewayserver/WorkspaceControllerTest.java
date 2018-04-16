@@ -61,7 +61,7 @@ public class WorkspaceControllerTest {
         info.setOuName("pkpm");
         info.setAdId(1);
         info.setUserId(88);
-        info.setSubsId(4);
+        info.setSubsId(4L);
         info.setOperatorStatusId(14);// AD域创建后调用创建桌面接口时传入的jobId，创建桌面任务生成后会更新此jobId
         String requestJson = JSONObject.toJSONString(info);
         mockMvc.perform(MockMvcRequestBuilders.post("/desktop/createDesktop").contentType(MediaType.APPLICATION_JSON)

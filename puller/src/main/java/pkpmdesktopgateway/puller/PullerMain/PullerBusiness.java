@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.Header;
 import org.apache.http.client.HttpClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import com.pkpm.httpclientutil.HuaWeiResponse;
 import com.pkpm.httpclientutil.MyHttpResponse;
 import com.pkpm.httpclientutil.builder.HCB;
 import com.pkpm.httpclientutil.common.HttpConfig;
+import com.pkpm.httpclientutil.common.HttpHeader;
 import com.pkpm.httpclientutil.common.HttpMethods;
 import com.pkpm.httpclientutil.common.util.PropertiesUtil;
 
@@ -39,7 +41,7 @@ public class PullerBusiness {
 	/**
 	 * 设置pkpmCloud的主机地址
 	 */
-	private static final String cloudHost = PropertiesUtil.getProperty("puller_config.properties", "cloud_host");
+	private static final String businessHost = PropertiesUtil.getProperty("puller_config.properties", "business_host");
 
 	
 	/**
@@ -488,7 +490,7 @@ public class PullerBusiness {
 		
 		String url = serverHost + "/puller/updateJobTask";
 		
-		//设置请参数
+		//设置请求参数
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("jobId", jobId);
 		jsonMap.put("status", status);
@@ -601,7 +603,7 @@ public class PullerBusiness {
 	 */   
 	private void updateCloudSubscription(JobDetail detail) {
 		
-		String url = cloudHost + "/puller/updateJobTask";
+		String url = businessHost + "/puller/updateJobTask";
 		
 		//设置请参数
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
@@ -650,5 +652,5 @@ public class PullerBusiness {
 		}
 		
 	}
-
+	
 }

@@ -3,9 +3,8 @@ package com.gatewayserver.gatewayserver.service;
 
 import com.desktop.utils.page.ResultObject;
 import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
-import com.gatewayserver.gatewayserver.dto.AdUser;
-import com.unboundid.ldap.sdk.LDAPConnectionPool;
-import com.unboundid.ldap.sdk.LDAPException;
+import com.gatewayserver.gatewayserver.dto.ad.AdComputer;
+import com.gatewayserver.gatewayserver.dto.ad.AdUser;
 
 import org.springframework.stereotype.Service;
 
@@ -15,16 +14,17 @@ import java.util.List;
 public interface AdService {
 
 
+    String addAdUser(CommonRequestBean requestBean) ;
 
+    String updateAdUser(CommonRequestBean requestBean);
 
-    void addAdUser(CommonRequestBean requestBean) ;
-
-    void updateAdUser(CommonRequestBean requestBean);
-
-    List<AdUser> getUsersByAdId(Integer adId);
     int getUserCountByAdIpAddress(String adIpAddress);
 
-    ResultObject getComputersByAdId(Integer adId);
+    int getUserOuCountByAdId(Integer adId);
+
+    List<AdUser> getUsersByAdId(Integer adId);
+
+    List<AdComputer>  getComputersByAdId(Integer adId);
 
     /**
      * @Description: 检查用户是否存在
@@ -33,8 +33,8 @@ public interface AdService {
      */
     boolean checkUser(String userName, Integer adId);
 
-    ResultObject deleteUser(String userName, Integer adId);
+    void deleteUser(String userName, Integer adId);
 
-    ResultObject deleteComputer(String computerName, Integer adId);
+    void deleteComputer(String computerName, Integer adId);
 
 }

@@ -140,7 +140,7 @@ public class PullerController {
      * @Title: updateJobTask
      * @Description: 更新Job任务表
      */
-    @RequestMapping(value = "/updateJobTask", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateJobTask", method = RequestMethod.POST, consumes = "application/json")
     public ResultObject updateJobTask(String jobId, String status) {
         if (StringUtils.isEmpty(jobId)) {
             return ResultObject.failure("jobId不能为空！");
