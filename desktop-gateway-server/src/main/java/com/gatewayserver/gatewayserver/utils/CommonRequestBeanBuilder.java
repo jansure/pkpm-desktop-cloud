@@ -96,6 +96,7 @@ public class CommonRequestBeanBuilder {
 		// pkpmToken配置
 		PkpmToken pkpmToken = new PkpmToken();
 		pkpmToken.setToken(workspaceService.createToken(commonRequestBean.getProjectId()));
+		System.out.println("========"+commonRequestBean.getProjectId());
 		commonRequestBean.setPkpmToken(pkpmToken);
 		PkpmProjectDef projectDef = pkpmProjectDefDAO.selectById(commonRequestBean.getProjectId());
 		if (projectDef != null) {

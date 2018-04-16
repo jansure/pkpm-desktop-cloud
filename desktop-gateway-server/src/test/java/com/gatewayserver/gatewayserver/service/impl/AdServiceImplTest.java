@@ -39,7 +39,7 @@ public class AdServiceImplTest {
         requestBean.setAdId(1);
         requestBean.setProjectId("9487c2cb4c4d4c828868098b7a78b497");
         requestBean.setUserId(100);
-        requestBean.setUserName("xuhe10");
+        requestBean.setUserName("xuhefafaf");
         requestBean.setSubsId(1L);
         requestBean.setUserEmail("new@163.com");
 
