@@ -1,13 +1,10 @@
 package com.cabr.pkpm.service.impl.subscription;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,23 +15,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
-import com.cabr.pkpm.entity.product.ComponentVO;
 import com.cabr.pkpm.entity.subscription.SubsCription;
 import com.cabr.pkpm.entity.subsdetails.SubsDetails;
-import com.cabr.pkpm.entity.subsdetails.SubsDetailsVO;
 import com.cabr.pkpm.entity.user.UserInfo;
-import com.cabr.pkpm.entity.workorder.ProductNameVO;
-import com.cabr.pkpm.entity.workorder.WorkOrder;
 import com.cabr.pkpm.entity.workorder.WorkOrderVO;
 import com.cabr.pkpm.mapper.subscription.SubsCriptionMapper;
 import com.cabr.pkpm.mapper.subsdetails.SubsDetailsMapper;
-import com.cabr.pkpm.mapper.workorder.WorkOrderMapper;
-import com.cabr.pkpm.service.product.IProductService;
-import com.cabr.pkpm.service.subscription.ISubscription;
+import com.cabr.pkpm.service.subscription.ISubscriptionService;
 import com.cabr.pkpm.utils.IDUtil;
 import com.cabr.pkpm.utils.ResponseResult;
 import com.cabr.pkpm.utils.StringUtil;
-import com.cabr.pkpm.utils.sdk.ClientDemo;
 import com.cabr.pkpm.utils.sdk.RedisCacheUtil;
 import com.cabr.pkpm.vo.MyProduct;
 import com.desktop.utils.HttpConfigBuilder;
@@ -49,7 +39,7 @@ import com.pkpm.httpclientutil.common.HttpMethods;
 import com.pkpm.httpclientutil.exception.HttpProcessException;
 @Service
 @Transactional
-public class SubscriptionImpl implements ISubscription {
+public class SubscriptionServiceImpl implements ISubscriptionService {
 	
 	@Autowired
 	private SubsCriptionMapper subscriptionMapper;
@@ -186,5 +176,22 @@ public class SubscriptionImpl implements ISubscription {
 		
 	}
 
+	@Override
+	public List<SubsCription> findSubsCriptionByUserId(Integer userId) {
+		
+		String str = stringRedisTemplate.opsForValue().get("subsCriptionByUserId:" + userId);
+		
+		// 若存在Redis缓存，从缓存中读取
+		if (StringUtils.isNotBlank(str)) {
+			List<SubsCription> subsCription = JSON.parseArray(str, SubsCription.class);
+			return subsCription;
+		} else {
+			// 若不存在对应的Redis缓存，从数据库查询
+			List<SubsCription> subsCription = subscriptionMapper.findSubsCriptionByUserId(userId);
+			// 写入Redis缓存
+			stringRedisTemplate.opsForValue().set("subsCriptionByUserId:" + userId, JSON.toJSONString(subsCription));
+			return subsCription;
+		}
+	}
 	
 }

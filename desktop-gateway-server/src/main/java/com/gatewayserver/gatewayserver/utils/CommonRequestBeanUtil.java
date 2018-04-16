@@ -109,7 +109,7 @@ public class CommonRequestBeanUtil {
         Preconditions.checkArgument(null != commonRequestBean, "commonRequestBean不能为空");
         Desktop desktop = commonRequestBean.getDesktops().get(0);
         String computerName = desktop.getComputerName();
-        Preconditions.checkArgument(StringUtils.isNotBlank(computerName), "operatetype不能为空");
+        Preconditions.checkArgument(StringUtils.isNotBlank(computerName), "computerName不能为空");
     }
 
 

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cabr.pkpm.entity.user.UserInfo;
 import com.cabr.pkpm.entity.workorder.WorkOrderVO;
-import com.cabr.pkpm.service.subscription.ISubscription;
+import com.cabr.pkpm.service.subscription.ISubscriptionService;
 import com.cabr.pkpm.service.user.IUserService;
 import com.cabr.pkpm.utils.ResponseResult;
 import com.cabr.pkpm.utils.sdk.RedisCacheUtil;
@@ -26,7 +26,7 @@ import com.cabr.pkpm.vo.MyProduct;
 public class SubscriptionController {
 	
 	@Autowired
-	private ISubscription subscription;
+	private ISubscriptionService subscription;
 	@Autowired
 	private IUserService userService;
 	@Autowired

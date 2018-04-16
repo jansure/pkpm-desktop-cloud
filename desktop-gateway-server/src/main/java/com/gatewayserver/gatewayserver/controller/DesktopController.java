@@ -110,12 +110,6 @@ public class DesktopController {
 	@RequestMapping(value = "/deleteDesktop", method = RequestMethod.POST, consumes = "application/json")
 	public ResultObject deleteDesktop(@RequestBody CommonRequestBean commonRequestBean) {
 
-		// 校验参数
-		CommonRequestBeanUtil.checkCommonRequestBean(commonRequestBean);
-		CommonRequestBeanUtil.checkCommonRequestBeanForDelChgDesk(commonRequestBean);
-
-		commonRequestBeanBuilder.buildBeanForDeleteDesktop(commonRequestBean);
-
 		// 开始删除桌面
 		return ResultObject.success(desktopService.deleteDesktop(commonRequestBean));
 	}
@@ -128,12 +122,6 @@ public class DesktopController {
 	 */
 	@RequestMapping(value = "/changeDesktop", method = RequestMethod.POST, consumes = "application/json")
 	public ResultObject changeDesktop(@RequestBody CommonRequestBean commonRequestBean) {
-
-		// 校验参数
-		CommonRequestBeanUtil.checkCommonRequestBean(commonRequestBean);
-		CommonRequestBeanUtil.checkCommonRequestBeanForDelChgDesk(commonRequestBean);
-
-		commonRequestBeanBuilder.buildBeanForChangeDesktop(commonRequestBean);
 
 		// 开始修改桌面属性
 		return ResultObject.success(desktopService.changeDesktop(commonRequestBean));

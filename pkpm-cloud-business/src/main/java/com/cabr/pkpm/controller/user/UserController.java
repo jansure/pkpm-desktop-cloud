@@ -1,5 +1,6 @@
 package com.cabr.pkpm.controller.user;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,14 +13,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cabr.pkpm.entity.subscription.SubsCription;
 import com.cabr.pkpm.entity.user.UserInfo;
 import com.cabr.pkpm.entity.workorder.WorkOrder;
+import com.cabr.pkpm.service.subscription.ISubscriptionService;
 import com.cabr.pkpm.service.user.IUserService;
 import com.cabr.pkpm.service.workorder.IWorkOrderService;
 import com.cabr.pkpm.utils.Base64Utils;
@@ -27,6 +32,12 @@ import com.cabr.pkpm.utils.Base64Utils;
 import com.cabr.pkpm.utils.ResponseResult;
 import com.cabr.pkpm.utils.StringUtil;
 import com.cabr.pkpm.utils.sdk.ClientDemo;
+import com.desktop.utils.HttpConfigBuilder;
+import com.desktop.utils.JsonUtil;
+import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
+import com.pkpm.httpclientutil.HttpClientUtil;
+import com.pkpm.httpclientutil.MyHttpResponse;
+import com.pkpm.httpclientutil.common.HttpMethods;
 
 @RestController
 @RequestMapping("/user")
@@ -38,6 +49,12 @@ public class UserController {
 	private IUserService userService;
 	@Autowired
 	private IWorkOrderService workOrderService;
+	@Autowired
+	private ISubscriptionService subscriptionService;
+	
+	
+	@Value("${server.host}")
+	private String serverHost;
 
 	protected ResponseResult result = new ResponseResult();
 	
@@ -309,81 +326,6 @@ public class UserController {
 
 	}
 	
-	/**
-	 * 修改密码
-	 * 
-	 * @param session
-	 * @throws Exception 
-	 * @return ResponseResult
-	 */
-	@RequestMapping(value = "/changPassword", method = RequestMethod.POST)
-	public ResponseResult changPassword(@RequestBody Map<String, String> map, HttpServletResponse response) throws Exception {
-
-		// 允许跨域访问
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		
-		Integer userID = new Integer(map.get("userID"));
-		String oldPassword = map.get("oldPassword");
-		String newPassword = map.get("newPassword");
-		
-		if (StringUtils.isBlank(newPassword)) {
-			this.result.set("密码不能设置为空", 0);
-			return this.result;
-		}
-
-		UserInfo user = userService.findUser(userID);
-		
-		String userName = user.getUserName();
-		
-		boolean flag = StringUtil.checkPassword(userName, newPassword);
-		if( !flag ){
-			this.result.set("您输入的密码不合法,请重新输入!", 0);
-			logger.debug(this.result.getMessage());
-			return this.result;
-		}
-
-		// 从数据库中查出password并解密
-		String password = user.getUserLoginPassword();
-		
-		String realPassword = Base64Utils.stringFromB64(password);
-
-		if (!realPassword.equals(oldPassword)) {
-			this.result.set("原密码输入错误", 0);
-			return this.result;
-		}
-		
-		if (oldPassword.equals(newPassword)) {
-			this.result.set("新老密码不能相同", 0);
-			return this.result;
-		}
-		
-		if (!newPassword.equals(StringUtils.deleteWhitespace(newPassword))) {
-			this.result.set("密码不能带空格", 0);
-			return this.result;
-		}
-
-		// 新密码加密
-		String nowPassword = Base64Utils.b64FromString(newPassword);
-
-		user.setUserLoginPassword(nowPassword);
-		
-		List<WorkOrder> workOrders = workOrderService.findWorkOrderListByUserId(userID);
-		
-		if(workOrders!=null && !workOrders.isEmpty()){
-			if (!userService.updateUserInfo(user) || !workOrderService.updatePasswordOrMobileNumber(userID, nowPassword, null)) {
-				this.result.set("密码修改失败", 0);
-				return this.result;
-			}
-		}else{
-			if (!userService.updateUserInfo(user)) {
-				this.result.set("密码修改失败", 0);
-				return this.result;
-			}
-		}
-		this.result.set("密码修改成功", 1, user);
-		return this.result;
-	}
-
 	/**
 	 * 修改手机号码
 	 * 

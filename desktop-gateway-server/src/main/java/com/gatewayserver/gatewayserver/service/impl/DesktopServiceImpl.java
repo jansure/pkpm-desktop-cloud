@@ -275,7 +275,12 @@ public class DesktopServiceImpl implements DesktopService {
 		Integer statusCode = null;
 
 		try {
+			// 校验参数
+			CommonRequestBeanUtil.checkCommonRequestBean(requestBean);
+			CommonRequestBeanUtil.checkCommonRequestBeanForDelChgDesk(requestBean);
 
+			commonRequestBeanBuilder.buildBeanForDeleteDesktop(requestBean);
+			
 			String token = requestBean.getPkpmToken().getToken();
 			String url = requestBean.getPkpmWorkspaceUrl().getUrl()
 					.replaceAll("\\{areaName\\}", requestBean.getPkpmWorkspaceUrl().getAreaName())
@@ -376,11 +381,16 @@ public class DesktopServiceImpl implements DesktopService {
 	@Override
 	public String changeDesktop(CommonRequestBean requestBean) {
 
-		CommonRequestBeanUtil.checkCommonRequestBeanForDelChgDesk(requestBean);
 		Integer statusCode = null;
 
 		try {
+			
+			// 校验参数
+			CommonRequestBeanUtil.checkCommonRequestBean(requestBean);
+			CommonRequestBeanUtil.checkCommonRequestBeanForDelChgDesk(requestBean);
 
+			commonRequestBeanBuilder.buildBeanForChangeDesktop(requestBean);
+			
 			String token = requestBean.getPkpmToken().getToken();
 			String url = requestBean.getPkpmWorkspaceUrl().getUrl()
 					.replaceAll("\\{areaName\\}", requestBean.getPkpmWorkspaceUrl().getAreaName())
