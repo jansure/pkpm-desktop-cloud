@@ -14,7 +14,7 @@ import com.gatewayserver.gatewayserver.domain.PkpmProjectDef;
  * @author yangpengfei
  * @time 2018年4月12日 下午3:10:27
  */
-public interface CloudOrderService {
+public interface GatewayServerParam {
 
 	/**
 	 * 返回可分配的Project列表
