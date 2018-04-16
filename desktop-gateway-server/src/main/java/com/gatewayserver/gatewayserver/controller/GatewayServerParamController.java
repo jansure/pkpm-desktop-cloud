@@ -27,8 +27,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @RestController
 @Slf4j
-@RequestMapping("cloudOrder")
-public class CloudOrderController {
+@RequestMapping("param")
+public class GatewayServerParamController {
 
 	@Resource
 	private CloudOrderService cloudOrderService;
