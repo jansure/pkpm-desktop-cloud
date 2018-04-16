@@ -15,6 +15,8 @@ import java.util.List;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommonRequestBean implements Serializable {
+    private String areaCode;
+
     //*******前端传递*********
     private Long subsId;
     private Integer userId;
