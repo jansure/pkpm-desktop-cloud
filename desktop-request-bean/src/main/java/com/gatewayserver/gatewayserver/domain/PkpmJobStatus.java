@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PkpmJobStatus implements Serializable {
+    private String areaCode;
     private String workspaceId;
     private String projectId;
     private String jobId;
