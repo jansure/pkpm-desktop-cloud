@@ -21,7 +21,7 @@ import com.gatewayserver.gatewayserver.dao.PkpmProjectDefDAO;
 import com.gatewayserver.gatewayserver.domain.PkpmAdDef;
 import com.gatewayserver.gatewayserver.domain.PkpmProjectDef;
 import com.gatewayserver.gatewayserver.service.AdService;
-import com.gatewayserver.gatewayserver.service.CloudOrderService;
+import com.gatewayserver.gatewayserver.service.GatewayServerParam;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service
 @Slf4j
-public class CloudOrderServiceImpl implements CloudOrderService {
+public class GatewayServerParamImpl implements GatewayServerParam {
 
 	@Resource
 	private PkpmProjectDefDAO pkpmProjectDefDAO;
