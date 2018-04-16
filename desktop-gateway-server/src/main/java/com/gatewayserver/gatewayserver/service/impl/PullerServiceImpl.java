@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import com.desktop.utils.page.PageUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -89,7 +90,8 @@ public class PullerServiceImpl implements PullerService {
         //获取所有的未更新的任务
         PkpmJobStatus pkpmJob = new PkpmJobStatus();
         pkpmJob.setStatus(JobStatusEnum.INITIAL.toString());
-        
+        pkpmJob.setPage(PageUtils.getBeginPos(1,10));
+        pkpmJob.setPageSize(10);
         try {
         	
         	// 加入分页
