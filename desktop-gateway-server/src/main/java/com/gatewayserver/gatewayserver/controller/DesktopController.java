@@ -2,6 +2,7 @@ package com.gatewayserver.gatewayserver.controller;
 
 import javax.annotation.Resource;
 
+import com.gatewayserver.gatewayserver.service.AdService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,8 @@ public class DesktopController {
 	CommonRequestBeanBuilder commonRequestBeanBuilder;
 	@Autowired
 	private DesktopService desktopService;
+	@Autowired
+	private AdService adService;
 
 	/**
 	 * 生成token接口
@@ -60,7 +63,13 @@ public class DesktopController {
 	 */
 	@PostMapping(value = "/createAdAndDesktop")
 	public ResultObject createAdAndDesktop(@RequestBody CommonRequestBean commonRequestBean) {
-		return desktopService.createAdAndDesktop(commonRequestBean);
+		adService.addAdUser(commonRequestBean);
+		DesktopCreation desktopCreation = desktopService.createDesktop(commonRequestBean);
+		Preconditions.checkNotNull(desktopCreation);
+		Preconditions.checkNotNull(desktopCreation.getJobId());
+		Preconditions.checkArgument(desktopCreation.getJobId().length() > 0);
+		log.info("createDesktop job_id = " + desktopCreation.getJobId());
+		return ResultObject.success(desktopCreation.getJobId(), "正在创建桌面......");
 	}
 
 	/**
