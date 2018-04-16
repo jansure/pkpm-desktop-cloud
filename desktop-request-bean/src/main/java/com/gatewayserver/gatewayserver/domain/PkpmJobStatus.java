@@ -1,5 +1,6 @@
 package com.gatewayserver.gatewayserver.domain;
 
+import com.desktop.utils.mybatis.Invisible;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
@@ -16,4 +17,7 @@ public class PkpmJobStatus implements Serializable {
     private String status;
     private String ext1;
     private String operatorType;
+    @Invisible
+    private Integer page;
+    private Integer pageSize;
 }
