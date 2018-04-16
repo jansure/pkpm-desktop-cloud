@@ -3,20 +3,17 @@
  */
 package com.gatewayserver.gatewayserver.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.desktop.utils.page.ResultObject;
-import com.gatewayserver.gatewayserver.service.CloudOrderService;
+import com.gatewayserver.gatewayserver.service.GatewayServerParam;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 public class GatewayServerParamController {
 
 	@Resource
-	private CloudOrderService cloudOrderService;
+	private GatewayServerParam gatewayServerParam;
 	
 	/**
 	 * 根据areaCode获取AdId和ProjectId
@@ -41,7 +38,7 @@ public class GatewayServerParamController {
 	 */
 	@RequestMapping(value = "/getAdAndProject", method = RequestMethod.GET)
 	public ResultObject getAdAndProject( String areaCode) {
-		Map<String, String> adAndProject = cloudOrderService.getAdAndProject(areaCode, null);
+		Map<String, String> adAndProject = gatewayServerParam.getAdAndProject(areaCode, null);
 		
 		if (StringUtils.isNotBlank(adAndProject.get("adId")) && StringUtils.isNotBlank(adAndProject.get("projectId"))) {
 			log.info(adAndProject.get("adId"));
