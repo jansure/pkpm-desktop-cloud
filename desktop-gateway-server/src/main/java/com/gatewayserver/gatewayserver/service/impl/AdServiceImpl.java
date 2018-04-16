@@ -148,6 +148,7 @@ public class AdServiceImpl implements AdService {
                 operatorStatus.setStatus("AD_SUCCESS");
                 operatorStatusDAO.update(operatorStatus);
                 log.info("AD数据库记录状态更新成功 --id={}",operatorStatus.getId());
+                requestBean.setOperatorStatusId(operatorStatus.getId());
                 return userName + "已添加至AD域中";
             }
             // 不存在则创建
@@ -174,6 +175,7 @@ public class AdServiceImpl implements AdService {
                 operatorStatus.setStatus(JobStatusEnum.AD_SUCCESS.toString());
                 operatorStatusDAO.update(operatorStatus);
                 log.info("AD数据库记录状态更新成功 --id={}",operatorStatus.getId());
+                requestBean.setOperatorStatusId(operatorStatus.getId());
                 return userName + "已新增至AD域中";
             }
         } catch (LDAPException | IOException e) {
