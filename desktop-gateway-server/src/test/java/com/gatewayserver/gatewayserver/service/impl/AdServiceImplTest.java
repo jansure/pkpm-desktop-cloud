@@ -1,13 +1,11 @@
 package com.gatewayserver.gatewayserver.service.impl;
 
-import com.desktop.utils.page.ResultObject;
 import com.gatewayserver.gatewayserver.dao.impl.PkpmCloudUserInfoDAOImpl;
 import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
 import com.gatewayserver.gatewayserver.domain.PkpmCloudUserInfo;
-import com.gatewayserver.gatewayserver.dto.AdUser;
-import com.unboundid.ldap.sdk.LDAPConnection;
+import com.gatewayserver.gatewayserver.dto.ad.AdComputer;
+import com.gatewayserver.gatewayserver.dto.ad.AdUser;
 import org.apache.http.util.Asserts;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeanUtils;
@@ -90,14 +88,14 @@ public class AdServiceImplTest {
 
     @Test
     public void selectComputersByAdId(){
-        ResultObject object = adService.getComputersByAdId(1);
-        System.out.println(object.getCode()+object.getMessage());
+        List<AdComputer> computers = adService.getComputersByAdId(1);
+        System.out.println(Arrays.toString(computers.toArray()));
 
     }
 
     @Test
     public void deleteComputer() {
-        ResultObject object = adService.deleteComputer("123456789123456789", 1);
+        adService.deleteComputer("123456789123456789", 1);
 
     }
 

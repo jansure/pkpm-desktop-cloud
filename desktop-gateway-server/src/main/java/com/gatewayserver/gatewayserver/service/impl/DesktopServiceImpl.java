@@ -321,11 +321,11 @@ public class DesktopServiceImpl implements DesktopService {
 				pkpmOperator.setFinishTime(LocalDateTime.now());
 				pkpmOperatorStatusDAO.save(pkpmOperator);
 
-				ResultObject resultObject = adService.deleteComputer(requestBean.getDesktops().get(0).getComputerName(),
+				adService.deleteComputer(requestBean.getDesktops().get(0).getComputerName(),
 						requestBean.getAdId());
-				if (resultObject.getCode() == HttpStatus.OK.value()) {
+
 					return "正在删除桌面,请稍等!";
-				}
+
 			}
 
 		} catch (HttpProcessException httpProcessException) {

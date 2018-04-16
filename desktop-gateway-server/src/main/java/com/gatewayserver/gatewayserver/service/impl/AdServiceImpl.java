@@ -13,7 +13,8 @@ import com.gatewayserver.gatewayserver.dao.PkpmOperatorStatusDAO;
 import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
 import com.gatewayserver.gatewayserver.domain.PkpmAdDef;
 import com.gatewayserver.gatewayserver.domain.PkpmOperatorStatus;
-import com.gatewayserver.gatewayserver.dto.AdUser;
+import com.gatewayserver.gatewayserver.dto.ad.AdComputer;
+import com.gatewayserver.gatewayserver.dto.ad.AdUser;
 import com.gatewayserver.gatewayserver.service.AdService;
 import com.gatewayserver.gatewayserver.utils.AdUtil;
 import com.gatewayserver.gatewayserver.utils.PkpmOperatorStatusBeanUtil;
@@ -104,7 +105,7 @@ public class AdServiceImpl implements AdService {
      * @Author xuhe
      */
 
-    public void addAdUser(CommonRequestBean requestBean) {
+    public String addAdUser(CommonRequestBean requestBean) {
 
         //初始化插入数据
         Preconditions.checkNotNull(requestBean);
@@ -117,7 +118,7 @@ public class AdServiceImpl implements AdService {
         //像数据库插入一条记录
         int result = operatorStatusDAO.save(operatorStatus);
         Preconditions.checkArgument(result == 1 && operatorStatus.getId() != null, "AD插入数据库初始化失败");
-        log.info("Ad插入数据库成功 --id=", operatorStatus.getId());
+        log.info("AD插入数据库成功 --id={}", operatorStatus.getId());
 
         //获取AD连接信息，从连接池取出连接
         AdUtil.checkAdUser(requestBean);
@@ -146,8 +147,8 @@ public class AdServiceImpl implements AdService {
             if (entry != null) {
                 operatorStatus.setStatus("AD_SUCCESS");
                 operatorStatusDAO.update(operatorStatus);
-                log.info("用户" + userName + "已添加至AD域中");
-                return;
+                log.info("AD数据库记录状态更新成功 --id={}",operatorStatus.getId());
+                return userName + "已添加至AD域中";
             }
             // 不存在则创建
             ArrayList<Attribute> attributes = new ArrayList<>();
@@ -171,10 +172,9 @@ public class AdServiceImpl implements AdService {
             if (addResultCodeName.equals("success") && modResultCodeName.equals("success")) {
                 requestBean.setOuName(ouName);
                 operatorStatus.setStatus(JobStatusEnum.AD_SUCCESS.toString());
-                log.info("UPDATE SUCCESS --ID=", operatorStatus.getId());
                 operatorStatusDAO.update(operatorStatus);
-                log.info("用户" + userName + "已新增至AD域中");
-                return;
+                log.info("AD数据库记录状态更新成功 --id={}",operatorStatus.getId());
+                return userName + "已新增至AD域中";
             }
         } catch (LDAPException | IOException e) {
             throw Exceptions.newBusinessException(e.getMessage());
@@ -189,7 +189,7 @@ public class AdServiceImpl implements AdService {
 
 
 
-    public void updateAdUser(CommonRequestBean requestBean) {
+    public String updateAdUser(CommonRequestBean requestBean) {
 
         //初始化插入数据
         Preconditions.checkNotNull(requestBean);
@@ -202,7 +202,7 @@ public class AdServiceImpl implements AdService {
         //像数据库插入一条记录
         int result = operatorStatusDAO.save(operatorStatus);
         Preconditions.checkArgument(result == 1 && operatorStatus.getId() != null, "AD插入数据库初始化失败");
-        log.info("Ad插入数据库成功 --id=", operatorStatus.getId());
+        log.info("AD插入数据库成功 --id={}", operatorStatus.getId());
 
         //获取AD连接信息，从连接池取出连接
         AdUtil.checkAdUser(requestBean);
@@ -239,8 +239,12 @@ public class AdServiceImpl implements AdService {
 
             LDAPResult modResult = connection.modify(entryDN, mods);
             String modResultCodeName = modResult.getResultCode().getName();
-            if (modResultCodeName.equals("success"))
-                return;
+            if (modResultCodeName.equals("success")){
+                operatorStatus.setStatus(JobStatusEnum.AD_SUCCESS.toString());
+                operatorStatusDAO.update(operatorStatus);
+                log.info("AD数据库记录状态更新成功 --id={}",operatorStatus.getId());
+                return userName+"密码修改成功";
+            }
 
         } catch (LDAPException | IOException e) {
             e.printStackTrace();
@@ -278,7 +282,7 @@ public class AdServiceImpl implements AdService {
         throw Exceptions.newBusinessException("用户列表获取失败");
     }
 
-    public int getOuUserCountByAdId(Integer adId) {
+    public int getUserOuCountByAdId(Integer adId) {
 
         PkpmAdDef adDef = getAdDefByAdId(adId);
         Preconditions.checkNotNull(adDef);
@@ -307,17 +311,18 @@ public class AdServiceImpl implements AdService {
     }
 
     public List<AdUser> getUsersByAdId(Integer adId) {
+
         PkpmAdDef adDef = getAdDefByAdId(adId);
         Preconditions.checkNotNull(adDef);
         LDAPConnectionPool connectionPool = getConnectionPool(adDef);
         LDAPConnection connection = null;
+
         try {
             connection = connectionPool.getConnection();
             Preconditions.checkNotNull(connection);
             //AD属性:获取组织ouDN;
             String baseDN = AdUtil.getBaseDN(adDef);
             String ouDN = AdUtil.getOuDN(adDef);
-            log.info(ouDN);
 
             SearchRequest request = new SearchRequest(ouDN,
                     SearchScope.SUB, "objectCategory=CN=Person,CN=Schema,CN=Configuration," + baseDN);
@@ -349,60 +354,37 @@ public class AdServiceImpl implements AdService {
         throw Exceptions.newBusinessException("用户列表获取失败");
     }
 
-    public ResultObject getComputersByAdId(Integer adId) {
+    public List<AdComputer> getComputersByAdId(Integer adId) {
         PkpmAdDef adDef = getAdDefByAdId(adId);
         Preconditions.checkNotNull(adDef);
         LDAPConnectionPool connectionPool = getConnectionPool(adDef);
         LDAPConnection connection = null;
-        List<String> computers = new ArrayList<>();
+        List<AdComputer> computers = new ArrayList<>();
         try {
             connection = connectionPool.getConnection();
-            Preconditions.checkNotNull(connection, "AD连接空指针异常");
-            SearchRequest request = new SearchRequest(connectionPool.getConnectionPoolName(),
-                    SearchScope.SUB, "objectCategory=CN=Computer,CN=Schema,CN=Configuration,DC=glory,DC=com");
+            Preconditions.checkNotNull(connection);
+
+            //AD属性:获取组织ouDN;
+            String baseDN = AdUtil.getBaseDN(adDef);
+            String ouDN = AdUtil.getOuDN(adDef);
+
+            SearchRequest request = new SearchRequest(ouDN,
+                    SearchScope.SUB, "objectCategory=CN=Computer,CN=Schema,CN=Configuration," + baseDN);
             SearchResult results = connection.search(request);
             int count = results.getEntryCount();
             for (SearchResultEntry entry : results.getSearchEntries()) {
-
-                String computerName = entry.getAttribute("name").getValue();
-                computers.add(computerName);
+                AdComputer computer= new AdComputer();
+                computer.setComputerName(entry.getAttribute("name").getValue());
+                computers.add(computer);
             }
-            if (count > 0)
-                return ResultObject.success(JSON.toJSONString(computers), "计算机列表获取成功");
-            else if (count == 0)
-                return ResultObject.success(null, "计算机列表为空");
+            return computers;
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
             connectionPool.releaseConnection(connection);
             System.out.println("AD连接资源被释放");
         }
-
-        return ResultObject.failure("计算机列表获取失败");
-    }
-
-    public ResultObject deleteUser(String userName, Integer adId) {
-        PkpmAdDef adDef = getAdDefByAdId(adId);
-        Preconditions.checkNotNull(adDef);
-        LDAPConnectionPool connectionPool = getConnectionPool(adDef);
-        LDAPConnection connection = null;
-        try {
-            connection = connectionPool.getConnection();
-            Preconditions.checkNotNull(connection, "AD连接空指针异常");
-            String userDN = String.format("CN=%s,%s", userName, connectionPool.getConnectionPoolName());
-            SearchResultEntry entry = connection.getEntry(userDN);
-            Preconditions.checkNotNull(entry, "用户不存在");
-            LDAPResult result = connection.delete(userDN);
-            if (result.getResultCode().getName().equals("success"))
-                return ResultObject.success(userDN, "用户" + userName + "删除成功");
-        } catch (LDAPException e) {
-            e.printStackTrace();
-        } finally {
-            connectionPool.releaseConnection(connection);
-            System.out.println("AD连接资源被释放");
-        }
-
-        return ResultObject.failure("用户" + userName + "删除失败");
+        throw Exceptions.newBusinessException("计算机列表获取失败");
     }
 
     public boolean checkUser(String userName, Integer adId) {
@@ -413,7 +395,11 @@ public class AdServiceImpl implements AdService {
         try {
             connection = connectionPool.getConnection();
             Preconditions.checkNotNull(connection, "AD连接空指针异常");
-            String userDN = String.format("CN=%s,%s", userName, connectionPool.getConnectionPoolName());
+
+            //AD属性:获取组织ouDN;
+            String ouDN = AdUtil.getOuDN(adDef);
+
+            String userDN = String.format("CN=%s,%s", userName, ouDN);
             SearchResultEntry entry = connection.getEntry(userDN);
             if (entry == null)
                 return false;
@@ -432,7 +418,7 @@ public class AdServiceImpl implements AdService {
         return false;
     }
 
-    public ResultObject deleteComputer(String computerName, Integer adId) {
+    public void deleteUser(String userName, Integer adId) {
         PkpmAdDef adDef = getAdDefByAdId(adId);
         Preconditions.checkNotNull(adDef);
         LDAPConnectionPool connectionPool = getConnectionPool(adDef);
@@ -440,20 +426,54 @@ public class AdServiceImpl implements AdService {
         try {
             connection = connectionPool.getConnection();
             Preconditions.checkNotNull(connection, "AD连接空指针异常");
-            String computerDN = String.format("CN=%s,%s", computerName, connectionPool.getConnectionPoolName());
-            SearchResultEntry entry = connection.getEntry(computerDN);
-            Preconditions.checkNotNull(entry, "计算机名不存在");
-            LDAPResult result = connection.delete(computerDN);
+
+            //AD属性:获取组织ouDN;
+            String ouDN = AdUtil.getOuDN(adDef);
+
+            String userDN = String.format("CN=%s,%s", userName, ouDN);
+            SearchResultEntry entry = connection.getEntry(userDN);
+            Preconditions.checkNotNull(entry, "用户名不存在");
+            LDAPResult result = connection.delete(userDN);
             if (result.getResultCode().getName().equals("success"))
-                return ResultObject.success(computerDN, "计算机" + computerName + "删除成功");
+                return ;
+            else
+                throw Exceptions.newBusinessException("用户删除失败");
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
             connectionPool.releaseConnection(connection);
             System.out.println("AD连接资源被释放");
         }
+        throw Exceptions.newBusinessException("用户删除失败");
+    }
 
-        return ResultObject.failure("计算机" + computerName + "删除失败");
+    public void deleteComputer(String computerName, Integer adId) {
+        PkpmAdDef adDef = getAdDefByAdId(adId);
+        Preconditions.checkNotNull(adDef);
+        LDAPConnectionPool connectionPool = getConnectionPool(adDef);
+        LDAPConnection connection = null;
+        try {
+            connection = connectionPool.getConnection();
+            Preconditions.checkNotNull(connection, "AD连接空指针异常");
+
+            //AD属性:获取组织ouDN;
+            String ouDN = AdUtil.getOuDN(adDef);
+
+            String computerDN = String.format("CN=%s,%s", computerName, ouDN);
+            SearchResultEntry entry = connection.getEntry(computerDN);
+            Preconditions.checkNotNull(entry, "计算机名不存在");
+            LDAPResult result = connection.delete(computerDN);
+            if (result.getResultCode().getName().equals("success"))
+                return ;
+            else
+                throw Exceptions.newBusinessException("计算机删除失败");
+        } catch (LDAPException e) {
+            e.printStackTrace();
+        } finally {
+            connectionPool.releaseConnection(connection);
+            System.out.println("AD连接资源被释放");
+        }
+        throw Exceptions.newBusinessException("计算机删除失败");
     }
 
 
