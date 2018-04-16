@@ -38,7 +38,7 @@ import java.util.Map;
 @Slf4j
 public class AdServiceImpl implements AdService {
 
-    private static Map<Integer, LDAPConnectionPool> poolMap = new HashMap();
+    private static Map<String, LDAPConnectionPool> poolMap = new HashMap();
     @Resource
     private PkpmAdDefDAO pkpmAdDefDAO;
     @Resource
@@ -52,6 +52,7 @@ public class AdServiceImpl implements AdService {
         SSLSocketFactory sslSocketFactory;
 
         LDAPConnectionPool connectionPool = null;
+
         //检测ip对应AD域连接池是否存在，不存在创建，存在则返回已有
         if (poolMap.get(adIpAddress) == null)
             try {
@@ -61,6 +62,7 @@ public class AdServiceImpl implements AdService {
                 connectionPool = new LDAPConnectionPool(connection, adDef.getAdMaxPoolCount());
                 connectionPool.setConnectionPoolName(adIpAddress);
                 log.info("AD连接池新建成功 --IP={} --MaxCon={}", connectionPool.getConnectionPoolName(), connectionPool.getMaximumAvailableConnections());
+                poolMap.put(adIpAddress,connectionPool);
                 return connectionPool;
             } catch (GeneralSecurityException e) {
                 log.error("安全认证错误：" + e.getMessage());
