@@ -1,6 +1,6 @@
 package com.gatewayserver.gatewayserver.service.impl;
 
-import com.gatewayserver.gatewayserver.service.CloudOrderService;
+import com.gatewayserver.gatewayserver.service.GatewayServerParam;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +15,10 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CloudOrderServiceImplTest {
+public class GatewayServerParamImplTest {
 
     @Autowired
-    CloudOrderService pkpmCloudService;
+    GatewayServerParam pkpmCloudService;
 
     @Test
     public void testGetAdAndProject() throws Exception {
