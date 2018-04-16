@@ -45,4 +45,42 @@ public class HttpConfigBuilder {
                 .encoding("utf-8");
         return config;
     }
+    
+    public static HttpConfig buildHttpConfigNoToken(String url,
+    		Integer tryTimes,
+    		String encode,
+    		Integer timeOut)
+    				throws HttpProcessException {
+    	HCB hcb = HCB.custom().timeout(timeOut)
+    			.sslpv(SSLs.SSLProtocolVersion.TLSv1_2)
+    			.ssl()
+    			.retry(tryTimes);
+    	HttpClient client = hcb.build();
+    	HttpConfig config = HttpConfig.custom()
+    								  .client(client).url(url)
+    			                      .encoding("utf-8");
+    	return config;
+    }
+    
+    public static HttpConfig buildHttpConfigNoToken(String url,
+    		String strJson,
+    		Integer tryTimes,
+    		String encode,
+    		Integer timeOut)
+    				throws HttpProcessException {
+    	
+    	// Header[] headers = HttpHeaderBulder.buildHttpHeader(token);
+    	Header[] headers = HttpHeaderBulder.buildHttpHeader();
+    	
+    	HCB hcb = HCB.custom().timeout(timeOut)
+    			.sslpv(SSLs.SSLProtocolVersion.TLSv1_2)
+    			.ssl()
+    			.retry(tryTimes);
+    	HttpClient client = hcb.build();
+    	HttpConfig config = HttpConfig.custom().headers(headers, true)
+    			.client(client).url(url)
+    			.json(strJson)
+    			.encoding("utf-8");
+    	return config;
+    }
 }
