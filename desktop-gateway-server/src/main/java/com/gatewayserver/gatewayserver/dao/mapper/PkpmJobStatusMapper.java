@@ -16,7 +16,7 @@ public interface PkpmJobStatusMapper {
     @Options(useGeneratedKeys = true, keyProperty = "jobId", keyColumn = "job_id")
     Integer insert(PkpmJobStatus pkpmJob);
 
-    @Select("select * from pkpm_job_status (#{pkpmJob})")
+    @Select("select * from pkpm_job_status (#{pkpmJob}) limit (#{page}),(#{pageSize})")
     @Lang(SimpleSelectLangDriver.class)
     List<PkpmJobStatus> select(PkpmJobStatus pkpmJob);
 
