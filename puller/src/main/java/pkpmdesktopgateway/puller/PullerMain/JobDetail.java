@@ -9,7 +9,8 @@ import java.time.LocalDateTime;
 
 @Data
 public class JobDetail implements Serializable {
-    private String id;
+	
+	private Integer id;
     private String jobId;
     private String projectId;
     private Integer userId;
@@ -19,6 +20,7 @@ public class JobDetail implements Serializable {
     private String desktopId;
     private String computerName;
     private String operatorType;
+    private String areaCode;
     private String status;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

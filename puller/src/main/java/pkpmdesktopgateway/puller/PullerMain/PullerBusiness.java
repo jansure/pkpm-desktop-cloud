@@ -477,10 +477,9 @@ public class PullerBusiness {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("jobId", jobId);
 		jsonMap.put("status", status);
-		String strJson = JsonUtil.serialize(jsonMap);
 		try {
 
-			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url, strJson, 5, "utf-8", 100000);
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url, jsonMap, 5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.POST));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
@@ -526,11 +525,10 @@ public class PullerBusiness {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("jobId", jobId);
 		jsonMap.put("status", status);
-		String strJson = JsonUtil.serialize(jsonMap);
 		
 		try {
 			
-			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url, strJson, 5, "utf-8", 100000);
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url, jsonMap, 5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.POST));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
@@ -576,11 +574,10 @@ public class PullerBusiness {
 		jsonMap.put("subsId", detail.getSubsId());
 		jsonMap.put("status", detail.getStatus());
 		jsonMap.put("projectId", detail.getProjectId());
-		String strJson = JsonUtil.serialize(jsonMap);
 		
 		try {
 
-			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url, strJson, 5, "utf-8", 100000);
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url, jsonMap, 5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.POST));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
