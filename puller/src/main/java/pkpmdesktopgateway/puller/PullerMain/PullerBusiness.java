@@ -215,7 +215,8 @@ public class PullerBusiness {
 				}else {
 					detail.setStatus("");
 				}
-				updateCloudSubscription(detail);
+				
+//				updateCloudSubscription(detail);
 			}
 			
 		}

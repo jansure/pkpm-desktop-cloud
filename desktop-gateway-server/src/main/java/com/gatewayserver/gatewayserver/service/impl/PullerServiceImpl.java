@@ -90,12 +90,12 @@ public class PullerServiceImpl implements PullerService {
         //获取所有的未更新的任务
         PkpmJobStatus pkpmJob = new PkpmJobStatus();
         pkpmJob.setStatus(JobStatusEnum.INITIAL.toString());
-        pkpmJob.setPage(PageUtils.getBeginPos(1,10));
-        pkpmJob.setPageSize(10);
+        pkpmJob.setPage(PageUtils.getBeginPos(1, jobSize));
+        pkpmJob.setPageSize(jobSize);
         try {
         	
         	// 加入分页
-        	List<PkpmJobStatus> jobList = pkpmJobStatusDAO.selectByPage(pkpmJob, 1, jobSize);
+        	List<PkpmJobStatus> jobList = pkpmJobStatusDAO.selectByPage(pkpmJob);
             List<String> jobIds = jobList.stream().map(PkpmJobStatus::getJobId).collect(Collectors.toList());
             if(jobIds != null && jobIds.size() > 0) {
             	return jobIds;

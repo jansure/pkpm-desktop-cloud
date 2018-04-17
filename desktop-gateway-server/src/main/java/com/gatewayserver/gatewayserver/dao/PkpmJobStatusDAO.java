@@ -23,5 +23,5 @@ public interface PkpmJobStatusDAO {
     List<PkpmJobStatus> select(PkpmJobStatus pkpmJob);
     
     //查询分业记录
-    List<PkpmJobStatus> selectByPage(PkpmJobStatus pkpmJob,int pageNo, int pageSize);
+    List<PkpmJobStatus> selectByPage(PkpmJobStatus pkpmJob);
 }
