@@ -49,6 +49,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service
 @Slf4j
+@Transactional
 public class PullerServiceImpl implements PullerService {
 	
     @Resource

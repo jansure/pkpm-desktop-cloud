@@ -24,6 +24,7 @@ import com.gatewayserver.gatewayserver.service.AdService;
 import com.gatewayserver.gatewayserver.service.GatewayServerParam;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Description 供云平台使用Service实现类
@@ -32,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service
 @Slf4j
+@Transactional
 public class GatewayServerParamImpl implements GatewayServerParam {
 
 	@Resource
