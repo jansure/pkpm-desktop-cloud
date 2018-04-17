@@ -73,6 +73,7 @@ public class ProductController {
 		}
 	}
 
+	//fixme 移到其他资源类里边
 	/**
 	 * 获取帮助文档、使用教程、下载云桌面客户端
 	 * 

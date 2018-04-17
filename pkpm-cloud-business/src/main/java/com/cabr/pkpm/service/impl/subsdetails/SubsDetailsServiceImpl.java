@@ -3,7 +3,6 @@ package com.cabr.pkpm.service.impl.subsdetails;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.cabr.pkpm.entity.product.ProductInfo;
 import com.cabr.pkpm.entity.subsdetails.SubsDetails;
-import com.cabr.pkpm.entity.workorder.WorkOrder;
 import com.cabr.pkpm.mapper.component.ComponentMapper;
 import com.cabr.pkpm.mapper.product.ProductMapper;
-import com.cabr.pkpm.mapper.subscription.SubsCriptionMapper;
+import com.cabr.pkpm.mapper.subscription.SubscriptionMapper;
 import com.cabr.pkpm.mapper.subsdetails.SubsDetailsMapper;
 import com.cabr.pkpm.mapper.workorder.WorkOrderMapper;
 import com.cabr.pkpm.service.subsdetails.ISubsDetailsService;
@@ -25,25 +23,27 @@ import com.cabr.pkpm.utils.sdk.StringOrDate;
 import com.cabr.pkpm.vo.MyProduct;
 import com.github.pagehelper.PageHelper;
 
+import javax.annotation.Resource;
+
 @Service
 public class SubsDetailsServiceImpl implements ISubsDetailsService {
 	
-	@Autowired
-	SubsCriptionMapper subsCriptionMapper;
+	@Resource
+	private SubscriptionMapper subscriptionMapper;
 	
-	@Autowired
-	SubsDetailsMapper subsDetailsMapper;
+	@Resource
+	private SubsDetailsMapper subsDetailsMapper;
 	
-	@Autowired
-	ProductMapper productMapper;
+	@Resource
+	private ProductMapper productMapper;
 	
-	@Autowired
-	ComponentMapper componentMapper;
+	@Resource
+	private ComponentMapper componentMapper;
 	
-	@Autowired
-	WorkOrderMapper workOrderMapper;
+	@Resource
+	private WorkOrderMapper workOrderMapper;
 	
-	@Autowired
+	@Resource
 	private RedisCacheUtil<MyProduct> redisCacheUtil;
 
 	
@@ -74,7 +74,7 @@ public class SubsDetailsServiceImpl implements ISubsDetailsService {
 			this.result.set("读取成功", 1, myProducts.size()+"", myProducts);
 			return this.result;
 		} else {
-			List<Long> subsIds = subsCriptionMapper.findSubsId(userId);
+			List<Long> subsIds = subscriptionMapper.findSubsId(userId);
 			
 			for (Long subsId : subsIds) {
 				
