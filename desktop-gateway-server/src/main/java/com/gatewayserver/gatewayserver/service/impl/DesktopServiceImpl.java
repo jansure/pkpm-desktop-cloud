@@ -195,6 +195,17 @@ public class DesktopServiceImpl implements DesktopService {
 			// 如果响应成功，将job插入数据库，并返回job_id；若失败，返回异常信息
 			if (statusCode == HttpStatus.OK.value()) {
 				JobBean jobBean = JsonUtil.deserialize(body, JobBean.class);
+				
+				// 更新到PkpmOperatorStatus
+				PkpmOperatorStatus pkpmOperatorStatus = new PkpmOperatorStatus();
+				BeanUtil.copyPropertiesIgnoreNull(commonRequestBean, pkpmOperatorStatus);
+				pkpmOperatorStatus.setId(commonRequestBean.getOperatorStatusId());
+				pkpmOperatorStatus.setJobId(jobBean.getJobId());
+				pkpmOperatorStatus.setComputerName(commonRequestBean.getDesktops().get(0).getComputerName());
+				pkpmOperatorStatus.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
+				PkpmOperatorStatusBeanUtil.checkNotNull(pkpmOperatorStatus);
+				pkpmOperatorStatusDAO.update(pkpmOperatorStatus);
+				
 				// 保存到PkpmJobStatus
 				PkpmJobStatus pkpmJob = new PkpmJobStatus();
 				pkpmJob.setJobId(jobBean.getJobId());
@@ -207,17 +218,7 @@ public class DesktopServiceImpl implements DesktopService {
 				pkpmJob.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
 				pkpmJob.setAreaCode(commonRequestBean.getAreaCode());
 				pkpmJobStatusDAO.insert(pkpmJob);
-				// 更新到PkpmOperatorStatus
-				PkpmOperatorStatus pkpmOperatorStatus = new PkpmOperatorStatus();
-				// fixme 放到一个方法里边
-				BeanUtil.copyPropertiesIgnoreNull(commonRequestBean, pkpmOperatorStatus);
-				pkpmOperatorStatus.setId(commonRequestBean.getOperatorStatusId());
-				pkpmOperatorStatus.setJobId(jobBean.getJobId());
-				pkpmOperatorStatus.setComputerName(commonRequestBean.getDesktops().get(0).getComputerName());
-				pkpmOperatorStatus.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
-				PkpmOperatorStatusBeanUtil.checkNotNull(pkpmOperatorStatus);
-				pkpmOperatorStatusDAO.update(pkpmOperatorStatus);
-
+				
 				DesktopCreation desktopCreation = new DesktopCreation();
 				desktopCreation.setJobId(jobBean.getJobId());
 				desktopCreation.setComputerName(commonRequestBean.getDesktops().get(0).getComputerName());
