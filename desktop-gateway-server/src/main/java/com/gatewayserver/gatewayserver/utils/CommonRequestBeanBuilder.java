@@ -177,7 +177,7 @@ public class CommonRequestBeanBuilder {
 		// pkpmWorkspaceUrl配置
 		PkpmWorkspaceUrl pkpmWorkspaceUrl = pkpmWorkspaceUrlDAO.selectByPriKey(requestBean.getProjectId(), areaName,
 				DesktopServiceEnum.MODIFY.toString());
-		pkpmWorkspaceUrl.setDesktopId(requestBean.getDesktops().get(0).getDesktopId());
+		pkpmWorkspaceUrl.setDesktopId(requestBean.getDesktopId());
 		requestBean.setPkpmWorkspaceUrl(pkpmWorkspaceUrl);
 
 		return requestBean;
@@ -186,7 +186,7 @@ public class CommonRequestBeanBuilder {
 	public CommonRequestBean buildBeanForDeleteDesktop(CommonRequestBean requestBean) {
 
 		String projectId = requestBean.getProjectId();
-		String desktopId = requestBean.getDesktops().get(0).getDesktopId();
+		String desktopId = requestBean.getDesktopId();
 
 		// 组装成CommonRequestBean
 		// pkpmToken配置

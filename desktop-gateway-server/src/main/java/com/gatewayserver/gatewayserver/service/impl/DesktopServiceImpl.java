@@ -318,7 +318,7 @@ public class DesktopServiceImpl implements DesktopService {
 				pkpmOperator.setSubsId(requestBean.getSubsId());
 				pkpmOperator.setAdId(requestBean.getAdId());
 				pkpmOperator.setUserName(requestBean.getUserName());
-				pkpmOperator.setDesktopId(requestBean.getDesktops().get(0).getDesktopId());
+				pkpmOperator.setDesktopId(requestBean.getDesktopId());
 				pkpmOperator.setComputerName(requestBean.getDesktops().get(0).getComputerName());
 				pkpmOperator.setOperatorType(OperatoreTypeEnum.DELETE.toString());
 				pkpmOperator.setStatus(JobStatusEnum.CREATE.toString());
@@ -436,7 +436,7 @@ public class DesktopServiceImpl implements DesktopService {
 				pkpmOperator.setSubsId(requestBean.getSubsId());
 				pkpmOperator.setAdId(requestBean.getAdId());
 				pkpmOperator.setUserName(requestBean.getUserName());
-				pkpmOperator.setDesktopId(requestBean.getDesktops().get(0).getDesktopId());
+				pkpmOperator.setDesktopId(requestBean.getDesktopId());
 				pkpmOperator.setComputerName(requestBean.getDesktops().get(0).getComputerName());
 				pkpmOperator.setOperatorType(OperatoreTypeEnum.CHANGE.toString());
 				pkpmOperator.setStatus(JobStatusEnum.CREATE.toString());
@@ -453,7 +453,7 @@ public class DesktopServiceImpl implements DesktopService {
 		} catch (Exception exception) {
 			log.error(exception.getMessage());
 		}
-		throw Exceptions.newBusinessException("未能删除桌面!");
+		throw Exceptions.newBusinessException("未能修改桌面!");
 	}
 
 
