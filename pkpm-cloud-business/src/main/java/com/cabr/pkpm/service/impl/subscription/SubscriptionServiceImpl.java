@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,7 @@ import com.cabr.pkpm.entity.subscription.SubsCription;
 import com.cabr.pkpm.entity.subsdetails.SubsDetails;
 import com.cabr.pkpm.entity.user.UserInfo;
 import com.cabr.pkpm.entity.workorder.WorkOrderVO;
-import com.cabr.pkpm.mapper.subscription.SubsCriptionMapper;
+import com.cabr.pkpm.mapper.subscription.SubscriptionMapper;
 import com.cabr.pkpm.mapper.subsdetails.SubsDetailsMapper;
 import com.cabr.pkpm.service.subscription.ISubscriptionService;
 import com.cabr.pkpm.utils.IDUtil;
@@ -37,22 +36,24 @@ import com.pkpm.httpclientutil.HttpClientUtil;
 import com.pkpm.httpclientutil.MyHttpResponse;
 import com.pkpm.httpclientutil.common.HttpMethods;
 import com.pkpm.httpclientutil.exception.HttpProcessException;
+
+import javax.annotation.Resource;
+
 @Service
 @Transactional
 public class SubscriptionServiceImpl implements ISubscriptionService {
 	
-	@Autowired
-	private SubsCriptionMapper subscriptionMapper;
-	@Autowired
+	@Resource
+	private SubscriptionMapper subscriptionMapper;
+	@Resource
 	private SubsDetailsMapper subsDetailsMapper;
-	@Autowired
-	private RedisCacheUtil<MyProduct> redisCacheUtil;
-	@Autowired
+	@Resource
 	private StringRedisTemplate stringRedisTemplate;
 
 	@Value("${server.host}")
 	private String serverHost;
-	
+	private RedisCacheUtil<MyProduct> redisCacheUtil;
+
 	protected ResponseResult result = new ResponseResult();
 	protected final Log logger = LogFactory.getLog(getClass());
 	/**
@@ -70,9 +71,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		
 	try {
 		String areaCode = "cn-north-1";
-		//String urlGetAdAndProject =serverHost + "/cloudOrder/getAdAndProject/" + areaCode;
 		String urlGetAdAndProject =serverHost + "/cloudOrder/getAdAndProject?areaCode=" + areaCode;
-//		String urlGetAdAndProject =serverHost + "/cloudOrder/getAdAndProject?s=" + "4565";
 		String adAndProjectResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(urlGetAdAndProject,  5, "utf-8", 100000).method(HttpMethods.GET));
 		
 		MyHttpResponse adAndProjectHttpResponse = JsonUtil.deserialize(adAndProjectResponse, MyHttpResponse.class);

@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.cabr.pkpm.entity.subscription.SubsCription;
 @Mapper
-public interface SubsCriptionMapper {
+public interface SubscriptionMapper {
 	/**
 	 * 根据用户id获取订单Id
 	 * @param userId 用户id
