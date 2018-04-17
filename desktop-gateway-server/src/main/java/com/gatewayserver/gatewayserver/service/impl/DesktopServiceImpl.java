@@ -195,6 +195,17 @@ public class DesktopServiceImpl implements DesktopService {
 			// 如果响应成功，将job插入数据库，并返回job_id；若失败，返回异常信息
 			if (statusCode == HttpStatus.OK.value()) {
 				JobBean jobBean = JsonUtil.deserialize(body, JobBean.class);
+				
+				// 更新到PkpmOperatorStatus
+				PkpmOperatorStatus pkpmOperatorStatus = new PkpmOperatorStatus();
+				BeanUtil.copyPropertiesIgnoreNull(commonRequestBean, pkpmOperatorStatus);
+				pkpmOperatorStatus.setId(commonRequestBean.getOperatorStatusId());
+				pkpmOperatorStatus.setJobId(jobBean.getJobId());
+				pkpmOperatorStatus.setComputerName(commonRequestBean.getDesktops().get(0).getComputerName());
+				pkpmOperatorStatus.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
+				PkpmOperatorStatusBeanUtil.checkNotNull(pkpmOperatorStatus);
+				pkpmOperatorStatusDAO.update(pkpmOperatorStatus);
+				
 				// 保存到PkpmJobStatus
 				PkpmJobStatus pkpmJob = new PkpmJobStatus();
 				pkpmJob.setJobId(jobBean.getJobId());
@@ -205,19 +216,9 @@ public class DesktopServiceImpl implements DesktopService {
 				pkpmJob.setWorkspaceId(projectDef.getWorkspaceId());
 				pkpmJob.setStatus(JobStatusEnum.INITIAL.toString());
 				pkpmJob.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
-				
+				pkpmJob.setAreaCode(commonRequestBean.getAreaCode());
 				pkpmJobStatusDAO.insert(pkpmJob);
-				// 更新到PkpmOperatorStatus
-				PkpmOperatorStatus pkpmOperatorStatus = new PkpmOperatorStatus();
-				// fixme 放到一个方法里边
-				BeanUtil.copyPropertiesIgnoreNull(commonRequestBean, pkpmOperatorStatus);
-				pkpmOperatorStatus.setId(commonRequestBean.getOperatorStatusId());
-				pkpmOperatorStatus.setJobId(jobBean.getJobId());
-				pkpmOperatorStatus.setComputerName(commonRequestBean.getDesktops().get(0).getComputerName());
-				pkpmOperatorStatus.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
-				PkpmOperatorStatusBeanUtil.checkNotNull(pkpmOperatorStatus);
-				pkpmOperatorStatusDAO.update(pkpmOperatorStatus);
-
+				
 				DesktopCreation desktopCreation = new DesktopCreation();
 				desktopCreation.setJobId(jobBean.getJobId());
 				desktopCreation.setComputerName(commonRequestBean.getDesktops().get(0).getComputerName());
@@ -275,7 +276,12 @@ public class DesktopServiceImpl implements DesktopService {
 		Integer statusCode = null;
 
 		try {
+			// 校验参数
+			CommonRequestBeanUtil.checkCommonRequestBean(requestBean);
+			CommonRequestBeanUtil.checkCommonRequestBeanForDelChgDesk(requestBean);
 
+			commonRequestBeanBuilder.buildBeanForDeleteDesktop(requestBean);
+			
 			String token = requestBean.getPkpmToken().getToken();
 			String url = requestBean.getPkpmWorkspaceUrl().getUrl()
 					.replaceAll("\\{areaName\\}", requestBean.getPkpmWorkspaceUrl().getAreaName())
@@ -376,11 +382,16 @@ public class DesktopServiceImpl implements DesktopService {
 	@Override
 	public String changeDesktop(CommonRequestBean requestBean) {
 
-		CommonRequestBeanUtil.checkCommonRequestBeanForDelChgDesk(requestBean);
 		Integer statusCode = null;
 
 		try {
+			
+			// 校验参数
+			CommonRequestBeanUtil.checkCommonRequestBean(requestBean);
+			CommonRequestBeanUtil.checkCommonRequestBeanForDelChgDesk(requestBean);
 
+			commonRequestBeanBuilder.buildBeanForChangeDesktop(requestBean);
+			
 			String token = requestBean.getPkpmToken().getToken();
 			String url = requestBean.getPkpmWorkspaceUrl().getUrl()
 					.replaceAll("\\{areaName\\}", requestBean.getPkpmWorkspaceUrl().getAreaName())

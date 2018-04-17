@@ -20,5 +20,6 @@ public class PkpmJobStatus implements Serializable {
     private String operatorType;
     @Invisible
     private Integer page;
+    @Invisible
     private Integer pageSize;
 }

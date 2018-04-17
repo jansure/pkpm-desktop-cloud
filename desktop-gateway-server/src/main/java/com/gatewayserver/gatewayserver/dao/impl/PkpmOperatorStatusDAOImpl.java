@@ -29,6 +29,9 @@ public class PkpmOperatorStatusDAOImpl implements PkpmOperatorStatusDAO {
         criteria.setDesktopId(null);;
         criteria.setComputerName(null);
         
+        criteria.setUserId(null);
+        criteria.setSubsId(null);
+        
         List<PkpmOperatorStatus> list = mapper.select(criteria);
         if (CollectionUtils.isNotEmpty(list))
             return list.get(0);
@@ -82,6 +85,9 @@ public class PkpmOperatorStatusDAOImpl implements PkpmOperatorStatusDAO {
         criteria.setStatus(null);
         criteria.setDesktopId(null);;
         criteria.setComputerName(null);
+        
+        criteria.setUserId(null);
+        criteria.setSubsId(null);
 
         List<PkpmOperatorStatus> list = mapper.select(criteria);
         if (CollectionUtils.isNotEmpty(list)) {

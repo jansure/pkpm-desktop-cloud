@@ -15,6 +15,14 @@ public interface SubsCriptionMapper {
 	 */
 	List<Long> findSubsId(int userId);
 
+	/**
+	 * 根据用户Id查subscription
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	List<SubsCription> findSubsCriptionByUserId(int userId);
+
 	Integer saveSubscription(SubsCription subscription);
 
 }

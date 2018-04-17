@@ -2,6 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cabr.pkpm.mapper.subscription.SubsCriptionMapper">
 
+	<resultMap id="BaseResultMap" type="com.cabr.pkpm.entity.subsdetails.SubsCription">
+			<id property="id" column="id" jdbcType="INTEGER"/>
+   	      	<result property="subsId" column="subs_id" jdbcType="BIGINT"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="payChannel" column="pay_channel" jdbcType="VARCHAR"/>
+            <result property="adId" column="ad_id" jdbcType="INTEGER"/>
+            <result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+            <result property="desktopId" column="desktop_id" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<select id="findSubsCriptionByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select *
+		from pkpm_cloud_subscription
+		where user_id = #{userId,jdbcType=INTEGER} order by create_time
+	</select>
+
 	<select id="findSubsId" parameterType="java.lang.Integer" resultType="java.lang.Long">
 		select subs_id
 		from pkpm_cloud_subscription

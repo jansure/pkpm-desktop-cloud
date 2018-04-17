@@ -68,8 +68,7 @@ public class PkpmJobStatusDAOImpl implements PkpmJobStatusDAO {
 	 * @see com.gatewayserver.gatewayserver.dao.PkpmJobStatusDAO#selectByPage(com.gatewayserver.gatewayserver.domain.PkpmJobStatus, int, int)  
 	 */  
 	@Override
-	public List<PkpmJobStatus> selectByPage(PkpmJobStatus pkpmJob, int pageNo, int pageSize) {
-		PageHelper.startPage(pageNo, pageSize);
+	public List<PkpmJobStatus> selectByPage(PkpmJobStatus pkpmJob) {
 		return mapper.select(pkpmJob);
 	}
 }
