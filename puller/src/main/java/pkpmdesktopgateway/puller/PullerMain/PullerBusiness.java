@@ -603,8 +603,8 @@ public class PullerBusiness {
 	 * @throws  
 	 */   
 	private void updateCloudSubscription(JobDetail detail) {
-		
-		String url = businessHost + "/puller/updateJobTask";
+		//fixme
+		String url = businessHost + "/subscription/setSubsStatus";
 		
 		//设置请参数
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
