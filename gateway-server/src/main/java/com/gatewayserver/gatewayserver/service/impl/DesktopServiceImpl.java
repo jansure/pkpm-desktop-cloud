@@ -584,7 +584,7 @@ public class DesktopServiceImpl implements DesktopService {
 
             if ( HttpStatus.ACCEPTED.value() == statusCode ) {
 
-                PkpmOperatorStatus pkpmOperatorStatus = new PkpmOperatorStatus();
+                PkpmOperatorStatus pkpmOperatorStatus = new PkpmOperatorStatus().setDefault();
                 BeanUtils.copyProperties(commonRequestBean, pkpmOperatorStatus);
                 String jobId = StringUtil.getUUID();
                 pkpmOperatorStatus.setJobId(jobId);
