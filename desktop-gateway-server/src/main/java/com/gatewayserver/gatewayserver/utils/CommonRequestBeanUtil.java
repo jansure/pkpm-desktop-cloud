@@ -106,7 +106,7 @@ public class CommonRequestBeanUtil {
      */
     public static void checkCommonRequestBeanForChgDeskSpec(CommonRequestBean commonRequestBean) {
         checkCommonRequestBean(commonRequestBean);
-        Preconditions.checkNotNull(commonRequestBean.getHwProductId(),
+        Preconditions.checkNotNull(commonRequestBean.getDesktops().get(0).getProductId(),
                 "Desktop字段内的product_id不能为空");
 
     }

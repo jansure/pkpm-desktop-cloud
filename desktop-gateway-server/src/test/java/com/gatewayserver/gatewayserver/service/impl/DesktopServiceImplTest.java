@@ -10,10 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 /**
  * Desktop Service Impl 单元测试
+ *
  * @author xuhe
  */
 @RunWith(SpringRunner.class)
@@ -22,6 +23,7 @@ public class DesktopServiceImplTest {
 
     @Autowired
     DesktopService desktopService;
+
     /*
     *@author xuhe
     */
@@ -46,11 +48,12 @@ public class DesktopServiceImplTest {
         desktopService.createAdAndDesktop(info);
 
     }
+
     /*
     *@author xuhe
     */
     @Test
-    public void changeDesktopSpecTest(){
+    public void changeDesktopSpecTest() {
         CommonRequestBean requestBean = new CommonRequestBean();
         requestBean.setUserName("glglgl");
         requestBean.setUserLoginPassword("Abc=5678");
@@ -58,14 +61,18 @@ public class DesktopServiceImplTest {
         requestBean.setProjectId("9487c2cb4c4d4c828868098b7a78b497");
         requestBean.setImageId("997488ed-fa23-4671-b88c-d364c0405334");// 默认的镜像Workspace-User-Template
         requestBean.setDataVolumeSize(100);
-        requestBean.setHwProductId("workspace.c2.large.windows");
+        requestBean.setHwProductId("workspace.c2.xlarge.windows");
         requestBean.setGloryProductName("PLGAAA");
         requestBean.setOuName("pkpm");
         requestBean.setAdId(1);
         requestBean.setUserId(145);
         requestBean.setSubsId(4L);
-        requestBean.setDesktopId("8ff115ca-61bb-4573-822b-ab143f293d2e");
-        requestBean.setDesktops(new ArrayList<Desktop>());
+        Desktop desktop = new Desktop();
+        desktop.setDesktopId("8ff115ca-61bb-4573-822b-ab143f293d2e");
+        desktop.setProductId("workspace.c2.large.windows");
+        List desktopList = new ArrayList<Desktop>();
+        desktopList.add(desktop);
+        requestBean.setDesktops(desktopList);
         desktopService.changeDesktopSpec(requestBean);
     }
 

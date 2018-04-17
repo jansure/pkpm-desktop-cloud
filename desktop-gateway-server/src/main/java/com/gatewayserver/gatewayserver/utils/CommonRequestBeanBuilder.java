@@ -227,9 +227,15 @@ public class CommonRequestBeanBuilder {
 		PkpmProjectDef projectDef = pkpmProjectDefDAO.selectById(projectId);
 		if (projectDef != null) {
 			String areaName = projectDef.getAreaName();
-			PkpmWorkspaceUrl pkpmWorkspaceUrl = pkpmWorkspaceUrlDAO.selectByPriKey(projectId, areaName,
-					DesktopServiceEnum.CHANGE_SPECS.toString());
+			Preconditions.checkNotNull(StringUtils.isNotBlank(areaName), "areaName不能为空");
+			//读取URL拼装信息，拼装URL
+			PkpmWorkspaceUrl pkpmWorkspaceUrl = pkpmWorkspaceUrlDAO.selectByPriKey(projectId, areaName, DesktopServiceEnum.CHANGE_SPECS.toString());
 			pkpmWorkspaceUrl.setDesktopId(requestBean.getDesktops().get(0).getDesktopId());
+			pkpmWorkspaceUrl.setUrl(pkpmWorkspaceUrl.getUrl()
+					.replaceAll("\\{projectId\\}", pkpmWorkspaceUrl.getProjectId())
+					.replaceAll("\\{areaName\\}", pkpmWorkspaceUrl.getAreaName())
+					.replaceAll("\\{desktopId\\}", pkpmWorkspaceUrl.getDesktopId()));
+			log.info(pkpmWorkspaceUrl.getUrl());
 			requestBean.setPkpmWorkspaceUrl(pkpmWorkspaceUrl);
 		}
 		return requestBean;
