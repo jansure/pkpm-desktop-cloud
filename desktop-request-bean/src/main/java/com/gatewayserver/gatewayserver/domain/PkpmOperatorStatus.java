@@ -13,26 +13,47 @@ import java.time.LocalDateTime;
 public class PkpmOperatorStatus implements Serializable {
 
     private Integer id;
-    //默认生成随机jobId;
-    private String jobId = StringUtil.getUUID();
-    //默认值为null,强制赋值；
-    private String projectId =null;
-    private Integer userId =-1;//默认值为-1，
-    private Integer subsId =-1;
-    private Integer adId=null;
-    private String userName=null;
-    private String desktopId = "";
-    private String computerName = "";
-    private String operatorType=null;
-    private String status = JobStatusEnum.INITIAL.toString();
+    private String jobId;
+    private String projectId;
+    private Integer userId;
+    private Long subsId;
+    private Integer adId;
+    private String userName;
+    private String desktopId;
+    private String computerName;
+    private String operatorType;
+    private String areaCode;
+    private String status;
+
+    public PkpmOperatorStatus() {
+    }
+    /**
+     *@author xuhe
+     */
+    //为实例设置默认值
+    //projectId,areaCode,operateType,adId,subsId必须在CommonRequestBean里赋值
+    public PkpmOperatorStatus setDefault() {
+        //默认生成随机字符串
+        this.jobId = StringUtil.getUUID();
+        this.userName = "";
+        this.desktopId = "";
+        this.computerName = "";
+        this.status = JobStatusEnum.INITIAL.toString();
+        this.createTime = LocalDateTime.now();
+        this.updateTime = LocalDateTime.now();
+        this.finishTime = LocalDateTime.now();
+        this.isFinished = 0;
+        return this;
+    }
+
     //设置默认初始值
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime createTime = LocalDateTime.now();
+    private LocalDateTime createTime;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime updateTime = LocalDateTime.now();
+    private LocalDateTime updateTime;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime finishTime = LocalDateTime.now();
-    private Integer isFinished = 0;
+    private LocalDateTime finishTime;
+    private Integer isFinished;
 }

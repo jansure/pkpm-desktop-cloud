@@ -4,9 +4,13 @@ import com.pkpm.httpclientutil.builder.HCB;
 import com.pkpm.httpclientutil.common.HttpConfig;
 import com.pkpm.httpclientutil.common.SSLs;
 import com.pkpm.httpclientutil.exception.HttpProcessException;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.http.Header;
 import org.apache.http.client.HttpClient;
 
+@Slf4j
 public class HttpConfigBuilder {
     public static HttpConfig buildHttpConfig(String url,
                                              String strJson,
@@ -25,6 +29,9 @@ public class HttpConfigBuilder {
                 .client(client).url(url)
                 .json(strJson)
                 .encoding("utf-8");
+        Header[] headers2 = config.headers();
+        log.info("aaaa" + headers2[0]);
+        log.info("+hgjsadgsakdsa+" + JsonUtil.serialize(config));
         return config;
     }
 
@@ -43,6 +50,7 @@ public class HttpConfigBuilder {
         HttpConfig config = HttpConfig.custom().headers(headers, true)
                 .client(client).url(url)
                 .encoding("utf-8");
+        log.info("+hgjsadgsakdsa+" + JsonUtil.serialize(config));
         return config;
     }
     

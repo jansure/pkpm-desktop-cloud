@@ -8,9 +8,11 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.gatewayserver.gatewayserver.dto.desktop.DesktopSpecResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.Consts;
 import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -185,7 +187,8 @@ public class DesktopServiceImpl implements DesktopService {
 					.replaceAll("\\{projectId\\}", commonRequestBean.getPkpmWorkspaceUrl().getProjectId());
 			String desktops = JsonUtil.serialize(commonRequestBean.getDesktops());
 			String strJson = "{\"desktops\":" + desktops + "}";
-
+			
+			HttpConfig buildHttpConfig = HttpConfigBuilder.buildHttpConfig(url, strJson, token, 5, null, 10000);
 			String strJobResponse = HttpClientUtil.mysend(
 					HttpConfigBuilder.buildHttpConfig(url, strJson, token, 5, null, 10000).method(HttpMethods.POST));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(strJobResponse, MyHttpResponse.class);
@@ -318,7 +321,7 @@ public class DesktopServiceImpl implements DesktopService {
 				pkpmOperator.setSubsId(requestBean.getSubsId());
 				pkpmOperator.setAdId(requestBean.getAdId());
 				pkpmOperator.setUserName(requestBean.getUserName());
-				pkpmOperator.setDesktopId(requestBean.getDesktops().get(0).getDesktopId());
+				pkpmOperator.setDesktopId(requestBean.getDesktopId());
 				pkpmOperator.setComputerName(requestBean.getDesktops().get(0).getComputerName());
 				pkpmOperator.setOperatorType(OperatoreTypeEnum.DELETE.toString());
 				pkpmOperator.setStatus(JobStatusEnum.CREATE.toString());
@@ -436,7 +439,7 @@ public class DesktopServiceImpl implements DesktopService {
 				pkpmOperator.setSubsId(requestBean.getSubsId());
 				pkpmOperator.setAdId(requestBean.getAdId());
 				pkpmOperator.setUserName(requestBean.getUserName());
-				pkpmOperator.setDesktopId(requestBean.getDesktops().get(0).getDesktopId());
+				pkpmOperator.setDesktopId(requestBean.getDesktopId());
 				pkpmOperator.setComputerName(requestBean.getDesktops().get(0).getComputerName());
 				pkpmOperator.setOperatorType(OperatoreTypeEnum.CHANGE.toString());
 				pkpmOperator.setStatus(JobStatusEnum.CREATE.toString());
@@ -453,57 +456,61 @@ public class DesktopServiceImpl implements DesktopService {
 		} catch (Exception exception) {
 			log.error(exception.getMessage());
 		}
-		throw Exceptions.newBusinessException("未能删除桌面!");
+		throw Exceptions.newBusinessException("未能修改桌面!");
 	}
 
 
 	/**
-	 * @Description:变更桌面规格，如2核4G切换为4核8G
-	 * @Author:xuhe
-	 * @Param: CommonRequestBean
-	 * @Return ResultObject(成功则将jobId放入data中)
+	 * @apiNote  变更桌面规格，如2核4G切换为4核8G
+	 * @author xuhe
+	 * @param  requestBean
+	 * @return DesktopSpecResponse(包含jobId)
 	 */
-	public ResultObject changeDesktopSpec(CommonRequestBean requestBean) {
+	public DesktopSpecResponse changeDesktopSpec(CommonRequestBean requestBean) {
 
-		Integer statusCode = null;
+		CommonRequestBeanUtil.checkCommonRequestBeanForChgDeskSpec(requestBean);
 		commonRequestBeanBuilder.buildBeanforChangeDesktopSpecs(requestBean);
-		String token = requestBean.getPkpmToken().getToken();
-		String url = requestBean.getPkpmWorkspaceUrl().getUrl()
-				.replaceAll("\\{areaName\\}", requestBean.getPkpmWorkspaceUrl().getAreaName())
-				.replaceAll("\\{projectId\\}", requestBean.getPkpmWorkspaceUrl().getProjectId())
-				.replaceAll("\\{desktopId\\}", requestBean.getPkpmWorkspaceUrl().getDesktopId());
-		System.out.println(url);
+
+		//初始化数据库插入数据
+		PkpmOperatorStatus operatorStatus = new PkpmOperatorStatus();
+		BeanUtil.copyPropertiesIgnoreNull(requestBean, operatorStatus);
+		operatorStatus.setStatus(JobStatusEnum.INITIAL.toString());
+		operatorStatus.setOperatorType(OperatoreTypeEnum.RESIZE.toString());
+		PkpmOperatorStatusBeanUtil.checkNotNull(operatorStatus);
+
+		//像数据库插入一条记录
+		int result = pkpmOperatorStatusDAO.save(operatorStatus);
+		log.info("变更桌面插入记录 --id={}",result);
+
 		try {
+			String token = requestBean.getPkpmToken().getToken();
+			String url = requestBean.getPkpmWorkspaceUrl().getUrl();
 			Header[] headers = HttpHeader.custom().contentType("application/json").other("X-Auth-Token", token).build();
 			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
 					.sslpv(SSLProtocolVersion.TLSv1_2) // 可设置ssl版本号，默认SSLv3，用于ssl，也可以调用sslpv("TLSv1.2")
 					.ssl() // https，支持自定义ssl证书路径和密码
 					.retry(5);
 			HttpClient client = hcb.build();
-			String strJson = String.format("{\"product_id\": \"%s\"}", requestBean.getDesktops().get(0).getProductId());
-			System.out.println(strJson);
+			String strJson = String.format("{\"product_id\": \"%s\"}", requestBean.getHwProductId());
 			HttpConfig config = HttpConfig.custom().headers(headers, true) // 设置headers，不需要时则无需设置
 					.client(client).url(url).json(strJson)// 设置请求的url
 					.encoding("utf-8"); // 设置请求和返回编码，默认就是Charset.defaultCharset()
 			String strMyHttpResponse = HttpClientUtil.mysend(config.method(HttpMethods.POST));
-			// String strMyHttpResponse = HttpClientUtil.get(config);
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(strMyHttpResponse, MyHttpResponse.class);
-			statusCode = myHttpResponse.getStatusCode();
-			String code = String.valueOf(statusCode);
-			if (code.startsWith("2")) {
+			int statusCode = myHttpResponse.getStatusCode();
+			//返回值为200,返回结果
+			if (statusCode==HttpStatus.OK.value()) {
 				// 重置成功，返回jobId
-				String jobId = myHttpResponse.getBody();
-				return ResultObject.success(jobId, "SUCCESS");
-			} else {
-				return ResultObject.failure(statusCode, myHttpResponse.getBody());
+				DesktopSpecResponse response =JsonUtil.deserialize(myHttpResponse.getBody(), DesktopSpecResponse.class);
+				return response;
 			}
+			throw Exceptions.newBusinessException(myHttpResponse.getBody());
 		} catch (HttpProcessException e) {
-			System.out.println(e.getMessage());
-		} catch (Exception ee) {
-			System.out.println(ee.getMessage());
+			log.error(e.getMessage());
+		} catch (Exception e){
+			log.error(e.getMessage());
 		}
-
-		return ResultObject.failure(statusCode, "FAILURE Unkown_reason");
+		throw Exceptions.newBusinessException("重置桌面规格失败");
 	}
 
 	@SuppressWarnings("unused")

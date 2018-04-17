@@ -23,14 +23,15 @@ public class CommonRequestBean implements Serializable {
     private String userName;
     private String projectId;
     private Integer adId;
+    private String desktopId;
 
     // **前端传递**创建桌面所需参数
     private String imageId;
     private String productId;
-    private String hwProductId;
+    private String hwProductId;   //workspace.c2.large.windows
     // 产品名称/云桌面计算机名
     private String gloryProductName;
-    private String ouName;
+    private String ouName;        //默认pkpm
     private Integer dataVolumeSize;
     // 接收ad域创建后传过来的operatorStatusId
     private Integer operatorStatusId;

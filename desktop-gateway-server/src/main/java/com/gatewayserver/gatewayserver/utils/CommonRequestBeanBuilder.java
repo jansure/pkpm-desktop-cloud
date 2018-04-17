@@ -177,7 +177,7 @@ public class CommonRequestBeanBuilder {
 		// pkpmWorkspaceUrl配置
 		PkpmWorkspaceUrl pkpmWorkspaceUrl = pkpmWorkspaceUrlDAO.selectByPriKey(requestBean.getProjectId(), areaName,
 				DesktopServiceEnum.MODIFY.toString());
-		pkpmWorkspaceUrl.setDesktopId(requestBean.getDesktops().get(0).getDesktopId());
+		pkpmWorkspaceUrl.setDesktopId(requestBean.getDesktopId());
 		requestBean.setPkpmWorkspaceUrl(pkpmWorkspaceUrl);
 
 		return requestBean;
@@ -186,7 +186,7 @@ public class CommonRequestBeanBuilder {
 	public CommonRequestBean buildBeanForDeleteDesktop(CommonRequestBean requestBean) {
 
 		String projectId = requestBean.getProjectId();
-		String desktopId = requestBean.getDesktops().get(0).getDesktopId();
+		String desktopId = requestBean.getDesktopId();
 
 		// 组装成CommonRequestBean
 		// pkpmToken配置
@@ -267,8 +267,13 @@ public class CommonRequestBeanBuilder {
         if (projectDef != null) {
             String areaName = projectDef.getAreaName();
             Preconditions.checkNotNull(StringUtils.isNotBlank(areaName), "areaName不能为空");
+            //读取URL拼装信息，拼装URL
             PkpmWorkspaceUrl pkpmWorkspaceUrl = pkpmWorkspaceUrlDAO.selectByPriKey(projectId, areaName, DesktopServiceEnum.USER_LIST.toString());
             commonReq.setPkpmWorkspaceUrl(pkpmWorkspaceUrl);
+            pkpmWorkspaceUrl.getUrl()
+					.replaceAll("\\{areaName\\}", pkpmWorkspaceUrl.getAreaName())
+					.replaceAll("\\{projectId\\}", pkpmWorkspaceUrl.getProjectId())
+					.replaceAll("\\{desktopId\\}", pkpmWorkspaceUrl.getDesktopId());
         }
         return commonReq;
     }
