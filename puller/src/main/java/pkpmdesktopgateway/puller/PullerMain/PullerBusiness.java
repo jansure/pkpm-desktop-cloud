@@ -17,6 +17,7 @@ import com.desktop.constant.JobStatusEnum;
 import com.desktop.constant.OperatoreTypeEnum;
 import com.desktop.constant.ResponseStatusEnum;
 import com.desktop.constant.SubscriptionStatusEnum;
+import com.desktop.utils.HttpConfigBuilder;
 import com.desktop.utils.JsonUtil;
 import com.desktop.utils.page.ResultObject;
 import com.pkpm.httpclientutil.HttpClientUtil;
@@ -93,16 +94,8 @@ public class PullerBusiness {
 		url = url.replace("{jobSize}", jobSize).replace("{areaCode}", areaCode);
 		log.info(url);
 		try {
-			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
-					.retry(5) // 重试5次
-			;
-			
-			HttpClient client = hcb.build();
-			// 插件式配置请求参数（网址、请求参数、编码、client）
-			HttpConfig config = HttpConfig.custom()
-					.client(client).url(url) // 设置请求的url
-					.encoding("utf-8"); // 设置请求和返回编码，默认就是Charset.defaultCharset()
 
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url,  5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.GET));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
@@ -249,16 +242,8 @@ public class PullerBusiness {
 		String url = serverHost + "/puller/getJobDetail?jobId=" + jobId;
 		
 		try {
-			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
-					.retry(5) // 重试5次
-			;
-			
-			HttpClient client = hcb.build();
-			// 插件式配置请求参数（网址、请求参数、编码、client）
-			HttpConfig config = HttpConfig.custom()
-					.client(client).url(url) // 设置请求的url
-					.encoding("utf-8"); // 设置请求和返回编码，默认就是Charset.defaultCharset()
 
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url,  5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.GET));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
@@ -306,16 +291,8 @@ public class PullerBusiness {
 		url = url.replace("{jobId}", jobId).replace("{projectId}", projectId).replace("{operatorType}", operatorType);
 		log.info(url);
 		try {
-			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
-					.retry(5) // 重试5次
-			;
 			
-			HttpClient client = hcb.build();
-			// 插件式配置请求参数（网址、请求参数、编码、client）
-			HttpConfig config = HttpConfig.custom()
-					.client(client).url(url) // 设置请求的url
-					.encoding("utf-8"); // 设置请求和返回编码，默认就是Charset.defaultCharset()
-
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url,  5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.GET));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
@@ -388,16 +365,8 @@ public class PullerBusiness {
 		String url = serverHost + "/puller/getConfig";
 		
 		try {
-			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
-					.retry(5) // 重试5次
-			;
 			
-			HttpClient client = hcb.build();
-			// 插件式配置请求参数（网址、请求参数、编码、client）
-			HttpConfig config = HttpConfig.custom()
-					.client(client).url(url) // 设置请求的url
-					.encoding("utf-8"); // 设置请求和返回编码，默认就是Charset.defaultCharset()
-
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url,  5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.GET));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
@@ -508,19 +477,10 @@ public class PullerBusiness {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("jobId", jobId);
 		jsonMap.put("status", status);
-		
+		String strJson = JsonUtil.serialize(jsonMap);
 		try {
-			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
-					.retry(5) // 重试5次
-			;
-			
-			HttpClient client = hcb.build();
-			// 插件式配置请求参数（网址、请求参数、编码、client）
-			HttpConfig config = HttpConfig.custom()
-					.client(client).url(url) // 设置请求的url
-					.map(jsonMap)
-					.encoding("utf-8"); // 设置请求和返回编码，默认就是Charset.defaultCharset()
 
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url, strJson, 5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.POST));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
@@ -566,19 +526,11 @@ public class PullerBusiness {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("jobId", jobId);
 		jsonMap.put("status", status);
+		String strJson = JsonUtil.serialize(jsonMap);
 		
 		try {
-			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
-					.retry(5) // 重试5次
-			;
 			
-			HttpClient client = hcb.build();
-			// 插件式配置请求参数（网址、请求参数、编码、client）
-			HttpConfig config = HttpConfig.custom()
-					.client(client).url(url) // 设置请求的url
-					.map(jsonMap)
-					.encoding("utf-8"); // 设置请求和返回编码，默认就是Charset.defaultCharset()
-
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url, strJson, 5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.POST));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
@@ -616,7 +568,7 @@ public class PullerBusiness {
 	 * @throws  
 	 */   
 	private void updateCloudSubscription(JobDetail detail) {
-		//fixme
+
 		String url = businessHost + "/subscription/setSubsStatus";
 		
 		//设置请参数
@@ -624,19 +576,11 @@ public class PullerBusiness {
 		jsonMap.put("subsId", detail.getSubsId());
 		jsonMap.put("status", detail.getStatus());
 		jsonMap.put("projectId", detail.getProjectId());
+		String strJson = JsonUtil.serialize(jsonMap);
 		
 		try {
-			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
-					.retry(5) // 重试5次
-			;
-			
-			HttpClient client = hcb.build();
-			// 插件式配置请求参数（网址、请求参数、编码、client）
-			HttpConfig config = HttpConfig.custom()
-					.client(client).url(url) // 设置请求的url
-					.map(jsonMap)
-					.encoding("utf-8"); // 设置请求和返回编码，默认就是Charset.defaultCharset()
 
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url, strJson, 5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.POST));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
