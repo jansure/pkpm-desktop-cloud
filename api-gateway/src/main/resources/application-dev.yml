@@ -1,0 +1,27 @@
+server:
+  port: 18080
+zuul:
+  routes:
+    oauth-server:
+      path: /uaa/**
+      serviceId: auth-server
+      sensitiveHeaders:
+      strip-prefix: false
+    pkpmcloud-server:
+      path: /pkpmcloud/**
+      #serviceId: pkpmcloud-server
+      serviceId: pkpmcloud
+      strip-prefix: true
+  host:
+    connect-timeout-millis: 60000
+    socket-timeout-millis: 60000
+  hystrix:  
+    command:  
+      default:  
+        execution:  
+          isolation:  
+            thread:  
+              timeoutInMilliseconds: 60000
+ribbon:  
+  ReadTimeout: 60000  
+  ConnectTimeout: 60000   
