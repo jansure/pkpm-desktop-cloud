@@ -71,7 +71,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	try {
 		String areaCode = "cn-north-1";
 		//String urlGetAdAndProject =serverHost + "/cloudOrder/getAdAndProject/" + areaCode;
-		String urlGetAdAndProject =serverHost + "/cloudOrder/getAdAndProject?areaCode=" + areaCode;
+		String urlGetAdAndProject =serverHost + "/params/getAdAndProject?areaCode=" + areaCode;
 //		String urlGetAdAndProject =serverHost + "/cloudOrder/getAdAndProject?s=" + "4565";
 		String adAndProjectResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(urlGetAdAndProject,  5, "utf-8", 100000).method(HttpMethods.GET));
 		
@@ -129,7 +129,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		commonRequestBean.setUserName(userInfo.getUserName());
 		commonRequestBean.setUserLoginPassword(userInfo.getUserLoginPassword());
 		commonRequestBean.setDataVolumeSize(100);
-		commonRequestBean.setSubsId(subsId);   //   字段不统一？？？  long  - integer
+		commonRequestBean.setSubsId(subsId);   //   
 		commonRequestBean.setOperatorStatusId(null);  
 		
 		commonRequestBean.setHwProductId("workspace.c2.large.windows");   //？？？
@@ -139,7 +139,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		commonRequestBean.setAdId(Integer.parseInt(adId));
 		commonRequestBean.setImageId("997488ed-fa23-4671-b88c-d364c0405334");   //前端传过来的ID
 		commonRequestBean.setGloryProductName("kbp-test");
-		
+		commonRequestBean.setAreaCode(areaCode);
 		String urlCreateAdAndDesktop =serverHost + "/desktop/createAdAndDesktop";
 	
 		String strJson = JsonUtil.serialize(commonRequestBean);

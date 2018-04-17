@@ -187,7 +187,8 @@ public class DesktopServiceImpl implements DesktopService {
 					.replaceAll("\\{projectId\\}", commonRequestBean.getPkpmWorkspaceUrl().getProjectId());
 			String desktops = JsonUtil.serialize(commonRequestBean.getDesktops());
 			String strJson = "{\"desktops\":" + desktops + "}";
-
+			
+			HttpConfig buildHttpConfig = HttpConfigBuilder.buildHttpConfig(url, strJson, token, 5, null, 10000);
 			String strJobResponse = HttpClientUtil.mysend(
 					HttpConfigBuilder.buildHttpConfig(url, strJson, token, 5, null, 10000).method(HttpMethods.POST));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(strJobResponse, MyHttpResponse.class);
