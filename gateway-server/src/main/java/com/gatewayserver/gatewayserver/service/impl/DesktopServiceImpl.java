@@ -200,12 +200,13 @@ public class DesktopServiceImpl implements DesktopService {
 				JobBean jobBean = JsonUtil.deserialize(body, JobBean.class);
 				
 				// 更新到PkpmOperatorStatus
-				PkpmOperatorStatus pkpmOperatorStatus = new PkpmOperatorStatus();
+				PkpmOperatorStatus pkpmOperatorStatus = new PkpmOperatorStatus().setDefault();
 				BeanUtil.copyPropertiesIgnoreNull(commonRequestBean, pkpmOperatorStatus);
 				pkpmOperatorStatus.setId(commonRequestBean.getOperatorStatusId());
 				pkpmOperatorStatus.setJobId(jobBean.getJobId());
 				pkpmOperatorStatus.setComputerName(commonRequestBean.getDesktops().get(0).getComputerName());
 				pkpmOperatorStatus.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
+				pkpmOperatorStatus.setAreaCode(commonRequestBean.getAreaCode());
 				PkpmOperatorStatusBeanUtil.checkNotNull(pkpmOperatorStatus);
 				pkpmOperatorStatusDAO.update(pkpmOperatorStatus);
 				
@@ -461,9 +462,7 @@ public class DesktopServiceImpl implements DesktopService {
 
 
 	/**
-	 *
-	 * 变更桌面规格，如2核4G切换为4核8G
-	 *
+	 * @apiNote  变更桌面规格，如2核4G切换为4核8G
 	 * @author xuhe
 	 * @param  requestBean
 	 * @return DesktopSpecResponse(包含jobId)
@@ -474,38 +473,26 @@ public class DesktopServiceImpl implements DesktopService {
 		commonRequestBeanBuilder.buildBeanforChangeDesktopSpecs(requestBean);
 
 		//初始化数据库插入数据
-		PkpmOperatorStatus operatorStatus = new PkpmOperatorStatus().setDefault();
+		PkpmOperatorStatus operatorStatus = new PkpmOperatorStatus();
 		BeanUtil.copyPropertiesIgnoreNull(requestBean, operatorStatus);
+		operatorStatus.setStatus(JobStatusEnum.INITIAL.toString());
 		operatorStatus.setOperatorType(OperatoreTypeEnum.RESIZE.toString());
 		PkpmOperatorStatusBeanUtil.checkNotNull(operatorStatus);
 
 		//像数据库插入一条记录
 		int result = pkpmOperatorStatusDAO.save(operatorStatus);
-		log.info("变更桌面插入记录 --id={}",operatorStatus.getId());
+		log.info("变更桌面插入记录 --id={}",result);
 
 		try {
 			String token = requestBean.getPkpmToken().getToken();
 			String url = requestBean.getPkpmWorkspaceUrl().getUrl();
-			//调用获取桌面详情接口
-			DesktopRequest desktopRequest = queryDesktopDetail(requestBean);
-			Preconditions.checkNotNull(desktopRequest.getDesktop(), "桌面信息为空");
-			//获取桌面状态及产品配置
-			String desktopStatus = desktopRequest.getDesktop().getStatus();
-			String productId = requestBean.getDesktops().get(0).getProductId();
-			//判断计算机状态为关机 且规格与已有规格不同
-			if(!desktopStatus.equals("SHUTOFF"))
-				throw Exceptions.newBusinessException("计算机未关机，请先关机");
-			else if (desktopRequest.getDesktop().getProductId().equals(requestBean.getDesktops().get(0).getProductId()))
-				throw Exceptions.newBusinessException("桌面配置相同，无法修改");
-			//发送变更桌面规格请求
 			Header[] headers = HttpHeader.custom().contentType("application/json").other("X-Auth-Token", token).build();
 			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
 					.sslpv(SSLProtocolVersion.TLSv1_2) // 可设置ssl版本号，默认SSLv3，用于ssl，也可以调用sslpv("TLSv1.2")
 					.ssl() // https，支持自定义ssl证书路径和密码
 					.retry(5);
 			HttpClient client = hcb.build();
-			String strJson = String.format("{\"product_id\": \"%s\"}", productId);
-			log.info(strJson);
+			String strJson = String.format("{\"product_id\": \"%s\"}", requestBean.getHwProductId());
 			HttpConfig config = HttpConfig.custom().headers(headers, true) // 设置headers，不需要时则无需设置
 					.client(client).url(url).json(strJson)// 设置请求的url
 					.encoding("utf-8"); // 设置请求和返回编码，默认就是Charset.defaultCharset()
@@ -516,25 +503,12 @@ public class DesktopServiceImpl implements DesktopService {
 			if (statusCode==HttpStatus.OK.value()) {
 				// 重置成功，返回jobId
 				DesktopSpecResponse response =JsonUtil.deserialize(myHttpResponse.getBody(), DesktopSpecResponse.class);
-				//在puller中插入一条记录 用于异步更新状态
-				PkpmJobStatus jobStatus =new PkpmJobStatus();
-				jobStatus.setJobId(operatorStatus.getJobId());
-				jobStatus.setCreateTime(LocalDateTime.now());
-				jobStatus.setProjectId(requestBean.getProjectId());
-				PkpmProjectDef projectDef = pkpmProjectDefDAO
-						.selectById(requestBean.getProjectId());
-				jobStatus.setWorkspaceId(projectDef.getWorkspaceId());
-				jobStatus.setAreaCode(requestBean.getAreaCode());
-				jobStatus.setJobId(response.getJobId());
-				jobStatus.setOperatorType(OperatoreTypeEnum.RESIZE.toString());
-				jobStatus.setStatus(JobStatusEnum.INITIAL.toString());
-				pkpmJobStatusDAO.insert(jobStatus);
-				//重置成功，更新状态
-				log.info("变更桌面Puller中插入一条记录 --jobId={}",jobStatus.getJobId());
 				return response;
 			}
 			throw Exceptions.newBusinessException(myHttpResponse.getBody());
 		} catch (HttpProcessException e) {
+			log.error(e.getMessage());
+		} catch (Exception e){
 			log.error(e.getMessage());
 		}
 		throw Exceptions.newBusinessException("重置桌面规格失败");
