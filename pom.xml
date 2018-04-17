@@ -10,10 +10,14 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>gateway-utils</module>
-        <module>desktop-gateway-server</module>
+        <module>gateway-server</module>
         <module>http-client-util</module>
         <module>puller</module>
-        <module>desktop-request-bean</module>
+        <module>gateway-common</module>
+        <module>api-gateway</module>
+        <module>auth-server</module>
+        <module>config-server</module>
+        <module>eureka-server</module>
     </modules>
 
     <!-- 统一版本号依赖 -->
