@@ -69,7 +69,7 @@ public class DesktopServiceImplTest {
         requestBean.setSubsId(4L);
         Desktop desktop = new Desktop();
         desktop.setDesktopId("8ff115ca-61bb-4573-822b-ab143f293d2e");
-        desktop.setProductId("workspace.c2.large.windows");
+        desktop.setProductId("workspace.c2.xlarge.windows");
         List desktopList = new ArrayList<Desktop>();
         desktopList.add(desktop);
         requestBean.setDesktops(desktopList);

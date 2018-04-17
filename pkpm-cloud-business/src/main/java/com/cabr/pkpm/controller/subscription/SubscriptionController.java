@@ -6,12 +6,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.cabr.pkpm.utils.ResultObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.cabr.pkpm.entity.user.UserInfo;
 import com.cabr.pkpm.entity.workorder.WorkOrderVO;
@@ -67,5 +64,10 @@ public class SubscriptionController {
 			return this.result;
 		}
 		
+	}
+
+	@PostMapping(value = "/setSubsStatus")
+	public ResultObject updateSubscription(){
+		return ResultObject.success("订单表更新成功");
 	}
 }

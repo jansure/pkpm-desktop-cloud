@@ -518,6 +518,13 @@ public class DesktopServiceImpl implements DesktopService {
 				DesktopSpecResponse response =JsonUtil.deserialize(myHttpResponse.getBody(), DesktopSpecResponse.class);
 				//在puller中插入一条记录 用于异步更新状态
 				PkpmJobStatus jobStatus =new PkpmJobStatus();
+				jobStatus.setJobId(operatorStatus.getJobId());
+				jobStatus.setCreateTime(LocalDateTime.now());
+				jobStatus.setProjectId(requestBean.getProjectId());
+				PkpmProjectDef projectDef = pkpmProjectDefDAO
+						.selectById(requestBean.getProjectId());
+				jobStatus.setWorkspaceId(projectDef.getWorkspaceId());
+				jobStatus.setAreaCode(requestBean.getAreaCode());
 				jobStatus.setJobId(response.getJobId());
 				jobStatus.setOperatorType(OperatoreTypeEnum.RESIZE.toString());
 				jobStatus.setStatus(JobStatusEnum.INITIAL.toString());
