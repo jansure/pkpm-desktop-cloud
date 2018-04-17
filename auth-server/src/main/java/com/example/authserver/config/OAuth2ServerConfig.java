@@ -14,6 +14,9 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+
+import javax.annotation.Resource;
+
 /**
  * OAuth2 授权服务器配置类
  * @author pkpm
@@ -23,13 +26,13 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 @EnableAuthorizationServer //用于配置 OAuth 2.0 授权服务器机制
 public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 
-	@Autowired
+	@Resource
 	private AuthenticationManager authenticationManager;
 	
-	@Autowired
+	@Resource
     private RedisConnectionFactory connectionFactory;
 
-    @Autowired
+    @Resource
     private OAuth2ClientProperties clientProperties;
     
 //	@Autowired
