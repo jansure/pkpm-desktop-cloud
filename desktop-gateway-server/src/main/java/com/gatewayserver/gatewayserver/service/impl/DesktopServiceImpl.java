@@ -205,7 +205,7 @@ public class DesktopServiceImpl implements DesktopService {
 				pkpmJob.setWorkspaceId(projectDef.getWorkspaceId());
 				pkpmJob.setStatus(JobStatusEnum.INITIAL.toString());
 				pkpmJob.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
-				
+				pkpmJob.setAreaCode(commonRequestBean.getAreaCode());
 				pkpmJobStatusDAO.insert(pkpmJob);
 				// 更新到PkpmOperatorStatus
 				PkpmOperatorStatus pkpmOperatorStatus = new PkpmOperatorStatus();
