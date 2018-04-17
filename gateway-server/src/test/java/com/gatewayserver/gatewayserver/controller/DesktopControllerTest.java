@@ -1,4 +1,4 @@
-package com.gatewayserver.gatewayserver;
+package com.gatewayserver.gatewayserver.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
@@ -18,7 +18,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class WorkspaceControllerTest {
+public class DesktopControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
@@ -73,7 +73,7 @@ public class WorkspaceControllerTest {
 
     @Test
     public void testQueryJob() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/queryJob/ff80808262863b0701628f555cf600cf").accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get("/desktop/queryJob/ff80808262863b0701628f555cf600cf").accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print()).andReturn();
     }

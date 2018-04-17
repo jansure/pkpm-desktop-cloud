@@ -19,6 +19,10 @@ public interface PkpmJobStatusMapper {
     @Select("select * from pkpm_job_status (#{pkpmJob}) limit #{page},#{pageSize}")
     @Lang(SimpleSelectLangDriver.class)
     List<PkpmJobStatus> select(PkpmJobStatus pkpmJob);
+    
+    @Select("select * from pkpm_job_status (#{pkpmJob})")
+    @Lang(SimpleSelectLangDriver.class)
+    List<PkpmJobStatus> selectByPkpmJob(PkpmJobStatus pkpmJob);
 
     @Update("update pkpm_job_status (#{pkpmJob}) WHERE job_id = #{jobId}")
     @Lang(SimpleUpdateLangDriver.class)

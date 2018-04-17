@@ -16,12 +16,13 @@ public interface PullerService {
 
     /**
      * @param jobSize 任务条数
+     * @param areaCode 区域名称
      * @return List<String>    返回任务Id集合
      * @throws
      * @Title: getJobTasks
      * @Description: 获取所有任务列表
      */
-    List<String> getJobTasks(int jobSize);
+    List<String> getJobTasks(int jobSize, String areaCode);
 
     /**
      * @param jobId 任务Id

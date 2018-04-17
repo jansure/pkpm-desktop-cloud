@@ -7,6 +7,8 @@ import com.pkpm.httpclientutil.exception.HttpProcessException;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
+
 import org.apache.http.Header;
 import org.apache.http.client.HttpClient;
 
@@ -85,6 +87,22 @@ public class HttpConfigBuilder {
     	HttpConfig config = HttpConfig.custom().headers(headers, true)
     			.client(client).url(url)
     			.json(strJson)
+    			.encoding("utf-8");
+    	return config;
+    }
+    
+    public static HttpConfig buildHttpConfigNoToken(String url,
+    		Map<String, Object> paraMap,
+    		Integer tryTimes,
+    		String encode,
+    		Integer timeOut)
+    				throws HttpProcessException {
+    	
+    	HCB hcb = HCB.custom().timeout(timeOut).retry(tryTimes);
+    	HttpClient client = hcb.build();
+    	HttpConfig config = HttpConfig.custom()
+    			.client(client).url(url)
+    			.map(paraMap)
     			.encoding("utf-8");
     	return config;
     }

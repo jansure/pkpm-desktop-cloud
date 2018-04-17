@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,15 +84,19 @@ public class PullerServiceImpl implements PullerService {
      * @see com.gatewayserver.gatewayserver.service.IPullerService#getJobTasks()
      */
     @Override
-    public List<String> getJobTasks(int jobSize) {
+    public List<String> getJobTasks(int jobSize, String areaCode) {
 
     	if(jobSize < 1 || jobSize > 30) {//范围控制
     		jobSize = 20;
     	}
         //获取所有的未更新的任务
         PkpmJobStatus pkpmJob = new PkpmJobStatus();
+        
     	//fixme for test,modify
-    	pkpmJob.setAreaCode("");
+        if(StringUtils.isNotEmpty(areaCode)) {
+        	pkpmJob.setAreaCode(areaCode);
+		}
+    	
         pkpmJob.setStatus(JobStatusEnum.INITIAL.toString());
         pkpmJob.setPage(PageUtils.getBeginPos(1, jobSize));
         pkpmJob.setPageSize(jobSize);
