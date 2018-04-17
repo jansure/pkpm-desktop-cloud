@@ -54,10 +54,8 @@ public class WorkspaceServiceImplTest {
         desktops.add(desktop);
         requestBean.setDesktops(desktops);
 
-        ResultObject resultObject = workspaceServiceImpl.changeDesktopSpec(requestBean);
-        System.out.println(resultObject.getCode());
-        System.out.println(resultObject.getMessage());
-        System.out.println(resultObject.getData());
+        workspaceServiceImpl.changeDesktopSpec(requestBean);
+
     }
 
     @Test
