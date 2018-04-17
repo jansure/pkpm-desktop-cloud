@@ -378,7 +378,7 @@ public class PullerServiceImpl implements PullerService {
 	        PkpmOperatorStatus pkpmOperatorStatus = new PkpmOperatorStatus();
 	        
 	        //设置对象属性为空
-	        pkpmOperatorStatus = new MyBeanUtil<PkpmOperatorStatus>().setPropertyNull(pkpmOperatorStatus);
+//	        pkpmOperatorStatus = new MyBeanUtil<PkpmOperatorStatus>().setPropertyNull(pkpmOperatorStatus);
 	        
 	        pkpmOperatorStatus.setId(oldOperatorStatus.getId());
 	        pkpmOperatorStatus.setStatus(status);

@@ -23,7 +23,7 @@ public class PkpmOperatorStatusDAOImpl implements PkpmOperatorStatusDAO {
         PkpmOperatorStatus criteria = new PkpmOperatorStatus();
         
         //对象所有属性置空
-        criteria = new MyBeanUtil<PkpmOperatorStatus>().setPropertyNull(criteria);
+//        criteria = new MyBeanUtil<PkpmOperatorStatus>().setPropertyNull(criteria);
         
         criteria.setJobId(jobId);
         
