@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import java.util.Map;
 
 @Service
 @Slf4j
+@Transactional
 public class StrategyServiceImpl implements StrategyService {
     @Resource
     private PkpmTokenDAO pkpmTokenDAO;

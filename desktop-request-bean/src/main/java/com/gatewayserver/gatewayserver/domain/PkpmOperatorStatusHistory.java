@@ -13,7 +13,7 @@ public class PkpmOperatorStatusHistory implements Serializable {
     private String jobId;
     private String projectId;
     private Integer userId;
-    private Integer subsId;
+    private Long subsId;
     private Integer adId;
     private String userName;
     private String desktopId;

@@ -24,6 +24,7 @@ import com.unboundid.util.ssl.SSLUtil;
 import com.unboundid.util.ssl.TrustAllTrustManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.net.ssl.SSLSocketFactory;
@@ -36,6 +37,7 @@ import java.util.Map;
 
 @Service
 @Slf4j
+@Transactional
 public class AdServiceImpl implements AdService {
 
     private static Map<String, LDAPConnectionPool> poolMap = new HashMap();

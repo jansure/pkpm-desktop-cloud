@@ -8,8 +8,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
-import com.desktop.utils.page.PageUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +17,9 @@ import com.desktop.constant.JobStatusEnum;
 import com.desktop.constant.OperatoreTypeEnum;
 import com.desktop.utils.HttpConfigBuilder;
 import com.desktop.utils.JsonUtil;
+import com.desktop.utils.MyBeanUtil;
 import com.desktop.utils.exception.Exceptions;
+import com.desktop.utils.page.PageUtils;
 import com.gatewayserver.gatewayserver.dao.PkpmJobStatusDAO;
 import com.gatewayserver.gatewayserver.dao.PkpmOperatorStatusDAO;
 import com.gatewayserver.gatewayserver.dao.PkpmOperatorStatusHistoryDAO;
@@ -49,6 +49,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service
 @Slf4j
+@Transactional
 public class PullerServiceImpl implements PullerService {
 	
     @Resource
@@ -373,6 +374,10 @@ public class PullerServiceImpl implements PullerService {
 	
 	        //更新任务详情
 	        PkpmOperatorStatus pkpmOperatorStatus = new PkpmOperatorStatus();
+	        
+	        //设置对象属性为空
+	        pkpmOperatorStatus = new MyBeanUtil<PkpmOperatorStatus>().setPropertyNull(pkpmOperatorStatus);
+	        
 	        pkpmOperatorStatus.setId(oldOperatorStatus.getId());
 	        pkpmOperatorStatus.setStatus(status);
 	        pkpmOperatorStatus.setUpdateTime(LocalDateTime.now());

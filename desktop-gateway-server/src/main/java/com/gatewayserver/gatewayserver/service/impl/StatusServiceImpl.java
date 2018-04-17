@@ -11,6 +11,7 @@ import com.gatewayserver.gatewayserver.service.StatusService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 
 @Service
 @Slf4j
+@Transactional
 public class StatusServiceImpl implements StatusService {
 
     @Resource

@@ -55,3 +55,8 @@ pagehelper:
     reasonable: true
     supportMethodsArguments: true
     params: count=countSql
+
+#SQL日志    
+#logging:
+#  level:
+#    com.gatewayserver.gatewayserver.dao.mapper: trace # 改成你的mapper文件所在包路径
