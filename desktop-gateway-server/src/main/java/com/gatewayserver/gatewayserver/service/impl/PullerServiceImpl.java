@@ -90,6 +90,8 @@ public class PullerServiceImpl implements PullerService {
     	}
         //获取所有的未更新的任务
         PkpmJobStatus pkpmJob = new PkpmJobStatus();
+    	//fixme for test,modify
+    	pkpmJob.setAreaCode("");
         pkpmJob.setStatus(JobStatusEnum.INITIAL.toString());
         pkpmJob.setPage(PageUtils.getBeginPos(1, jobSize));
         pkpmJob.setPageSize(jobSize);
