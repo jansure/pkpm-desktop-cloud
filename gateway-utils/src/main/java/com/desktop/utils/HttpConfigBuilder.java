@@ -30,8 +30,6 @@ public class HttpConfigBuilder {
                 .json(strJson)
                 .encoding("utf-8");
         Header[] headers2 = config.headers();
-        log.info("aaaa" + headers2[0]);
-        log.info("+hgjsadgsakdsa+" + JsonUtil.serialize(config));
         return config;
     }
 
@@ -50,7 +48,6 @@ public class HttpConfigBuilder {
         HttpConfig config = HttpConfig.custom().headers(headers, true)
                 .client(client).url(url)
                 .encoding("utf-8");
-        log.info("+hgjsadgsakdsa+" + JsonUtil.serialize(config));
         return config;
     }
     
