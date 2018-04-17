@@ -99,6 +99,18 @@ public class CommonRequestBeanUtil {
         Preconditions.checkArgument(StringUtils.isNotBlank(requestBean.getPkpmWorkspaceUrl().getJobId()), "请求对象的JobId不能为空");
     }
 
+    /**
+     * 更改桌面配置的参数校验
+     *
+     * @param commonRequestBean
+     */
+    public static void checkCommonRequestBeanForChgDeskSpec(CommonRequestBean commonRequestBean) {
+        checkCommonRequestBean(commonRequestBean);
+        Preconditions.checkNotNull(commonRequestBean.getHwProductId(),
+                "Desktop字段内的product_id不能为空");
+
+    }
+
 
     /**
      * 删除桌面接口、修改桌面属性接口的参数校验

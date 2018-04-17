@@ -5,6 +5,7 @@ import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
 import com.gatewayserver.gatewayserver.dto.DesktopCreation;
 import com.gatewayserver.gatewayserver.dto.DesktopRequest;
 import com.gatewayserver.gatewayserver.dto.JobBean;
+import com.gatewayserver.gatewayserver.dto.desktop.DesktopSpecResponse;
 
 /**
  * @author yangpengfei
@@ -47,6 +48,11 @@ public interface DesktopService {
 	 * 修改桌面属性
 	 */
 	String changeDesktop(CommonRequestBean requestBean);
+	/**
+	 * 变更桌面配置
+	 * @author xuhe
+	 */
+	DesktopSpecResponse changeDesktopSpec(CommonRequestBean requestBean);
 
     /**
      * 查询桌面详情
