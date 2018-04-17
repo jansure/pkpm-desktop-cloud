@@ -27,7 +27,7 @@ public class PkpmJobStatusDAOImpl implements PkpmJobStatusDAO {
     public PkpmJobStatus selectByJobId(String jobId) {
         PkpmJobStatus pkpmJob = new PkpmJobStatus();
         pkpmJob.setJobId(jobId);
-        List<PkpmJobStatus> list = mapper.select(pkpmJob);
+        List<PkpmJobStatus> list = mapper.selectByPkpmJob(pkpmJob);
         if (CollectionUtils.isNotEmpty(list))
             return list.get(0);
         return null;
@@ -54,7 +54,7 @@ public class PkpmJobStatusDAOImpl implements PkpmJobStatusDAO {
 
     @Override
     public List<PkpmJobStatus> select(PkpmJobStatus pkpmJob) {
-        return mapper.select(pkpmJob);
+        return mapper.selectByPkpmJob(pkpmJob);
     }
 
 	  

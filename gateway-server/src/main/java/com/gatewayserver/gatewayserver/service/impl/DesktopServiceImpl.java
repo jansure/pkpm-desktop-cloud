@@ -200,12 +200,13 @@ public class DesktopServiceImpl implements DesktopService {
 				JobBean jobBean = JsonUtil.deserialize(body, JobBean.class);
 				
 				// 更新到PkpmOperatorStatus
-				PkpmOperatorStatus pkpmOperatorStatus = new PkpmOperatorStatus();
+				PkpmOperatorStatus pkpmOperatorStatus = new PkpmOperatorStatus().setDefault();
 				BeanUtil.copyPropertiesIgnoreNull(commonRequestBean, pkpmOperatorStatus);
 				pkpmOperatorStatus.setId(commonRequestBean.getOperatorStatusId());
 				pkpmOperatorStatus.setJobId(jobBean.getJobId());
 				pkpmOperatorStatus.setComputerName(commonRequestBean.getDesktops().get(0).getComputerName());
 				pkpmOperatorStatus.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
+				pkpmOperatorStatus.setAreaCode(commonRequestBean.getAreaCode());
 				PkpmOperatorStatusBeanUtil.checkNotNull(pkpmOperatorStatus);
 				pkpmOperatorStatusDAO.update(pkpmOperatorStatus);
 				
