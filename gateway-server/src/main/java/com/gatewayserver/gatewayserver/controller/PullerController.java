@@ -38,8 +38,8 @@ public class PullerController {
      * @Description: 获取所有未更新的任务
      */
     @RequestMapping(value = "/getJobTasks", method = RequestMethod.GET)
-    public ResultObject getJobTasks(int jobSize) {
-        List<String> jobIds = pullerService.getJobTasks(jobSize);
+    public ResultObject getJobTasks(int jobSize, String areaCode) {
+        List<String> jobIds = pullerService.getJobTasks(jobSize, areaCode);
 
         if (CollectionUtils.isNotEmpty(jobIds)) {
             return ResultObject.success(jobIds, "操作成功!");

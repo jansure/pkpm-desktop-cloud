@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.desktop.constant.JobStatusEnum;
 import com.desktop.constant.OperatoreTypeEnum;
 import com.desktop.constant.ResponseStatusEnum;
+import com.desktop.constant.SubscriptionStatusEnum;
 import com.desktop.utils.JsonUtil;
 import com.desktop.utils.page.ResultObject;
 import com.pkpm.httpclientutil.HttpClientUtil;
@@ -54,6 +55,11 @@ public class PullerBusiness {
 	 */
 	private static Set<String> opTypeSet = new HashSet<String>();
 	
+	/**
+	 * 存放启动参数中设置的监控区域名称参数
+	 */
+	private static String areaCode = "";
+	
 	static {
 		String opType = System.getProperty("opType");
 		if(StringUtils.isNotEmpty(opType)) {
@@ -68,6 +74,12 @@ public class PullerBusiness {
 				}
 			}
 		}
+		
+		String areaCodeStr = System.getProperty("areaCode");
+		if(StringUtils.isNotEmpty(areaCodeStr)) {
+			areaCode = areaCodeStr.toLowerCase();
+		}
+		
 	}
 	
 	/**
@@ -77,8 +89,9 @@ public class PullerBusiness {
 	 * @return void    无返回
 	 */
 	public void updateJobStatus() {
-		String url = serverHost + "/puller/getJobTasks?jobSize=" + jobSize;
-		
+		String url = serverHost + "/puller/getJobTasks?jobSize={jobSize}&areaCode={areaCode}";
+		url = url.replace("{jobSize}", jobSize).replace("{areaCode}", areaCode);
+		log.info(url);
 		try {
 			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
 					.retry(5) // 重试5次
@@ -211,9 +224,9 @@ public class PullerBusiness {
 					&& (operatorType.equals(OperatoreTypeEnum.DELETE.toString())
 							|| operatorType.equals(OperatoreTypeEnum.DESKTOP.toString()))) {
 				if(operatorType.equals(OperatoreTypeEnum.DELETE.toString())) {
-					detail.setStatus("");
+					detail.setStatus(SubscriptionStatusEnum.INVALID.toString());
 				}else {
-					detail.setStatus("");
+					detail.setStatus(SubscriptionStatusEnum.VALID.toString());
 				}
 				
 				updateCloudSubscription(detail);
