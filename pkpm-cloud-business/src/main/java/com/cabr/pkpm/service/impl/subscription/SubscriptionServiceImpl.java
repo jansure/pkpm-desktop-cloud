@@ -191,7 +191,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		String strResponse = HttpClientUtil.mysend(
 				HttpConfigBuilder.buildHttpConfigNoToken(urlCreateAdAndDesktop, strJson, 5, "utf-8", 10000).method(HttpMethods.POST));
 		MyHttpResponse myHttpResponse = JsonUtil.deserialize(strResponse, MyHttpResponse.class);
-		System.out.println("urlCreateAdAndDesktop---------" + myHttpResponse);
+		
 		Integer statusCode = myHttpResponse.getStatusCode();
 			//3、创建成功后,返回参数给前台
 			if(HttpStatus.OK.value() == statusCode){
