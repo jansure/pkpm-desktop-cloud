@@ -1,7 +1,7 @@
 package com.gatewayserver.gatewayserver.dao;
 
 
-import com.gatewayserver.gatewayserver.domain.PkpmWorkspaceUrl;
+import com.gateway.common.domain.PkpmWorkspaceUrl;
 
 public interface PkpmWorkspaceUrlDAO {
     /**

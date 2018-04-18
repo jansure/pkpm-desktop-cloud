@@ -1,10 +1,10 @@
 package com.gatewayserver.gatewayserver.service.impl;
 
 import com.desktop.utils.page.ResultObject;
+import com.gateway.common.domain.CommonRequestBean;
+import com.gateway.common.dto.Desktop;
 import com.gatewayserver.gatewayserver.dao.PkpmOperatorStatusDAO;
 import com.gatewayserver.gatewayserver.dao.impl.PkpmCloudUserInfoDAOImpl;
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
-import com.gatewayserver.gatewayserver.dto.Desktop;
 import com.gatewayserver.gatewayserver.service.DesktopService;
 import com.gatewayserver.gatewayserver.thread.JobThread;
 import org.junit.Test;

@@ -1,7 +1,7 @@
 package com.gatewayserver.gatewayserver.service.impl;
 
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
-import com.gatewayserver.gatewayserver.dto.Desktop;
+import com.gateway.common.domain.CommonRequestBean;
+import com.gateway.common.dto.Desktop;
 import com.gatewayserver.gatewayserver.service.DesktopService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,7 +1,7 @@
 package com.gatewayserver.gatewayserver.service;
 
-import com.gatewayserver.gatewayserver.domain.PkpmOperatorStatus;
-import com.gatewayserver.gatewayserver.domain.PkpmPullerConfig;
+import com.gateway.common.domain.PkpmOperatorStatus;
+import com.gateway.common.domain.PkpmPullerConfig;
 import com.pkpm.httpclientutil.HuaWeiResponse;
 
 import java.util.List;

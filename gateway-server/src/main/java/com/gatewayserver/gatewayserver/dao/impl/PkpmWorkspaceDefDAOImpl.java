@@ -1,8 +1,9 @@
 package com.gatewayserver.gatewayserver.dao.impl;
 
+import com.gateway.common.domain.PkpmWorkspaceDef;
 import com.gatewayserver.gatewayserver.dao.PkpmWorkspaceDefDAO;
 import com.gatewayserver.gatewayserver.dao.mapper.PkpmWorkspaceDefMapper;
-import com.gatewayserver.gatewayserver.domain.PkpmWorkspaceDef;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 

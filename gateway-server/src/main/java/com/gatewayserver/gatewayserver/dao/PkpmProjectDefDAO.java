@@ -3,7 +3,7 @@ package com.gatewayserver.gatewayserver.dao;
 
 import java.util.List;
 
-import com.gatewayserver.gatewayserver.domain.PkpmProjectDef;
+import com.gateway.common.domain.PkpmProjectDef;
 /**
  * @Description 项目信息DAO
  * @author yangpengfei

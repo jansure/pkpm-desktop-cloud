@@ -1,8 +1,8 @@
 package com.gatewayserver.gatewayserver.utils;
 
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
-import com.gatewayserver.gatewayserver.dto.Desktop;
-import com.gatewayserver.gatewayserver.dto.strategy.Policies;
+import com.gateway.common.domain.CommonRequestBean;
+import com.gateway.common.dto.Desktop;
+import com.gateway.common.dto.strategy.Policies;
 import com.google.common.base.Preconditions;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang.StringUtils;

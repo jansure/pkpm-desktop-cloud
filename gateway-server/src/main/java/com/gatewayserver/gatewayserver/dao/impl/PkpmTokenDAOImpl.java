@@ -1,8 +1,9 @@
 package com.gatewayserver.gatewayserver.dao.impl;
 
+import com.gateway.common.domain.PkpmToken;
 import com.gatewayserver.gatewayserver.dao.PkpmTokenDAO;
 import com.gatewayserver.gatewayserver.dao.mapper.PkpmTokenMapper;
-import com.gatewayserver.gatewayserver.domain.PkpmToken;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 

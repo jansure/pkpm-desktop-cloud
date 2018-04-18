@@ -1,8 +1,8 @@
 package com.gatewayserver.gatewayserver.controller;
 
 import com.desktop.utils.page.ResultObject;
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
-import com.gatewayserver.gatewayserver.dto.product.Products;
+import com.gateway.common.domain.CommonRequestBean;
+import com.gateway.common.dto.product.Products;
 import com.gatewayserver.gatewayserver.service.ProductPackageService;
 import com.gatewayserver.gatewayserver.utils.CommonRequestBeanBuilder;
 import com.gatewayserver.gatewayserver.utils.CommonRequestBeanUtil;

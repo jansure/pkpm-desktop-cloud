@@ -1,9 +1,9 @@
 package com.gatewayserver.gatewayserver.controller;
 
 import com.desktop.utils.page.ResultObject;
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
-import com.gatewayserver.gatewayserver.dto.record.Records;
-import com.gatewayserver.gatewayserver.dto.resp.userlist.UserList;
+import com.gateway.common.domain.CommonRequestBean;
+import com.gateway.common.dto.record.Records;
+import com.gateway.common.dto.resp.userlist.UserList;
 import com.gatewayserver.gatewayserver.service.UserService;
 import com.gatewayserver.gatewayserver.utils.CommonRequestBeanBuilder;
 import com.gatewayserver.gatewayserver.utils.CommonRequestBeanUtil;

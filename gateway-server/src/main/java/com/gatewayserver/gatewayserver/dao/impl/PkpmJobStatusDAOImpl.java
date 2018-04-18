@@ -7,9 +7,9 @@ import javax.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
+import com.gateway.common.domain.PkpmJobStatus;
 import com.gatewayserver.gatewayserver.dao.PkpmJobStatusDAO;
 import com.gatewayserver.gatewayserver.dao.mapper.PkpmJobStatusMapper;
-import com.gatewayserver.gatewayserver.domain.PkpmJobStatus;
 import com.github.pagehelper.PageHelper;
 
 /**

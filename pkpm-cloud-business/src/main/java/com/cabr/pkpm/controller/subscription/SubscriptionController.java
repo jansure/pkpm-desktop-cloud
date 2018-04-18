@@ -17,7 +17,7 @@ import com.cabr.pkpm.service.user.IUserService;
 import com.cabr.pkpm.utils.ResponseResult;
 import com.cabr.pkpm.utils.sdk.RedisCacheUtil;
 import com.cabr.pkpm.vo.MyProduct;
-import com.gatewayserver.gatewayserver.domain.PkpmOperatorStatus;
+import com.gateway.common.domain.PkpmOperatorStatus;
 
 @RestController
 @RequestMapping("/subscription")

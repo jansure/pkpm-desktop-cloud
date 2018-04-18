@@ -16,10 +16,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.desktop.utils.exception.Exceptions;
+import com.gateway.common.domain.PkpmAdDef;
+import com.gateway.common.domain.PkpmProjectDef;
 import com.gatewayserver.gatewayserver.dao.PkpmAdDefDAO;
 import com.gatewayserver.gatewayserver.dao.PkpmProjectDefDAO;
-import com.gatewayserver.gatewayserver.domain.PkpmAdDef;
-import com.gatewayserver.gatewayserver.domain.PkpmProjectDef;
 import com.gatewayserver.gatewayserver.service.AdService;
 import com.gatewayserver.gatewayserver.service.GatewayServerParam;
 import com.google.common.base.Preconditions;

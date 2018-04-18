@@ -1,6 +1,6 @@
 package com.gatewayserver.gatewayserver.service;
 
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
+import com.gateway.common.domain.CommonRequestBean;
 
 public interface StrategyService {
     /**

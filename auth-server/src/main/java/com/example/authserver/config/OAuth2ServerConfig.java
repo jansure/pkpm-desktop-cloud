@@ -1,11 +1,12 @@
 package com.example.authserver.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
+import javax.annotation.Resource;
+
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -13,9 +14,6 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-
-import javax.annotation.Resource;
 
 /**
  * OAuth2 授权服务器配置类
@@ -67,8 +65,10 @@ public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()	// 使用内存存储客户端信息
-                .withClient(clientProperties.getClientId())	// client_id
-                .secret(clientProperties.getClientSecret())	// client_secret
+//                .withClient(clientProperties.getClientId())	// client_id
+//                .secret(clientProperties.getClientSecret())	// client_secret
+                .withClient("client1")	// client_id
+                .secret("123456")	// client_secret
                 .authorizedGrantTypes("refresh_token","authorization_code", "password", "client_credentials")	// 该client允许的授权类型, oauth2保护模式
                 .scopes("read", "view", "webclient","mobileclient")	// 允许的授权范围
                 .accessTokenValiditySeconds(3600) //设置token有效时间，单位是秒，(如果不设置，框架内部默认是12小时),失效后自动从redis中移除

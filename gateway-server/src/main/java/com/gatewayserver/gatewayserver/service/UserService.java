@@ -1,8 +1,8 @@
 package com.gatewayserver.gatewayserver.service;
 
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
-import com.gatewayserver.gatewayserver.dto.record.Records;
-import com.gatewayserver.gatewayserver.dto.resp.userlist.UserList;
+import com.gateway.common.domain.CommonRequestBean;
+import com.gateway.common.dto.record.Records;
+import com.gateway.common.dto.resp.userlist.UserList;
 
 public interface UserService {
 

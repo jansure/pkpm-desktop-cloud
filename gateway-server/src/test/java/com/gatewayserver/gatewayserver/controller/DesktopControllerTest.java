@@ -1,7 +1,8 @@
 package com.gatewayserver.gatewayserver.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
+import com.gateway.common.domain.CommonRequestBean;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
