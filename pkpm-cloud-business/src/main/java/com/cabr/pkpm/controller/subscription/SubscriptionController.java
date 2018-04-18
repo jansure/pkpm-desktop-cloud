@@ -17,6 +17,7 @@ import com.cabr.pkpm.service.user.IUserService;
 import com.cabr.pkpm.utils.ResponseResult;
 import com.cabr.pkpm.utils.sdk.RedisCacheUtil;
 import com.cabr.pkpm.vo.MyProduct;
+import com.gatewayserver.gatewayserver.domain.PkpmOperatorStatus;
 
 @RestController
 @RequestMapping("/subscription")
@@ -55,8 +56,8 @@ public class SubscriptionController {
 		}
 		
 		try {
-			ResponseResult responseResult = subscription.saveSubsDetails(userInfo,wo);
-			this.result.set("恭喜您申请免费使用成功,请稍等,马上为您开通！",1);
+			PkpmOperatorStatus pkpmOperatorStatus = subscription.saveSubsDetails(userInfo,wo);
+			this.result.set("恭喜您申请免费使用成功,请稍等,马上为您开通！", 1, pkpmOperatorStatus);
 			return this.result;
 		} catch (Exception e) {
 			e.printStackTrace();

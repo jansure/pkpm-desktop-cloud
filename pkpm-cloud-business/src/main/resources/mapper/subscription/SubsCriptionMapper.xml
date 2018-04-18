@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cabr.pkpm.mapper.subscription.SubscriptionMapper">
-
 	<resultMap id="BaseResultMap" type="com.cabr.pkpm.entity.subscription.SubsCription">
 			<id property="id" column="id" jdbcType="INTEGER"/>
    	      	<result property="subsId" column="subs_id" jdbcType="BIGINT"/>
@@ -30,4 +29,15 @@
 	    insert into pkpm_cloud_subscription(subs_id,user_id,create_time,pay_channel,ad_id,project_id,status) values
 	    (#{subsId},#{userId},#{createTime},#{payChannel},#{adId},#{projectId},#{status});
 	</insert>
+	
+	<select id="selectCount"  resultType="java.lang.Integer" >
+	    SELECT
+			count(1)
+		FROM
+			pkpm_cloud_subscription
+		WHERE
+			user_id = #{userId}
+		AND STATUS = #{status};
+	</select>
+	
 </mapper>

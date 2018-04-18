@@ -16,4 +16,6 @@ public class ComponentInfo implements Serializable{
 	private String componentTypeName;
 	private String isDefault;
 	
+	private String hwProductId;
+	
 }

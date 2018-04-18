@@ -26,6 +26,8 @@ public class ProductInfo implements Serializable {
     @Transient
     private List<ProductInfo> children;
     
+    private String imageId;
+    
 	@Override
     public String toString() {
         return "ProductInfo [productId=" + productId + ", productType=" + productType + ", productName=" + productName

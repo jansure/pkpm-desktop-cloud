@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,10 +16,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
+import com.cabr.pkpm.entity.component.ComponentInfo;
+import com.cabr.pkpm.entity.product.ProductInfo;
 import com.cabr.pkpm.entity.subscription.SubsCription;
 import com.cabr.pkpm.entity.subsdetails.SubsDetails;
 import com.cabr.pkpm.entity.user.UserInfo;
 import com.cabr.pkpm.entity.workorder.WorkOrderVO;
+import com.cabr.pkpm.mapper.component.ComponentMapper;
+import com.cabr.pkpm.mapper.product.ProductMapper;
 import com.cabr.pkpm.mapper.subscription.SubscriptionMapper;
 import com.cabr.pkpm.mapper.subsdetails.SubsDetailsMapper;
 import com.cabr.pkpm.service.subscription.ISubscriptionService;
@@ -26,6 +32,7 @@ import com.cabr.pkpm.utils.ResponseResult;
 import com.cabr.pkpm.utils.StringUtil;
 import com.cabr.pkpm.utils.sdk.RedisCacheUtil;
 import com.cabr.pkpm.vo.MyProduct;
+import com.desktop.constant.ComponentTypeConstant;
 import com.desktop.utils.HttpConfigBuilder;
 import com.desktop.utils.JsonUtil;
 import com.desktop.utils.exception.Exceptions;
@@ -36,8 +43,6 @@ import com.pkpm.httpclientutil.HttpClientUtil;
 import com.pkpm.httpclientutil.MyHttpResponse;
 import com.pkpm.httpclientutil.common.HttpMethods;
 import com.pkpm.httpclientutil.exception.HttpProcessException;
-
-import javax.annotation.Resource;
 
 @Service
 @Transactional
@@ -50,12 +55,32 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	@Resource
 	private StringRedisTemplate stringRedisTemplate;
 
+	@Resource
+	private ProductMapper productMapper;
+	
+	@Resource
+	private ComponentMapper componentMapper;
+	
+	private RedisCacheUtil<MyProduct> redisCacheUtil;
+	
+	protected ResponseResult result = new ResponseResult();
+	
+	protected final Log logger = LogFactory.getLog(getClass());
+	
 	@Value("${server.host}")
 	private String serverHost;
-	private RedisCacheUtil<MyProduct> redisCacheUtil;
-
-	protected ResponseResult result = new ResponseResult();
-	protected final Log logger = LogFactory.getLog(getClass());
+	@Value("${ouName}")
+	private String ouName;
+	@Value("${userEmail}")
+	private String userEmail;
+	@Value("${status}")
+	private String status;
+	@Value("${invalidStatus}")
+	private String invalidStatus;
+	@Value("${dataVolumeSize}")
+	private Integer dataVolumeSize;
+	
+	
 	/**
 	 * 1、保存订单，保存订单明细
 	 * 2、获取projectId和AdId
@@ -63,15 +88,24 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	 */
 	@SuppressWarnings({ "unused", "unchecked" })
 	@Override
-	public ResponseResult saveSubsDetails(UserInfo userInfo,WorkOrderVO wo) {
+	public PkpmOperatorStatus saveSubsDetails(UserInfo userInfo,WorkOrderVO wo) {
 		
 		
 		String adId = "";
 		String projectId = "";
-		
 	try {
-		String areaCode = "cn-north-1";
-		String urlGetAdAndProject =serverHost + "/cloudOrder/getAdAndProject?areaCode=" + areaCode;
+		//a、保存订单之前先查询有没有 初始化的订单
+		Integer userId = userInfo.getUserID();
+		Integer invalidCount = subscriptionMapper.selectCount(userId,invalidStatus);
+		if(invalidCount >= 1){
+			throw  Exceptions.newBusinessException("您有正在创建中的桌面,请重新尝试!");
+		}
+		Integer regionId = wo.getRegionId();
+		ComponentInfo regionComponentInfo = componentMapper.getComponentInfo(regionId, ComponentTypeConstant.region_type);
+		String areaCode = regionComponentInfo.getComponentDesc();
+		
+	   //	String areaCode = "cn-north-1";
+		String urlGetAdAndProject =serverHost + "/params/getAdAndProject?areaCode=" + areaCode;
 		String adAndProjectResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(urlGetAdAndProject,  5, "utf-8", 100000).method(HttpMethods.GET));
 		
 		MyHttpResponse adAndProjectHttpResponse = JsonUtil.deserialize(adAndProjectResponse, MyHttpResponse.class);
@@ -94,16 +128,13 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		LocalDateTime date = LocalDateTime.now();
 		subscription.setCreateTime(date);
 		subscription.setPayChannel("0");
-		Integer userId = userInfo.getUserID();
 		subscription.setUserId(userId);
 		subscription.setProjectId(projectId);
 		subscription.setAdId(Integer.parseInt(adId));
-		subscription.setStatus(0);
-		
+		subscription.setStatus(status);
 		Integer subscriptionCount = subscriptionMapper.saveSubscription(subscription);
 		if(subscriptionCount<1){
-			this.result.set("创建订单失败,请您重试", 0);
-			return this.result;
+			throw  Exceptions.newBusinessException("保存订单失败,请您重试!");
 		}
 		
 		SubsDetails subsDetails = new SubsDetails();
@@ -112,39 +143,54 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		subsDetails.setProductId(productId);
 		subsDetails.setCreateTime(date);
 		subsDetails.setCloudStorageTimeId(wo.getCloudStorageTimeId());
-		subsDetails.setCloudStorageTime(Integer.parseInt(StringUtil.substr(wo.getCloudStorageTimeName())));
-		
+		String cloudStorageName = componentMapper.getComponentName(wo.getCloudStorageTimeId(), ComponentTypeConstant.cloud_storage);
+		subsDetails.setCloudStorageTime(Integer.parseInt(StringUtil.substr(cloudStorageName)));
 		Integer subsDetailsCount = subsDetailsMapper.saveSubsDetails(subsDetails);
 		if(subsDetailsCount<1){
-			this.result.set("创建订单失败,请您重试", 0);
-			return this.result;
+			throw  Exceptions.newBusinessException("保存订单明细失败,请您重试!");
 		}
 		
-		//1、应该是传入regionCode,获取到adId和projectId
-		String regionName = wo.getRegionName();
+		List<ProductInfo> products = productMapper.getProductByProductId(productId);
+		ProductInfo productInfo = products.get(0);
+		String imageId = productInfo.getImageId();
+		String productName = productInfo.getProductName();
+		
 		//2、传入commonrequestbean,创建ad和desktop
 		CommonRequestBean commonRequestBean = new CommonRequestBean();
 		commonRequestBean.setUserId(userId);
 		commonRequestBean.setUserName(userInfo.getUserName());
 		commonRequestBean.setUserLoginPassword(userInfo.getUserLoginPassword());
-		commonRequestBean.setDataVolumeSize(100);
-		commonRequestBean.setSubsId(subsId);   //   字段不统一？？？  long  - integer
+		commonRequestBean.setDataVolumeSize(dataVolumeSize);
+		commonRequestBean.setSubsId(subsId);   
 		commonRequestBean.setOperatorStatusId(null);  
 		
-		commonRequestBean.setHwProductId("workspace.c2.large.windows");   //？？？
-		commonRequestBean.setOuName("pkpm");
-		commonRequestBean.setUserEmail("cherishpf@163.com");
-		commonRequestBean.setProjectId(projectId);   //
-		commonRequestBean.setAdId(Integer.parseInt(adId));
-		commonRequestBean.setImageId("997488ed-fa23-4671-b88c-d364c0405334");   //前端传过来的ID
-		commonRequestBean.setGloryProductName("kbp-test");
+		Integer hostConfigId = wo.getHostConfigId();
+		ComponentInfo hostConfigcomponentInfo = componentMapper.getComponentInfo(hostConfigId, ComponentTypeConstant.host_config);
+		String hwProductId = hostConfigcomponentInfo.getHwProductId();
+		commonRequestBean.setHwProductId(hwProductId);   // workspace.c2.large.windows
 		
+		commonRequestBean.setOuName(ouName);
+		commonRequestBean.setUserEmail(userEmail);
+		commonRequestBean.setProjectId(projectId);   
+		commonRequestBean.setAdId(Integer.parseInt(adId));
+		commonRequestBean.setImageId(imageId);   //997488ed-fa23-4671-b88c-d364c0405334
+		
+		//根据user_id和status查询计算机名
+		
+		
+		//b查询成功的条数
+		Integer count = subscriptionMapper.selectCount(userId,status);
+		String userName = userInfo.getUserName();
+		String gloryProductName  = userName + "-" +  String.valueOf(count + 1);  ;//计算机名字不能超过15位 ,  如果username-productname-01超过15位？
+		commonRequestBean.setGloryProductName(gloryProductName);
+		
+		commonRequestBean.setAreaCode(areaCode);
 		String urlCreateAdAndDesktop =serverHost + "/desktop/createAdAndDesktop";
-	
 		String strJson = JsonUtil.serialize(commonRequestBean);
 		String strResponse = HttpClientUtil.mysend(
 				HttpConfigBuilder.buildHttpConfigNoToken(urlCreateAdAndDesktop, strJson, 5, "utf-8", 10000).method(HttpMethods.POST));
 		MyHttpResponse myHttpResponse = JsonUtil.deserialize(strResponse, MyHttpResponse.class);
+		System.out.println("urlCreateAdAndDesktop---------" + myHttpResponse);
 		Integer statusCode = myHttpResponse.getStatusCode();
 			//3、创建成功后,返回参数给前台
 			if(HttpStatus.OK.value() == statusCode){
@@ -159,18 +205,16 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 					pkpmOperatorStatus.setSubsId(subsId);  //字段不统一
 					pkpmOperatorStatus.setAdId(Integer.parseInt(adId));
 					pkpmOperatorStatus.setUserId(userId);
-					//pkpmOperatorStatus.                   //得setAreaCode字段
-					this.result.set("恭喜您创建桌面成功!", 200, pkpmOperatorStatus);
-					redisCacheUtil.delete("MyProduct:"+userId);
-					return this.result;
+					pkpmOperatorStatus.setAreaCode(areaCode);
+					//redisCacheUtil.delete("MyProduct:"+userId);
+					return pkpmOperatorStatus;
 					
 				}
 			}
 			
 		} catch (HttpProcessException e) {
 			e.printStackTrace();
-			throw  Exceptions.newBusinessException("创建桌面失败!请重新尝试!");
-		}
+	    }
 		throw  Exceptions.newBusinessException("申请试用失败,请稍后重试!");
 		
 	}
