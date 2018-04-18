@@ -19,7 +19,11 @@ public enum SubscriptionStatusEnum {
     /**
      * 有效
      */
-    VALID;
+    VALID,
+    /**
+     * 创建失败
+     */
+    FAILED;
 
     public static SubscriptionStatusEnum eval(String code) {
         return Arrays.stream(values())
