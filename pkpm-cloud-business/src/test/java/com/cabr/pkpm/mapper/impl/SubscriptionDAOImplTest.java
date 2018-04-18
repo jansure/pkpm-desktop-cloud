@@ -1,6 +1,7 @@
-package com.cabr.pkpm.dao.impl;
+/*
+package com.cabr.pkpm.mapper.impl;
 
-import com.cabr.pkpm.dao.SubscriptionDAO;
+import com.cabr.pkpm.mapper.subscription.SubscriptionDAO;
 import com.cabr.pkpm.entity.subscription.SubsCription;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,16 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.*;
-
+*/
 /**
  * @author xuhe
  * @description
  * @date 2018/4/17
- */
+ *//*
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class SubscriptionDAOImplTest {
+
     @Autowired
     SubscriptionDAO dao;
     @Test
@@ -27,4 +29,4 @@ public class SubscriptionDAOImplTest {
 
     }
 
-}
+}*/

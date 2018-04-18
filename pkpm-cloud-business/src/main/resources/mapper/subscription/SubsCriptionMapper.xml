@@ -20,6 +20,13 @@
 		where user_id = #{userId,jdbcType=INTEGER} order by create_time
 	</select>
 
+	<update id="updateSubsCriptionBySubsId" parameterType="com.cabr.pkpm.entity.subscription.SubsCription">
+		UPDATE pkpm_cloud_subscription
+			SET pkpm_cloud_subscription.status = #{status}
+		WHERE pkpm_cloud_subscription.subs_id = #{subsId};
+	</update>
+
+
 	<select id="findSubsId" parameterType="java.lang.Integer" resultType="java.lang.Long">
 		select subs_id
 		from pkpm_cloud_subscription

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -236,5 +237,19 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 			return subsCription;
 		}
 	}
-	
+	/**
+	 *根据subsId更新订单状态
+	 *
+	 * @author xuhe
+	 * @param subsCription
+	 * @return java.lang.String
+	 */
+	@Override
+	public String  updateSubsCriptionBySubsId(SubsCription subsCription) {
+
+		int result =subscriptionMapper.updateSubsCriptionBySubsId(subsCription);
+		Preconditions.checkArgument(result==1,"订单更新失败");
+		return "更新状态成功";
+	}
+
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.cabr.pkpm.entity.subscription.SubsCription;
 import com.cabr.pkpm.utils.ResultObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -68,7 +69,8 @@ public class SubscriptionController {
 	}
 
 	@PostMapping(value = "/setSubsStatus")
-	public ResultObject updateSubscription(){
-		return ResultObject.success("订单表更新成功");
+	public ResultObject updateSubscription(@RequestBody SubsCription subsCription){
+		String response = subscription.updateSubsCriptionBySubsId(subsCription);
+		return ResultObject.success(response);
 	}
 }

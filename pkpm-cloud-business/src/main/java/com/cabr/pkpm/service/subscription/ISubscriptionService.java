@@ -14,4 +14,12 @@ public interface ISubscriptionService {
 	PkpmOperatorStatus saveSubsDetails(UserInfo userInfo,WorkOrderVO wo);
 
 	List<SubsCription> findSubsCriptionByUserId(Integer userId);
+	/**
+	 *根据subsId更新订单状态
+	 *
+	 * @author xuhe
+	 * @param subsCription
+	 * @return java.lang.String
+	 */
+	String updateSubsCriptionBySubsId(SubsCription subsCription);
 }

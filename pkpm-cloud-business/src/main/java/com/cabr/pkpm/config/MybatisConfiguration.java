@@ -1,3 +1,4 @@
+/*
 package com.cabr.pkpm.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
@@ -14,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 import javax.sql.DataSource;
 
 @Configurable
-@MapperScan("com.cabr.pkpm.dao")
+@MapperScan("com.cabr.pkpm.mapper.mapper")
 public class MybatisConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(MybatisConfiguration.class);
@@ -67,3 +68,4 @@ public class MybatisConfiguration {
     }
 
 }
+*/

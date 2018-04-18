@@ -24,6 +24,8 @@ public interface SubscriptionMapper {
 	 */
 	List<SubsCription> findSubsCriptionByUserId(int userId);
 
+	Integer updateSubsCriptionBySubsId(SubsCription subsCription);
+
 	Integer saveSubscription(SubsCription subscription);
 
 	Integer selectCount(@Param("userId") Integer userId, @Param("status") String status);

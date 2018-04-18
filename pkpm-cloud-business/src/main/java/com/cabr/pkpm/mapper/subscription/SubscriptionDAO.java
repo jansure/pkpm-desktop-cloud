@@ -1,4 +1,4 @@
-package com.cabr.pkpm.dao;
+package com.cabr.pkpm.mapper.subscription;
 
 import com.cabr.pkpm.entity.subscription.SubsCription;
 
