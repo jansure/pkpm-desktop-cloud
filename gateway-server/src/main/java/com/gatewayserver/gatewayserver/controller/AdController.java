@@ -1,9 +1,9 @@
 package com.gatewayserver.gatewayserver.controller;
 
 import com.desktop.utils.page.ResultObject;
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
-import com.gatewayserver.gatewayserver.dto.ad.AdComputer;
-import com.gatewayserver.gatewayserver.dto.ad.AdUser;
+import com.gateway.common.domain.CommonRequestBean;
+import com.gateway.common.dto.ad.AdComputer;
+import com.gateway.common.dto.ad.AdUser;
 import com.gatewayserver.gatewayserver.service.AdService;
 import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;

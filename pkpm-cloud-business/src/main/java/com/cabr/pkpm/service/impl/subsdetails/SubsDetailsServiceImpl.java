@@ -4,8 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cabr.pkpm.entity.product.ProductInfo;
@@ -22,8 +23,6 @@ import com.cabr.pkpm.utils.sdk.RedisCacheUtil;
 import com.cabr.pkpm.utils.sdk.StringOrDate;
 import com.cabr.pkpm.vo.MyProduct;
 import com.github.pagehelper.PageHelper;
-
-import javax.annotation.Resource;
 
 @Service
 public class SubsDetailsServiceImpl implements ISubsDetailsService {

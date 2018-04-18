@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.desktop.utils.page.ResultObject;
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
-import com.gatewayserver.gatewayserver.dto.DesktopCreation;
-import com.gatewayserver.gatewayserver.dto.DesktopRequest;
-import com.gatewayserver.gatewayserver.dto.JobBean;
+import com.gateway.common.domain.CommonRequestBean;
+import com.gateway.common.dto.DesktopCreation;
+import com.gateway.common.dto.DesktopRequest;
+import com.gateway.common.dto.JobBean;
 import com.gatewayserver.gatewayserver.service.DesktopService;
 import com.gatewayserver.gatewayserver.utils.CommonRequestBeanBuilder;
 import com.gatewayserver.gatewayserver.utils.CommonRequestBeanUtil;

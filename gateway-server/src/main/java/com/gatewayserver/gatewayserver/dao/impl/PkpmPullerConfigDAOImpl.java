@@ -1,8 +1,9 @@
 package com.gatewayserver.gatewayserver.dao.impl;
 
+import com.gateway.common.domain.PkpmPullerConfig;
 import com.gatewayserver.gatewayserver.dao.PkpmPullerConfigDAO;
 import com.gatewayserver.gatewayserver.dao.mapper.PkpmPullerConfigMapper;
-import com.gatewayserver.gatewayserver.domain.PkpmPullerConfig;
+
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;

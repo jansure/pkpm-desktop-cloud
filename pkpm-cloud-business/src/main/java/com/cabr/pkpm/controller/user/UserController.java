@@ -34,7 +34,7 @@ import com.cabr.pkpm.utils.StringUtil;
 import com.cabr.pkpm.utils.sdk.ClientDemo;
 import com.desktop.utils.HttpConfigBuilder;
 import com.desktop.utils.JsonUtil;
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
+import com.gateway.common.domain.CommonRequestBean;
 import com.pkpm.httpclientutil.HttpClientUtil;
 import com.pkpm.httpclientutil.MyHttpResponse;
 import com.pkpm.httpclientutil.common.HttpMethods;

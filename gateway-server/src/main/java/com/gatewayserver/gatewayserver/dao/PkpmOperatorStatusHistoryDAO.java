@@ -1,8 +1,8 @@
 package com.gatewayserver.gatewayserver.dao;
 
-import com.gatewayserver.gatewayserver.domain.PkpmOperatorStatusHistory;
-
 import java.util.List;
+
+import com.gateway.common.domain.PkpmOperatorStatusHistory;
 
 /**
  * @author wangxiulong

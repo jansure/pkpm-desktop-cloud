@@ -1,7 +1,7 @@
 package com.gatewayserver.gatewayserver.dao;
 
 
-import com.gatewayserver.gatewayserver.domain.PkpmWorkspaceDef;
+import com.gateway.common.domain.PkpmWorkspaceDef;
 
 public interface PkpmWorkspaceDefDAO {
     PkpmWorkspaceDef selectById(String workspaceId);

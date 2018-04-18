@@ -6,8 +6,8 @@ package com.gatewayserver.gatewayserver.service;
 import java.util.List;
 import java.util.Map;
 
-import com.gatewayserver.gatewayserver.domain.PkpmAdDef;
-import com.gatewayserver.gatewayserver.domain.PkpmProjectDef;
+import com.gateway.common.domain.PkpmAdDef;
+import com.gateway.common.domain.PkpmProjectDef;
 
 /**
  * @Description 供云平台订单使用Service

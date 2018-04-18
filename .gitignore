@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 target/
 !.mvn/wrapper/maven-wrapper.jar
 
@@ -22,4 +23,36 @@ build/
 nbbuild/
 dist/
 nbdist/
+=======
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.metadata
+.log
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.ipr
+*.iml
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+>>>>>>> Stashed changes
 .nb-gradle/
+gateway-server/logs/gateway.log
+desktop-gateway-server/logs/gateway.log
+desktop-gateway-server/logs/aaa.log
+pkpm-cloud-business/logs/pkpmcloud.log.2018-04-17.0.gz
+pkpm-cloud-business/logs/pkpmcloud.log.2018-04-16.0.gz

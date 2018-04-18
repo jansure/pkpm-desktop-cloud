@@ -1,7 +1,7 @@
 package com.gatewayserver.gatewayserver.utils;
 
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
-import com.gatewayserver.gatewayserver.domain.PkpmAdDef;
+import com.gateway.common.domain.CommonRequestBean;
+import com.gateway.common.domain.PkpmAdDef;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang.StringUtils;
 

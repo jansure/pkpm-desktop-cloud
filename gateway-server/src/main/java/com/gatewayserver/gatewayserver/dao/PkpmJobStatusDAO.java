@@ -1,8 +1,8 @@
 package com.gatewayserver.gatewayserver.dao;
 
-import com.gatewayserver.gatewayserver.domain.PkpmJobStatus;
-
 import java.util.List;
+
+import com.gateway.common.domain.PkpmJobStatus;
 
 /**
  * @Description:

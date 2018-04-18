@@ -223,6 +223,11 @@ public class PullerBusiness {
 				}
 				
 				updateCloudSubscription(detail);
+			}else if(status.equals(JobStatusEnum.FAILED.toString())
+					&& operatorType.equals(OperatoreTypeEnum.DESKTOP.toString())) {//创建桌面失败，返回失败状态
+				
+				detail.setStatus(SubscriptionStatusEnum.FAILED.toString());
+				updateCloudSubscription(detail);
 			}
 			
 		}

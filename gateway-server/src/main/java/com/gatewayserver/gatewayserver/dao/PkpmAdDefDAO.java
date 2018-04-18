@@ -3,7 +3,7 @@ package com.gatewayserver.gatewayserver.dao;
 
 import java.util.List;
 
-import com.gatewayserver.gatewayserver.domain.PkpmAdDef;
+import com.gateway.common.domain.PkpmAdDef;
 
 public interface PkpmAdDefDAO {
     PkpmAdDef selectById(Integer adId);

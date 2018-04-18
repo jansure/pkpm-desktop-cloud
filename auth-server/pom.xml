@@ -4,12 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>auth-server</groupId>
-	<artifactId>auth-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-
-	<name>gateway-server</name>
-	<description>Demo project for Spring Boot</description>
+	<artifactId>auth-server</artifactId>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -79,50 +76,10 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<version>4.2.3.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security.oauth</groupId>
-			<artifactId>spring-security-oauth2</artifactId>
-			<version>2.3.0.BUILD-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-		</dependency>
-		<dependency>
-			<groupId>io.spring.sample</groupId>
-			<artifactId>function-sample-azure</artifactId>
-			<version>1.0.0.BUILD-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-autoconfigure</artifactId>
-			<version>1.5.9.RELEASE</version>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-actuator</artifactId>
-			<version>1.5.9.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-commons</artifactId>
-			<version>2.0.0.BUILD-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-netflix-core</artifactId>
-			<version>1.4.0.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-commons</artifactId>
-			<version>2.0.0.BUILD-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -130,7 +87,6 @@
 			<version>2.0.0.BUILD-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

@@ -1,11 +1,11 @@
 package com.gatewayserver.gatewayserver.service;
 
 import com.desktop.utils.page.ResultObject;
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
-import com.gatewayserver.gatewayserver.dto.DesktopCreation;
-import com.gatewayserver.gatewayserver.dto.DesktopRequest;
-import com.gatewayserver.gatewayserver.dto.JobBean;
-import com.gatewayserver.gatewayserver.dto.desktop.DesktopSpecResponse;
+import com.gateway.common.domain.CommonRequestBean;
+import com.gateway.common.dto.DesktopCreation;
+import com.gateway.common.dto.DesktopRequest;
+import com.gateway.common.dto.JobBean;
+import com.gateway.common.dto.desktop.DesktopSpecResponse;
 
 /**
  * @author yangpengfei

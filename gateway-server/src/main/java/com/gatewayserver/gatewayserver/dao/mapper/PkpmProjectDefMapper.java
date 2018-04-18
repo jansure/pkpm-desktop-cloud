@@ -2,7 +2,8 @@ package com.gatewayserver.gatewayserver.dao.mapper;
 
 
 import com.desktop.utils.mybatis.SimpleSelectLangDriver;
-import com.gatewayserver.gatewayserver.domain.PkpmProjectDef;
+import com.gateway.common.domain.PkpmProjectDef;
+
 import org.apache.ibatis.annotations.Lang;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

@@ -1,7 +1,7 @@
 package com.gatewayserver.gatewayserver.controller;
 
 import com.desktop.utils.page.ResultObject;
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
+import com.gateway.common.domain.CommonRequestBean;
 import com.gatewayserver.gatewayserver.service.StrategyService;
 import com.gatewayserver.gatewayserver.utils.CommonRequestBeanBuilder;
 import com.gatewayserver.gatewayserver.utils.CommonRequestBeanUtil;

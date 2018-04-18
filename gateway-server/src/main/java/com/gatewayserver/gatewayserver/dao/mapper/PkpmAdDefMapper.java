@@ -3,7 +3,8 @@ package com.gatewayserver.gatewayserver.dao.mapper;
 
 import com.desktop.utils.mybatis.SimpleInsertLangDriver;
 import com.desktop.utils.mybatis.SimpleSelectLangDriver;
-import com.gatewayserver.gatewayserver.domain.PkpmAdDef;
+import com.gateway.common.domain.PkpmAdDef;
+
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

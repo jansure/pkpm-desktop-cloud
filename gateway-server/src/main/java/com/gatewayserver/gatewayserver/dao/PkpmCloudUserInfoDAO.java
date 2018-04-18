@@ -1,6 +1,6 @@
 package com.gatewayserver.gatewayserver.dao;
 
-import com.gatewayserver.gatewayserver.domain.PkpmCloudUserInfo;
+import com.gateway.common.domain.PkpmCloudUserInfo;
 
 /**
  * @Description:

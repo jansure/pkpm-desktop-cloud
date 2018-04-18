@@ -8,7 +8,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import com.gatewayserver.gatewayserver.dto.desktop.DesktopSpecResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.Consts;
 import org.apache.http.Header;
@@ -33,20 +32,21 @@ import com.desktop.utils.StringUtil;
 import com.desktop.utils.exception.Exceptions;
 import com.desktop.utils.page.BeanUtil;
 import com.desktop.utils.page.ResultObject;
+import com.gateway.common.domain.CommonRequestBean;
+import com.gateway.common.domain.PkpmJobStatus;
+import com.gateway.common.domain.PkpmOperatorStatus;
+import com.gateway.common.domain.PkpmProjectDef;
+import com.gateway.common.domain.PkpmToken;
+import com.gateway.common.dto.Desktop;
+import com.gateway.common.dto.DesktopCreation;
+import com.gateway.common.dto.DesktopRequest;
+import com.gateway.common.dto.JobBean;
+import com.gateway.common.dto.desktop.DesktopSpecResponse;
 import com.gatewayserver.gatewayserver.dao.PkpmJobStatusDAO;
 import com.gatewayserver.gatewayserver.dao.PkpmOperatorStatusDAO;
 import com.gatewayserver.gatewayserver.dao.PkpmProjectDefDAO;
 import com.gatewayserver.gatewayserver.dao.PkpmTokenDAO;
 import com.gatewayserver.gatewayserver.dao.mapper.PkpmOperatorStatusMapper;
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
-import com.gatewayserver.gatewayserver.domain.PkpmJobStatus;
-import com.gatewayserver.gatewayserver.domain.PkpmOperatorStatus;
-import com.gatewayserver.gatewayserver.domain.PkpmProjectDef;
-import com.gatewayserver.gatewayserver.domain.PkpmToken;
-import com.gatewayserver.gatewayserver.dto.Desktop;
-import com.gatewayserver.gatewayserver.dto.DesktopCreation;
-import com.gatewayserver.gatewayserver.dto.DesktopRequest;
-import com.gatewayserver.gatewayserver.dto.JobBean;
 import com.gatewayserver.gatewayserver.service.AdService;
 import com.gatewayserver.gatewayserver.service.DesktopService;
 import com.gatewayserver.gatewayserver.utils.CommonRequestBeanBuilder;
@@ -220,7 +220,7 @@ public class DesktopServiceImpl implements DesktopService {
 				pkpmJob.setWorkspaceId(projectDef.getWorkspaceId());
 				pkpmJob.setStatus(JobStatusEnum.INITIAL.toString());
 				pkpmJob.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
-				pkpmJob.setAreaCode(commonRequestBean.getAreaCode());
+				//pkpmJob.setAreaCode(commonRequestBean.getAreaCode());
 				pkpmJobStatusDAO.insert(pkpmJob);
 				
 				DesktopCreation desktopCreation = new DesktopCreation();

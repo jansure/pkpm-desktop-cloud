@@ -3,9 +3,9 @@
  */
 package com.gatewayserver.gatewayserver.thread;
 
+import com.gateway.common.domain.PkpmOperatorStatus;
 import com.gatewayserver.gatewayserver.dao.PkpmOperatorStatusDAO;
 import com.gatewayserver.gatewayserver.dao.impl.PkpmOperatorStatusDAOImpl;
-import com.gatewayserver.gatewayserver.domain.PkpmOperatorStatus;
 import com.gatewayserver.gatewayserver.service.DesktopService;
 import com.gatewayserver.gatewayserver.service.impl.DesktopServiceImpl;
 

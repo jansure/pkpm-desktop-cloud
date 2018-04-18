@@ -3,6 +3,7 @@ package com.cabr.pkpm.mapper.subscription;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.cabr.pkpm.entity.subscription.SubsCription;
 @Mapper
@@ -24,5 +25,7 @@ public interface SubscriptionMapper {
 	List<SubsCription> findSubsCriptionByUserId(int userId);
 
 	Integer saveSubscription(SubsCription subscription);
+
+	Integer selectCount(@Param("userId") Integer userId, @Param("status") String status);
 
 }

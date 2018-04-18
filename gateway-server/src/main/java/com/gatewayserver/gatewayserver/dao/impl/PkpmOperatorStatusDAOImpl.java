@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import com.desktop.constant.OperatoreTypeEnum;
 import com.desktop.utils.MyBeanUtil;
+import com.gateway.common.domain.PkpmOperatorStatus;
 import com.gatewayserver.gatewayserver.dao.PkpmOperatorStatusDAO;
 import com.gatewayserver.gatewayserver.dao.mapper.PkpmOperatorStatusMapper;
-import com.gatewayserver.gatewayserver.domain.PkpmOperatorStatus;
 
 @Repository
 public class PkpmOperatorStatusDAOImpl implements PkpmOperatorStatusDAO {

@@ -1,7 +1,7 @@
 package com.gatewayserver.gatewayserver.service;
 
 import com.desktop.utils.page.ResultObject;
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
+import com.gateway.common.domain.CommonRequestBean;
 
 public interface StatusService {
 

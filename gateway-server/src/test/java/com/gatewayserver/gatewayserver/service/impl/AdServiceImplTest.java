@@ -1,10 +1,11 @@
 package com.gatewayserver.gatewayserver.service.impl;
 
+import com.gateway.common.domain.CommonRequestBean;
+import com.gateway.common.domain.PkpmCloudUserInfo;
+import com.gateway.common.dto.ad.AdComputer;
+import com.gateway.common.dto.ad.AdUser;
 import com.gatewayserver.gatewayserver.dao.impl.PkpmCloudUserInfoDAOImpl;
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
-import com.gatewayserver.gatewayserver.domain.PkpmCloudUserInfo;
-import com.gatewayserver.gatewayserver.dto.ad.AdComputer;
-import com.gatewayserver.gatewayserver.dto.ad.AdUser;
+
 import org.apache.http.util.Asserts;
 import org.junit.Test;
 import org.junit.runner.RunWith;

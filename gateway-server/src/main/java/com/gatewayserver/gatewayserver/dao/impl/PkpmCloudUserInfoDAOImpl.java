@@ -1,8 +1,9 @@
 package com.gatewayserver.gatewayserver.dao.impl;
 
+import com.gateway.common.domain.PkpmCloudUserInfo;
 import com.gatewayserver.gatewayserver.dao.PkpmCloudUserInfoDAO;
 import com.gatewayserver.gatewayserver.dao.mapper.PkpmCloudUserInfoMapper;
-import com.gatewayserver.gatewayserver.domain.PkpmCloudUserInfo;
+
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;

@@ -17,7 +17,7 @@ public class SubsCription implements Serializable {
 	private Integer adId;
 	private String projectId;
 	private String desktopId;
-	private Integer status;
+	private String status;
 	
 	
 }

@@ -1,6 +1,6 @@
 package com.gatewayserver.gatewayserver.utils;
 
-import com.gatewayserver.gatewayserver.domain.PkpmOperatorStatus;
+import com.gateway.common.domain.PkpmOperatorStatus;
 import com.google.common.base.Preconditions;
 
 /**

@@ -1,8 +1,9 @@
 package com.gatewayserver.gatewayserver.dao.impl;
 
+import com.gateway.common.domain.PkpmOperatorStatusHistory;
 import com.gatewayserver.gatewayserver.dao.PkpmOperatorStatusHistoryDAO;
 import com.gatewayserver.gatewayserver.dao.mapper.PkpmOperatorStatusHistoryMapper;
-import com.gatewayserver.gatewayserver.domain.PkpmOperatorStatusHistory;
+
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;

@@ -1,7 +1,7 @@
 package com.gatewayserver.gatewayserver.service;
 
-import com.gatewayserver.gatewayserver.domain.CommonRequestBean;
-import com.gatewayserver.gatewayserver.dto.product.Products;
+import com.gateway.common.domain.CommonRequestBean;
+import com.gateway.common.dto.product.Products;
 
 public interface ProductPackageService {
 
