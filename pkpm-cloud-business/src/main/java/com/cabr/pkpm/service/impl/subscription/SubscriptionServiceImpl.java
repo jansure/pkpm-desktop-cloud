@@ -132,7 +132,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		subscription.setUserId(userId);
 		subscription.setProjectId(projectId);
 		subscription.setAdId(Integer.parseInt(adId));
-		subscription.setStatus(status);
+		subscription.setStatus(invalidStatus);
 		Integer subscriptionCount = subscriptionMapper.saveSubscription(subscription);
 		if(subscriptionCount<1){
 			throw  Exceptions.newBusinessException("保存订单失败,请您重试!");
@@ -177,7 +177,6 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		commonRequestBean.setImageId(imageId);   //997488ed-fa23-4671-b88c-d364c0405334
 		
 		//根据user_id和status查询计算机名
-		
 		
 		//b查询成功的条数
 		Integer count = subscriptionMapper.selectCount(userId,status);
