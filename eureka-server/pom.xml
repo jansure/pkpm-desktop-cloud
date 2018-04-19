@@ -6,8 +6,9 @@
 	<groupId>pkpm-desktop-cloud</groupId>
 	<version>1.0-SNAPSHOT</version>
 	<artifactId>eureka-server</artifactId>
-
-
+	<properties>
+	<mapstruct.version>1.0.final</mapstruct.version>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -60,6 +61,7 @@
 			<version>2.0.0.BUILD-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+
 
 	<dependencyManagement>
 		<dependencies>
