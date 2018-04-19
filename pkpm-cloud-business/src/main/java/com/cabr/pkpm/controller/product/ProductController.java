@@ -31,6 +31,8 @@ import com.cabr.pkpm.utils.ResponseResult;
 import com.cabr.pkpm.utils.StringUtil;
 import com.cabr.pkpm.utils.sdk.ClientDemo;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 
  * @author yangpengfei
@@ -38,6 +40,7 @@ import com.cabr.pkpm.utils.sdk.ClientDemo;
  *
  */
 @RestController
+@Slf4j
 @RequestMapping(value = "/product")
 public class ProductController {
 	@Autowired
@@ -46,8 +49,6 @@ public class ProductController {
 	private StringRedisTemplate stringRedisTemplate;
 
 	protected ResponseResult result = new ResponseResult();
-
-	private static Logger logger = Logger.getLogger(ProductController.class);
 
 	/**
 	 * 获取全部导航列表
@@ -91,7 +92,7 @@ public class ProductController {
 			this.result.set("文件名不能为空", 0);
 			return this.result;
 		}
-		logger.debug("filename:" + filename + "; isOnLine:" + isOnLine);
+		log.debug("filename:" + filename + "; isOnLine:" + isOnLine);
 		// 文件系统路径
 		String fileUrl = productService.getSysValue(SysConstant.FILE_BASE_URL);
 
@@ -109,15 +110,14 @@ public class ProductController {
 						// 若存在该文件名，则开启下载；若不存在，抛出异常
 						String filePath = fileUrl + "/" + filename;
 						FileUtil.downloadFile(filePath, isOnLine, request, response);
-						logger.debug("FileUtil.downloadFile:" + filePath);
+						log.debug("FileUtil.downloadFile:" + filePath);
 						this.result.set("下载成功！", 1, filePath);
 					} else {
 						this.result.set("该文件不存在！", 0);
 					}
 				} catch (Exception e) {
-					logger.error(e);
 					String msg = "<" + array.getString(i) + ">下载失败！";
-					logger.error(msg);
+					log.error(e.getMessage());
 					this.result.set(msg, 0);
 				}
 			}
@@ -163,7 +163,7 @@ public class ProductController {
 	public Map<String, List<Map<String, Object>>> getProductTypeList(HttpServletResponse response) {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		Map<String, List<Map<String, Object>>> map = new HashMap<String, List<Map<String, Object>>>();
+		Map<String, List<Map<String, Object>>> map = new HashMap<String, List<Map<String, Object>>>(16);
 		// 产品套餐类型列表，默认选项为全家桶类型
 		List<Map<String, Object>> productTypeList = productService.getProductTypeList();
 		map.put(SysConstant.BUY_TYPE, productTypeList);
@@ -174,7 +174,7 @@ public class ProductController {
 			// 每一种配置类型对应其包含的配置项列表
 			map.put(componentType.toString(), productService.getConfigByComponentType(componentType));
 		}
-		logger.debug("map ：" + map);
+		log.debug("map ：" + map);
 		return map;
 	}
 	/**
@@ -190,7 +190,7 @@ public class ProductController {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		
 		List<Integer> compTypeList = productService.getCompTypeList(StringUtil.stringToInt(productType));
-		logger.debug("compTypeList ：" + compTypeList);
+		log.debug("compTypeList ：" + compTypeList);
 		Map<Integer, List<ComponentVO>> componentsMap = new LinkedHashMap<Integer, List<ComponentVO>>();
 		// 每种产品配置类别中的配置项
 		for (Integer compType : compTypeList) {
@@ -211,7 +211,7 @@ public class ProductController {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		if (StringUtils.isBlank(userMobileNumber)||StringUtils.isBlank(workId)) {
 			this.result.set("手机号/工单号不能为空", 0);
-			logger.debug(this.result.getMessage());
+			log.debug(this.result.getMessage());
 			return this.result;
 		}
 		try {
@@ -225,11 +225,11 @@ public class ProductController {
 				ClientDemo clientDemo = new ClientDemo();
 				clientDemo.smsPublish(userMobileNumber, message);
 				this.result.set("发送短信成功", 1);
-				logger.debug(this.result.getMessage());
+				log.debug(this.result.getMessage());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("发送短信产生异常:" + e);
+			log.error("发送短信产生异常:" + e);
 			this.result.set("发送短信失败", 0);
 		}
 

@@ -162,6 +162,7 @@ public class DesktopServiceImpl implements DesktopService {
 		throw Exceptions.newBusinessException("获取token失败！");
 	}
 
+	@Override
 	public ResultObject createAdAndDesktop(CommonRequestBean commonRequestBean) {
 		adService.addAdUser(commonRequestBean);
 		DesktopCreation desktopCreation = createDesktop(commonRequestBean);
@@ -469,6 +470,7 @@ public class DesktopServiceImpl implements DesktopService {
 	 * @param  requestBean
 	 * @return DesktopSpecResponse(包含jobId)
 	 */
+	@Override
 	public DesktopSpecResponse changeDesktopSpec(CommonRequestBean requestBean) {
 
 		CommonRequestBeanUtil.checkCommonRequestBeanForChgDeskSpec(requestBean);
@@ -494,10 +496,12 @@ public class DesktopServiceImpl implements DesktopService {
 			String desktopStatus = desktopRequest.getDesktop().getStatus();
 			String productId = requestBean.getDesktops().get(0).getProductId();
 			//判断计算机状态为关机 且规格与已有规格不同
-			if(!desktopStatus.equals("SHUTOFF"))
+			if(!"SHUTOFF".equals(desktopStatus)){
 				throw Exceptions.newBusinessException("计算机未关机，请先关机");
-			else if (desktopRequest.getDesktop().getProductId().equals(requestBean.getDesktops().get(0).getProductId()))
+			}
+			else if (desktopRequest.getDesktop().getProductId().equals(requestBean.getDesktops().get(0).getProductId())){
 				throw Exceptions.newBusinessException("桌面配置相同，无法修改");
+			}
 			//发送变更桌面规格请求
 			Header[] headers = HttpHeader.custom().contentType("application/json").other("X-Auth-Token", token).build();
 			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
@@ -552,14 +556,14 @@ public class DesktopServiceImpl implements DesktopService {
         
         CommonRequestBeanUtil.checkCommonRequestBeanForDesktop(requestBean);
         String type = requestBean.getDesktops().get(0).getDesktopOperatorType();
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<String, String>(16);
         if (DesktopServiceEnum.CLOSE.toString().equals(type)) {
             map.put("os-stop", null);
             message = "关机";
             jsonStr = JsonUtil.serialize(map);
         } else if (DesktopServiceEnum.REBOOT.toString().equals(type)) {
             map.put("type", "SOFT");
-            Map<String, Map<String, String>> rebootMap = new HashMap<String, Map<String, String>>();
+            Map<String, Map<String, String>> rebootMap = new HashMap<String, Map<String, String>>(16);
             rebootMap.put("reboot", map);
             message = "重新开机";
             jsonStr = JsonUtil.serialize(rebootMap);
@@ -696,11 +700,12 @@ public class DesktopServiceImpl implements DesktopService {
     }
 
 	@Override
-	public void updateOperatorStatus(String jobId, String userName, int adId, long seconds) {
+	public void updateOperatorStatus(String jobId, String userName, Integer adId, Long seconds) {
 		// 根据jobId查询pkpm_operator_status(仅查询未完成的创建桌面类的任务)
 		PkpmOperatorStatus operStatus = pkpmOperatorStatusDAO.selectByJobId(jobId);
 		// 仅更新超过预设的扫描时间的任务
-		if (null != operStatus && (operStatus.getUpdateTime().plusSeconds(seconds)).isBefore(LocalDateTime.now())) {
+		final boolean existed = null != operStatus && (operStatus.getUpdateTime().plusSeconds(seconds)).isBefore(LocalDateTime.now());
+		if (existed) {
 			// 若status为初始化或创建过程中状态，说明已进入创建桌面环节，调用异步任务查询接口
 			if (JobStatusEnum.eval(operStatus.getStatus()).equals(JobStatusEnum.INITIAL)
 					|| JobStatusEnum.eval(operStatus.getStatus()).equals(JobStatusEnum.CREATE)) {

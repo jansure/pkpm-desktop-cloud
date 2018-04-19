@@ -93,6 +93,6 @@ public interface DesktopService {
 	 * @author yangpengfei
 	 * @time 2018年3月29日 下午5:00:00
 	 */
-	void updateOperatorStatus(String jobId, String userName, int adId, long seconds);
+	void updateOperatorStatus(String jobId, String userName, Integer adId, Long seconds);
 
 }
