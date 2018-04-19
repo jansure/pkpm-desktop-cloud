@@ -5,5 +5,5 @@ opType取值不区分大小写，多个类型值用英文逗号分割,不传值�
 示例：java -jar xxx.jar -DopType=DESKTOP,DELETE,CHANGE,RESIZE,BOOT,REBOOT,CLOSE
 
 areaCode取值，（cn-north-1，北区）
-areaCode取值不区分大小写，多个类型值用英文逗号分割,不传值则监听所有区域
+areaCode取值不区分大小写，只能传一个区域,不传值则监听所有区域
 示例：java -jar xxx.jar -DareaCode=cn-north-1

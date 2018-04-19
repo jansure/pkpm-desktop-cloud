@@ -47,4 +47,13 @@
 		AND STATUS = #{status};
 	</select>
 	
+	<select id="selectTotalById" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+	    SELECT
+			count(1)
+		FROM
+			pkpm_cloud_subscription
+		WHERE
+			user_id = #{userId}
+	</select>
+	
 </mapper>

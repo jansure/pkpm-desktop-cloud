@@ -132,7 +132,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		subscription.setUserId(userId);
 		subscription.setProjectId(projectId);
 		subscription.setAdId(Integer.parseInt(adId));
-		subscription.setStatus(status);
+		subscription.setStatus(invalidStatus);
 		Integer subscriptionCount = subscriptionMapper.saveSubscription(subscription);
 		if(subscriptionCount<1){
 			throw  Exceptions.newBusinessException("保存订单失败,请您重试!");
@@ -178,11 +178,10 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		
 		//根据user_id和status查询计算机名
 		
-		
 		//b查询成功的条数
-		Integer count = subscriptionMapper.selectCount(userId,status);
+		Integer count = subscriptionMapper.selectTotalById(userId);
 		String userName = userInfo.getUserName();
-		String gloryProductName  = userName + "-" +  String.valueOf(count + 1);  ;//计算机名字不能超过15位 ,  如果username-productname-01超过15位？
+		String gloryProductName  = productName + "-" +  String.valueOf(count + 1);  ;//计算机名字不能超过15位 ,  如果username-productname-01超过15位？
 		commonRequestBean.setGloryProductName(gloryProductName);
 		
 		commonRequestBean.setAreaCode(areaCode);
@@ -191,7 +190,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		String strResponse = HttpClientUtil.mysend(
 				HttpConfigBuilder.buildHttpConfigNoToken(urlCreateAdAndDesktop, strJson, 5, "utf-8", 10000).method(HttpMethods.POST));
 		MyHttpResponse myHttpResponse = JsonUtil.deserialize(strResponse, MyHttpResponse.class);
-		System.out.println("urlCreateAdAndDesktop---------" + myHttpResponse);
+		
 		Integer statusCode = myHttpResponse.getStatusCode();
 			//3、创建成功后,返回参数给前台
 			if(HttpStatus.OK.value() == statusCode){

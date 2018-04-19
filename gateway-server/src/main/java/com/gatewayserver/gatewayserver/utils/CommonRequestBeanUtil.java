@@ -186,10 +186,12 @@ public class CommonRequestBeanUtil {
         Long subsId = commonRequestBean.getSubsId();
         Integer userId = commonRequestBean.getUserId();
         Integer adId = commonRequestBean.getAdId();
+        String areaCode = commonRequestBean.getAreaCode();
         Preconditions.checkArgument(StringUtils.isNotBlank(projectId), "projectId不能为空");
         Preconditions.checkArgument(null != subsId, "subsId不能为空");
         Preconditions.checkArgument(null != userId, "userId不能为空");
         Preconditions.checkArgument(null != adId, "adId不能为空");
+        Preconditions.checkArgument(StringUtils.isNotBlank(areaCode), "areaCode不能为空");
 
     }
 
