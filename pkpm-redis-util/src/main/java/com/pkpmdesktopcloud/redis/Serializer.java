@@ -15,5 +15,5 @@ public interface Serializer {
  * @author zhangshuai
  * @since 04.19.18
  */
-    Object unserialize(byte[] bytes);
+    Object deserialize(byte[] bytes);
 }
