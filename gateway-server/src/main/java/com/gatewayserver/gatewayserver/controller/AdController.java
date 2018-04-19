@@ -41,7 +41,7 @@ public class AdController {
     @RequestMapping(value = "/user/update",method = RequestMethod.POST)
     public ResultObject updateUser(@RequestBody CommonRequestBean requestBean) {
         String response = adService.updateAdUser(requestBean);
-        return ResultObject.success(response,"密码添加成功");
+        return ResultObject.success(response,"密码修改成功");
     }
     /**
      * @Description: 查询某一AD域下的所有用户；
