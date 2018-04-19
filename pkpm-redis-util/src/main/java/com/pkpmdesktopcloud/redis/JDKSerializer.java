@@ -7,7 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public enum JDKSerializer {
+public enum JDKSerializer implements Serializer{
     INSTANCE;
     private JDKSerializer()
     {
