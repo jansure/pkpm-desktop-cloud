@@ -40,7 +40,7 @@ public enum KryoSerializer implements Serializer{
         else
             return fallbackSerielizer.serialize(object);
     }
-    
+
     @Override
     public  Object deserialize(byte[] bytes) {
         if(bytes == null) return null;
