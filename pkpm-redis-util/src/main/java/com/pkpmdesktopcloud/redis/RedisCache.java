@@ -20,11 +20,11 @@ public class RedisCache implements Cache{
                 throw new IllegalArgumentException("Cache instances require an ID");
             this.id = id;
             redisConfig = RedisConfigurationBuilder.getInstance().parseConfiguration();
-            pool = new JedisPool(redisConfig, redisConfig.getHost(), redisConfig.getPort(),
-                    redisConfig.getConnectionTimeout(), redisConfig.getSoTimeout(), redisConfig.getPassword(),
-                    redisConfig.getDataBase(), redisConfig.getClientName(), redisConfig.getSsl(),
-                    redisConfig.getSslSocketFactory(), redisConfig.getSslParameters(), redisConfig.getHostNameVerifier());
-        }
+            pool = new JedisPool(redisConfig, redisConfig.getHost(), redisConfig.getPort(), redisConfig.getConnectionTimeout(),
+                    redisConfig.getSoTimeout(), redisConfig.getPassword(), redisConfig.getDatabase(), redisConfig.getClientName(),
+                    redisConfig.isSsl(), redisConfig.getSslSocketFactory(), redisConfig.getSslParameters(),
+                    redisConfig.getHostnameVerifier());
+            }
         catch (Exception e) {
             System.err.println(e.getStackTrace().toString());
         }

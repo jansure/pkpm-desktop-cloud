@@ -37,9 +37,16 @@ public final class RedisTestCase {
 
   @Test
   public void shouldDemonstrateCopiesAreEqual() {
-    for (int i = 0; i < 1000; i++) {
-      cache.putObject(i, i);
-      assertEquals(i, cache.getObject(i));
+    for (int i = 0; i < 10000; i++) {
+      Person person = new Person();
+      person.setId(i);
+      person.setAge(i + 10);
+      person.setAddress("beijing" + i);
+      person.setName("zhangshuai" + i);
+      cache.putObject(i, person);
+    }
+    for (int i = 0; i < 10000; i++) {
+      System.out.println(cache.getObject(i));
     }
   }
 
@@ -56,6 +63,8 @@ public final class RedisTestCase {
     for (int i = 0; i < 5; i++) {
       cache.putObject(i, i);
     }
+    System.out.println(cache.getObject(0));
+    System.out.println(cache.getObject(4));
     assertNotNull(cache.getObject(0));
     assertNotNull(cache.getObject(4));
     cache.clear();

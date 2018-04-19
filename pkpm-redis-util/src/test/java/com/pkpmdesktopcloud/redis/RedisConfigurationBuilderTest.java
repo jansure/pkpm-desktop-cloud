@@ -16,10 +16,10 @@ public class RedisConfigurationBuilderTest {
     RedisConfig redisConfig = RedisConfigurationBuilder.getInstance()
         .parseConfiguration(this.getClass().getClassLoader());
     assertEquals(JDKSerializer.class, redisConfig.getSerializer().getClass());
-    assertFalse(redisConfig.getSsl());
+    assertFalse(redisConfig.isSsl());
     assertNull(redisConfig.getSslSocketFactory());
     assertNull(redisConfig.getSslParameters());
-    assertNull(redisConfig.getHostNameVerifier());
+    assertNull(redisConfig.getHostnameVerifier());
 
   }
 
@@ -29,10 +29,10 @@ public class RedisConfigurationBuilderTest {
     RedisConfig redisConfig = RedisConfigurationBuilder.getInstance()
         .parseConfiguration(this.getClass().getClassLoader());
     assertEquals(KryoSerializer.class, redisConfig.getSerializer().getClass());
-    assertTrue(redisConfig.getSsl());
+    assertTrue(redisConfig.isSsl());
     assertEquals(TestSSLSocketFactory.class, redisConfig.getSslSocketFactory().getClass());
     assertEquals(TestSSLParameters.class, redisConfig.getSslParameters().getClass());
-    assertEquals(TestHostnameVerifier.class, redisConfig.getHostNameVerifier().getClass());
+    assertEquals(TestHostnameVerifier.class, redisConfig.getHostnameVerifier().getClass());
   }
 
   @After
