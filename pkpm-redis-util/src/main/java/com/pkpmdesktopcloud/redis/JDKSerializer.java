@@ -1,14 +1,19 @@
 package com.pkpmdesktopcloud.redis;
 
 import org.apache.ibatis.cache.CacheException;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public class JDKSerializer implements Serializer{
+public enum JDKSerializer {
+    INSTANCE;
+    private JDKSerializer()
+    {
 
-    @Override
+    }
+
     public byte[] serialize(Object object) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -21,7 +26,6 @@ public class JDKSerializer implements Serializer{
         }
     }
 
-    @Override
     public Object unserialize(byte[] bytes) {
         if(bytes == null) return null;
         try {
