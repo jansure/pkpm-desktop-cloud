@@ -7,7 +7,7 @@ import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-//@EnableAuthorizationServer
-//@EnableResourceServer
-//@EnableDiscoveryClient
+@EnableAuthorizationServer
+@EnableResourceServer
+@EnableDiscoveryClient
 @RestController
-//@EnableFeignClients
+@EnableFeignClients
 public class AuthServerApplication {
 
 	@RequestMapping(value="/user", produces="application/json")
