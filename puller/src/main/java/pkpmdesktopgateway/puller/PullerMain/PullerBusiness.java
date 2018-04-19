@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.Header;
-import org.apache.http.client.HttpClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +21,7 @@ import com.desktop.utils.page.ResultObject;
 import com.pkpm.httpclientutil.HttpClientUtil;
 import com.pkpm.httpclientutil.HuaWeiResponse;
 import com.pkpm.httpclientutil.MyHttpResponse;
-import com.pkpm.httpclientutil.builder.HCB;
 import com.pkpm.httpclientutil.common.HttpConfig;
-import com.pkpm.httpclientutil.common.HttpHeader;
 import com.pkpm.httpclientutil.common.HttpMethods;
 import com.pkpm.httpclientutil.common.util.PropertiesUtil;
 
@@ -38,18 +34,18 @@ public class PullerBusiness {
 	/**
 	 * 设置getwayServer的主机地址
 	 */
-	private static final String serverHost = PropertiesUtil.getProperty("puller_config.properties", "server_host");
+	private static final String SERVER_HOST = PropertiesUtil.getProperty("puller_config.properties", "server_host");
 
 	/**
 	 * 设置pkpmCloud的主机地址
 	 */
-	private static final String businessHost = PropertiesUtil.getProperty("puller_config.properties", "business_host");
+	private static final String BUSINESS_HOST = PropertiesUtil.getProperty("puller_config.properties", "business_host");
 
 	
 	/**
 	 * 设置任务更新条数
 	 */
-	private static final String jobSize = PropertiesUtil.getProperty("puller_config.properties", "job_size");
+	private static final String JOB_SIZE = PropertiesUtil.getProperty("puller_config.properties", "job_size");
 
 	/**
 	 * 存放启动参数中设置的监控类型参数
@@ -91,8 +87,8 @@ public class PullerBusiness {
 	 */
 	public void updateJobStatus() {
 		log.info(areaCode);
-		String url = serverHost + "/puller/getJobTasks?jobSize={jobSize}&areaCode={areaCode}";
-		url = url.replace("{jobSize}", jobSize).replace("{areaCode}", areaCode);
+		String url = SERVER_HOST + "/puller/getJobTasks?jobSize={jobSize}&areaCode={areaCode}";
+		url = url.replace("{jobSize}", JOB_SIZE).replace("{areaCode}", areaCode);
 		log.info(url);
 		try {
 
@@ -245,7 +241,7 @@ public class PullerBusiness {
 	 * @throws  
 	 */  
 	private JobDetail getJobDetailByJobId(String jobId) {
-		String url = serverHost + "/puller/getJobDetail?jobId=" + jobId;
+		String url = SERVER_HOST + "/puller/getJobDetail?jobId=" + jobId;
 		
 		try {
 
@@ -293,7 +289,7 @@ public class PullerBusiness {
 	 */  
 	    
 	private HuaWeiResponse getHuaWeiInfo(String jobId, String projectId, String operatorType) {
-		String url = serverHost + "/puller/getHuaWeiInfo?jobId={jobId}&projectId={projectId}&operatorType={operatorType}";
+		String url = SERVER_HOST + "/puller/getHuaWeiInfo?jobId={jobId}&projectId={projectId}&operatorType={operatorType}";
 		url = url.replace("{jobId}", jobId).replace("{projectId}", projectId).replace("{operatorType}", operatorType);
 		log.info(url);
 		try {
@@ -368,7 +364,7 @@ public class PullerBusiness {
 	 */  
 	    
 	private Map<String, Integer> getPullConfigs() {
-		String url = serverHost + "/puller/getConfig";
+		String url = SERVER_HOST + "/puller/getConfig";
 		
 		try {
 			
@@ -477,7 +473,7 @@ public class PullerBusiness {
 	 */   
 	private void updateJobTask(String jobId, String status) {
 		
-		String url = serverHost + "/puller/updateJobTask";
+		String url = SERVER_HOST + "/puller/updateJobTask";
 		
 		//设置请求参数
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
@@ -525,7 +521,7 @@ public class PullerBusiness {
 	 */  
 	private void updateJobDetail(String jobId, String status) {
 		
-		String url = serverHost + "/puller/updateJobDetail";
+		String url = SERVER_HOST + "/puller/updateJobDetail";
 		
 		//设置请参数
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
@@ -573,7 +569,7 @@ public class PullerBusiness {
 	 */   
 	private void updateCloudSubscription(JobDetail detail) {
 
-		String url = businessHost + "/subscription/setSubsStatus";
+		String url = BUSINESS_HOST + "/subscription/setSubsStatus";
 		
 		//设置请参数
 		Map<String, Object> jsonMap = new HashMap<String, Object>();

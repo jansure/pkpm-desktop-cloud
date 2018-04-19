@@ -33,4 +33,20 @@ public class JobDetail implements Serializable {
     private LocalDateTime finishTime;
 
     private Integer isFinished;
+
+	  
+	/* (非 Javadoc)  
+	 *   
+	 *   
+	 * @return  
+	 * @see java.lang.Object#toString()  
+	 */  
+	@Override
+	public String toString() {
+		return "JobDetail [id=" + id + ", jobId=" + jobId + ", projectId=" + projectId + ", userId=" + userId
+				+ ", subsId=" + subsId + ", adId=" + adId + ", userName=" + userName + ", desktopId=" + desktopId
+				+ ", computerName=" + computerName + ", operatorType=" + operatorType + ", areaCode=" + areaCode
+				+ ", status=" + status + ", createTime=" + createTime + ", updateTime=" + updateTime + ", finishTime="
+				+ finishTime + ", isFinished=" + isFinished + "]";
+	}
 }
