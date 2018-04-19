@@ -50,12 +50,12 @@ public class PullerBusiness {
 	/**
 	 * 存放启动参数中设置的监控类型参数
 	 */
-	private static Set<String> OPERATOR_TYPE_SET = new HashSet<String>();
+	private static Set<String> opTypeSet = new HashSet<String>();
 	
 	/**
 	 * 存放启动参数中设置的监控区域名称参数
 	 */
-	private static String AREA_CODE = "";
+	private static String areaCode = "";
 	
 	static {
 		String opType = System.getProperty("opType");
@@ -67,14 +67,14 @@ public class PullerBusiness {
 				
 				for(String typeStr : typeArray) {
 					
-					OPERATOR_TYPE_SET.add(typeStr);
+					opTypeSet.add(typeStr);
 				}
 			}
 		}
 		
 		String areaCodeStr = System.getProperty("areaCode");
 		if(StringUtils.isNotEmpty(areaCodeStr)) {
-			AREA_CODE = areaCodeStr.toLowerCase();
+			areaCode = areaCodeStr.toLowerCase();
 		}
 		
 	}
@@ -86,9 +86,9 @@ public class PullerBusiness {
 	 * @return void    无返回
 	 */
 	public void updateJobStatus() {
-		log.info(AREA_CODE);
+		log.info(areaCode);
 		String url = SERVER_HOST + "/puller/getJobTasks?jobSize={jobSize}&areaCode={areaCode}";
-		url = url.replace("{jobSize}", JOB_SIZE).replace("{areaCode}", AREA_CODE);
+		url = url.replace("{jobSize}", JOB_SIZE).replace("{areaCode}", areaCode);
 		log.info(url);
 		try {
 
@@ -161,7 +161,7 @@ public class PullerBusiness {
 		LocalDateTime updateTime = detail.getUpdateTime();
 		
 		//通过启动参数，控制是否进行更新
-		if(OPERATOR_TYPE_SET.size() > 0 && !OPERATOR_TYPE_SET.contains(operatorType)) {
+		if(opTypeSet.size() > 0 && !opTypeSet.contains(operatorType)) {
 			log.info("此类型任务配置为不更新，跳过。任务ID:{}，operatorType:{}", jobId, operatorType);
 			return;
 		}
