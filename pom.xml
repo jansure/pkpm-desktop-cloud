@@ -19,6 +19,7 @@
         <module>config-server</module>
         <module>eureka-server</module>
         <module>pkpm-redis-client</module>
+        <module>pkpm-redis-util</module>
     </modules>
 
     <!-- 统一版本号依赖 -->
