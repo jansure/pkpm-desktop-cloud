@@ -90,6 +90,7 @@ public class PullerBusiness {
 	 * @return void    无返回
 	 */
 	public void updateJobStatus() {
+		log.info(areaCode);
 		String url = serverHost + "/puller/getJobTasks?jobSize={jobSize}&areaCode={areaCode}";
 		url = url.replace("{jobSize}", jobSize).replace("{areaCode}", areaCode);
 		log.info(url);
@@ -579,10 +580,11 @@ public class PullerBusiness {
 		jsonMap.put("subsId", detail.getSubsId());
 		jsonMap.put("status", detail.getStatus());
 		jsonMap.put("projectId", detail.getProjectId());
+		String jsonStr = JsonUtil.serialize(jsonMap);
 		
 		try {
 
-			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url, jsonMap, 5, "utf-8", 100000);
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url, jsonStr, 5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.POST));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
@@ -611,6 +613,13 @@ public class PullerBusiness {
 			log.error("更新任务数据失败！");
 		}
 		
+	}
+	
+	public static void main(String[] args) {
+		JobDetail detail = new JobDetail();
+		detail.setSubsId(123456l);
+		detail.setStatus(SubscriptionStatusEnum.VALID.toString());
+		new PullerBusiness().updateCloudSubscription(detail );
 	}
 	
 }
