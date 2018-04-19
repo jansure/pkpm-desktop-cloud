@@ -1,23 +1,25 @@
 package com.cabr.pkpm.service.impl.user;
 
+import com.cabr.pkpm.entity.user.UserInfo;
+import com.cabr.pkpm.mapper.user.UserMapper;
+import com.cabr.pkpm.service.user.IUserService;
+import com.desktop.utils.JsonUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
-import com.cabr.pkpm.entity.user.UserInfo;
-import com.cabr.pkpm.mapper.user.UserMapper;
-import com.cabr.pkpm.service.user.IUserService;
-import com.desktop.utils.JsonUtil;
+
+import javax.annotation.Resource;
+
 @Service
 public class UserServiceImpl implements IUserService {
     
-	@Autowired
+	@Resource
 	private UserMapper userMapper;
 	
-	@Autowired
+	@Resource
 	private StringRedisTemplate stringRedisTemplate;
 	
 	@Override
