@@ -1,7 +1,7 @@
 package com.desktop.constant;
 
 import com.desktop.utils.exception.Exceptions;
-import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.Arrays;
 
