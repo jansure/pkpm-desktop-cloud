@@ -8,7 +8,7 @@ zuul:
       sensitiveHeaders:
       strip-prefix: false
     pkpmcloud-server:
-      path: /pkpmcloud/**
+      path: /pkpm-desktop-cloud/**
       #serviceId: pkpmcloud-server
       serviceId: pkpmcloud
       strip-prefix: true  ##当stripPrefix=true的时候 （http://127.0.0.1:8181/api/user/list -> http://192.168.1.100:8080/user/list）  

@@ -4,7 +4,7 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "pkpmcloud")
+@FeignClient(name = "pkpm-desktop-cloud")
 public interface LoginClient {
 
     @PostMapping("/user/login")
