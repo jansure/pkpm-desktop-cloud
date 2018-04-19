@@ -6,9 +6,14 @@
 	<groupId>pkpm-desktop-cloud</groupId>
 	<version>1.0-SNAPSHOT</version>
 	<artifactId>eureka-server</artifactId>
-	<properties>
-	<mapstruct.version>1.0.final</mapstruct.version>
-	</properties>
+
+	<parent>
+		<groupId>pkpm-desktop-cloud</groupId>
+		<artifactId>pkpm-desktop-cloud</artifactId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
