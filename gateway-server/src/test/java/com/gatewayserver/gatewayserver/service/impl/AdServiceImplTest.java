@@ -37,10 +37,10 @@ public class AdServiceImplTest {
     public void addAdUser() {
 
         CommonRequestBean requestBean = new CommonRequestBean();
-        requestBean.setAdId(1);
+        requestBean.setAdId(3);
         requestBean.setProjectId("9487c2cb4c4d4c828868098b7a78b497");
         requestBean.setUserId(100);
-        requestBean.setUserName("xuhefafaf");
+        requestBean.setUserName("xuhetest");
         requestBean.setSubsId(1L);
         requestBean.setUserEmail("new@163.com");
 

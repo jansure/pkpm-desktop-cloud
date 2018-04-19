@@ -144,7 +144,8 @@ public class AdServiceImpl implements AdService {
             String ouName = adDef.getAdOu();
             //AD属性:获取组织ouDN;
             String ouDN = AdUtil.getOuDN(adDef);
-
+            SearchResultEntry ouEntry = connection.getEntry(ouDN);
+            Preconditions.checkNotNull(ouEntry,  "AD组织不存在"+ouDN);
             String entryDN = String.format("CN=%s,%s", userName, ouDN);
             SearchResultEntry entry = connection.getEntry(entryDN);
             //检测到用户存在，返回成功
@@ -199,7 +200,7 @@ public class AdServiceImpl implements AdService {
 
         //初始化插入数据
         Preconditions.checkNotNull(requestBean);
-        PkpmOperatorStatus operatorStatus = new PkpmOperatorStatus();
+        PkpmOperatorStatus operatorStatus = new PkpmOperatorStatus().setDefault();
         BeanUtil.copyPropertiesIgnoreNull(requestBean, operatorStatus);
         operatorStatus.setStatus(JobStatusEnum.AD_CREATE.toString());
         operatorStatus.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
