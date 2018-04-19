@@ -11,7 +11,7 @@ public interface Serializer {
 
 /**
  * unSerialize method for redis object
- * @return unserialize Object
+ * @return deserialize Object
  * @author zhangshuai
  * @since 04.19.18
  */
