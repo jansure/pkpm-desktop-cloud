@@ -5,7 +5,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.gateway-server</groupId>
+	<groupId>pkpm-desktop-cloud</groupId>
 	<artifactId>gateway-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -190,17 +190,17 @@
 		</dependency>
 
 		<dependency>
-			<groupId>pkpm-desktop-gateway</groupId>
+			<groupId>pkpm-desktop-cloud</groupId>
 			<artifactId>gateway-utils</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>pkpm-desktop-gateway</groupId>
+			<groupId>pkpm-desktop-cloud</groupId>
 			<artifactId>gateway-common</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>http-client-util</groupId>
+			<groupId>pkpm-desktop-cloud</groupId>
 			<artifactId>http-client-util</artifactId>
 			<version>1.0</version>
 		</dependency>
