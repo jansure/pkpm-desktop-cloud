@@ -179,9 +179,9 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		//根据user_id和status查询计算机名
 		
 		//b查询成功的条数
-		Integer count = subscriptionMapper.selectCount(userId,status);
+		Integer count = subscriptionMapper.selectTotalById(userId);
 		String userName = userInfo.getUserName();
-		String gloryProductName  = userName + "-" +  String.valueOf(count + 1);  ;//计算机名字不能超过15位 ,  如果username-productname-01超过15位？
+		String gloryProductName  = productName + "-" +  String.valueOf(count + 1);  ;//计算机名字不能超过15位 ,  如果username-productname-01超过15位？
 		commonRequestBean.setGloryProductName(gloryProductName);
 		
 		commonRequestBean.setAreaCode(areaCode);
