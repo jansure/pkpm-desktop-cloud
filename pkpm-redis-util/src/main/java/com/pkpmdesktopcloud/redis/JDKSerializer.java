@@ -26,7 +26,7 @@ public enum JDKSerializer implements Serializer{
         }
     }
 
-    public Object unserialize(byte[] bytes) {
+    public Object deserialize(byte[] bytes) {
         if(bytes == null) return null;
         try {
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
