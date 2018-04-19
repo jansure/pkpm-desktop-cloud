@@ -1,6 +1,5 @@
 package com.pkpmdesktopcloud.redis;
 
-import com.oracle.webservices.internal.api.databinding.DatabindingMode;
 import lombok.Data;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
