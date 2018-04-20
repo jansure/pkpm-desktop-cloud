@@ -37,15 +37,15 @@ public final class RedisTestCase {
 
   @Test
   public void shouldDemonstrateCopiesAreEqual() {
-    for (int i = 0; i < 10000; i++) {
+    for (int i = 0; i < 10; i++) {
       Person person = new Person();
       person.setId(i);
       person.setAge(i + 10);
       person.setAddress("beijing" + i);
       person.setName("zhangshuai" + i);
-      cache.putObject(i, person);
+      cache.putObject(person, person);
     }
-    for (int i = 0; i < 10000; i++) {
+    for (int i = 0; i < 10; i++) {
       System.out.println(cache.getObject(i));
     }
   }
