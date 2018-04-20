@@ -128,6 +128,7 @@ public class AdServiceImpl implements AdService {
         AdUtil.checkAdUser(requestBean);
         Integer adId = requestBean.getAdId();
         PkpmAdDef adDef = getAdDefByAdId(adId);
+       
         Preconditions.checkNotNull(adDef);
         LDAPConnectionPool connectionPool = getConnectionPool(adDef);
         Preconditions.checkNotNull(connectionPool, "AD获取连接池失败");
