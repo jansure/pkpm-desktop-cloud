@@ -106,7 +106,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		String areaCode = regionComponentInfo.getComponentDesc();
 		
 	   //	String areaCode = "cn-north-1";
-		String urlGetAdAndProject =serverHost + "/params/getAdAndProject?areaCode=" + areaCode;
+		String urlGetAdAndProject =serverHost + "/params/getAdAndProject?areaCode=" + areaCode ;
 		String adAndProjectResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(urlGetAdAndProject,  5, "utf-8", 100000).method(HttpMethods.GET));
 		
 		MyHttpResponse adAndProjectHttpResponse = JsonUtil.deserialize(adAndProjectResponse, MyHttpResponse.class);
@@ -153,7 +153,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		
 		List<ProductInfo> products = productMapper.getProductByProductId(productId);
 		ProductInfo productInfo = products.get(0);
-		String imageId = productInfo.getImageId();
+		//String imageId = productInfo.getImageId();
 		String productName = productInfo.getProductName();
 		
 		//2、传入commonrequestbean,创建ad和desktop
@@ -170,11 +170,12 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		String hwProductId = hostConfigcomponentInfo.getHwProductId();
 		commonRequestBean.setHwProductId(hwProductId);   // workspace.c2.large.windows
 		
-		commonRequestBean.setOuName(ouName);
+		//commonRequestBean.setOuName(ouName);
+		//commonRequestBean.setOuName("远大北京公司/销售部");
 		commonRequestBean.setUserEmail(userEmail);
 		commonRequestBean.setProjectId(projectId);   
 		commonRequestBean.setAdId(Integer.parseInt(adId));
-		commonRequestBean.setImageId(imageId);   //997488ed-fa23-4671-b88c-d364c0405334
+		commonRequestBean.setImageId("asdf");   //997488ed-fa23-4671-b88c-d364c0405334
 		
 		//根据user_id和status查询计算机名
 		

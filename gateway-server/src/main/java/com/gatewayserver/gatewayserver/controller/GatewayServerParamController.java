@@ -37,7 +37,7 @@ public class GatewayServerParamController {
 	 * @time 2018年4月13日 上午11:16:07
 	 */
 	@RequestMapping(value = "/getAdAndProject", method = RequestMethod.GET)
-	public ResultObject getAdAndProject( String areaCode) {
+	public ResultObject getAdAndProject(String areaCode) {
 		Map<String, String> adAndProject = gatewayServerParam.getAdAndProject(areaCode, null);
 		
 		if (StringUtils.isNotBlank(adAndProject.get("adId")) && StringUtils.isNotBlank(adAndProject.get("projectId"))) {
