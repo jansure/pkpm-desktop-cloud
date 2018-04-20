@@ -1,7 +1,6 @@
 package com.gatewayserver.gatewayserver.service;
 
 
-import com.desktop.utils.page.ResultObject;
 import com.gateway.common.domain.CommonRequestBean;
 import com.gateway.common.dto.ad.AdComputer;
 import com.gateway.common.dto.ad.AdUser;
@@ -18,9 +17,9 @@ public interface AdService {
 
     String updateAdUser(CommonRequestBean requestBean);
 
-    int getUserCountByAdIpAddress(String adIpAddress);
+    Integer getUserCountByAdIpAddress(String adIpAddress);
 
-    int getUserOuCountByAdId(Integer adId);
+    Integer getUserOuCountByAdId(Integer adId);
 
     List<AdUser> getUsersByAdId(Integer adId);
 
@@ -31,7 +30,7 @@ public interface AdService {
      * @Param: * @param userName,adId
      * @Return boolean
      */
-    boolean checkUser(String userName, Integer adId);
+    Boolean checkUser(String userName, Integer adId);
 
     void deleteUser(String userName, Integer adId);
 
