@@ -17,6 +17,7 @@ import com.gatewayserver.gatewayserver.service.AdService;
 import com.gatewayserver.gatewayserver.utils.AdUtil;
 import com.gatewayserver.gatewayserver.utils.PkpmOperatorStatusBeanUtil;
 import com.google.common.base.Preconditions;
+import com.sun.org.apache.xml.internal.security.Init;
 import com.unboundid.ldap.sdk.*;
 import com.unboundid.util.ssl.SSLUtil;
 import com.unboundid.util.ssl.TrustAllTrustManager;
@@ -117,10 +118,10 @@ public class AdServiceImpl implements AdService {
         operatorStatus.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
         PkpmOperatorStatusBeanUtil.checkNotNull(operatorStatus);
 
-        //像数据库插入一条记录
-        int result = operatorStatusDAO.save(operatorStatus);
+        //数据库插入一条记录
+        Integer result = operatorStatusDAO.save(operatorStatus);
         Preconditions.checkArgument(result == 1 && operatorStatus.getId() != null, "AD插入数据库初始化失败");
-        log.info("AD插入数据库成功 --id={}", operatorStatus.getId());
+        log.info("开户增加AD->pkpm-operator-status(%s)插入成功", operatorStatus.getId().toString());
 
         //获取AD连接信息，从连接池取出连接
         AdUtil.checkAdUser(requestBean);
@@ -185,8 +186,8 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException | IOException e) {
             throw Exceptions.newBusinessException(e.getMessage());
         } finally {
+            log.info("AD连接资源(%s)被释放",connection.toString());
             connectionPool.releaseConnection(connection);
-            System.out.println("AD连接资源被释放");
         }
         operatorStatus.setStatus(JobStatusEnum.AD_FAILED.toString());
         operatorStatusDAO.update(operatorStatus);
@@ -255,8 +256,8 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException | IOException e) {
             e.printStackTrace();
         } finally {
+            log.info("AD连接资源(%s)被释放",connection.toString());
             connectionPool.releaseConnection(connection);
-            System.out.println("AD连接资源被释放");
         }
         throw Exceptions.newBusinessException("用户密码修改失败");
     }
@@ -282,8 +283,8 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
+            log.info("AD连接资源(%s)被释放",connection.toString());
             connectionPool.releaseConnection(connection);
-            System.out.println("AD连接资源被释放");
         }
         throw Exceptions.newBusinessException("用户列表获取失败");
     }
@@ -310,8 +311,8 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
+            log.info("AD连接资源(%s)被释放",connection.toString());
             connectionPool.releaseConnection(connection);
-            System.out.println("AD连接资源被释放");
         }
         throw Exceptions.newBusinessException("用户列表获取失败");
     }
@@ -353,8 +354,8 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
+            log.info("AD连接资源(%s)被释放",connection.toString());
             connectionPool.releaseConnection(connection);
-            System.out.println("AD连接资源被释放");
         }
 
         throw Exceptions.newBusinessException("用户列表获取失败");
@@ -387,8 +388,8 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
+            log.info("AD连接资源(%s)被释放",connection.toString());
             connectionPool.releaseConnection(connection);
-            System.out.println("AD连接资源被释放");
         }
         throw Exceptions.newBusinessException("计算机列表获取失败");
     }
@@ -477,8 +478,8 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
+            log.info("AD连接资源(%s)被释放",connection.toString());
             connectionPool.releaseConnection(connection);
-            System.out.println("AD连接资源被释放");
         }
         throw Exceptions.newBusinessException("计算机删除失败");
     }
