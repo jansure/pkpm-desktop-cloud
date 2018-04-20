@@ -38,6 +38,9 @@ public class PkpmAdDefDAOImpl implements PkpmAdDefDAO {
 
 	@Override
 	public List<PkpmAdDef> select(PkpmAdDef pkpmAdDef) {
-		return mapper.select(pkpmAdDef);
+        List<PkpmAdDef> list = mapper.select(pkpmAdDef);
+        if(CollectionUtils.isNotEmpty(list))
+            return list;
+        return null;
 	}
 }
