@@ -42,12 +42,34 @@ public final class RedisTestCase {
       person.setId(i);
       person.setAge(i + 10);
       person.setAddress("beijing" + i);
-      person.setName("zhangshuai" + i);
-      cache.putObject(i, person);
+      //person.setName("zhangshuai" + i);
+      cache.putObject(person, person);
     }
+
     for (int i = 0; i < 10000; i++) {
-      System.out.println(cache.getObject(i));
+      Person person = new Person();
+      person.setId(i);
+      person.setAge(i + 10);
+      person.setAddress("beijing" + i);
+      person.setName("zhangshuai" + i);
+      cache.putObject(person, person);
     }
+
+   // for (int i = 0; i < 10000; i++) {
+      Person person = new Person();
+      person.setId(1);
+      person.setAge(1 + 10);
+      person.setAddress("beijing" + 1);
+      //person.setName("x" + 1);
+      System.out.println(cache.getObject(person));
+   // }
+
+    Person person1 = new Person();
+    person1.setId(1);
+    person1.setAge(1 + 10);
+    person1.setAddress("beijing" + 1);
+    person1.setName("zhangshuai" + 1);
+    System.out.println(cache.getObject(person1));
   }
 
   @Test
