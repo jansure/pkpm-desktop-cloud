@@ -8,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.cabr.pkpm.utils.ResultObject;
+import com.gateway.common.dto.user.UserInfoForChangePassword;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -471,5 +473,21 @@ public class UserController {
 			this.result.set("发送短信失败", 0);
 		}
 		return this.result;
+	}
+
+	/**
+	 * 修改密码
+	 *
+	 * @param session
+	 * @throws Exception
+	 * @return ResponseResult
+	 */
+	@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
+	public ResultObject changPassword(UserInfoForChangePassword newUserInfo) throws Exception {
+		Integer userId = newUserInfo.getUserId();
+		List<SubsCription> subsCriptionList = subscriptionService.findSubsCriptionByUserId(userId);
+		logger.info(subsCriptionList);
+		userService.changeUserPassword(newUserInfo, subsCriptionList);
+		return ResultObject.success("密码修改成功");
 	}
 }
