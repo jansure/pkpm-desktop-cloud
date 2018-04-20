@@ -60,9 +60,10 @@ public class SerializerTestCase {
 
     SimpleBeanStudentInfo rawSimpleBean = new SimpleBeanStudentInfo();
     byte[] serialBytes = jdkSerializer.serialize(rawSimpleBean);
-
-    SimpleBeanStudentInfo unserializeSimpleBean = (SimpleBeanStudentInfo) kryoSerializer.deserialize(serialBytes);
-    Assert.assertEquals(rawSimpleBean, unserializeSimpleBean);
+    System.out.println(serialBytes);
+    SimpleBeanStudentInfo deserializeSimpleBean = (SimpleBeanStudentInfo) kryoSerializer.deserialize(serialBytes);
+    Assert.assertEquals(rawSimpleBean, deserializeSimpleBean);
+    System.out.println(deserializeSimpleBean);
 
   }
 

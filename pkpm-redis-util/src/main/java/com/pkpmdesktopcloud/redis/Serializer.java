@@ -10,7 +10,7 @@ public interface Serializer {
     byte[] serialize(Object object);
 
 /**
- * unSerialize method for redis object
+ * deSerialize method for redis object
  * @return deserialize Object
  * @author zhangshuai
  * @since 04.19.18
