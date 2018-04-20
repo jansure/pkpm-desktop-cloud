@@ -1,13 +1,11 @@
 package com.gatewayserver.gatewayserver.service.impl;
 
 
-import com.alibaba.fastjson.JSON;
 import com.desktop.constant.AdConstant;
 import com.desktop.constant.JobStatusEnum;
 import com.desktop.constant.OperatoreTypeEnum;
 import com.desktop.utils.exception.Exceptions;
 import com.desktop.utils.page.BeanUtil;
-import com.desktop.utils.page.ResultObject;
 import com.gateway.common.domain.CommonRequestBean;
 import com.gateway.common.domain.PkpmAdDef;
 import com.gateway.common.domain.PkpmOperatorStatus;
@@ -263,7 +261,7 @@ public class AdServiceImpl implements AdService {
         throw Exceptions.newBusinessException("用户密码修改失败");
     }
 
-    public int getUserCountByAdIpAddress(String adIpAddress) {
+    public Integer getUserCountByAdIpAddress(String adIpAddress) {
 
         PkpmAdDef adDef = getAdDefByAdIpAddress(adIpAddress);
         Preconditions.checkNotNull(adDef);
