@@ -288,7 +288,7 @@ public class AdServiceImpl implements AdService {
         throw Exceptions.newBusinessException("用户列表获取失败");
     }
 
-    public int getUserOuCountByAdId(Integer adId) {
+    public Integer getUserOuCountByAdId(Integer adId) {
 
         PkpmAdDef adDef = getAdDefByAdId(adId);
         Preconditions.checkNotNull(adDef);
@@ -393,7 +393,7 @@ public class AdServiceImpl implements AdService {
         throw Exceptions.newBusinessException("计算机列表获取失败");
     }
 
-    public boolean checkUser(String userName, Integer adId) {
+    public Boolean checkUser(String userName, Integer adId) {
         PkpmAdDef adDef = getAdDefByAdId(adId);
         Preconditions.checkNotNull(adDef);
         LDAPConnectionPool connectionPool = getConnectionPool(adDef);
@@ -408,22 +408,23 @@ public class AdServiceImpl implements AdService {
             String userDN = String.format("CN=%s,%s", userName, ouDN);
             SearchResultEntry entry = connection.getEntry(userDN);
             if (entry == null)
-                return false;
+                return Boolean.FALSE;
             else {
                 Attribute nameAttr = entry.getAttribute("samAccountName");
                 if (nameAttr != null && nameAttr.getValue().equals(userName))
-                    return true;
+                    return Boolean.TRUE;
             }
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
+            log.info("AD连接资源(%s)被释放",connection.toString());
             connectionPool.releaseConnection(connection);
-            System.out.println("AD连接资源被释放");
         }
 
         return false;
     }
 
+    //fixme  deleteUser不给前端返回信息吗？
     public void deleteUser(String userName, Integer adId) {
         PkpmAdDef adDef = getAdDefByAdId(adId);
         Preconditions.checkNotNull(adDef);
@@ -447,8 +448,8 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
+            log.info("AD连接资源(%s)被释放",connection.toString());
             connectionPool.releaseConnection(connection);
-            System.out.println("AD连接资源被释放");
         }
         throw Exceptions.newBusinessException("用户删除失败");
     }
