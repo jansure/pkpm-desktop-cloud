@@ -152,7 +152,7 @@ public class AdServiceImpl implements AdService {
             if (entry != null) {
                 operatorStatus.setStatus("AD_SUCCESS");
                 operatorStatusDAO.update(operatorStatus);
-                log.info("AD数据库记录状态更新成功 --id={}",operatorStatus.getId());
+                log.info(String.format("AD数据库记录状态更新成功 --id={%s}",operatorStatus.getId()));
                 requestBean.setOperatorStatusId(operatorStatus.getId());
                 return userName + "已添加至AD域中";
             }
@@ -186,7 +186,7 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException | IOException e) {
             throw Exceptions.newBusinessException(e.getMessage());
         } finally {
-            log.info("AD连接资源(%s)被释放",connection.toString());
+            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
             connectionPool.releaseConnection(connection);
         }
         operatorStatus.setStatus(JobStatusEnum.AD_FAILED.toString());
@@ -209,7 +209,7 @@ public class AdServiceImpl implements AdService {
         //像数据库插入一条记录
         int result = operatorStatusDAO.save(operatorStatus);
         Preconditions.checkArgument(result == 1 && operatorStatus.getId() != null, "AD插入数据库初始化失败");
-        log.info("AD插入数据库成功 --id={}", operatorStatus.getId());
+        log.info(String.format("AD插入数据库成功 --id={%s}", operatorStatus.getId()));
 
         //获取AD连接信息，从连接池取出连接
         AdUtil.checkAdUser(requestBean);
@@ -256,7 +256,7 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException | IOException e) {
             e.printStackTrace();
         } finally {
-            log.info("AD连接资源(%s)被释放",connection.toString());
+            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
             connectionPool.releaseConnection(connection);
         }
         throw Exceptions.newBusinessException("用户密码修改失败");
@@ -283,7 +283,7 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
-            log.info("AD连接资源(%s)被释放",connection.toString());
+            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
             connectionPool.releaseConnection(connection);
         }
         throw Exceptions.newBusinessException("用户列表获取失败");
@@ -311,7 +311,7 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
-            log.info("AD连接资源(%s)被释放",connection.toString());
+            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
             connectionPool.releaseConnection(connection);
         }
         throw Exceptions.newBusinessException("用户列表获取失败");
@@ -354,7 +354,7 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
-            log.info("AD连接资源(%s)被释放",connection.toString());
+            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
             connectionPool.releaseConnection(connection);
         }
 
@@ -388,7 +388,7 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
-            log.info("AD连接资源(%s)被释放",connection.toString());
+            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
             connectionPool.releaseConnection(connection);
         }
         throw Exceptions.newBusinessException("计算机列表获取失败");
@@ -418,11 +418,11 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
-            log.info("AD连接资源(%s)被释放",connection.toString());
+            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
             connectionPool.releaseConnection(connection);
         }
 
-        return false;
+        return Boolean.FALSE;
     }
 
     //fixme  deleteUser不给前端返回信息吗？
@@ -449,7 +449,7 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
-            log.info("AD连接资源(%s)被释放",connection.toString());
+            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
             connectionPool.releaseConnection(connection);
         }
         throw Exceptions.newBusinessException("用户删除失败");
@@ -478,7 +478,7 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
-            log.info("AD连接资源(%s)被释放",connection.toString());
+            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
             connectionPool.releaseConnection(connection);
         }
         throw Exceptions.newBusinessException("计算机删除失败");
