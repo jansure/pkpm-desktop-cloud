@@ -8,5 +8,5 @@ public class DesktopConstant {
     /**
      * 单个用户最大购买桌面数量
      */
-    public static final Integer DESKTOP_OWN_MAX_ACCOUNT = 10000;
+    public static final Integer DESKTOP_OWN_MAX_ACCOUNT = 200;
 }
