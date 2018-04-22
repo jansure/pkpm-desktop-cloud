@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 import com.cabr.pkpm.utils.ResultObject;
@@ -45,13 +46,13 @@ import com.pkpm.httpclientutil.common.HttpMethods;
 @RequestMapping("/user")
 public class UserController {
 
-	@Autowired
+	@Resource
 	private StringRedisTemplate stringRedisTemplate;
-	@Autowired
+	@Resource
 	private IUserService userService;
-	@Autowired
+	@Resource
 	private IWorkOrderService workOrderService;
-	@Autowired
+	@Resource
 	private ISubscriptionService subscriptionService;
 	
 	
