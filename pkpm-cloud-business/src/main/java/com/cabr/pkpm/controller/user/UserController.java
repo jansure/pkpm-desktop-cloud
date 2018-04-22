@@ -483,7 +483,7 @@ public class UserController {
 	 * @return ResponseResult
 	 */
 	@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
-	public ResultObject changPassword(UserInfoForChangePassword newUserInfo) throws Exception {
+	public ResultObject changPassword(@RequestBody UserInfoForChangePassword newUserInfo) throws Exception {
 		Integer userId = newUserInfo.getUserId();
 		List<SubsCription> subsCriptionList = subscriptionService.findSubsCriptionByUserId(userId);
 		logger.info(subsCriptionList);

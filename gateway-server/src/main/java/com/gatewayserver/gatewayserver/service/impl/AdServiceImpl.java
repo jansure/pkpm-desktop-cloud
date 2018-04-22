@@ -198,6 +198,7 @@ public class AdServiceImpl implements AdService {
 
     public String updateAdUser(CommonRequestBean requestBean) {
 
+        log.info(requestBean+"进入");
         //初始化插入数据
         Preconditions.checkNotNull(requestBean);
         PkpmOperatorStatus operatorStatus = new PkpmOperatorStatus().setDefault();
@@ -216,6 +217,7 @@ public class AdServiceImpl implements AdService {
         Integer adId = requestBean.getAdId();
         PkpmAdDef adDef = getAdDefByAdId(adId);
         Preconditions.checkNotNull(adDef);
+        log.info(adDef+"");
         LDAPConnectionPool connectionPool = getConnectionPool(adDef);
         Preconditions.checkNotNull(connectionPool, "AD获取连接池失败");
 

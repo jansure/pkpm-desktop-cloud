@@ -17,7 +17,7 @@ import java.util.List;
  * @Date: 2018/3/23
  */
 @RestController
-@RequestMapping("/ad")
+@RequestMapping("ad")
 public class AdController {
 
     @Autowired
@@ -40,6 +40,7 @@ public class AdController {
      */
     @RequestMapping(value = "/user/update",method = RequestMethod.POST)
     public ResultObject updateUser(@RequestBody CommonRequestBean requestBean) {
+        System.out.println("AD服务Controller进入成功"+requestBean);
         String response = adService.updateAdUser(requestBean);
         return ResultObject.success(response,"密码修改成功");
     }

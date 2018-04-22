@@ -232,7 +232,8 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 			// 若不存在对应的Redis缓存，从数据库查询
 			List<SubsCription> subsCription = subscriptionMapper.findSubsCriptionByUserId(userId);
 			// 写入Redis缓存
-			stringRedisTemplate.opsForValue().set("subsCriptionByUserId:" + userId, JSON.toJSONString(subsCription));
+			//fixme 解决JSON序列化问题
+			/*stringRedisTemplate.opsForValue().set("subsCriptionByUserId:" + userId, JSON.toJSONString(subsCription));*/
 			return subsCription;
 		}
 	}

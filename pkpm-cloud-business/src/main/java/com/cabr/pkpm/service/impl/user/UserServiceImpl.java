@@ -19,6 +19,7 @@ import com.pkpm.httpclientutil.common.HttpMethods;
 import com.pkpm.httpclientutil.exception.HttpProcessException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,9 @@ public class UserServiceImpl implements IUserService {
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+
+    @Value("${server.host}")
+    private String serverHost;
 
     @Override
     @Transactional
@@ -108,21 +112,24 @@ public class UserServiceImpl implements IUserService {
 
         Preconditions.checkArgument(realPassword.equals(oldPassword), "原密码输入错误");
         Preconditions.checkArgument(newPassword.equals(StringUtils.deleteWhitespace(newPassword)));
-        Preconditions.checkArgument(oldPassword.equals(newPassword), "密码与原密码相同");
+        Preconditions.checkArgument(!oldPassword.equals(newPassword), "密码与原密码相同");
 
 
         String encryptedPassword = Base64Utils.b64FromString(newPassword);
+        log.info("加密新密码-{}",encryptedPassword);
         userInfo.setUserLoginPassword(encryptedPassword);
-        updateUserInfo(userInfo);
+        userMapper.updateUserInfo(userInfo);
 
         try {
 
-            String url = "localhost" + "/ad/user/update";
+            String url = serverHost + "/ad/user/update";
             CommonRequestBean requestBean = new CommonRequestBean();
             requestBean.setUserName(userName);
             for (SubsCription subInfo : subsList) {
+                log.info(subInfo+"");
                 requestBean.setAdId(subInfo.getAdId());
                 String jsonStr = JsonUtil.serialize(requestBean);
+                log.info("url={}",url);
                 log.info("requestBean:{}",requestBean.toString());
 
                 String response = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(url, jsonStr,5, "utf-8", 100000).method(HttpMethods.POST));
