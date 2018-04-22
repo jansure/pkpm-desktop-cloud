@@ -1,6 +1,6 @@
 server:
   port: 18030
-  context-path: /pkpm-desktop-cloud
+#  context-path: /pkpm-desktop-cloud
 spring:
   cloud:
     loadbalancer:

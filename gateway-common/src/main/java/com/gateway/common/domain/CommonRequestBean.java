@@ -1,5 +1,6 @@
 package com.gateway.common.domain;
 
+import com.desktop.utils.ObjectClear;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gateway.common.dto.Auth;
 import com.gateway.common.dto.Desktop;
@@ -74,4 +75,12 @@ public class CommonRequestBean implements Serializable {
 
     private Record record;
 
+
+
+}
+class Main {
+    public static void main(String[] args) {
+        CommonRequestBean commonRequestBean = new CommonRequestBean();
+        ObjectClear.clearObject(commonRequestBean);
+    }
 }

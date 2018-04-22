@@ -24,7 +24,7 @@ public class GatewayServerParamImplTest {
     public void testGetAdAndProject() throws Exception {
 
         String areaCode = "cn-north-1";
-        String ouName = "";
+        String ouName = "远大北京公司/销售部";
         pkpmCloudService.getAdAndProject(areaCode, ouName);
 
     }

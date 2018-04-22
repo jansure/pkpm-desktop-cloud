@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import com.desktop.constant.AdConstant;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
@@ -103,12 +104,14 @@ public class GatewayServerParamImpl implements GatewayServerParam {
 			// 结果不空，返回adIpAddress列表
 			if (CollectionUtils.isNotEmpty(pkpmAdList)) {
 				// 查出已有的adIpAddress，并去重
-				List<String> adIpAddressList = pkpmAdList.stream().map(PkpmAdDef::getAdIpAddress).distinct().collect(Collectors.toList());
+				List<String> adIpAddressList = pkpmAdList.stream().
+						       					map(PkpmAdDef::getAdIpAddress).
+												distinct().collect(Collectors.toList());
 				for (String adIpAddress : adIpAddressList) {
 					// 查询此AD域已有用户数
-					int count = adService.getUserCountByAdIpAddress(adIpAddress);
+					Integer count = adService.getUserCountByAdIpAddress(adIpAddress);
 					// 若用户数未超过限制，返回该AD Host下的一个adId、一个projectId，放入map
-					if (count < 2000) {
+					if (count < AdConstant.AD_MAX_COUNT) {
 						Map<String, String> map = new HashMap<String, String>();
 
 						// 根据adIpAddress查到AdId放入map

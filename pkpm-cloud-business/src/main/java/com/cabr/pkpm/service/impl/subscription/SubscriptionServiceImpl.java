@@ -3,9 +3,12 @@ package com.cabr.pkpm.service.impl.subscription;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.function.IntToDoubleFunction;
 
 import javax.annotation.Resource;
 
+import com.desktop.constant.AdConstant;
+import com.desktop.constant.DesktopConstant;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -106,7 +109,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		String areaCode = regionComponentInfo.getComponentDesc();
 		
 	   //	String areaCode = "cn-north-1";
-		String urlGetAdAndProject =serverHost + "/params/getAdAndProject?areaCode=" + areaCode;
+		String urlGetAdAndProject =serverHost + "/params/getAdAndProject?areaCode=" + areaCode ;
 		String adAndProjectResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(urlGetAdAndProject,  5, "utf-8", 100000).method(HttpMethods.GET));
 		
 		MyHttpResponse adAndProjectHttpResponse = JsonUtil.deserialize(adAndProjectResponse, MyHttpResponse.class);
@@ -153,7 +156,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		
 		List<ProductInfo> products = productMapper.getProductByProductId(productId);
 		ProductInfo productInfo = products.get(0);
-		String imageId = productInfo.getImageId();
+		//String imageId = productInfo.getImageId();
 		String productName = productInfo.getProductName();
 		
 		//2、传入commonrequestbean,创建ad和desktop
@@ -170,20 +173,44 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		String hwProductId = hostConfigcomponentInfo.getHwProductId();
 		commonRequestBean.setHwProductId(hwProductId);   // workspace.c2.large.windows
 		
-		commonRequestBean.setOuName(ouName);
+		//commonRequestBean.setOuName(ouName);
+		//commonRequestBean.setOuName("远大北京公司/销售部");
 		commonRequestBean.setUserEmail(userEmail);
 		commonRequestBean.setProjectId(projectId);   
 		commonRequestBean.setAdId(Integer.parseInt(adId));
-		commonRequestBean.setImageId(imageId);   //997488ed-fa23-4671-b88c-d364c0405334
+		commonRequestBean.setImageId("asdf");   //997488ed-fa23-4671-b88c-d364c0405334
 		
 		//根据user_id和status查询计算机名
-		
-		//b查询成功的条数
-		Integer count = subscriptionMapper.selectTotalById(userId);
+
+
 		String userName = userInfo.getUserName();
-		String gloryProductName  = productName + "-" +  String.valueOf(count + 1);  ;//计算机名字不能超过15位 ,  如果username-productname-01超过15位？
-		commonRequestBean.setGloryProductName(gloryProductName);
-		
+		//查询成功的条数
+		Integer nextNum = 1 + subscriptionMapper.selectTotalById(userId);
+		if(nextNum >= 1 + DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT)
+			throw Exceptions.newBusinessException(
+					String.format("您购买的桌面数量已经达到%d个上限，请重新注册账号进行购买!",
+							DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT));
+
+		//productName.length < 15
+		if(DesktopConstant.DESKTOP_NAME_MAX_LEN > productName.length()) {
+			commonRequestBean.setGloryProductName(productName + nextNum);
+			if(productName.length() + nextNum.toString().length() >
+					DesktopConstant.DESKTOP_NAME_MAX_LEN) {
+				Integer minus = nextNum.toString().length() -
+						(DesktopConstant.DESKTOP_NAME_MAX_LEN - productName.length());
+				commonRequestBean.setGloryProductName(productName.substring(0,
+						DesktopConstant.DESKTOP_NAME_MAX_LEN - minus
+				) + nextNum);
+			}
+
+		}
+		else {
+			commonRequestBean.setGloryProductName(productName.substring(0,
+					DesktopConstant.DESKTOP_NAME_MAX_LEN - nextNum.toString().length())
+					+ nextNum);
+		}
+
+
 		commonRequestBean.setAreaCode(areaCode);
 		String urlCreateAdAndDesktop =serverHost + "/desktop/createAdAndDesktop";
 		String strJson = JsonUtil.serialize(commonRequestBean);
