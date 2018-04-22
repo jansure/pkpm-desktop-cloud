@@ -10,6 +10,7 @@ import com.cabr.pkpm.utils.StringUtil;
 import com.desktop.utils.HttpConfigBuilder;
 import com.desktop.utils.JsonUtil;
 import com.desktop.utils.exception.Exceptions;
+import com.desktop.utils.page.BeanUtil;
 import com.gateway.common.domain.CommonRequestBean;
 import com.gateway.common.dto.user.UserInfoForChangePassword;
 import com.google.common.base.Preconditions;
@@ -94,13 +95,10 @@ public class UserServiceImpl implements IUserService {
         Integer userID = newUserInfo.getUserId();
         String oldPassword = newUserInfo.getOldPassword();
         String newPassword = newUserInfo.getNewPassword();
-        /*// 允许跨域访问
-		response.setHeader("Access-Control-Allow-Origin", "*");
-        */
 
         Preconditions.checkNotNull(newPassword, "密码不能设置为空");
 
-        UserInfo userInfo = findUser(userID);
+        UserInfo userInfo = userMapper.getUserById(userID);
 
         String userName = userInfo.getUserName();
         Preconditions.checkArgument(StringUtil.checkPassword(userName, newPassword), "您输入的密码不合法,请重新输入!");
@@ -108,7 +106,6 @@ public class UserServiceImpl implements IUserService {
         // 从数据库中查出password并解密
         String password = userInfo.getUserLoginPassword();
         String realPassword = Base64Utils.stringFromB64(password);
-        log.info(realPassword);
 
         Preconditions.checkArgument(realPassword.equals(oldPassword), "原密码输入错误");
         Preconditions.checkArgument(newPassword.equals(StringUtils.deleteWhitespace(newPassword)));
@@ -116,7 +113,6 @@ public class UserServiceImpl implements IUserService {
 
 
         String encryptedPassword = Base64Utils.b64FromString(newPassword);
-        log.info("加密新密码-{}",encryptedPassword);
         userInfo.setUserLoginPassword(encryptedPassword);
         userMapper.updateUserInfo(userInfo);
 
@@ -126,20 +122,19 @@ public class UserServiceImpl implements IUserService {
             CommonRequestBean requestBean = new CommonRequestBean();
             requestBean.setUserName(userName);
             for (SubsCription subInfo : subsList) {
-                log.info(subInfo+"");
-                requestBean.setAdId(subInfo.getAdId());
+                BeanUtil.copyPropertiesIgnoreNull(subInfo,requestBean);
+                requestBean.setUserLoginPassword(newPassword);
                 String jsonStr = JsonUtil.serialize(requestBean);
-                log.info("url={}",url);
-                log.info("requestBean:{}",requestBean.toString());
 
                 String response = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(url, jsonStr,5, "utf-8", 100000).method(HttpMethods.POST));
                 MyHttpResponse myHttpResponse = JsonUtil.deserialize(response, MyHttpResponse.class);
-                log.info("Response:{}",myHttpResponse);
 
                 Integer statusCode = myHttpResponse.getStatusCode();
                 String body = myHttpResponse.getBody();
-                if (statusCode!= HttpStatus.OK.value()||body.equals("密码修改成功"))
+                if (statusCode!= HttpStatus.OK.value()){
                     throw Exceptions.newBusinessException("AD域密码修改失败");
+                }
+                log.info("密码修改成功 --adId={}",subInfo.getAdId());
             }
             return "密码修改成功";
         } catch (HttpProcessException e) {
