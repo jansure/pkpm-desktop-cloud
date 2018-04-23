@@ -13,7 +13,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
+/**
+ * 测试类GatewayServerParamController
+ * @author yangpengfei
+ * @date 2018年4月19日
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class GatewayServerParamControllerTest {
@@ -24,7 +28,6 @@ public class GatewayServerParamControllerTest {
 
     /**
      * 初始化执行
-     *
      * @throws Exception
      */
     @Before
@@ -40,7 +43,9 @@ public class GatewayServerParamControllerTest {
      */
     @Test
     public void testGetAdAndProject() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/cloudOrder/getAdAndProject/cn-north-1").accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get("/params/getAdAndProject").accept(MediaType.APPLICATION_JSON)
+        		.param("areaCode", "cn-north-1")
+        		.param("ouName", "远大北京公司/销售部"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print()).andReturn();
     }
