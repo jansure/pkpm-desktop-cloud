@@ -50,7 +50,7 @@ public class UserServiceImpl implements  UserService {
 		
 		if(accessToken != null) {
 			boolean isExpired = accessToken.isExpired();
-			log.info("isExpired:{},RefreshToken:{}", isExpired, accessToken.getExpiration());
+			log.info("isExpired:{}, expiredDate:{}", isExpired, accessToken.getExpiration());
 			User user = (User)authentication.getPrincipal();
 			log.info("username:{}",user.getUsername());
 			return true;
