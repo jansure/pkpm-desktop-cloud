@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cabr.pkpm.mapper.workorder.WorkOrderMapper">
+<mapper namespace="com.gateway.cloud.business.mapper.WorkOrderMapper">
 	  <insert id="saveWorkerOrder" parameterType="java.util.List">
 	  		INSERT INTO pkpm_cloud_work_order (
 				work_id,
@@ -44,7 +44,7 @@
 	  
 	  </insert>
 	  
-	  <resultMap type="com.cabr.pkpm.entity.workorder.WorkOrder" id="workOrderMap">
+	  <resultMap type="com.gateway.cloud.business.entity.WorkOrder" id="workOrderMap">
 	  		<result column="work_id" property="workId"/>
 	  		<result column="user_id" property="userId"/>
 	  		<result column="user_name" property="userName"/>

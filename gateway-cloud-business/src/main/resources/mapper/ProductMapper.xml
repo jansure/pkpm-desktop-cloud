@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cabr.pkpm.mapper.product.ProductMapper">
-	<resultMap id="ProductMap" type="com.cabr.pkpm.entity.product.ProductInfo">
+<mapper namespace="com.gateway.cloud.business.mapper.ProductMapper">
+	<resultMap id="ProductMap" type="com.gateway.cloud.business.entity.ProductInfo">
 		<id property="productId" column="product_id" />
 		<result property="productName" column="product_name" />
 		<result property="productType" column="product_type" />
@@ -23,14 +23,14 @@
 		WHERE product_type = #{productType}
 	</select>
 
-	<resultMap id="NavMap" type="com.cabr.pkpm.entity.product.Navigation">
+	<resultMap id="NavMap" type="com.gateway.cloud.business.entity.Navigation">
 		<id property="navId" column="nav_id" />
 		<result property="navName" column="nav_name" />
 		<result property="parentNavId" column="parent_nav_id" />
 		<result property="parentNavName" column="parent_nav_name" />
 		<result property="valid" column="valid" />
-		<collection property="children" ofType="com.cabr.pkpm.entity.product.Navigation" 
-				select="com.cabr.pkpm.mapper.product.ProductMapper.getNavByPid" column="nav_id">
+		<collection property="children" ofType="com.gateway.cloud.business.entity.product.Navigation" 
+				select="com.gateway.cloud.business.mapper.product.ProductMapper.getNavByPid" column="nav_id">
 		</collection>
 	</resultMap>
 	
@@ -41,7 +41,7 @@
 		AND parent_nav_id = #{parentNavId}
 	</select>
 
-	<resultMap id="SysConfigMap" type="com.cabr.pkpm.entity.SysConfig">
+	<resultMap id="SysConfigMap" type="com.gateway.cloud.business.entity.SysConfig">
 		<id property="key" column="key" />
 		<result property="value" column="value" />
 	</resultMap>
@@ -52,7 +52,7 @@
 		WHERE `key`= #{key}
 	</select>
 
-	<resultMap id="ComponentMap" type="com.cabr.pkpm.entity.product.ComponentVO">
+	<resultMap id="ComponentMap" type="com.gateway.cloud.business.vo.ComponentVO">
 		<id property="productId" column="product_id" />
 		<result property="productName" column="product_name" />
 		<result property="productDesc" column="product_desc" />

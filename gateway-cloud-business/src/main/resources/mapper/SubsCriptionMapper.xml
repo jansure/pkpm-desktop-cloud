@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cabr.pkpm.mapper.subscription.SubscriptionMapper">
-	<resultMap id="BaseResultMap" type="com.cabr.pkpm.entity.subscription.SubsCription">
+<mapper namespace="com.gateway.cloud.business.mapper.SubscriptionMapper">
+	<resultMap id="BaseResultMap" type="com.gateway.cloud.business.entity.SubsCription">
 			<id property="id" column="id" jdbcType="INTEGER"/>
    	      	<result property="subsId" column="subs_id" jdbcType="BIGINT"/>
             <result property="userId" column="user_id" jdbcType="INTEGER"/>
@@ -20,7 +20,7 @@
 		where user_id = #{userId,jdbcType=INTEGER} order by create_time
 	</select>
 
-	<update id="updateSubsCriptionBySubsId" parameterType="com.cabr.pkpm.entity.subscription.SubsCription">
+	<update id="updateSubsCriptionBySubsId" parameterType="com.gateway.cloud.business.entity.SubsCription">
 		UPDATE pkpm_cloud_subscription
 			SET pkpm_cloud_subscription.status = #{status}
 		WHERE pkpm_cloud_subscription.subs_id = #{subsId};
@@ -32,7 +32,7 @@
 		from pkpm_cloud_subscription
 		where user_id = #{userId,jdbcType=INTEGER} order by create_time
 	</select>
-	<insert id="saveSubscription"  parameterType="com.cabr.pkpm.entity.subscription.SubsCription" useGeneratedKeys="true" keyProperty="id">
+	<insert id="saveSubscription"  parameterType="com.gateway.cloud.business.entity.SubsCription" useGeneratedKeys="true" keyProperty="id">
 	    insert into pkpm_cloud_subscription(subs_id,user_id,create_time,pay_channel,ad_id,project_id,status) values
 	    (#{subsId},#{userId},#{createTime},#{payChannel},#{adId},#{projectId},#{status});
 	</insert>

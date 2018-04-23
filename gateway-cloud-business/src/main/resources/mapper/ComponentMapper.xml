@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cabr.pkpm.mapper.component.ComponentMapper">
+<mapper namespace="com.gateway.cloud.business.mapper.ComponentMapper">
 	<select id="getComponentName" resultType="java.lang.String" parameterType="java.lang.Integer">
 			select component_name
 			from pkpm_cloud_component_def
@@ -9,7 +9,7 @@
 	</select>
 	
 	
-	<resultMap id="ComponentMap" type="com.cabr.pkpm.entity.component.ComponentInfo">
+	<resultMap id="ComponentMap" type="com.gateway.cloud.business.entity.ComponentInfo">
 		<id property="componentId" column="component_id" />
 		<result property="componentName" column="component_name" />
 		<result property="componentDesc" column="component_desc" />
