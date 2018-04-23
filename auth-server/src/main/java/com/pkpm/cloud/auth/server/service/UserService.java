@@ -10,7 +10,6 @@
     
 package com.pkpm.cloud.auth.server.service;
 
-  
 /**  
  * @ClassName: UserService  
  * @Description: 用户认证服务类

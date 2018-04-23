@@ -13,6 +13,8 @@ import com.pkpm.cloud.auth.server.client.LoginClient;
 import com.pkpm.cloud.auth.server.entity.UserInfo;
 import com.pkpm.cloud.auth.server.util.RequestUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +25,8 @@ import java.util.List;
  *
  */
 @Component("customUserDetailsService")
+@Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
-
-    private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
     @Resource
     private LoginClient loginClient;
@@ -41,7 +42,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>();
         String password =  RequestUtils.getCurrentRequest().getParameter("password");
         Integer userId = loginClient.login(username, password);
-        logger.info("user_id : {}", userId);
+        log.info("user_id : {}", userId);
         //return new User(userId == null ? username : userId.toString(), password, authorities);
         try {
 			if (userId != 0) {

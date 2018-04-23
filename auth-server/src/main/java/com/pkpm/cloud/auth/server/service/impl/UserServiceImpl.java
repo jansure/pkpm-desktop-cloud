@@ -20,6 +20,8 @@ import org.springframework.stereotype.Component;
 
 import com.pkpm.cloud.auth.server.service.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**  
  * @ClassName: UserService  
  * @Description: 用户认证服务类
@@ -28,6 +30,7 @@ import com.pkpm.cloud.auth.server.service.UserService;
  *    
  */
 @Component
+@Slf4j
 public class UserServiceImpl implements  UserService {
 
 	@Resource
@@ -47,8 +50,8 @@ public class UserServiceImpl implements  UserService {
 		
 		if(accessToken != null) {
 			User user = (User)authentication.getPrincipal();
-			System.out.println(accessToken.getRefreshToken().getValue());
-			System.out.println(user.getUsername());
+			log.info("RefreshToken:{}", accessToken.getRefreshToken().getValue());
+			log.info("username:{}",user.getUsername());
 			return true;
 		}
 		

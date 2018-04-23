@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pkpm.cloud.auth.server.service.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
 
 	@Resource
@@ -38,7 +41,9 @@ public class UserController {
 	public Integer login(@RequestParam("userNameOrTelephoneOrUserEmail") String username, @RequestParam("userLoginPassword") String password, HttpServletResponse response) {
 
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		System.out.println("username:" + username);
+		
+		log.info("username:{}", username);
+		
 		return 100;
 		// if("aaa".equals(username)){
 		//
