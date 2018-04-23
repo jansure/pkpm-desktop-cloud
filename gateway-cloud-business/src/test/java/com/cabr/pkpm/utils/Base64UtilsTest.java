@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.gateway.cloud.business.utils.Base64Utils;
+
 public class Base64UtilsTest {
 	@Test
     public void testIsB64()
