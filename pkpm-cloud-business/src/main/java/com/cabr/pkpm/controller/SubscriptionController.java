@@ -62,7 +62,8 @@ public class SubscriptionController {
 			return this.result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.result.set("创建订单失败,请重新创建订单", 0);
+			//this.result.set("创建订单失败,请重新创建订单", 0);
+			this.result.set(e.getMessage(), 0);
 			return this.result;
 		}
 		

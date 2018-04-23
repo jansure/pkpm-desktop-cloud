@@ -33,7 +33,7 @@ public class StatusController {
 			this.result.set("查询桌面状态失败,请重新尝试!", 0);
 			return this.result;
 		}
-		this.result.set("查询桌面状态成功!", 1, response);
+		this.result.set("查询桌面状态成功!",1 , response);
 		return this.result;
 		
 	}

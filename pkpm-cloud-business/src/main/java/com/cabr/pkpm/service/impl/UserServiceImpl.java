@@ -63,24 +63,24 @@ public class UserServiceImpl implements IUserService {
     public UserInfo findUser(Integer userID) {
 
         // 若不存在对应的Redis缓存，从数据库查询
-//			UserInfo userInfo = userMapper.getUserById(userID);
-//			return userInfo;
-        String str = stringRedisTemplate.opsForValue().get("user:" + userID);
+			UserInfo userInfo = userMapper.getUserById(userID);
+			return userInfo;
+    //    String str = stringRedisTemplate.opsForValue().get("user:" + userID);
         // 若存在Redis缓存，从缓存中读取
-        if (StringUtils.isNotBlank(str)) {
-
-            UserInfo userInfo = JsonUtil.deserializeEx(str, UserInfo.class);
-            return userInfo;
-        } else {
-            // 若不存在对应的Redis缓存，从数据库查询
-            UserInfo userInfo = userMapper.getUserById(userID);
-            //String jsonString = JSON.toJSONString(userInfo);
-            // 写入Redis缓存
-//			stringRedisTemplate.opsForValue().set("user:"+userID, JSON.toJSONString(userInfo));
-//			return userInfo;
-            stringRedisTemplate.opsForValue().set("user:" + userID, JsonUtil.serializeEx(userInfo));
-            return userInfo;
-        }
+//        if (StringUtils.isNotBlank(str)) {
+//
+//            UserInfo userInfo = JsonUtil.deserializeEx(str, UserInfo.class);
+//            return userInfo;
+//        } else {
+//            // 若不存在对应的Redis缓存，从数据库查询
+//            UserInfo userInfo = userMapper.getUserById(userID);
+//            //String jsonString = JSON.toJSONString(userInfo);
+//            // 写入Redis缓存
+////			stringRedisTemplate.opsForValue().set("user:"+userID, JSON.toJSONString(userInfo));
+////			return userInfo;
+//            stringRedisTemplate.opsForValue().set("user:" + userID, JsonUtil.serializeEx(userInfo));
+//            return userInfo;
+//        }
 
     }
 
