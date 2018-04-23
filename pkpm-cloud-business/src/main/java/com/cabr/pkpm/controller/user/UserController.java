@@ -66,7 +66,7 @@ public class UserController {
 	/**
 	 * 用户注册
 	 * 
-	 * @param userInfo(user_name,password,user_mobile_number)
+	 * @param map(user_name,password,user_mobile_number)
 	 * @return 注册成功的页面
 	 */
 	@RequestMapping(value = "/regist", method = RequestMethod.POST)
@@ -159,7 +159,7 @@ public class UserController {
     
 	/**
 	 * 
-	 * @param session
+	 * @param map
 	 * @return ResponseResult
 	 */
 	@SuppressWarnings("unused")
@@ -189,7 +189,7 @@ public class UserController {
 	/**
 	 * 发送验证码短信
 	 * 
-	 * @param user_mobile_number
+	 * @param map
 	 * @return ResponseResult
 	 */
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
@@ -221,7 +221,7 @@ public class UserController {
 	/**
 	 * 异步校验邮箱，是否存在
 	 * 
-	 * @param userEmailOrMobileNumber
+	 * @param map
 	 */
 	@RequestMapping(value = "/findByEmailOrUserMobileNumber", method = RequestMethod.POST)
 	public ResponseResult findByEmailOrUserMobileNumber(@RequestBody Map<String,String> map , HttpServletResponse response) {
@@ -252,7 +252,7 @@ public class UserController {
 	/**
 	 * 完善个人信息,获取会员名称和联系方式
 	 * 
-	 * @param session
+	 * @param map,response
 	 * @return ResponseResult
 	 */
 	@RequestMapping(value = "/perfectInfoInit", method = RequestMethod.POST)
@@ -332,11 +332,11 @@ public class UserController {
 	/**
 	 * 修改手机号码
 	 * 
-	 * @param session
+	 * @param map,response
 	 * @return ResponseResult
 	 */
-	@RequestMapping(value = "/changMobileNumber", method = RequestMethod.POST)
-	public ResponseResult changMobileNumber(@RequestBody Map<String, String> map, HttpServletResponse response) throws Exception {
+	@RequestMapping(value = "/changeMobileNumber", method = RequestMethod.POST)
+	public ResponseResult changeMobileNumber(@RequestBody Map<String, String> map, HttpServletResponse response) throws Exception {
 
 		// 允许跨域访问
 		response.setHeader("Access-Control-Allow-Origin", "*");
@@ -422,7 +422,7 @@ public class UserController {
 	/**
 	 * 找回密码
 	 * 
-	 * @param session
+	 * @param map,response
 	 * @throws Exception 
 	 * @return ResponseResult
 	 */
@@ -479,7 +479,7 @@ public class UserController {
 	/**
 	 * 修改密码
 	 *
-	 * @param session
+	 * @param newUserInfo
 	 * @throws Exception
 	 * @return ResponseResult
 	 */
