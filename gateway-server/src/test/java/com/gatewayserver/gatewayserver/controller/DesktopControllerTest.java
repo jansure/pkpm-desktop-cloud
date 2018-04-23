@@ -53,12 +53,12 @@ public class DesktopControllerTest {
         CommonRequestBean info = new CommonRequestBean();
         info.setUserName("xuhe10");
         info.setUserEmail("cherishpf@163.com");
-        info.setProjectId("9487c2cb4c4d4c828868098b7a78b497");
+        info.setProjectId("80367f2e346747139970a46e3e50c055");
         info.setImageId("997488ed-fa23-4671-b88c-d364c0405334");// 默认的镜像Workspace-User-Template
 //		info.setImageId("997488ed-fa23-4671-b88c-d364c0405334");// Image does not exist
         info.setDataVolumeSize(100);
         info.setHwProductId("workspace.c2.large.windows");
-        info.setGloryProductName("YPF-TEST");
+        info.setGloryProductName("YPF-TEST1234567890");
         info.setOuName("pkpm");
         info.setAdId(1);
         info.setUserId(88);
