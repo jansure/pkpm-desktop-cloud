@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
-@ComponentScan(basePackages={"com.cabr.pkpm","com.desktop.utils"})
+@ComponentScan(basePackages={"com.gateway.cloud.business","com.desktop.utils"})
 public class PkpmCloudApplication {
 	
     @Value("${server.port}")
