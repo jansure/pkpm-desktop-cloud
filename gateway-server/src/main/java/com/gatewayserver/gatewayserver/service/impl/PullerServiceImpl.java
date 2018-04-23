@@ -108,15 +108,15 @@ public class PullerServiceImpl implements PullerService {
             if(jobIds != null && jobIds.size() > 0) {
             	return jobIds;
             }
-            
+
         }catch(Exception ex) {
         	log.error(ex.getMessage());
         	ex.printStackTrace();
         	throw Exceptions.newBusinessException("获取任务出错");
         }
-        
+
         throw Exceptions.newBusinessException("没有要获取状态的任务");
-        
+
     }
 
 
