@@ -1,4 +1,4 @@
-package com.example.authserver.config;
+package com.pkpm.cloud.auth.server.config;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

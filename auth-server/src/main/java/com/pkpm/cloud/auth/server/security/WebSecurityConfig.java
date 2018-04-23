@@ -1,9 +1,10 @@
-package com.example.authserver.security;
+package com.pkpm.cloud.auth.server.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,5 +36,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .authorizeRequests().anyRequest().authenticated();
     }
     
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+    	//暂时忽略，保证不被拦截
+        web.ignoring().antMatchers("/user/islogin", "/user/login");
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.example.authserver.config;
+package com.pkpm.cloud.auth.server.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +9,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.example.authserver.client.LoginClient;
-import com.example.authserver.entity.UserInfo;
-import com.example.authserver.util.RequestUtils;
+import com.pkpm.cloud.auth.server.client.LoginClient;
+import com.pkpm.cloud.auth.server.entity.UserInfo;
+import com.pkpm.cloud.auth.server.util.RequestUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
