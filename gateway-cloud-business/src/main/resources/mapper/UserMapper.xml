@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gateway.cloud.business.mapper.UserMapper">
+	  
+      <insert id="saveUserInfo" >
+      		  insert into pkpm_cloud_user_info(user_name,user_login_password,user_mobile_number) values(#{userName},#{userLoginPassword},#{userMobileNumber});
+      </insert>
+      
+      <update id="updateUserInfo" parameterType="com.gateway.cloud.business.entity.UserInfo" >
+		      update pkpm_cloud_user_info
+			   <set >
+			   	 <if test="userAccountID != null" >
+			       user_account_id = #{userAccountID,jdbcType=INTEGER},
+			     </if>
+			     <if test="userName != null" >
+			       user_name = #{userName,jdbcType=VARCHAR},
+			     </if>
+			     <if test="userLoginPassword != null" >
+			       user_login_password = #{userLoginPassword,jdbcType=VARCHAR},
+			     </if>
+			     <if test="userType != null" >
+			       user_type = #{userType,jdbcType=INTEGER},
+			     </if>
+			     <if test="userMobileNumber != null" >
+			       user_mobile_number = #{userMobileNumber,jdbcType=VARCHAR},
+			     </if>
+			     <if test="userEmail != null" >
+			       user_email = #{userEmail,jdbcType=VARCHAR},
+			     </if>
+			     <if test="userIdentificationCard != null" >
+			       user_identification_card = #{userIdentificationCard,jdbcType=VARCHAR},
+			     </if>
+	      		 <if test="userCreateTime != null" >
+			       user_create_time = #{userCreateTime,jdbcType=TIMESTAMP},
+			     </if> 
+			     <if test="userIdentificationName != null" >
+			       user_identification_name = #{userIdentificationName,jdbcType=VARCHAR},
+			     </if>
+			     <if test="userOrganization != null" >
+			       user_organization = #{userOrganization,jdbcType=VARCHAR},
+			     </if>
+			   </set>
+			   
+			  where user_id = #{userID,jdbcType=INTEGER}
+	  </update>
+	  
+	  <select id="getUserById" parameterType="java.lang.Integer" resultMap="userInfoMap">
+			  select *
+			  from pkpm_cloud_user_info  
+			  where user_id = #{userID,jdbcType=INTEGER} 
+  	  </select>	
+
+		<resultMap type="com.gateway.cloud.business.entity.UserInfo" id="userInfoMap">
+			<id column="user_id" property="userID"/>
+			<result column="user_account_id" property="userAccountID" />
+			<result column="user_name" property="userName" />
+			<result column="user_login_password" property="userLoginPassword" />
+			<result column="user_type" property="userType" />
+			<result column="user_mobile_number" property="userMobileNumber" />
+			<result column="user_email" property="userEmail" />
+			<result column="user_identification_card" property="userIdentificationCard" />
+			<result column="user_create_time" property="userCreateTime" />
+			<result column="user_identification_name" property="userIdentificationName" />
+			<result column="user_organization" property="userOrganization" />
+			<result column="user_area" property="userArea" />
+		</resultMap>
+		
+      <select id="findByUserNameOrTelephoneOrUserEmail"  resultMap="userInfoMap" >
+      		  select  * from pkpm_cloud_user_info where  user_name=#{arg0} 
+      		  or user_email=#{arg0} 
+      		  or user_mobile_number=#{arg0}
+      </select>
+</mapper>

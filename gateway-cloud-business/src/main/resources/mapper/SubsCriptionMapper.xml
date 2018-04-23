@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gateway.cloud.business.mapper.SubscriptionMapper">
+	<resultMap id="BaseResultMap" type="com.gateway.cloud.business.entity.SubsCription">
+			<id property="id" column="id" jdbcType="INTEGER"/>
+   	      	<result property="subsId" column="subs_id" jdbcType="BIGINT"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="payChannel" column="pay_channel" jdbcType="VARCHAR"/>
+            <result property="adId" column="ad_id" jdbcType="INTEGER"/>
+            <result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+            <result property="desktopId" column="desktop_id" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<select id="findSubsCriptionByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select *
+		from pkpm_cloud_subscription
+		where user_id = #{userId,jdbcType=INTEGER} order by create_time
+	</select>
+
+	<update id="updateSubsCriptionBySubsId" parameterType="com.gateway.cloud.business.entity.SubsCription">
+		UPDATE pkpm_cloud_subscription
+			SET pkpm_cloud_subscription.status = #{status}
+		WHERE pkpm_cloud_subscription.subs_id = #{subsId};
+	</update>
+
+
+	<select id="findSubsId" parameterType="java.lang.Integer" resultType="java.lang.Long">
+		select subs_id
+		from pkpm_cloud_subscription
+		where user_id = #{userId,jdbcType=INTEGER} order by create_time
+	</select>
+	<insert id="saveSubscription"  parameterType="com.gateway.cloud.business.entity.SubsCription" useGeneratedKeys="true" keyProperty="id">
+	    insert into pkpm_cloud_subscription(subs_id,user_id,create_time,pay_channel,ad_id,project_id,status) values
+	    (#{subsId},#{userId},#{createTime},#{payChannel},#{adId},#{projectId},#{status});
+	</insert>
+	
+	<select id="selectCount"  resultType="java.lang.Integer" >
+	    SELECT
+			count(1)
+		FROM
+			pkpm_cloud_subscription
+		WHERE
+			user_id = #{userId}
+		AND STATUS = #{status};
+	</select>
+	
+	<select id="selectTotalById" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+	    SELECT
+			count(1)
+		FROM
+			pkpm_cloud_subscription
+		WHERE
+			user_id = #{userId}
+	</select>
+	
+</mapper>

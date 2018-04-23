@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gateway.cloud.business.mapper.SubsDetailsMapper">
+
+	<resultMap id="BaseResultMap" type="com.gateway.cloud.business.entity.SubsDetails">
+   	      	<id property="id" column="id" jdbcType="INTEGER"/>
+   	      	<result property="subsId" column="subs_id" jdbcType="BIGINT"/>
+            <result property="productId" column="product_id" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="validTime" column="valid_time" jdbcType="TIMESTAMP"/>
+            <result property="invalidTime" column="invalid_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<select id="findSubsDetailsList" resultMap="BaseResultMap" parameterType="java.lang.Long">
+			select *
+			from pkpm_cloud_subs_details 
+			where subs_id = #{subsId,jdbcType=BIGINT}
+	</select>
+	
+	<insert id="saveSubsDetails" parameterType="subsDetails">
+		insert into pkpm_cloud_subs_details (subs_id,product_id,create_time,invalid_time)
+			values (#{subsId,jdbcType=BIGINT},#{productId,jdbcType=INTEGER},
+			#{createTime,jdbcType=TIMESTAMP},(DATE_ADD(NOW(), INTERVAL #{cloudStorageTime,jdbcType=INTEGER} MONTH)));
+	</insert>
+	
+	<update id="updateSubsDetailsStatus" parameterType="java.lang.Long">
+		update pkpm_cloud_subs_details set  valid_time=now() where subs_id = #{workId,jdbcType=BIGINT};
+	</update>
+</mapper>
