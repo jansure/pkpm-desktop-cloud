@@ -12,7 +12,9 @@ package com.pkpm.cloud.auth.server.service.impl;
 
 import javax.annotation.Resource;
 
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +22,7 @@ import com.pkpm.cloud.auth.server.service.UserService;
 
 /**  
  * @ClassName: UserService  
- * @Description: TODO(这里用一句话描述这个类的作用)  
+ * @Description: 用户认证服务类
  * @author wangxiulong  
  * @date 2018年4月23日  
  *    
@@ -41,8 +43,12 @@ public class UserServiceImpl implements  UserService {
 	@Override
 	public Boolean isLogin(String token) {
 		OAuth2AccessToken accessToken = tokenStore.readAccessToken(token);
+		OAuth2Authentication authentication = tokenStore.readAuthentication(accessToken);
+		
 		if(accessToken != null) {
-			System.out.println(accessToken.getRefreshToken());
+			User user = (User)authentication.getPrincipal();
+			System.out.println(accessToken.getRefreshToken().getValue());
+			System.out.println(user.getUsername());
 			return true;
 		}
 		

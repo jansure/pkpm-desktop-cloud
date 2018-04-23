@@ -13,12 +13,11 @@ package com.pkpm.cloud.auth.server.service;
   
 /**  
  * @ClassName: UserService  
- * @Description: TODO(这里用一句话描述这个类的作用)  
+ * @Description: 用户认证服务类
  * @author wangxiulong  
  * @date 2018年4月23日  
  *    
  */
-
 public interface UserService {
 
 	/**
