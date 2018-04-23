@@ -23,6 +23,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.annotation.Resource;
+
 /**
  * 产品接口实现类
  * 
@@ -31,10 +33,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 @Service
 public class ProductServiceImpl implements IProductService {
-	@Autowired
+	@Resource
 	private ProductMapper productMapper;
 
-	@Autowired
+	@Resource
 	private StringRedisTemplate stringRedisTemplate;
 
 	@Override
