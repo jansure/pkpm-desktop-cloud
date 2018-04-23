@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cabr.pkpm.mapper.product.ProductMapper">
+	<resultMap id="ProductMap" type="com.cabr.pkpm.entity.product.ProductInfo">
+		<id property="productId" column="product_id" />
+		<result property="productName" column="product_name" />
+		<result property="productType" column="product_type" />
+		<result property="productDesc" column="product_desc" />
+		<result property="componentId" column="component_id" />
+		
+		<result property="imageId" column="image_id" />
+	</resultMap>
+
+	<select id="getProductByProductId" parameterType="int" resultMap="ProductMap">
+		SELECT DISTINCT(product_id), product_name, product_type, product_desc, component_id,image_id
+		FROM pkpm_cloud_product_def
+		WHERE product_id = #{productId}
+	</select>
+
+	<select id="getProductByParentId" parameterType="int" resultMap="ProductMap">
+		SELECT DISTINCT(product_id), product_name, product_type, product_desc, component_id
+		FROM pkpm_cloud_product_def
+		WHERE product_type = #{productType}
+	</select>
+
+	<resultMap id="NavMap" type="com.cabr.pkpm.entity.product.Navigation">
+		<id property="navId" column="nav_id" />
+		<result property="navName" column="nav_name" />
+		<result property="parentNavId" column="parent_nav_id" />
+		<result property="parentNavName" column="parent_nav_name" />
+		<result property="valid" column="valid" />
+		<collection property="children" ofType="com.cabr.pkpm.entity.product.Navigation" 
+				select="com.cabr.pkpm.mapper.product.ProductMapper.getNavByPid" column="nav_id">
+		</collection>
+	</resultMap>
+	
+	<select id="getNavByPid" resultMap="NavMap">
+		SELECT nav_id, nav_name, parent_nav_id
+		FROM pkpm_cloud_navigation
+		WHERE valid = '1'
+		AND parent_nav_id = #{parentNavId}
+	</select>
+
+	<resultMap id="SysConfigMap" type="com.cabr.pkpm.entity.SysConfig">
+		<id property="key" column="key" />
+		<result property="value" column="value" />
+	</resultMap>
+
+	<select id="getSysConfig" parameterType="String" resultMap="SysConfigMap">
+		SELECT `key`, value
+		FROM pkpm_sys_config
+		WHERE `key`= #{key}
+	</select>
+
+	<resultMap id="ComponentMap" type="com.cabr.pkpm.entity.product.ComponentVO">
+		<id property="productId" column="product_id" />
+		<result property="productName" column="product_name" />
+		<result property="productDesc" column="product_desc" />
+		<result property="componentId" column="component_id" />
+		<result property="componentName" column="component_name" />
+		<result property="componentType" column="component_type" />
+		<result property="componentTypeName" column="component_type_name" />
+	</resultMap>
+	
+	<select id="getComponentByPid" parameterType="int" resultMap="ComponentMap">
+		SELECT prod.product_id product_id,prod.product_name	product_name,prod.product_desc product_desc,prod.component_id component_id,comp.component_name component_name,
+				comp.component_type	component_type,comp.component_type_name component_type_name
+		FROM pkpm_cloud_product_def prod
+		LEFT JOIN pkpm_cloud_component_def comp ON prod.component_id=comp.component_id
+		WHERE prod.product_type = #{productType,jdbcType=INTEGER}
+		AND comp.component_type = #{componentType,jdbcType=INTEGER}
+	</select>
+	<!-- 某一类套餐所包含的配置类型 -->
+	<resultMap id="CompTypeMap" type="java.lang.Integer">
+	    <result property="componentType" column="component_type" javaType="java.lang.Integer"/>
+	</resultMap>
+	
+	<select id="getCompTypeList" parameterType="int" resultMap="CompTypeMap">
+		SELECT DISTINCT(comp.component_type) component_type FROM pkpm_cloud_product_def prod
+		LEFT JOIN pkpm_cloud_component_def comp ON prod.component_id=comp.component_id 
+		WHERE prod.product_type = #{productType}
+	</select>
+	
+	<!-- 产品套餐类型 -->
+	<resultMap id="ProductTypeMap" type="java.util.HashMap">
+	    <id property="productId" column="product_id" javaType="java.lang.Integer"/>
+	    <result property="productType" column="product_type" javaType="java.lang.Integer"/>
+	    <result property="productDesc" column="product_desc" javaType="java.lang.String"/>
+	    <result property="isDefault" column="is_default" javaType="java.lang.String"/>
+	</resultMap>
+
+	<select id="getProductTypeList" resultMap="ProductTypeMap">
+		SELECT DISTINCT(product_type), product_id, product_desc, '0' AS is_default
+		FROM pkpm_cloud_product_def
+	</select>
+	
+	<!-- 购买配置项类型 -->
+	<resultMap id="ComponentTypeMap" type="java.util.HashMap">
+	    <id property="componentType" column="component_type" javaType="java.lang.Integer"/>
+	    <result property="componentTypeName" column="component_type_name" javaType="java.lang.String"/>
+	</resultMap>
+	
+	<select id="getComponentTypeList" resultMap="ComponentTypeMap">
+		SELECT DISTINCT(component_type),component_type_name
+		FROM pkpm_cloud_component_def
+	</select>
+
+	<!-- 购买配置项 -->
+	<resultMap id="ConfigsMap" type="java.util.HashMap">
+	    <id property="componentId" column="component_id" javaType="java.lang.Integer"/>
+	    <result property="componentName" column="component_name" javaType="java.lang.String"/>
+	    <result property="isDefault" column="is_default" javaType="java.lang.String"/>
+	</resultMap>
+	
+	<select id="getConfigByComponentType" parameterType="int" resultMap="ConfigsMap">
+		SELECT component_id, component_name, is_default
+		FROM pkpm_cloud_component_def
+		WHERE component_type = #{componentType}
+	</select>
+	
+	<!-- 获取云桌面登录信息 -->
+	<resultMap id="ClientInfoMap" type="java.util.HashMap">
+	    <result property="userMobileNumber" column="user_mobile_number" javaType="java.lang.String"/>
+	    <result property="userName" column="user_name" javaType="java.lang.String"/>
+	    <result property="userLoginPassword" column="user_login_password" javaType="java.lang.String"/>
+	    <result property="hostIp" column="host_ip" javaType="java.lang.String"/>
+	</resultMap>
+	
+	<select id="getClientInfo" resultMap="ClientInfoMap">
+		SELECT user_mobile_number,user_name,user_login_password,host_ip FROM pkpm_cloud_work_order
+		WHERE user_mobile_number = #{userMobileNumber,jdbcType=VARCHAR}
+		AND work_id = #{workId,jdbcType=BIGINT}
+	</select>
+
+</mapper>
