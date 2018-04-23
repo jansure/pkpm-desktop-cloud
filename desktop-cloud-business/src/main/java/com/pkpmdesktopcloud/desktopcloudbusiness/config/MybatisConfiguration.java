@@ -33,7 +33,6 @@ public class MybatisConfiguration {
 
     @Bean
     public DataSource dataSource() {
-        System.out.println("1111");
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setUrl(url);
         dataSource.setUsername(username);
