@@ -93,141 +93,143 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	@SuppressWarnings({ "unused", "unchecked" })
 	@Override
 	public PkpmOperatorStatus saveSubsDetails(UserInfo userInfo,WorkOrderVO wo) {
-		
-		
+
+
 		String adId = "";
 		String projectId = "";
-	try {
-		//a、保存订单之前先查询有没有 初始化的订单
-		Integer userId = userInfo.getUserID();
-		Integer invalidCount = subscriptionMapper.selectCount(userId,invalidStatus);
-		if(invalidCount >= 1){
-			throw  Exceptions.newBusinessException("您有正在创建中的桌面,请重新尝试!");
-		}
-		Integer regionId = wo.getRegionId();
-		ComponentInfo regionComponentInfo = componentMapper.getComponentInfo(regionId, ComponentTypeConstant.region_type);
-		String areaCode = regionComponentInfo.getComponentDesc();
-		
-	   //	String areaCode = "cn-north-1";
-		String urlGetAdAndProject =serverHost + "/params/getAdAndProject?areaCode=" + areaCode ;
-		String adAndProjectResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(urlGetAdAndProject,  5, "utf-8", 100000).method(HttpMethods.GET));
-		
-		MyHttpResponse adAndProjectHttpResponse = JsonUtil.deserialize(adAndProjectResponse, MyHttpResponse.class);
-		Integer adStatusCode = adAndProjectHttpResponse.getStatusCode();
-		if( HttpStatus.OK.value() == adStatusCode){
-		
+		try {
+			//a、保存订单之前先查询有没有 初始化的订单
+			Integer userId = userInfo.getUserID();
+			Integer invalidCount = subscriptionMapper.selectCount(userId, invalidStatus);
+			if (invalidCount >= 1) {
+				throw Exceptions.newBusinessException("您有正在创建中的桌面,请重新尝试!");
+			}
+			Integer regionId = wo.getRegionId();
+			ComponentInfo regionComponentInfo = componentMapper.getComponentInfo(regionId, ComponentTypeConstant.region_type);
+			String areaCode = regionComponentInfo.getComponentDesc();
+
+			//	String areaCode = "cn-north-1";
+			String urlGetAdAndProject = serverHost + "/params/getAdAndProject?areaCode=" + areaCode;
+			String adAndProjectResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(urlGetAdAndProject, 5, "utf-8", 100000).method(HttpMethods.GET));
+
+			MyHttpResponse adAndProjectHttpResponse = JsonUtil.deserialize(adAndProjectResponse, MyHttpResponse.class);
+			Integer adStatusCode = adAndProjectHttpResponse.getStatusCode();
 			String body = adAndProjectHttpResponse.getBody();
 			ResultObject result = JsonUtil.deserialize(body, ResultObject.class);
+
+			if (HttpStatus.OK.value() != adStatusCode) {
+				throw Exceptions.newBusinessException(result.getMessage());
+			}
+
 			Integer code = result.getCode();
-			if(HttpStatus.OK.value() == code){
-				Map<String,String> map = (Map<String, String>) result.getData();
-				 adId = map.get("adId");
-				 projectId = map.get("projectId");
+			if (HttpStatus.OK.value() == code) {
+				Map<String, String> map = (Map<String, String>) result.getData();
+				adId = map.get("adId");
+				projectId = map.get("projectId");
 			}
-		}
-		
-		SubsCription subscription = new SubsCription();
-		long subsId = IDUtil.genOrderId();
-		subscription.setSubsId(subsId);
-		LocalDateTime date = LocalDateTime.now();
-		subscription.setCreateTime(date);
-		subscription.setPayChannel("0");
-		subscription.setUserId(userId);
-		subscription.setProjectId(projectId);
-		subscription.setAdId(Integer.parseInt(adId));
-		subscription.setStatus(invalidStatus);
-		Integer subscriptionCount = subscriptionMapper.saveSubscription(subscription);
-		if(subscriptionCount<1){
-			throw  Exceptions.newBusinessException("保存订单失败,请您重试!");
-		}
-		
-		SubsDetails subsDetails = new SubsDetails();
-		subsDetails.setSubsId(subsId);
-		Integer productId = (Integer) wo.getProductId();
-		subsDetails.setProductId(productId);
-		subsDetails.setCreateTime(date);
-		subsDetails.setCloudStorageTimeId(wo.getCloudStorageTimeId());
-		String cloudStorageName = componentMapper.getComponentName(wo.getCloudStorageTimeId(), ComponentTypeConstant.cloud_storage);
-		subsDetails.setCloudStorageTime(Integer.parseInt(StringUtil.substr(cloudStorageName)));
-		Integer subsDetailsCount = subsDetailsMapper.saveSubsDetails(subsDetails);
-		if(subsDetailsCount<1){
-			throw  Exceptions.newBusinessException("保存订单明细失败,请您重试!");
-		}
-		
-		List<ProductInfo> products = productMapper.getProductByProductId(productId);
-		ProductInfo productInfo = products.get(0);
-		//String imageId = productInfo.getImageId();
-		String productName = productInfo.getProductName();
-		
-		//2、传入commonrequestbean,创建ad和desktop
-		CommonRequestBean commonRequestBean = new CommonRequestBean();
-		commonRequestBean.setUserId(userId);
-		commonRequestBean.setUserName(userInfo.getUserName());
-		commonRequestBean.setUserLoginPassword(userInfo.getUserLoginPassword());
-		commonRequestBean.setDataVolumeSize(dataVolumeSize);
-		commonRequestBean.setSubsId(subsId);   
-		commonRequestBean.setOperatorStatusId(null);  
-		
-		Integer hostConfigId = wo.getHostConfigId();
-		ComponentInfo hostConfigcomponentInfo = componentMapper.getComponentInfo(hostConfigId, ComponentTypeConstant.host_config);
-		String hwProductId = hostConfigcomponentInfo.getHwProductId();
-		commonRequestBean.setHwProductId(hwProductId);   // workspace.c2.large.windows
-		
-		//commonRequestBean.setOuName(ouName);
-		//commonRequestBean.setOuName("远大北京公司/销售部");
-		commonRequestBean.setUserEmail(userEmail);
-		commonRequestBean.setProjectId(projectId);   
-		commonRequestBean.setAdId(Integer.parseInt(adId));
-		commonRequestBean.setImageId("asdf");   //997488ed-fa23-4671-b88c-d364c0405334
-		
-		//根据user_id和status查询计算机名
 
 
-		String userName = userInfo.getUserName();
-		//查询成功的条数
-		Integer nextNum = 1 + subscriptionMapper.selectTotalById(userId);
-		if(nextNum >= 1 + DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT)
-			throw Exceptions.newBusinessException(
-					String.format("您购买的桌面数量已经达到%d个上限，请重新注册账号进行购买!",
-							DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT));
+			SubsCription subscription = new SubsCription();
+			long subsId = IDUtil.genOrderId();
+			subscription.setSubsId(subsId);
+			LocalDateTime date = LocalDateTime.now();
+			subscription.setCreateTime(date);
+			subscription.setPayChannel("0");
+			subscription.setUserId(userId);
+			subscription.setProjectId(projectId);
+			subscription.setAdId(Integer.parseInt(adId));
+			subscription.setStatus(invalidStatus);
+			Integer subscriptionCount = subscriptionMapper.saveSubscription(subscription);
+			if (subscriptionCount < 1) {
+				throw Exceptions.newBusinessException("保存订单失败,请您重试!");
+			}
 
-		//productName.length < 15
-		if(DesktopConstant.DESKTOP_NAME_MAX_LEN > productName.length()) {
-			commonRequestBean.setGloryProductName(productName + nextNum);
-			if(productName.length() + nextNum.toString().length() >
-					DesktopConstant.DESKTOP_NAME_MAX_LEN) {
-				Integer minus = nextNum.toString().length() -
-						(DesktopConstant.DESKTOP_NAME_MAX_LEN - productName.length());
+			SubsDetails subsDetails = new SubsDetails();
+			subsDetails.setSubsId(subsId);
+			Integer productId = (Integer) wo.getProductId();
+			subsDetails.setProductId(productId);
+			subsDetails.setCreateTime(date);
+			subsDetails.setCloudStorageTimeId(wo.getCloudStorageTimeId());
+			String cloudStorageName = componentMapper.getComponentName(wo.getCloudStorageTimeId(), ComponentTypeConstant.cloud_storage);
+			subsDetails.setCloudStorageTime(Integer.parseInt(StringUtil.substr(cloudStorageName)));
+			Integer subsDetailsCount = subsDetailsMapper.saveSubsDetails(subsDetails);
+			if (subsDetailsCount < 1) {
+				throw Exceptions.newBusinessException("保存订单明细失败,请您重试!");
+			}
+
+			List<ProductInfo> products = productMapper.getProductByProductId(productId);
+			ProductInfo productInfo = products.get(0);
+			//String imageId = productInfo.getImageId();
+			String productName = productInfo.getProductName();
+
+			//2、传入commonrequestbean,创建ad和desktop
+			CommonRequestBean commonRequestBean = new CommonRequestBean();
+			commonRequestBean.setUserId(userId);
+			commonRequestBean.setUserName(userInfo.getUserName());
+			commonRequestBean.setUserLoginPassword(userInfo.getUserLoginPassword());
+			commonRequestBean.setDataVolumeSize(dataVolumeSize);
+			commonRequestBean.setSubsId(subsId);
+			commonRequestBean.setOperatorStatusId(null);
+
+			Integer hostConfigId = wo.getHostConfigId();
+			ComponentInfo hostConfigcomponentInfo = componentMapper.getComponentInfo(hostConfigId, ComponentTypeConstant.host_config);
+			String hwProductId = hostConfigcomponentInfo.getHwProductId();
+			commonRequestBean.setHwProductId(hwProductId);   // workspace.c2.large.windows
+
+			//commonRequestBean.setOuName(ouName);
+			//commonRequestBean.setOuName("远大北京公司/销售部");
+			commonRequestBean.setUserEmail(userEmail);
+			commonRequestBean.setProjectId(projectId);
+			commonRequestBean.setAdId(Integer.parseInt(adId));
+			commonRequestBean.setImageId("asdf");   //997488ed-fa23-4671-b88c-d364c0405334
+
+			//根据user_id和status查询计算机名
+
+
+			String userName = userInfo.getUserName();
+			//查询成功的条数
+			Integer nextNum = 1 + subscriptionMapper.selectTotalById(userId);
+			if (nextNum >= 1 + DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT)
+				throw Exceptions.newBusinessException(
+						String.format("您购买的桌面数量已经达到%d个上限，请重新注册账号进行购买!",
+								DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT));
+
+			//productName.length < 15
+			if (DesktopConstant.DESKTOP_NAME_MAX_LEN > productName.length()) {
+				commonRequestBean.setGloryProductName(productName + nextNum);
+				if (productName.length() + nextNum.toString().length() >
+						DesktopConstant.DESKTOP_NAME_MAX_LEN) {
+					Integer minus = nextNum.toString().length() -
+							(DesktopConstant.DESKTOP_NAME_MAX_LEN - productName.length());
+					commonRequestBean.setGloryProductName(productName.substring(0,
+							DesktopConstant.DESKTOP_NAME_MAX_LEN - minus
+					) + nextNum);
+				}
+
+			} else {
 				commonRequestBean.setGloryProductName(productName.substring(0,
-						DesktopConstant.DESKTOP_NAME_MAX_LEN - minus
-				) + nextNum);
+						DesktopConstant.DESKTOP_NAME_MAX_LEN - nextNum.toString().length())
+						+ nextNum);
 			}
 
-		}
-		else {
-			commonRequestBean.setGloryProductName(productName.substring(0,
-					DesktopConstant.DESKTOP_NAME_MAX_LEN - nextNum.toString().length())
-					+ nextNum);
-		}
 
+			commonRequestBean.setAreaCode(areaCode);
+			String urlCreateAdAndDesktop = serverHost + "/desktop/createAdAndDesktop";
+			String strJson = JsonUtil.serialize(commonRequestBean);
+			String strResponse = HttpClientUtil.mysend(
+					HttpConfigBuilder.buildHttpConfigNoToken(urlCreateAdAndDesktop, strJson, 5, "utf-8", 10000).method(HttpMethods.POST));
+			MyHttpResponse myHttpResponse = JsonUtil.deserialize(strResponse, MyHttpResponse.class);
 
-		commonRequestBean.setAreaCode(areaCode);
-		String urlCreateAdAndDesktop =serverHost + "/desktop/createAdAndDesktop";
-		String strJson = JsonUtil.serialize(commonRequestBean);
-		String strResponse = HttpClientUtil.mysend(
-				HttpConfigBuilder.buildHttpConfigNoToken(urlCreateAdAndDesktop, strJson, 5, "utf-8", 10000).method(HttpMethods.POST));
-		MyHttpResponse myHttpResponse = JsonUtil.deserialize(strResponse, MyHttpResponse.class);
-		
-		Integer statusCode = myHttpResponse.getStatusCode();
+			Integer statusCode = myHttpResponse.getStatusCode();
 			//3、创建成功后,返回参数给前台
-			if(HttpStatus.OK.value() == statusCode){
-				
-				String body = myHttpResponse.getBody();
-				ResultObject result = JsonUtil.deserialize(body, ResultObject.class);
-				Integer code = result.getCode();
-				if(HttpStatus.OK.value() == code){
-					
-					PkpmOperatorStatus  pkpmOperatorStatus = new PkpmOperatorStatus();
+			if (HttpStatus.OK.value() == statusCode) {
+
+				body = myHttpResponse.getBody();
+				result = JsonUtil.deserialize(body, ResultObject.class);
+				code = result.getCode();
+				if (HttpStatus.OK.value() == code) {
+
+					PkpmOperatorStatus pkpmOperatorStatus = new PkpmOperatorStatus();
 					pkpmOperatorStatus.setProjectId(projectId);
 					pkpmOperatorStatus.setSubsId(subsId);  //字段不统一
 					pkpmOperatorStatus.setAdId(Integer.parseInt(adId));
@@ -235,15 +237,15 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 					pkpmOperatorStatus.setAreaCode(areaCode);
 					//redisCacheUtil.delete("MyProduct:"+userId);
 					return pkpmOperatorStatus;
-					
+
 				}
 			}
-			
+
 		} catch (HttpProcessException e) {
 			e.printStackTrace();
-	    }
-		throw  Exceptions.newBusinessException("申请试用失败,请稍后重试!");
-		
+		}
+		throw Exceptions.newBusinessException("申请试用失败,请稍后重试!");
+
 	}
 
 	@Override
