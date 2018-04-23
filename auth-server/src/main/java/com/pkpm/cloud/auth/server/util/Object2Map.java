@@ -1,4 +1,4 @@
-package com.example.authserver.util;
+package com.pkpm.cloud.auth.server.util;
 
 import java.lang.reflect.Field;  
 import java.lang.reflect.Method;  

@@ -1,4 +1,4 @@
-package com.example.authserver.entity;
+package com.pkpm.cloud.auth.server.entity;
 
 import java.io.Serializable;
 import java.util.Date;

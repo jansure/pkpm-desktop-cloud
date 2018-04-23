@@ -1,4 +1,4 @@
-package com.example.authserver.config;
+package com.pkpm.cloud.auth.server.config;
 
 import javax.annotation.Resource;
 
@@ -65,10 +65,8 @@ public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()	// 使用内存存储客户端信息
-//                .withClient(clientProperties.getClientId())	// client_id
-//                .secret(clientProperties.getClientSecret())	// client_secret
-                .withClient("client1")	// client_id
-                .secret("123456")	// client_secret
+                .withClient(clientProperties.getClientId())	// client_id
+                .secret(clientProperties.getClientSecret())	// client_secret
                 .authorizedGrantTypes("refresh_token","authorization_code", "password", "client_credentials")	// 该client允许的授权类型, oauth2保护模式
                 .scopes("read", "view", "webclient","mobileclient")	// 允许的授权范围
                 .accessTokenValiditySeconds(3600) //设置token有效时间，单位是秒，(如果不设置，框架内部默认是12小时),失效后自动从redis中移除
