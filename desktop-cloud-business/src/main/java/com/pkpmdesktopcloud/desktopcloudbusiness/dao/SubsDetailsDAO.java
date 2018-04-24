@@ -1,0 +1,25 @@
+package com.pkpmdesktopcloud.desktopcloudbusiness.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsDetails;
+
+@Mapper
+public interface SubsDetailsDAO {
+	/**
+	 * 根据订单id获取订单明细（订购时间，失效时间）
+	 * @param productId 商品id
+	 * @return
+	 * 
+	 */
+	List<SubsDetails> findSubsDetailsList(Long subsId);
+
+	//Integer saveSubsDetailsVO(List<SubsDetailsVO> list);
+
+	Integer saveSubsDetails(SubsDetails subsDetails);
+	
+	Integer updateSubsDetailsStatus(Long workId);
+
+}
