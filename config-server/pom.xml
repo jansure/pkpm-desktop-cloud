@@ -10,7 +10,7 @@
 		<groupId>pkpm-desktop-cloud</groupId>
 		<artifactId>pkpm-desktop-cloud</artifactId>
 		<version>1.0-SNAPSHOT</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<dependencies>
