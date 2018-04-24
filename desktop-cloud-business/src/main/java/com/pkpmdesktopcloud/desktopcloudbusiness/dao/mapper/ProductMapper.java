@@ -3,9 +3,12 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Lang;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
+import com.desktop.utils.mybatis.SimpleSelectLangDriver;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.Navigation;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ProductInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SysConfig;
@@ -19,31 +22,19 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
  */
 @Mapper
 public interface ProductMapper {
-	/**
-	 * 根据父id获取子目录
-	 * @param productType 父类id
-	 * @return
-	 */
-    List<ProductInfo> getProductByParentId(Integer productType);
-    /**
-     * 获取导航子目录并控制层级
-     * @param parentNavId
-     * @return
-     */
-    List<Navigation> getNavByPid(Integer parentNavId);
-    /**
-     * 根据key值获取对应的SysConfig实体
-     * @param key
-     * @return
-     */
-    SysConfig getSysConfig(String key);
+	
+	@Select("select * from pkpm_cloud_product_def (#{productInfo})")
+	@Lang(SimpleSelectLangDriver.class)
+    List<ProductInfo> getProductList(ProductInfo productInfo);
+	
+	@Select("select * from pkpm_cloud_navigation (#{navigation})")
+	@Lang(SimpleSelectLangDriver.class)
+    List<Navigation> getNavigationList(Navigation navigation);
+	
+	@Select("select * from pkpm_sys_config (#{sysConfig})")
+	@Lang(SimpleSelectLangDriver.class)
+	List<SysConfig> getSysConfigList(SysConfig sysConfig);
     
-    /**
-     * 根据productId获取对应的product实体
-     * @param productId
-     * @return
-     */
-    List<ProductInfo> getProductByProductId(Integer productId);
     /**
 	 * 根据产品类型id获取自动配置的components
 	 * @param productType 产品套餐类型

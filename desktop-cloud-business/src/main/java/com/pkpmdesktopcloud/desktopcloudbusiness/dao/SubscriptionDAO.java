@@ -2,11 +2,8 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.dao;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
-@Mapper
+
 public interface SubscriptionDAO {
 	/**
 	 * 根据用户id获取订单Id
@@ -28,8 +25,8 @@ public interface SubscriptionDAO {
 
 	Integer saveSubscription(SubsCription subscription);
 
-	Integer selectCount(@Param("userId") Integer userId, @Param("status") String status);
+	Integer selectCount(Integer userId,  String status);
 	
-	Integer selectTotalById(@Param("userId") Integer userId);
+	Integer selectTotalById(Integer userId);
 
 }

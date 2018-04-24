@@ -1,18 +1,17 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.dao;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ComponentInfo;
 
-@Mapper
 public interface ComponentDAO {
 	/**
      * 根据componentId和componentType获取对应的子产品名
      * @param componentId,componentId
      * @return
      */
-    String getComponentName(@Param("componentId") Integer componentId, @Param("componentType") Integer componentType);
+    String getComponentName(Integer componentId, Integer componentType);
     
-    ComponentInfo getComponentInfo(@Param("componentId") Integer componentId,@Param("componentType")  Integer componentType);
+    ComponentInfo getComponentInfo(Integer componentId, Integer componentType);
+    
 }

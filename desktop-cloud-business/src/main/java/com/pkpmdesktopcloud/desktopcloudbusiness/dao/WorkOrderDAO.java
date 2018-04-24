@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Param;
 
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.WorkOrder;
 
-@Mapper
 public interface WorkOrderDAO {
 
 	Integer saveWorkerOrder(List<WorkOrder> workOrderList);
@@ -21,14 +20,14 @@ public interface WorkOrderDAO {
 	 * @param
 	 * @return
 	 */
-	int updatePasswordOrMobileNumberByUserID(@Param("userId") Integer userId, @Param("userLoginPassword") String userLoginPassword, @Param("userMobileNumber") String userMobileNumber); 
+	int updatePasswordOrMobileNumberByUserID(Integer userId, String userLoginPassword, @Param("userMobileNumber") String userMobileNumber); 
 
 	/**
 	 * 根据userId,workId,productId查询主机Ip
 	 * @param productId 商品id userId 用户id workId订单Id
 	 * @return 
 	 */
-	List<String> findHostIp(@Param("userId") Integer userId, @Param("workId") Long workId, @Param("productId") Integer productId);
+	List<String> findHostIp(Integer userId, Long workId, Integer productId);
 	
 
 	/**
@@ -37,7 +36,7 @@ public interface WorkOrderDAO {
 	 * @return
 	 *  
 	 */
-	List<Integer> findStatus(@Param("userId") Integer userId, @Param("workId") Long workId, @Param("productId") Integer productId);
+	List<Integer> findStatus(Integer userId, Long workId, Integer productId);
 	
 	/**
 	 * 根据userId,查询工单表

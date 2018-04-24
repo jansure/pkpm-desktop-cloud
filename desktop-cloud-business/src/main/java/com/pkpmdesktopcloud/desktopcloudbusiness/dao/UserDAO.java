@@ -1,10 +1,7 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.dao;
 
-import org.apache.ibatis.annotations.Mapper;
-
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo;
 
-@Mapper
 public interface UserDAO {
 
 	void saveUserInfo(UserInfo userInfo);
