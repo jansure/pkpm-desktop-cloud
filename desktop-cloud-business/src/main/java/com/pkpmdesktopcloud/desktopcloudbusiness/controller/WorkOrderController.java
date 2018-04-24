@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gateway.cloud.business.entity.UserInfo;
-import com.gateway.cloud.business.service.WorkOrderService;
-import com.gateway.cloud.business.utils.ResponseResult;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.WorkOrderService;
+import com.pkpmdesktopcloud.desktopcloudbusiness.utils.ResponseResult;
 
 @RestController
 @RequestMapping("/workorder")

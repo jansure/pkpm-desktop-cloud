@@ -29,10 +29,10 @@ import com.pkpm.httpclientutil.HttpClientUtil;
 import com.pkpm.httpclientutil.MyHttpResponse;
 import com.pkpm.httpclientutil.common.HttpMethods;
 import com.pkpm.httpclientutil.exception.HttpProcessException;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ComponentDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ProductDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.SubsDetailsDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.SubscriptionDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.ComponentMapper;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ComponentInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ProductInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
@@ -60,7 +60,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	private ProductDAO productMapper;
 	
 	@Resource
-	private ComponentMapper componentMapper;
+	private ComponentDAO componentMapper;
 	
 	private RedisCacheUtil<MyProduct> redisCacheUtil;
 	

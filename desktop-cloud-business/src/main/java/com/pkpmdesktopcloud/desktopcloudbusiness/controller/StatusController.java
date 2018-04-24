@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gateway.cloud.business.service.StatusService;
-import com.gateway.cloud.business.utils.ResponseResult;
-import com.gateway.cloud.business.utils.ResultObject;
 import com.gateway.common.domain.CommonRequestBean;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.StatusService;
+import com.pkpmdesktopcloud.desktopcloudbusiness.utils.ResponseResult;
 
 @RestController
 @RequestMapping("/status")

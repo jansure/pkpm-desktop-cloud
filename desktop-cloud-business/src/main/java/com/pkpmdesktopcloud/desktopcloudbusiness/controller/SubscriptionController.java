@@ -1,24 +1,26 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.gateway.cloud.business.entity.SubsCription;
-import com.gateway.cloud.business.entity.UserInfo;
-import com.gateway.cloud.business.service.SubscriptionService;
-import com.gateway.cloud.business.service.UserService;
-import com.gateway.cloud.business.utils.ResponseResult;
-import com.gateway.cloud.business.utils.ResultObject;
-import com.gateway.cloud.business.utils.sdk.RedisCacheUtil;
-import com.gateway.cloud.business.vo.MyProduct;
-import com.gateway.cloud.business.vo.WorkOrderVO;
 import com.gateway.common.domain.PkpmOperatorStatus;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dto.MyProduct;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dto.WorkOrderVO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubscriptionService;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.UserService;
+import com.pkpmdesktopcloud.desktopcloudbusiness.utils.RedisCacheUtil;
+import com.pkpmdesktopcloud.desktopcloudbusiness.utils.ResponseResult;
+import com.pkpmdesktopcloud.desktopcloudbusiness.utils.ResultObject;
 
 @RestController
 @RequestMapping("/subscription")

@@ -1,6 +1,5 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.gateway.common.dto.user.UserInfoForChangePassword;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -16,29 +14,23 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.desktop.utils.HttpConfigBuilder;
-import com.desktop.utils.JsonUtil;
-import com.gateway.cloud.business.entity.SubsCription;
-import com.gateway.cloud.business.entity.UserInfo;
-import com.gateway.cloud.business.entity.WorkOrder;
-import com.gateway.cloud.business.service.SubscriptionService;
-import com.gateway.cloud.business.service.UserService;
-import com.gateway.cloud.business.service.WorkOrderService;
-import com.gateway.cloud.business.utils.Base64Utils;
-import com.gateway.cloud.business.utils.ResponseResult;
-import com.gateway.cloud.business.utils.ResultObject;
-import com.gateway.cloud.business.utils.StringUtil;
-import com.gateway.cloud.business.utils.sdk.ClientDemo;
-import com.gateway.common.domain.CommonRequestBean;
-import com.pkpm.httpclientutil.HttpClientUtil;
-import com.pkpm.httpclientutil.MyHttpResponse;
-import com.pkpm.httpclientutil.common.HttpMethods;
+import com.gateway.common.dto.user.UserInfoForChangePassword;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.WorkOrder;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubscriptionService;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.UserService;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.WorkOrderService;
+import com.pkpmdesktopcloud.desktopcloudbusiness.utils.Base64Utils;
+import com.pkpmdesktopcloud.desktopcloudbusiness.utils.ClientDemo;
+import com.pkpmdesktopcloud.desktopcloudbusiness.utils.ResponseResult;
+import com.pkpmdesktopcloud.desktopcloudbusiness.utils.ResultObject;
+import com.pkpmdesktopcloud.desktopcloudbusiness.utils.StringUtil;
 
 @RestController
 @RequestMapping("/user")

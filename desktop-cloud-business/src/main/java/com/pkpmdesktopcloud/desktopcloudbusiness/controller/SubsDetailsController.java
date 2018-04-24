@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gateway.cloud.business.service.SubsDetailsService;
-import com.gateway.cloud.business.utils.ResponseResult;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubsDetailsService;
+import com.pkpmdesktopcloud.desktopcloudbusiness.utils.ResponseResult;
 
 @RestController
 @RequestMapping("/subsdetails")
