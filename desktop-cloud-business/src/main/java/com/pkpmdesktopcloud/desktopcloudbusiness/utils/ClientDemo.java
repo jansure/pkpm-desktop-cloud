@@ -28,7 +28,7 @@ public class ClientDemo {
                 "caBr905",
                 "liboxi",
                 "cn-north-1");
-
+        
 //        aksk authentication
 //        CloudAccount cloudAccount = new CloudAccount("access key id",
 //        "secret access key", "cn-north-1");

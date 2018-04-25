@@ -1,6 +1,7 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,20 +13,19 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dao.WorkOrderDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.WorkOrder;
 import com.pkpmdesktopcloud.desktopcloudbusiness.page.PageBean;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.WorkOrderService;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.ResponseResult;
 @Service
 public class WorkOrderServiceImpl implements WorkOrderService {
 	
 	@Autowired
-	private WorkOrderDAO workOrderMapper;
+	private WorkOrderDAO workOrderDAO;
 	@Autowired
-	private SubsDetailsDAO subsDetailsMapper;
+	private SubsDetailsDAO subsDetailsDao;
 	
 	public PageBean<WorkOrder> findWorkOrderList(Integer currentPage, Integer pageSize) {
 		
 		try {
 			PageHelper.startPage(currentPage, pageSize);
-			List<WorkOrder> workOrderList = workOrderMapper.findWorkOrderList();
+			List<WorkOrder> workOrderList = workOrderDAO.findWorkOrderList();
 			PageBean<WorkOrder> pageData = new PageBean<>(currentPage,pageSize,workOrderList.size());
 			pageData.setItems(workOrderList);
 			return pageData;
@@ -38,8 +38,8 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 	
 	public Integer updateWorkOrder(Integer id, Long workId) {
 		
-		Integer workOrderCount = workOrderMapper.updateWorkOrder(id);
-		Integer  subsDetailsCount= subsDetailsMapper.updateSubsDetailsStatus(workId);
+		Integer workOrderCount = workOrderDAO.updateWorkOrder(id);
+		Integer  subsDetailsCount= subsDetailsDao.updateSubsDetailsStatus(workId);
 		
 		return workOrderCount;
 	}
@@ -47,7 +47,7 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 	@Override
 	public boolean updatePasswordOrMobileNumber(Integer userId, String userLoginPassword, String userMobileNumber) {
 		
-		if(workOrderMapper.updatePasswordOrMobileNumberByUserID(userId, userLoginPassword, userMobileNumber)>0) {
+		if(workOrderDAO.updatePasswordOrMobileNumberByUserID(userId, userLoginPassword, userMobileNumber)>0) {
 			return true;
 		} else {
 			return false;
@@ -56,6 +56,12 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 
 	@Override
 	public List<WorkOrder> findWorkOrderListByUserId(Integer userId) {
-		return workOrderMapper.findWorkOrderListByUserId(userId);
+		return workOrderDAO.findWorkOrderListByUserId(userId);
+	}
+	
+	@Override
+	public List<Map<String, String>> getClientInfo(String userMobileNumber, Long workId) {
+		List<Map<String, String>> clientInfoList = workOrderDAO.getClientInfo(userMobileNumber, workId);
+		return clientInfoList;
 	}
 }

@@ -1,49 +1,34 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper;
 
 import java.util.List;
+import java.util.Map;
 
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Lang;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
+import com.desktop.utils.mybatis.SimpleInsertLangDriver;
+import com.desktop.utils.mybatis.SimpleSelectLangDriver;
+import com.desktop.utils.mybatis.SimpleUpdateLangDriver;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.WorkOrder;
 
 @Mapper
 public interface WorkOrderMapper {
-
-	Integer saveWorkerOrder(List<WorkOrder> workOrderList);
-
-	List<WorkOrder> findWorkOrderList();
-
-	Integer updateWorkOrder(Integer id);
 	
-	/**
-	 * 更新worker_order表
-	 * @param
-	 * @return
-	 */
-	int updatePasswordOrMobileNumberByUserID(@Param("userId") Integer userId, @Param("userLoginPassword") String userLoginPassword, @Param("userMobileNumber") String userMobileNumber); 
-
-	/**
-	 * 根据userId,workId,productId查询主机Ip
-	 * @param productId 商品id userId 用户id workId订单Id
-	 * @return 
-	 */
-	List<String> findHostIp(@Param("userId") Integer userId, @Param("workId") Long workId, @Param("productId") Integer productId);
+	@Select("select * from pkpm_cloud_work_order (#{workOrder})")
+    @Lang(SimpleSelectLangDriver.class)
+	List<WorkOrder> findWorkOrderList(WorkOrder workOrder);
 	
+	@Insert("insert into pkpm_cloud_work_order (#{workOrder})")
+    @Lang(SimpleInsertLangDriver.class)
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+    Integer insert(WorkOrder workOrder);
 
-	/**
-	 * 根据userId,workId,productId查询开户状态
-	 * @param productId 商品id userId 用户id workId订单Id
-	 * @return
-	 *  
-	 */
-	List<Integer> findStatus(@Param("userId") Integer userId, @Param("workId") Long workId, @Param("productId") Integer productId);
-	
-	/**
-	 * 根据userId,查询工单表
-	 * @param userId 
-	 * @return
-	 *  
-	 */
-	List<WorkOrder> findWorkOrderListByUserId(Integer userId);
+    @Update("update pkpm_cloud_work_order (#{workOrder}) WHERE id = #{id}")
+    @Lang(SimpleUpdateLangDriver.class)
+    Integer update(WorkOrder workOrder);
 }

@@ -62,25 +62,6 @@ public interface ProductDAO {
      * 返回全部产品套餐列表
      * @return
      */
-    List<Map<String, ProductInfo>> getProductTypeList();
+    List<Map<String, Object>> getProductTypeList();
     
-    /**
-     * 返回购买配置项类型列表(如地域、软件名称、主机配置、云存储)
-     * @return
-     */
-    List<Map<String, ProductInfo>> getComponentTypeList();
-    /**
-     * 根据配置项类型返回对应的所有配置项
-     * @param componentType
-     * @return
-     */
-    List<Map<String, Object>> getConfigByComponentType(Integer componentType);
-    
-    /**
-     * 根据用户手机号及工单号查询用户云桌面开户信息
-     * @param userMobileNumber
-     * @param
-     * @return
-     */
-    List<Map<String, String>> getClientInfo(String userMobileNumber, Long workId);
 }

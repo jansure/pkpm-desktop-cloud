@@ -29,4 +29,7 @@ public class WorkOrder {
 	private LocalDateTime createTime;
 	private LocalDateTime openTime;
 	
+	private Integer status;
+	
+	
 }

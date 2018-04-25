@@ -2,9 +2,7 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.dao.impl;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -105,37 +103,16 @@ public class ProductDAOImpl implements ProductDAO{
      * @return
      */
 	@Override
-	public List<Map<String, ProductInfo>> getProductTypeList(){
-		ProductInfo productInfo = new ProductInfo();
+	public List<Map<String, Object>> getProductTypeList(){
 		
-		List<ProductInfo> list = productMapper.getProductList(productInfo );
+		List<ProductInfo> list = productMapper.getProductTypeList();
 		if(list != null && list.size() > 0) {
-			Map<Integer, List<ProductInfo>> aa = list.stream().collect(Collectors.groupingBy(ProductInfo::getProductType));
+			
+			//obj2Map
+			
+			
 		}
-		return list;
+		return null;
 	}
-	
-    /**
-     * 返回购买配置项类型列表(如地域、软件名称、主机配置、云存储)
-     * @return
-     */
-	@Override
-	public List<Map<String, Object>> getComponentTypeList();
-    /**
-     * 根据配置项类型返回对应的所有配置项
-     * @param componentType
-     * @return
-     */
-	@Override
-	public List<Map<String, Object>> getConfigByComponentType(@Param("componentType") Integer componentType);
-    /**
-     * 根据用户手机号及工单号查询用户云桌面开户信息
-     * @param userMobileNumber
-     * @param
-     * @return
-     */
-	@Override
-	public List<Map<String, String>> getClientInfo(@Param("userMobileNumber") String userMobileNumber, @Param("workId") Long workId);
-	
-
+	  
 }

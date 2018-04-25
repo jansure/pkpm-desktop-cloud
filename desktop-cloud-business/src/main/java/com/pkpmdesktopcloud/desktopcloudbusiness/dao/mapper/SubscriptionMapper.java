@@ -2,34 +2,31 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Lang;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
+import com.desktop.utils.mybatis.SimpleInsertLangDriver;
+import com.desktop.utils.mybatis.SimpleSelectLangDriver;
+import com.desktop.utils.mybatis.SimpleUpdateLangDriver;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
 @Mapper
 public interface SubscriptionMapper {
-	/**
-	 * 根据用户id获取订单Id
-	 * @param userId 用户id
-	 * @return
-	 * 
-	 */
-	List<Long> findSubsId(int userId);
-
-	/**
-	 * 根据用户Id查subscription
-	 * 
-	 * @param userId
-	 * @return
-	 */
-	List<SubsCription> findSubsCriptionByUserId(int userId);
-
-	Integer updateSubsCriptionBySubsId(SubsCription subsCription);
-
-	Integer saveSubscription(SubsCription subscription);
-
-	Integer selectCount(@Param("userId") Integer userId, @Param("status") String status);
 	
-	Integer selectTotalById(@Param("userId") Integer userId);
+	@Select("select * from pkpm_cloud_subscription (#{subsCription})")
+    @Lang(SimpleSelectLangDriver.class)
+    List<SubsCription> getSubsCriptionList(SubsCription subsCription );
+    
+    @Insert("insert into pkpm_cloud_subscription (#{subsCription})")
+    @Lang(SimpleInsertLangDriver.class)
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+    Integer insert(SubsCription subsCription);
+
+    @Update("update pkpm_cloud_subscription (#{subsCription}) WHERE id = #{id}")
+    @Lang(SimpleUpdateLangDriver.class)
+    Integer update(SubsCription subsCription);
 
 }

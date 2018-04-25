@@ -19,7 +19,7 @@ public interface ComponentMapper {
 
     @Select("select * from pkpm_cloud_component_def (#{componentInfo})")
     @Lang(SimpleSelectLangDriver.class)
-    List<ComponentInfo> getComponentInfo(ComponentInfo componentInfo );
+    List<ComponentInfo> getComponentInfoList(ComponentInfo componentInfo );
     
     @Insert("insert into pkpm_cloud_component_def (#{componentInfo})")
     @Lang(SimpleInsertLangDriver.class)
@@ -30,5 +30,7 @@ public interface ComponentMapper {
     @Lang(SimpleUpdateLangDriver.class)
     Integer update(ComponentInfo componentInfo);
     
-    
+    @Select("select  DISTINCT(component_type),component_type_name from pkpm_cloud_component_def")
+    @Lang(SimpleSelectLangDriver.class)
+    List<ComponentInfo> getComponentTypeList();
 }

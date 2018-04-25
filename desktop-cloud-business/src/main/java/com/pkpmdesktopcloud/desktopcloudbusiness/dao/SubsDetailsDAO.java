@@ -17,6 +17,6 @@ public interface SubsDetailsDAO {
 
 	Integer saveSubsDetails(SubsDetails subsDetails);
 	
-	Integer updateSubsDetailsStatus(Long workId);
+	Integer updateSubsDetailsStatus(Long subsId);
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
 
 public interface SubscriptionDAO {
+	
 	/**
 	 * 根据用户id获取订单Id
 	 * @param userId 用户id

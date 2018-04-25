@@ -1,6 +1,7 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -8,6 +9,14 @@ import org.apache.ibatis.annotations.Param;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.WorkOrder;
 
 public interface WorkOrderDAO {
+	
+	/**
+     * 根据用户手机号及工单号查询用户云桌面开户信息
+     * @param userMobileNumber
+     * @param
+     * @return
+     */
+    List<Map<String, String>> getClientInfo(@Param("userMobileNumber") String userMobileNumber, @Param("workId") Long workId);
 
 	Integer saveWorkerOrder(List<WorkOrder> workOrderList);
 

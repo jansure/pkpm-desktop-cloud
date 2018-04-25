@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -15,6 +17,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pkpmdesktopcloud.desktopcloudbusiness.constants.SysConstant;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ComponentDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ProductDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.Navigation;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ProductInfo;
@@ -32,7 +35,10 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.utils.StringUtil;
 @Service
 public class ProductServiceImpl implements ProductService {
 	@Autowired
-	private ProductDAO productMapper;
+	private ProductDAO productDAO;
+	
+	@Resource
+	private ComponentDAO componentDAO;
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
@@ -46,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
 			return productInfo;
 		} else {
 			// 若不存在对应的Redis缓存，从数据库查询
-			List<ProductInfo> productInfo = productMapper.getProductByParentId(StringUtil.stringToInt(productType));
+			List<ProductInfo> productInfo = productDAO.getProductByType(StringUtil.stringToInt(productType));
 			// 写入Redis缓存
 			stringRedisTemplate.opsForValue().set("product:" + productType, JSON.toJSONString(productInfo));
 			return productInfo;
@@ -62,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
 			return sysConfig.getValue();
 		} else {
 			// 若不存在对应的Redis缓存，从数据库查询
-			SysConfig sysConfig = productMapper.getSysConfig(key);
+			SysConfig sysConfig = productDAO.getSysConfig(key);
 			// 写入Redis缓存
 			stringRedisTemplate.opsForValue().set("sysconfig:" + key, JSON.toJSONString(sysConfig));
 			return sysConfig.getValue();
@@ -71,13 +77,13 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<Navigation> getNavByPid(Integer parentNavId) {
-		List<Navigation> list = productMapper.getNavByPid(parentNavId);
+		List<Navigation> list = productDAO.getNavByPid(parentNavId);
 		return list;
 	}
 
 	@Override
 	public List<ComponentVO> getComponentByPid(String productType, String componentType) {
-		List<ComponentVO> componentInfo = productMapper.getComponentByPid(StringUtil.stringToInt(productType), StringUtil.stringToInt(componentType));
+		List<ComponentVO> componentInfo = productDAO.getComponentByPid(StringUtil.stringToInt(productType), StringUtil.stringToInt(componentType));
 		return componentInfo;
 	}
 
@@ -104,7 +110,7 @@ public class ProductServiceImpl implements ProductService {
 			return productTypeList;
 		} else {
 			// 若不存在对应的Redis缓存，从数据库查询
-			List<Map<String, Object>> productTypeList = productMapper.getProductTypeList();
+			List<Map<String, Object>> productTypeList = productDAO.getProductTypeList();
 			for (Map<String, Object> productType : productTypeList) {
 				// 设置“全家桶类型”为默认套餐
 				if (SysConstant.PRODUCT_TYPE_ALL.equals(productType.get("productType").toString())) {
@@ -119,7 +125,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<Integer> getCompTypeList(Integer productType) {
-		List<Integer> compTypeList = productMapper.getCompTypeList(productType);
+		List<Integer> compTypeList = productDAO.getCompTypeList(productType);
 		return compTypeList;
 	}
 
@@ -146,7 +152,7 @@ public class ProductServiceImpl implements ProductService {
 			return componentTypeList;
 		} else {
 			// 若不存在对应的Redis缓存，从数据库查询
-			List<Map<String, Object>> componentTypeList = productMapper.getComponentTypeList();
+			List<Map<String, Object>> componentTypeList = componentDAO.getComponentTypeList();
 			// 写入Redis缓存
 			stringRedisTemplate.opsForValue().set("componentTypeList", JSON.toJSONString(componentTypeList));
 			return componentTypeList;
@@ -176,17 +182,11 @@ public class ProductServiceImpl implements ProductService {
 			return configList;
 		} else {
 			// 若不存在对应的Redis缓存，从数据库查询
-			List<Map<String, Object>> configList = productMapper.getConfigByComponentType(componentType);
+			List<Map<String, Object>> configList = componentDAO.getConfigByComponentType(componentType);
 			// 写入Redis缓存
 			stringRedisTemplate.opsForValue().set("componentList:" + componentType, JSON.toJSONString(configList));
 			return configList;
 		}
-	}
-
-	@Override
-	public List<Map<String, String>> getClientInfo(String userMobileNumber, Long workId) {
-		List<Map<String, String>> clientInfoList = productMapper.getClientInfo(userMobileNumber, workId);
-		return clientInfoList;
 	}
 
 }

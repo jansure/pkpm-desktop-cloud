@@ -42,33 +42,25 @@ public interface ProductMapper {
 	 * @return
 	 */
     List<ComponentVO> getComponentByPid(@Param("productType") Integer productType, @Param("componentType") Integer componentType);
+    
     /**
      * 根据产品套餐类型获取对应的配置类别list
      * @param productType
      * @return
      */
     List<Integer> getCompTypeList(@Param("productType") Integer productType);
-    /**
-     * 返回全部产品套餐列表
-     * @return
-     */
-    List<Map<String, Object>> getProductTypeList();
-    /**
-     * 返回购买配置项类型列表(如地域、软件名称、主机配置、云存储)
-     * @return
-     */
-    List<Map<String, Object>> getComponentTypeList();
+   
+    
+    @Select("select DISTINCT(product_type), product_id, product_desc from pkpm_cloud_product_def")
+	@Lang(SimpleSelectLangDriver.class)
+    List<ProductInfo> getProductTypeList();
+    
+    
     /**
      * 根据配置项类型返回对应的所有配置项
      * @param componentType
      * @return
      */
     List<Map<String, Object>> getConfigByComponentType(@Param("componentType") Integer componentType);
-    /**
-     * 根据用户手机号及工单号查询用户云桌面开户信息
-     * @param userMobileNumber
-     * @param
-     * @return
-     */
-    List<Map<String, String>> getClientInfo(@Param("userMobileNumber") String userMobileNumber, @Param("workId") Long workId);
+   
 }
