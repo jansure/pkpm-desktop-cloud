@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
+import com.desktop.constant.DesktopConstant;
 import com.desktop.constant.DesktopServiceEnum;
 import com.desktop.constant.VolumeTypeEnum;
 import com.gateway.common.domain.CommonRequestBean;
@@ -372,9 +373,9 @@ public class CommonRequestBeanBuilder {
         String desktopType = requestBean.getQueryDesktopType();
         String areaName = projectDef.getAreaName();
         Preconditions.checkNotNull(StringUtils.isNotBlank(areaName), "areaName不能为空");
-        if ("simple".equals(desktopType)) {
+        if (DesktopConstant.QUERY_DESKTOP_SIMPLE.equals(desktopType)) {
             pkpmWorkspaceUrl = pkpmWorkspaceUrlDAO.selectByPriKey(projectId, areaName, DesktopServiceEnum.LIST_DESKTOPS.toString());
-        } else if ("detail".equals(desktopType)) {
+        } else if (DesktopConstant.QUERY_DESKTOP_DETAIL.equals(desktopType)) {
             pkpmWorkspaceUrl = pkpmWorkspaceUrlDAO.selectByPriKey(projectId, areaName, DesktopServiceEnum.LIST_DESKTOP_DETAIL.toString());
         }
         commonReq.setPkpmWorkspaceUrl(pkpmWorkspaceUrl);

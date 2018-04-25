@@ -22,6 +22,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.desktop.constant.DesktopConstant;
+import com.desktop.constant.DesktopQueryConstant;
 import com.desktop.constant.DesktopServiceEnum;
 import com.desktop.constant.JobStatusEnum;
 import com.desktop.constant.OperatoreTypeEnum;
@@ -558,17 +560,17 @@ public class DesktopServiceImpl implements DesktopService {
         String type = requestBean.getDesktops().get(0).getDesktopOperatorType();
         Map<String, String> map = new HashMap<String, String>(16);
         if (DesktopServiceEnum.CLOSE.toString().equals(type)) {
-            map.put("os-stop", null);
+            map.put(DesktopConstant.OS_STOP, null);
             message = "关机";
             jsonStr = JsonUtil.serialize(map);
         } else if (DesktopServiceEnum.REBOOT.toString().equals(type)) {
             map.put("type", "SOFT");
             Map<String, Map<String, String>> rebootMap = new HashMap<String, Map<String, String>>(16);
-            rebootMap.put("reboot", map);
+            rebootMap.put(DesktopConstant.REBOOT, map);
             message = "重新开机";
             jsonStr = JsonUtil.serialize(rebootMap);
         } else if (DesktopServiceEnum.BOOT.toString().equals(type)) {
-            map.put("os-start", null);
+            map.put(DesktopConstant.OS_START, null);
             message = "开机";
             jsonStr = JsonUtil.serialize(map);
         }
@@ -642,7 +644,7 @@ public class DesktopServiceImpl implements DesktopService {
         List<Desktop> desktops = requestBean.getDesktops();
 
         if (StringUtils.isNotBlank(limit)) {
-            params.add(new BasicNameValuePair("limit", limit));
+            params.add(new BasicNameValuePair(DesktopQueryConstant.LIMIT, limit));
         }
 
         if (desktops != null) {
@@ -654,19 +656,19 @@ public class DesktopServiceImpl implements DesktopService {
             String marker = desktop.getMarker();
 
             if (StringUtils.isBlank(status)) {
-                params.add(new BasicNameValuePair("status", status));
+                params.add(new BasicNameValuePair(DesktopQueryConstant.STATUS, status));
             }
             if (StringUtils.isBlank(desktopIp)) {
-                params.add(new BasicNameValuePair("desktop_ip", desktopIp));
+                params.add(new BasicNameValuePair(DesktopQueryConstant.DESKTOP_IP, desktopIp));
             }
             if (StringUtils.isBlank(userName)) {
-                params.add(new BasicNameValuePair("user_name", userName));
+                params.add(new BasicNameValuePair(DesktopQueryConstant.USER_NAME, userName));
             }
             if (StringUtils.isBlank(computerName)) {
-                params.add(new BasicNameValuePair("computer_name", computerName));
+                params.add(new BasicNameValuePair(DesktopQueryConstant.COMPUTER_NAME, computerName));
             }
             if (StringUtils.isBlank(marker)) {
-                params.add(new BasicNameValuePair("marker", marker));
+                params.add(new BasicNameValuePair(DesktopQueryConstant.MARKER, marker));
             }
         }
 
@@ -684,7 +686,7 @@ public class DesktopServiceImpl implements DesktopService {
             MyHttpResponse myHttpResponse = JsonUtil.deserialize(strMyHttpResponse, MyHttpResponse.class);
             statusCode = myHttpResponse.getStatusCode();
             
-            message = url.contains("detail") ? "桌面详情列表" : "桌面列表";
+            message = url.contains(DesktopConstant.QUERY_DESKTOP_DETAIL) ? "桌面详情列表" : "桌面列表";
             
             if ( HttpStatus.OK.value() == statusCode ) {
                 String body = myHttpResponse.getBody();
