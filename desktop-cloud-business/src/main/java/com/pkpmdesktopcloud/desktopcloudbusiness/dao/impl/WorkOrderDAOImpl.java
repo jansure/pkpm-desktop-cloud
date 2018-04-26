@@ -27,6 +27,8 @@ public class WorkOrderDAOImpl implements WorkOrderDAO{
 	@Override
 	public List<Map<String, String>> getClientInfo(String userMobileNumber, Long workId){
 		WorkOrder workOrder = new WorkOrder();
+		workOrder.setUserMobileNumber(userMobileNumber);
+		workOrder.setWorkId(workId);
 		List<WorkOrder> list = workOrderMapper.findWorkOrderList(workOrder);
 		if(list != null && list.size() > 0) {
 			//obj to map

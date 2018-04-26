@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.data.annotation.Transient;
 
+import com.desktop.utils.mybatis.Invisible;
+
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +24,8 @@ public class Navigation implements Serializable {
     private Integer parentNavId;
     private String parentNavName;
     private String valid;
-    @Transient
+    
+    @Invisible
     private List<Navigation> children;
     
 
