@@ -15,10 +15,7 @@
             <groupId>org.mybatis.caches</groupId>
             <artifactId>mybatis-redis</artifactId>
         </dependency>
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId></artifactId>
-        </dependency>
+
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
