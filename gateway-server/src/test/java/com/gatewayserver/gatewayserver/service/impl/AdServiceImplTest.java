@@ -100,4 +100,10 @@ public class AdServiceImplTest {
 
     }
 
+    @Test
+    public void getAvailableComputerName(){
+        String response = adService.getAvailableComputerName("testatestbtestc",4);
+        System.out.println(response);
+    }
+
 }

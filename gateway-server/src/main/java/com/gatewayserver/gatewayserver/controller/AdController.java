@@ -45,6 +45,16 @@ public class AdController {
         return ResultObject.success(response,"密码修改成功");
     }
     /**
+     * @Description: 添加用户至AD域 根据ADUser内的AdId字段插入对应的AD域；
+     * @Param: * @param adUser
+     * @Return ResultObject
+     */
+    @GetMapping(value = "/computer/getAvailableName")
+    public ResultObject updateUser(@RequestParam String computerName,@RequestParam Integer adId) {
+        String response = adService.getAvailableComputerName(computerName,adId);
+        return ResultObject.success(response,"获取成功");
+    }
+    /**
      * @Description: 查询某一AD域下的所有用户；
      * @Param: * @param adId
      * @Return ResultObject

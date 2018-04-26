@@ -132,6 +132,9 @@ public class SubsDetailsServiceImpl implements ISubsDetailsService {
 					myProduct.setHostIp(hostIp.get(0));
 					myProduct.setStatus(status.get(0));
 					
+					//增加订单ID
+					myProduct.setSubsId(subsId);
+					
 					myProducts.add(myProduct);
 				}
 				

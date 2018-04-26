@@ -16,4 +16,7 @@ public class MyProduct implements Serializable {
 	private boolean flagTime;
 	private String hostIp;
 	private Integer status;
+	
+	//增加订单ID
+	private Long subsId;
 }

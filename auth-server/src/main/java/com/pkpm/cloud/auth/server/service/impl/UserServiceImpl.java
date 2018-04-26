@@ -49,8 +49,9 @@ public class UserServiceImpl implements  UserService {
 		OAuth2Authentication authentication = tokenStore.readAuthentication(accessToken);
 		
 		if(accessToken != null) {
+			boolean isExpired = accessToken.isExpired();
+			log.info("isExpired:{}, expiredDate:{}", isExpired, accessToken.getExpiration());
 			User user = (User)authentication.getPrincipal();
-			log.info("RefreshToken:{}", accessToken.getRefreshToken().getValue());
 			log.info("username:{}",user.getUsername());
 			return true;
 		}

@@ -17,7 +17,6 @@ import com.gatewayserver.gatewayserver.service.AdService;
 import com.gatewayserver.gatewayserver.utils.AdUtil;
 import com.gatewayserver.gatewayserver.utils.PkpmOperatorStatusBeanUtil;
 import com.google.common.base.Preconditions;
-import com.sun.org.apache.xml.internal.security.Init;
 import com.unboundid.ldap.sdk.*;
 import com.unboundid.util.ssl.SSLUtil;
 import com.unboundid.util.ssl.TrustAllTrustManager;
@@ -33,6 +32,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Slf4j
@@ -44,6 +45,7 @@ public class AdServiceImpl implements AdService {
     private PkpmAdDefDAO pkpmAdDefDAO;
     @Resource
     private PkpmOperatorStatusDAO operatorStatusDAO;
+
 
     public static LDAPConnectionPool getConnectionPool(PkpmAdDef adDef) {
         //fixme 连接池管理加入netty，并且在应用启动的时候创建连接池
@@ -63,7 +65,7 @@ public class AdServiceImpl implements AdService {
                 connectionPool = new LDAPConnectionPool(connection, adDef.getAdMaxPoolCount());
                 connectionPool.setConnectionPoolName(adIpAddress);
                 log.info("AD连接池新建成功 --IP={} --MaxCon={}", connectionPool.getConnectionPoolName(), connectionPool.getMaximumAvailableConnections());
-                poolMap.put(adIpAddress,connectionPool);
+                poolMap.put(adIpAddress, connectionPool);
                 return connectionPool;
             } catch (GeneralSecurityException e) {
                 log.error("安全认证错误：" + e.getMessage());
@@ -84,7 +86,7 @@ public class AdServiceImpl implements AdService {
 
 
     //获取AdDef
-    public  PkpmAdDef getAdDefByAdId(Integer adId) {
+    public PkpmAdDef getAdDefByAdId(Integer adId) {
 
         AdUtil.checkAdId(adId);
         PkpmAdDef adDef = this.pkpmAdDefDAO.selectById(adId);
@@ -93,7 +95,7 @@ public class AdServiceImpl implements AdService {
     }
 
     //获取AdDef
-    public  PkpmAdDef getAdDefByAdIpAddress(String adIpAddress) {
+    public PkpmAdDef getAdDefByAdIpAddress(String adIpAddress) {
         Preconditions.checkNotNull(adIpAddress);
         PkpmAdDef adDef = this.pkpmAdDefDAO.selectByAdIpAddress(adIpAddress);
         AdUtil.checkAdDef(adDef);
@@ -127,7 +129,7 @@ public class AdServiceImpl implements AdService {
         AdUtil.checkAdUser(requestBean);
         Integer adId = requestBean.getAdId();
         PkpmAdDef adDef = getAdDefByAdId(adId);
-       
+
         Preconditions.checkNotNull(adDef);
         LDAPConnectionPool connectionPool = getConnectionPool(adDef);
         Preconditions.checkNotNull(connectionPool, "AD获取连接池失败");
@@ -145,14 +147,14 @@ public class AdServiceImpl implements AdService {
             //AD属性:获取组织ouDN;
             String ouDN = AdUtil.getOuDN(adDef);
             SearchResultEntry ouEntry = connection.getEntry(ouDN);
-            Preconditions.checkNotNull(ouEntry,  "AD组织不存在"+ouDN);
+            Preconditions.checkNotNull(ouEntry, "AD组织不存在" + ouDN);
             String entryDN = String.format("CN=%s,%s", userName, ouDN);
             SearchResultEntry entry = connection.getEntry(entryDN);
             //检测到用户存在，返回成功
             if (entry != null) {
                 operatorStatus.setStatus("AD_SUCCESS");
                 operatorStatusDAO.update(operatorStatus);
-                log.info(String.format("AD数据库记录状态更新成功 --id={%s}",operatorStatus.getId()));
+                log.info(String.format("AD数据库记录状态更新成功 --id={%s}", operatorStatus.getId()));
                 requestBean.setOperatorStatusId(operatorStatus.getId());
                 return userName + "已添加至AD域中";
             }
@@ -179,14 +181,14 @@ public class AdServiceImpl implements AdService {
                 requestBean.setOuName(ouName);
                 operatorStatus.setStatus(JobStatusEnum.AD_SUCCESS.toString());
                 operatorStatusDAO.update(operatorStatus);
-                log.info("AD数据库记录状态更新成功 --id={}",operatorStatus.getId());
+                log.info("AD数据库记录状态更新成功 --id={}", operatorStatus.getId());
                 requestBean.setOperatorStatusId(operatorStatus.getId());
                 return userName + "已新增至AD域中";
             }
         } catch (LDAPException | IOException e) {
             throw Exceptions.newBusinessException(e.getMessage());
         } finally {
-            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
+            log.info(String.format("AD连接资源(%s)被释放", connection.toString()));
             connectionPool.releaseConnection(connection);
         }
         operatorStatus.setStatus(JobStatusEnum.AD_FAILED.toString());
@@ -195,10 +197,9 @@ public class AdServiceImpl implements AdService {
     }
 
 
-
     public String updateAdUser(CommonRequestBean requestBean) {
 
-        log.info(requestBean+"进入");
+        log.info(requestBean + "进入");
         //初始化插入数据
         Preconditions.checkNotNull(requestBean);
         PkpmOperatorStatus operatorStatus = new PkpmOperatorStatus().setDefault();
@@ -217,7 +218,7 @@ public class AdServiceImpl implements AdService {
         Integer adId = requestBean.getAdId();
         PkpmAdDef adDef = getAdDefByAdId(adId);
         Preconditions.checkNotNull(adDef);
-        log.info(adDef+"");
+        log.info(adDef + "");
         LDAPConnectionPool connectionPool = getConnectionPool(adDef);
         Preconditions.checkNotNull(connectionPool, "AD获取连接池失败");
 
@@ -248,17 +249,17 @@ public class AdServiceImpl implements AdService {
 
             LDAPResult modResult = connection.modify(entryDN, mods);
             String modResultCodeName = modResult.getResultCode().getName();
-            if (modResultCodeName.equals("success")){
+            if (modResultCodeName.equals("success")) {
                 operatorStatus.setStatus(JobStatusEnum.AD_SUCCESS.toString());
                 operatorStatusDAO.update(operatorStatus);
-                log.info("AD数据库记录状态更新成功 --id={}",operatorStatus.getId());
-                return userName+"密码修改成功";
+                log.info("AD数据库记录状态更新成功 --id={}", operatorStatus.getId());
+                return userName + "密码修改成功";
             }
 
         } catch (LDAPException | IOException e) {
             e.printStackTrace();
         } finally {
-            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
+            log.info(String.format("AD连接资源(%s)被释放", connection.toString()));
             connectionPool.releaseConnection(connection);
         }
         throw Exceptions.newBusinessException("用户密码修改失败");
@@ -285,7 +286,7 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
-            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
+            log.info(String.format("AD连接资源(%s)被释放", connection.toString()));
             connectionPool.releaseConnection(connection);
         }
         throw Exceptions.newBusinessException("用户列表获取失败");
@@ -313,7 +314,7 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
-            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
+            log.info(String.format("AD连接资源(%s)被释放", connection.toString()));
             connectionPool.releaseConnection(connection);
         }
         throw Exceptions.newBusinessException("用户列表获取失败");
@@ -356,11 +357,44 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
-            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
+            log.info(String.format("AD连接资源(%s)被释放", connection.toString()));
             connectionPool.releaseConnection(connection);
         }
 
         throw Exceptions.newBusinessException("用户列表获取失败");
+    }
+    /**
+     *
+     *申请可用计算机名  尾部为3个数字 如test001 ,如果输入超过12位，则自动截取前12位
+     * @author xuhe
+     * @param computerName, adId
+     * @return java.lang.String
+     */
+    public  String getAvailableComputerName(String computerName, Integer adId) {
+
+        if (computerName.length()>12)
+            computerName = computerName.substring(0, 12);
+        log.info(computerName);
+        List<AdComputer> computerList = getComputersByAdId(adId);
+        String pattern = computerName + "\\d+";
+        String numPattern = "(\\D*)(\\d+)";
+        int max=0;
+        for (AdComputer adComputer : computerList) {
+            String comName =adComputer.getComputerName();
+            if (Pattern.matches(pattern, comName)) {
+                //匹配数字
+                Matcher m = Pattern.compile(numPattern).matcher(comName);
+                String numStr="";
+                if (m.find()){
+                    numStr = m.group(2);
+                }
+                Integer order = Integer.valueOf(numStr);
+                if (order > max) {
+                    max=order;
+                }
+            }
+        }
+        return computerName + String.format("%03d", max+1);
     }
 
     public List<AdComputer> getComputersByAdId(Integer adId) {
@@ -382,7 +416,7 @@ public class AdServiceImpl implements AdService {
             SearchResult results = connection.search(request);
             int count = results.getEntryCount();
             for (SearchResultEntry entry : results.getSearchEntries()) {
-                AdComputer computer= new AdComputer();
+                AdComputer computer = new AdComputer();
                 computer.setComputerName(entry.getAttribute("name").getValue());
                 computers.add(computer);
             }
@@ -390,7 +424,7 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
-            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
+            log.info(String.format("AD连接资源(%s)被释放", connection.toString()));
             connectionPool.releaseConnection(connection);
         }
         throw Exceptions.newBusinessException("计算机列表获取失败");
@@ -420,7 +454,7 @@ public class AdServiceImpl implements AdService {
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
-            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
+            log.info(String.format("AD连接资源(%s)被释放", connection.toString()));
             connectionPool.releaseConnection(connection);
         }
 
@@ -445,13 +479,13 @@ public class AdServiceImpl implements AdService {
             Preconditions.checkNotNull(entry, "用户名不存在");
             LDAPResult result = connection.delete(userDN);
             if (result.getResultCode().getName().equals("success"))
-                return ;
+                return;
             else
                 throw Exceptions.newBusinessException("用户删除失败");
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
-            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
+            log.info(String.format("AD连接资源(%s)被释放", connection.toString()));
             connectionPool.releaseConnection(connection);
         }
         throw Exceptions.newBusinessException("用户删除失败");
@@ -474,13 +508,13 @@ public class AdServiceImpl implements AdService {
             Preconditions.checkNotNull(entry, "计算机名不存在");
             LDAPResult result = connection.delete(computerDN);
             if (result.getResultCode().getName().equals("success"))
-                return ;
+                return;
             else
                 throw Exceptions.newBusinessException("计算机删除失败");
         } catch (LDAPException e) {
             e.printStackTrace();
         } finally {
-            log.info(String.format("AD连接资源(%s)被释放",connection.toString()));
+            log.info(String.format("AD连接资源(%s)被释放", connection.toString()));
             connectionPool.releaseConnection(connection);
         }
         throw Exceptions.newBusinessException("计算机删除失败");

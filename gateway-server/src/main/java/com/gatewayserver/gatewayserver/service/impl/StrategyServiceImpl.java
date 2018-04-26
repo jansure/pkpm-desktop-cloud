@@ -90,7 +90,7 @@ public class StrategyServiceImpl implements StrategyService {
 				                .replaceAll("\\{projectId\\}", requestBean.getPkpmWorkspaceUrl().getProjectId())
 				                .replaceAll("\\{areaName\\}", requestBean.getPkpmWorkspaceUrl().getAreaName());
         String jsonPolicies = JsonUtil.serialize(policeMap);
-        
+        System.out.println(jsonPolicies);
         try {
         	
             Header[] headers = HttpHeader.custom().contentType("application/json").other("X-Auth-Token", token).build();

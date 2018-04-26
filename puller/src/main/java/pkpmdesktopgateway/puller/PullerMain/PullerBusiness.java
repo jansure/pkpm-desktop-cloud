@@ -86,7 +86,7 @@ public class PullerBusiness {
 	 * @return void    无返回
 	 */
 	public void updateJobStatus() {
-		log.info(areaCode);
+		log.info("areaCode:{}", areaCode);
 		String url = SERVER_HOST + "/puller/getJobTasks?jobSize={jobSize}&areaCode={areaCode}";
 		url = url.replace("{jobSize}", JOB_SIZE).replace("{areaCode}", areaCode);
 		log.info(url);

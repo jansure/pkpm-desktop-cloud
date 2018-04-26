@@ -101,9 +101,9 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		//a、保存订单之前先查询有没有 初始化的订单
 		Integer userId = userInfo.getUserID();
 		Integer invalidCount = subscriptionMapper.selectCount(userId,invalidStatus);
-		if(invalidCount >= 1){
+		/*if(invalidCount >= 1){
 			throw  Exceptions.newBusinessException("您有正在创建中的桌面,请重新尝试!");
-		}
+		}*/
 		Integer regionId = wo.getRegionId();
 		ComponentInfo regionComponentInfo = componentMapper.getComponentInfo(regionId, ComponentTypeConstant.region_type);
 		String areaCode = regionComponentInfo.getComponentDesc();
@@ -114,17 +114,19 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		
 		MyHttpResponse adAndProjectHttpResponse = JsonUtil.deserialize(adAndProjectResponse, MyHttpResponse.class);
 		Integer adStatusCode = adAndProjectHttpResponse.getStatusCode();
-		if( HttpStatus.OK.value() == adStatusCode){
 		
-			String body = adAndProjectHttpResponse.getBody();
-			ResultObject result = JsonUtil.deserialize(body, ResultObject.class);
-			Integer code = result.getCode();
-			if(HttpStatus.OK.value() == code){
-				Map<String,String> map = (Map<String, String>) result.getData();
-				 adId = map.get("adId");
-				 projectId = map.get("projectId");
-			}
+		if(HttpStatus.OK.value() != adStatusCode){
+			throw  Exceptions.newBusinessException(adAndProjectHttpResponse.getMessage());
 		}
+		String body = adAndProjectHttpResponse.getBody();
+		ResultObject result = JsonUtil.deserialize(body, ResultObject.class);
+		Integer code = result.getCode();
+		if(HttpStatus.OK.value() != code){
+			throw  Exceptions.newBusinessException(result.getMessage());
+		}
+		Map<String,String> map = (Map<String, String>) result.getData();
+		adId = map.get("adId");
+		projectId = map.get("projectId");
 		
 		SubsCription subscription = new SubsCription();
 		long subsId = IDUtil.genOrderId();
@@ -182,7 +184,6 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		
 		//根据user_id和status查询计算机名
 
-
 		String userName = userInfo.getUserName();
 		//查询成功的条数
 		Integer nextNum = 1 + subscriptionMapper.selectTotalById(userId);
@@ -222,9 +223,12 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 			//3、创建成功后,返回参数给前台
 			if(HttpStatus.OK.value() == statusCode){
 				
-				String body = myHttpResponse.getBody();
-				ResultObject result = JsonUtil.deserialize(body, ResultObject.class);
-				Integer code = result.getCode();
+//				String body = myHttpResponse.getBody();
+//				ResultObject result = JsonUtil.deserialize(body, ResultObject.class);
+//				Integer code = result.getCode();
+				 body = myHttpResponse.getBody();
+				 result = JsonUtil.deserialize(body, ResultObject.class);
+				 code = result.getCode();
 				if(HttpStatus.OK.value() == code){
 					
 					PkpmOperatorStatus  pkpmOperatorStatus = new PkpmOperatorStatus();

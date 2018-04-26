@@ -17,4 +17,17 @@ public class PkpmPullerConfig implements Serializable {
     private Integer id;
     private String operatorType;
     private Integer seconds;
+	  
+	/* (非 Javadoc)  
+	 *   
+	 *   
+	 * @return  
+	 * @see java.lang.Object#toString()  
+	 */  
+	@Override
+	public String toString() {
+		return "PkpmPullerConfig [id=" + id + ", operatorType=" + operatorType + ", seconds=" + seconds + "]";
+	}
+    
+    
 }
