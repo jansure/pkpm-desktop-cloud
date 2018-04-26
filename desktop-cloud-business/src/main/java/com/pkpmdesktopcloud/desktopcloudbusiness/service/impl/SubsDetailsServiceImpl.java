@@ -49,6 +49,7 @@ public class SubsDetailsServiceImpl implements SubsDetailsService {
 		
 		PageHelper.startPage(currentPage, pageSize);
 		
+		
 		List<MyProduct> myProducts = redisCacheUtil.getCacheList("MyProduct:"+userId);
 		
 		LocalDateTime nowTime = LocalDateTime.now();
@@ -93,16 +94,6 @@ public class SubsDetailsServiceImpl implements SubsDetailsService {
 					List<String> componentNames = new ArrayList<>();
 					List<String> hostIp = workOrderMapper.findHostIp(userId, subsId, productId);
 					List<Integer> status = workOrderMapper.findStatus(userId, subsId, productId);
-					
-//					if (null == hostIp || hostIp.size() == 0) {
-//						this.result.set("主机Ip不能为空", 0);
-//						return this.result;
-//					}
-//					
-//					if (null == status || status.size() == 0) {
-//						this.result.set("status不能为空", 0);
-//						return this.result;
-//					}
 					
 					for (ProductInfo productInfo : products) {
 						
