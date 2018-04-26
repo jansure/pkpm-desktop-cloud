@@ -41,7 +41,7 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 		Integer workOrderCount = workOrderDAO.updateWorkOrder(id);
 		Integer  subsDetailsCount= subsDetailsDao.updateSubsDetailsStatus(workId);
 		
-		return workOrderCount;
+		return workOrderCount + subsDetailsCount;
 	}
 
 	@Override
