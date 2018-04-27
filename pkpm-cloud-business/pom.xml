@@ -259,8 +259,8 @@
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.arronlong</groupId>
-			<artifactId>httpclientutil</artifactId>
+			<groupId>com.pkpm-desktop-cloud</groupId>
+			<artifactId>http-client-util</artifactId>
 			<version>1.0</version>
 		</dependency>
 		<dependency>
