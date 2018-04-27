@@ -131,7 +131,7 @@ public class GatewayServerParamImpl implements GatewayServerParam {
 
 						//get destination ip by projectId
 						String destinationIp = pkpmProjectDefList.get(random).getDestinationIp();
-						map.put("destinationIp",destinationIp);
+						map.put("destinationIp", destinationIp);
 
 						return map;
 					}
@@ -141,6 +141,22 @@ public class GatewayServerParamImpl implements GatewayServerParam {
 			log.error(e.getMessage());
 		}
 		throw Exceptions.newBusinessException("该区域没有可用的AD域！");
+	}
+
+	@Override
+	public PkpmProjectDef getProjectDef(String projectId, String areaCode) {
+		try {
+			Preconditions.checkNotNull(projectId, "projectId不能为空");
+			Preconditions.checkNotNull(areaCode, "areaCode不能为空");
+			PkpmProjectDef pkpmProjectDef = pkpmProjectDefDAO.selectByProjectIdAndAreaCode(projectId, areaCode);
+			// 结果不空，返回项目信息
+			if (null != pkpmProjectDef) {
+				return pkpmProjectDef;
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		throw Exceptions.newBusinessException("此项目信息不存在！");
 	}
 
 }

@@ -45,4 +45,14 @@ public interface GatewayServerParam {
 	 * @time 2018年4月12日 下午7:28:22
 	 */
 	Map<String, String> getAdAndProject(String areaCode, String ouName);
+	
+	/**
+	 * 根据projectId、areaCode获取ProjectDef
+	 * @param projectId
+	 * @param areaCode
+	 * @return PkpmProjectDef
+	 * @author yangpengfei
+	 * @date 2018/04/27
+	 */
+	PkpmProjectDef getProjectDef(String projectId, String areaCode);
 }
