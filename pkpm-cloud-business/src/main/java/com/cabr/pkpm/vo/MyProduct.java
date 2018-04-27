@@ -13,7 +13,7 @@ public class MyProduct implements Serializable {
 	private List<String> componentName;
 	private String createTime;
 	private String invalidTime;
-	private boolean flagTime;
+	private Boolean flagTime;
 	private String hostIp;
 	private Integer status;
 	private Long subsId;

@@ -68,7 +68,16 @@ public class HttpConfigBuilder {
     			                      .encoding("utf-8");
     	return config;
     }
-    
+
+/*	public static HttpConfig buildHttpConfig(String url,
+											 String strJson,
+											 Integer tryTimes,
+											 String encode,
+											 Integer timeOut) {
+    	return null;
+
+	}*/
+
     public static HttpConfig buildHttpConfigNoToken(String url,
     		String strJson,
     		Integer tryTimes,
