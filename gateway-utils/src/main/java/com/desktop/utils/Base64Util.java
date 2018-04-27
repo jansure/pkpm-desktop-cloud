@@ -1,7 +1,7 @@
-package com.pkpmdesktopcloud.desktopcloudbusiness.utils;
+package com.desktop.utils;
 
 import java.nio.charset.StandardCharsets;
-public class Base64Utils {
+public class Base64Util {
 	
 	   private static final String s_sB64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 	   

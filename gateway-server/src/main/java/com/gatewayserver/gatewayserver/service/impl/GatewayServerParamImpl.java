@@ -26,6 +26,7 @@ import com.gatewayserver.gatewayserver.service.GatewayServerParam;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import sun.awt.image.IntegerInterleavedRaster;
 
 /**
  * @Description 供云平台使用Service实现类
@@ -124,8 +125,13 @@ public class GatewayServerParamImpl implements GatewayServerParam {
 						// 根据adIpAddress查到ProjectId放入map
 						List<PkpmProjectDef> pkpmProjectDefList = this.getProjectDefs(adIpAddress, areaCode);
 						// 随机选择一个project
-						String projectId = pkpmProjectDefList.get(r.nextInt(pkpmProjectDefList.size())).getProjectId();
+						Integer random = r.nextInt(pkpmProjectDefList.size());
+						String projectId = pkpmProjectDefList.get(random).getProjectId();
 						map.put("projectId", projectId);
+
+						//get destination ip by projectId
+						String destinationIp = pkpmProjectDefList.get(random).getDestinationIp();
+						map.put("destinationIp", destinationIp);
 
 						return map;
 					}
@@ -135,6 +141,22 @@ public class GatewayServerParamImpl implements GatewayServerParam {
 			log.error(e.getMessage());
 		}
 		throw Exceptions.newBusinessException("该区域没有可用的AD域！");
+	}
+
+	@Override
+	public PkpmProjectDef getProjectDef(String projectId, String areaCode) {
+		try {
+			Preconditions.checkArgument(StringUtils.isNotBlank(projectId), "projectId不能为空");
+			Preconditions.checkArgument(StringUtils.isNotBlank(areaCode), "areaCode不能为空");
+			PkpmProjectDef pkpmProjectDef = pkpmProjectDefDAO.selectByProjectIdAndAreaCode(projectId, areaCode);
+			// 结果不空，返回项目信息
+			if (null != pkpmProjectDef) {
+				return pkpmProjectDef;
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		throw Exceptions.newBusinessException("此项目信息不存在！");
 	}
 
 }

@@ -11,6 +11,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ibatis.executor.loader.ResultLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -19,18 +20,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.desktop.utils.Base64Util;
+import com.desktop.utils.SmsUtil;
+import com.desktop.utils.StringUtil;
+import com.desktop.utils.page.ResultObject;
 import com.gateway.common.dto.user.UserInfoForChangePassword;
+import com.google.common.base.Preconditions;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.WorkOrder;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubscriptionService;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.UserService;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.WorkOrderService;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.Base64Utils;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.ClientDemo;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.ResponseResult;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.ResultObject;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.StringUtil;
 
 @RestController
 @RequestMapping("/user")
@@ -49,8 +50,6 @@ public class UserController {
 	@Value("${server.host}")
 	private String serverHost;
 
-	protected ResponseResult result = new ResponseResult();
-	
 	protected final Log logger = LogFactory.getLog(getClass());
 
 	/**
@@ -60,152 +59,115 @@ public class UserController {
 	 * @return 注册成功的页面
 	 */
 	@RequestMapping(value = "/regist", method = RequestMethod.POST)
-	public ResponseResult regist(@RequestBody Map<String,String> map,
+	public ResultObject regist(String checkCode, String userMobileNumber, String userName, String userLoginPassword,
 			 HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		String checkCode = map.get("checkCode");
-		String userMobileNumber = map.get("userMobileNumber");
-		String userName = map.get("userName");
-		String userLoginPassword = map.get("userLoginPassword");
-		response.setHeader("Access-Control-Allow-Origin", "*");
+		
+		
+		
+		Preconditions.checkArgument(StringUtils.isBlank(checkCode),"验证码不能为空");
+		Preconditions.checkArgument(StringUtils.isBlank(userMobileNumber),"手机号不能为空");
+		Preconditions.checkArgument(StringUtils.isBlank(userName),"用户名不能为空");
+		Preconditions.checkArgument(StringUtils.isBlank(userLoginPassword),"密码不能为空");
 		
 		String realCheckCode = stringRedisTemplate.opsForValue().get(userMobileNumber);
-		if (StringUtils.isBlank(checkCode)) {
-			this.result.set("验证码不能为空", 0);
-			logger.debug(this.result.getMessage());
-			return this.result;
-		}
-		if (StringUtils.isBlank(userMobileNumber)) {
-			this.result.set("手机号不能为空", 0);
-			logger.debug(this.result.getMessage());
-			return this.result;
-		}
-		if (StringUtils.isBlank(userName)) {
-			this.result.set("用户名不能为空", 0);
-			logger.debug(this.result.getMessage());
-			return this.result;
+		if (!checkCode.equals(realCheckCode)) {
+			response.setContentType("text/html;charset=utf-8");
+			return ResultObject.failure("验证码错误");
 		}
 		
-		if (StringUtils.isBlank(userLoginPassword)) {
-			this.result.set("密码不能为空", 0);
-			logger.debug(this.result.getMessage());
-			return this.result;
-		}
 		boolean flag = StringUtil.checkPassword(userName, userLoginPassword);
 		if( !flag ){
-			this.result.set("您输入的密码不合法,请重新输入!", 0);
-			logger.debug(this.result.getMessage());
-			return this.result;
+			
+			return ResultObject.failure("您输入的密码不合法,请重新输入!");
 		}
 		
 		
 		UserInfo userInfo = new UserInfo();
 		userInfo.setUserName(userName);
 		userInfo.setUserMobileNumber(userMobileNumber);
-
-		if (checkCode != null && checkCode.equals(realCheckCode)) {
-			stringRedisTemplate.delete(userMobileNumber);
-			userLoginPassword = Base64Utils.b64FromString(userLoginPassword);
-			userInfo.setUserLoginPassword(userLoginPassword);
-			userService.saveUserInfo(userInfo);
-			this.result.set("恭喜您注册成功", 1);
-			logger.debug(this.result.getMessage());
-		} else {
-			response.setContentType("text/html;charset=utf-8");
-			this.result.set("验证码错误", 0);
-		}
-		return this.result;
+		
+		userLoginPassword = Base64Util.b64FromString(userLoginPassword);
+		userInfo.setUserLoginPassword(userLoginPassword);
+		userService.saveUserInfo(userInfo);
+		
+		stringRedisTemplate.delete(userMobileNumber);
+		
+		return ResultObject.success("恭喜您注册成功");
+		
+		
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST,produces = {"application/json;charset=utf-8"})
-	public ResponseResult login(@RequestBody Map<String,String> map,HttpServletResponse response) {
+	public ResultObject login(String username, String password, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
-        String username = map.get("username");
-        String password = map.get("password");
-		if(StringUtils.isBlank(username)){
-			this.result.set("登录账号不能为空",0);
-			logger.debug(this.result.getMessage());
-			return this.result;
-		}
-		if (StringUtils.isBlank(password)) {
-			this.result.set("密码不能为空", 0);
-			logger.debug(this.result.getMessage());
-			return this.result;
-		}
-		UserInfo realUserInfo = userService.findByUserNameOrTelephoneOrUserEmail(username);
+  
+		Preconditions.checkArgument(StringUtils.isBlank(username), "登录账号不能为空");
+		Preconditions.checkArgument(StringUtils.isBlank(password), "密码不能为空");
 		
-		password = Base64Utils.b64FromString(password);
-		if(realUserInfo!=null&&password.equals(realUserInfo.getUserLoginPassword())){
-			/*Map<String,String> mapInfo = new HashMap<String,String>();
-			mapInfo.put("userId", realUserInfo.getUserID().toString());
-			mapInfo.put("username", realUserInfo.getUserName());
-			this.result.set("登陆成功", 1,mapInfo );*/
-			this.result.set("登陆成功", 1,realUserInfo.getUserID() );
-		} else {
-			this.result.set("您输入的用户名或密码有误", 0);
+		UserInfo realUserInfo = userService.findByUserNameOrTelephoneOrUserEmail(username);
+		if(realUserInfo == null) {
+			return ResultObject.failure("账号不存在");
 		}
-		return this.result;
+		
+		password = Base64Util.b64FromString(password);
+		
+		if(!password.equals(realUserInfo.getUserLoginPassword())){
+			return ResultObject.failure("密码有误");
+		}
+		
+		return ResultObject.success(realUserInfo.getUserID(), "登陆成功");
 	}
     
 	/**
 	 * 
 	 * @param session
-	 * @return ResponseResult
+	 * @return ResultObject
 	 */
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/getUserName", method = RequestMethod.POST)
-	public ResponseResult getUserName(HttpServletResponse response,@RequestBody Map<String,String> map){
-		String strUserId = map.get("userId");
-		Integer userId = Integer.parseInt(strUserId);
+	public ResultObject getUserName(HttpServletResponse response, Integer userId){
+	
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		if(userId == null){
-			this.result.set("请您先登录", 0);
-			return this.result;
-		}
+		Preconditions.checkNotNull(userId, "请您先登录");
+		
 		UserInfo user = userService.findUser(userId);
-		if(user == null){
-			this.result.set("请您先登录", 0);
-			return this.result;
-		}
+		Preconditions.checkNotNull(user, "请您先登录");
+		
 		String userName = user.getUserName();
-		 userId = user.getUserID();
-		 Map<String,String> strmap = new HashMap<>();
-		 strmap.put("userId", Integer.toString(userId));
-		 strmap.put("userName", userName);
-		this.result.set("已登录", 1, strmap);
-		return this.result;
+		Map<String,String> strmap = new HashMap<>();
+		strmap.put("userId", Integer.toString(userId));
+		strmap.put("userName", userName);
+		
+		return ResultObject.success(strmap, "已登录");
 		
 	}
 	/**
 	 * 发送验证码短信
 	 * 
 	 * @param user_mobile_number
-	 * @return ResponseResult
+	 * @return ResultObject
 	 */
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
-	public ResponseResult sendMessage(@RequestBody Map<String,String> map, HttpServletResponse response) {
+	public ResultObject sendMessage(String userMobileNumber, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		String userMobileNumber = map.get("userMobileNumber");
-		if (StringUtils.isBlank(userMobileNumber)) {
-			this.result.set("手机号不能为空", 0);
-			logger.debug(this.result.getMessage());
-			return this.result;
-		}
+		
+		Preconditions.checkArgument(StringUtils.isBlank(userMobileNumber), "手机号不能为空");
+		
 		try {
 			String checkCode = RandomStringUtils.randomNumeric(4);
 			stringRedisTemplate.opsForValue().set(userMobileNumber, checkCode, 60 * 15, TimeUnit.SECONDS);
 			String message = "您的短信验证码是:" + checkCode + "，请注意查收";
-			ClientDemo clientDemo = new ClientDemo();
+			SmsUtil clientDemo = new SmsUtil();
 			clientDemo.smsPublish(userMobileNumber, message);
-			this.result.set("发送短信成功", 1);
-			logger.debug(this.result.getMessage());
+			
+			return ResultObject.success("发送短信成功");
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("发送短信产异常:" + e);
-			this.result.set("发送短信失败", 0);
 		}
 
-		return this.result;
+		return ResultObject.failure("发送短信失败");
 	}
 
 	/**
@@ -214,62 +176,55 @@ public class UserController {
 	 * @param userEmailOrMobileNumber
 	 */
 	@RequestMapping(value = "/findByEmailOrUserMobileNumber", method = RequestMethod.POST)
-	public ResponseResult findByEmailOrUserMobileNumber(@RequestBody Map<String,String> map , HttpServletResponse response) {
+	public ResultObject findByEmailOrUserMobileNumber(String userName, Integer type, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		String userEmailOrMobileNumber = map.get("userName");
-		String typeStr = map.get("type");
-		Integer type = Integer.parseInt(typeStr);
-		if (StringUtils.isBlank(userEmailOrMobileNumber)) {
-			this.result.set("请输入账户名", 0);
-			logger.debug(this.result.getMessage());
-			return this.result;
+		
+		Preconditions.checkArgument(StringUtils.isBlank(userName), "请输入账户名");
+		Preconditions.checkNotNull(type, "type不能为空");
+		
+		UserInfo realUserInfo = userService.findByUserNameOrTelephoneOrUserEmail(userName);
+		if (realUserInfo == null) {
+			return ResultObject.success("可以注册");
 		}
-		UserInfo realUserInfo = userService.findByUserNameOrTelephoneOrUserEmail(userEmailOrMobileNumber);
-		if (realUserInfo != null) {
-			if(type == 1){
-				this.result.set("该手机号码已被注册,请重新输入", 0);
-			}else{
-				this.result.set("该用户名已被注册,请重新输入", 0);
-			}
-			logger.debug(this.result.getMessage());
-		} else {
-			this.result.set("可以注册", 1);
-			logger.debug(this.result.getMessage());
+		
+		String errorMsg = "该用户名已被注册,请重新输入";
+		if(type == 1){
+			errorMsg = "该手机号码已被注册,请重新输入";
 		}
-		return this.result;
+		
+		return ResultObject.failure(errorMsg);
 	}
 
 	/**
 	 * 完善个人信息,获取会员名称和联系方式
 	 * 
 	 * @param session
-	 * @return ResponseResult
+	 * @return ResultObject
 	 */
 	@RequestMapping(value = "/perfectInfoInit", method = RequestMethod.POST)
-	public ResponseResult perfectInfoInit(@RequestBody Map<String, String> map, HttpServletResponse response) {
+	public ResultObject perfectInfoInit(Integer userID, HttpServletResponse response) {
 
 		// 允许跨域访问
 		response.setHeader("Access-Control-Allow-Origin", "*");
+		Preconditions.checkNotNull(userID, "userID不能为空");
 		
-		UserInfo user = userService.findUser(new Integer(map.get("userID")));
+		UserInfo user = userService.findUser(userID);
 
 		if (user != null) {
-			this.result.set("获取个人信息成功", 1, user);
-		} else {
-			this.result.set("获取个人信息失败", 0);
+			return ResultObject.success(user, "获取个人信息成功");
 		}
-
-		return this.result;
+		
+		return ResultObject.failure("获取个人信息失败");
 	}
 
 	/**
 	 * 完善个人信息，更新数据
 	 * 
 	 * @param userInfo(user_id,user_identification_card,user_identification_name,user_organization)
-	 * @return ResponseResult
+	 * @return ResultObject
 	 */
 	@RequestMapping(value = "/perfectInfo", method = RequestMethod.POST)
-	public ResponseResult perfectInfo(@RequestBody UserInfo userInfo, HttpServletResponse response) {
+	public ResultObject perfectInfo(@RequestBody UserInfo userInfo, HttpServletResponse response) {
 	// 允许跨域访问
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		
@@ -323,10 +278,10 @@ public class UserController {
 	 * 修改手机号码
 	 * 
 	 * @param session
-	 * @return ResponseResult
+	 * @return ResultObject
 	 */
 	@RequestMapping(value = "/changMobileNumber", method = RequestMethod.POST)
-	public ResponseResult changMobileNumber(@RequestBody Map<String, String> map, HttpServletResponse response) throws Exception {
+	public ResultObject changMobileNumber(@RequestBody Map<String, String> map, HttpServletResponse response) throws Exception {
 
 		// 允许跨域访问
 		response.setHeader("Access-Control-Allow-Origin", "*");
@@ -362,7 +317,7 @@ public class UserController {
 		// 从数据库中查出password并解密
 		String userPassword = user.getUserLoginPassword();
 		
-		String realPassword = Base64Utils.stringFromB64(userPassword);
+		String realPassword = Base64Util.stringFromB64(userPassword);
 
 		String userMobileNumber = user.getUserMobileNumber();
 		
@@ -414,10 +369,10 @@ public class UserController {
 	 * 
 	 * @param session
 	 * @throws Exception 
-	 * @return ResponseResult
+	 * @return ResultObject
 	 */
 	@RequestMapping(value = "/getBackPassword", method = RequestMethod.POST)
-	public ResponseResult getBackPassword(@RequestBody Map<String, String> map, HttpServletResponse response) throws Exception {	
+	public ResultObject getBackPassword(@RequestBody Map<String, String> map, HttpServletResponse response) throws Exception {	
 		// 允许跨域访问
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		
@@ -452,9 +407,9 @@ public class UserController {
 		}
 		
 		try {
-			String password = Base64Utils.stringFromB64(user.getUserLoginPassword());
+			String password = Base64Util.stringFromB64(user.getUserLoginPassword());
 			String message = "您的密码是:" + password + "，请记住密码";
-			ClientDemo clientDemo = new ClientDemo();
+			SmsUtil clientDemo = new SmsUtil();
 			clientDemo.smsPublish(mobileNumber, message);
 			this.result.set("您的密码将以短信的形式发送到您的手机上，请注意查收", 1);
 			logger.debug(this.result.getMessage());
@@ -471,7 +426,7 @@ public class UserController {
 	 *
 	 * @param session
 	 * @throws Exception
-	 * @return ResponseResult
+	 * @return ResultObject
 	 */
 	@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
 	public ResultObject changPassword(@RequestBody UserInfoForChangePassword newUserInfo) throws Exception {

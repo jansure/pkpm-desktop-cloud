@@ -1,4 +1,4 @@
-package com.pkpmdesktopcloud.desktopcloudbusiness.utils;
+package com.desktop.utils;
 
 import java.util.Random;
 import java.util.UUID;
