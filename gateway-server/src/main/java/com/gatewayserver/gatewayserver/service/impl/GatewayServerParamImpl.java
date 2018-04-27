@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.gatewayserver.gatewayserver.service.impl;
 
 import java.util.HashMap;
@@ -26,7 +23,6 @@ import com.gatewayserver.gatewayserver.service.GatewayServerParam;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
-import sun.awt.image.IntegerInterleavedRaster;
 
 /**
  * @Description 供云平台使用Service实现类
@@ -48,8 +44,8 @@ public class GatewayServerParamImpl implements GatewayServerParam {
 	@Override
 	public List<PkpmProjectDef> getProjectDefs(String adIpAddress, String areaCode) {
 		try {
-			Preconditions.checkNotNull(areaCode, "adIpAddress不能为空");
-			Preconditions.checkNotNull(areaCode, "areaCode不能为空");
+			Preconditions.checkArgument(StringUtils.isNotBlank(adIpAddress), "adIpAddress不能为空");
+			Preconditions.checkArgument(StringUtils.isNotBlank(areaCode), "areaCode不能为空");
 
 			PkpmProjectDef pkpmProjectDef = new PkpmProjectDef();
 			pkpmProjectDef.setAdIpAddress(adIpAddress);
@@ -69,10 +65,10 @@ public class GatewayServerParamImpl implements GatewayServerParam {
 	@Override
 	public List<PkpmAdDef> getAdDefs(String adIpAddress, String areaCode, String adOu, Integer isValid) {
 		try {
-			Preconditions.checkNotNull(areaCode, "adIpAddress不能为空");
-			Preconditions.checkNotNull(areaCode, "areaCode不能为空");
-			Preconditions.checkNotNull(areaCode, "adOu不能为空");
-			Preconditions.checkNotNull(areaCode, "isValid不能为空");
+			Preconditions.checkArgument(StringUtils.isNotBlank(adIpAddress), "adIpAddress不能为空");
+			Preconditions.checkArgument(StringUtils.isNotBlank(areaCode), "areaCode不能为空");
+			Preconditions.checkArgument(StringUtils.isNotBlank(adOu), "adOu不能为空");
+			Preconditions.checkNotNull(isValid, "isValid不能为空");
 
 			PkpmAdDef pkpmAdDef = new PkpmAdDef();
 			pkpmAdDef.setAdIpAddress(adIpAddress);
