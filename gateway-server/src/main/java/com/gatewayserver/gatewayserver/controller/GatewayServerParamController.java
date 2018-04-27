@@ -49,4 +49,10 @@ public class GatewayServerParamController {
 		
 		return ResultObject.failure("没有获取到AdId和ProjectId！");
 	}
+
+	@RequestMapping(value = "/getProjectDef", method = RequestMethod.GET)
+	public ResultObject getAdAndProject(String areaCode,String projectId) {
+
+		return ResultObject.failure("没有获取到AdId和ProjectId！");
+	}
 }
