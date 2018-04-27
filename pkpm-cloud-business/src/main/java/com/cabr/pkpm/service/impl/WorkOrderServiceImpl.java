@@ -13,12 +13,15 @@ import com.cabr.pkpm.service.IWorkOrderService;
 import com.cabr.pkpm.utils.ResponseResult;
 import com.cabr.pkpm.utils.sdk.PageBean;
 import com.github.pagehelper.PageHelper;
+
+import javax.annotation.Resource;
+
 @Service
 public class WorkOrderServiceImpl implements IWorkOrderService {
 	
-	@Autowired
+	@Resource
 	private WorkOrderMapper workOrderMapper;
-	@Autowired
+	@Resource
 	private SubsDetailsMapper subsDetailsMapper;
 	
 	protected ResponseResult result=new ResponseResult();  
