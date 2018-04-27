@@ -138,6 +138,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		subscription.setProjectId(projectId);
 		subscription.setAdId(Integer.parseInt(adId));
 		subscription.setStatus(invalidStatus);
+		subscription.setAreaCode(areaCode);
 		Integer subscriptionCount = subscriptionMapper.saveSubscription(subscription);
 		if(subscriptionCount<1){
 			throw  Exceptions.newBusinessException("保存订单失败,请您重试!");
