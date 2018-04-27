@@ -26,7 +26,7 @@ public class MybatisConfiguration {
     private String username;
 
     @Value("${spring.datasource.password}")
-    private String password;
+    private String passhword;
 
     @Value("${spring.datasource.driver-class-name}")
     private String driverClassName;
