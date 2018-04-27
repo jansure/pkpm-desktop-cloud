@@ -19,7 +19,9 @@ import com.alibaba.fastjson.JSON;
 import com.desktop.constant.ComponentTypeConstant;
 import com.desktop.constant.DesktopConstant;
 import com.desktop.utils.HttpConfigBuilder;
+import com.desktop.utils.IDUtil;
 import com.desktop.utils.JsonUtil;
+import com.desktop.utils.StringUtil;
 import com.desktop.utils.exception.Exceptions;
 import com.desktop.utils.page.ResultObject;
 import com.gateway.common.domain.CommonRequestBean;
@@ -38,12 +40,8 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ProductInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsDetails;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dto.MyProduct;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.WorkOrderVO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubscriptionService;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.IDUtil;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.RedisCacheUtil;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.StringUtil;
 
 @Service
 @Transactional
@@ -61,8 +59,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	
 	@Resource
 	private ComponentDAO componentMapper;
-	
-	private RedisCacheUtil<MyProduct> redisCacheUtil;
 	
 	protected final Log logger = LogFactory.getLog(getClass());
 	

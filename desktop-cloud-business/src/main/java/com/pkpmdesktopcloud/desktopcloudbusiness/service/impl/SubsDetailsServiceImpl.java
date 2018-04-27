@@ -9,6 +9,8 @@ import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.desktop.utils.DateUtils;
+import com.desktop.utils.DateUtilss;
 import com.github.pagehelper.PageHelper;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ComponentDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ProductDAO;
@@ -21,7 +23,6 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dto.MyProduct;
 import com.pkpmdesktopcloud.desktopcloudbusiness.page.PageBean;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubsDetailsService;
 import com.pkpmdesktopcloud.desktopcloudbusiness.utils.RedisCacheUtil;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.StringOrDate;
 
 @Service
 public class SubsDetailsServiceImpl implements SubsDetailsService {
@@ -58,7 +59,7 @@ public class SubsDetailsServiceImpl implements SubsDetailsService {
 			
 			for (MyProduct myProduct : myProducts) {
 				String invalid = myProduct.getInvalidtime();
-				LocalDateTime invalidTime = StringOrDate.stringToDate(invalid, "yyyy年MM月dd日  HH:mm:ss");
+				LocalDateTime invalidTime = DateUtilss.string2LocalDateTime(invalid, "yyyy年MM月dd日  HH:mm:ss");
 				boolean flagTime;
 				if (nowTime.isAfter(invalidTime)) {
 					flagTime = false;
@@ -77,7 +78,7 @@ public class SubsDetailsServiceImpl implements SubsDetailsService {
 				for (SubsDetails subs : subsDetails) {
 					Integer productId = subs.getProductId();
 					LocalDateTime createTime = subs.getCreateTime();
-					String create = StringOrDate.dateToString(createTime, "yyyy年MM月dd日  HH:mm:ss");
+					String create = DateUtils.dateToString(createTime, "yyyy年MM月dd日  HH:mm:ss");
 					LocalDateTime invalidTime = subs.getInvalidTime();
 					boolean flagTime;
 					
@@ -88,7 +89,7 @@ public class SubsDetailsServiceImpl implements SubsDetailsService {
 						flagTime = true;
 					}
 					
-					String invalid = StringOrDate.dateToString(invalidTime, "yyyy年MM月dd日  HH:mm:ss");
+					String invalid = DateUtils.dateToString(invalidTime, "yyyy年MM月dd日  HH:mm:ss");
 					List<ProductInfo> products = productMapper.getProductByProductId(productId);
 					String productDesc = products.get(0).getProductDesc(); 
 					List<String> componentNames = new ArrayList<>();

@@ -13,6 +13,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.desktop.utils.StringUtil;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,7 +25,6 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ProductInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SysConfig;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.ProductService;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.StringUtil;
 
 /**
  * 产品接口实现类
@@ -82,8 +82,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<ComponentVO> getComponentByPid(String productType, String componentType) {
-		List<ComponentVO> componentInfo = productDAO.getComponentByPid(StringUtil.stringToInt(productType), StringUtil.stringToInt(componentType));
+	public List<ComponentVO> getComponentByPid(Integer productType, Integer componentType) {
+		List<ComponentVO> componentInfo = productDAO.getComponentByPid(productType, componentType);
 		return componentInfo;
 	}
 
