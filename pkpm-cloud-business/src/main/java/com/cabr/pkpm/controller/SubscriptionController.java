@@ -47,14 +47,6 @@ public class SubscriptionController {
 			this.result.set("请重新登录", 2);
 			return this.result;
 		}
-		//删除掉
-	/*	List<MyProduct> myProducts = redisCacheUtil.getCacheList("MyProduct:"+userId);
-		if(myProducts != null && myProducts.size() > 0){
-			if(myProducts.size() >= 5){
-				this.result.set("您购买的条数已达到上限", 0);
-				return this.result;
-			}
-		}*/
 		
 		try {
 			PkpmOperatorStatus pkpmOperatorStatus = subscription.saveSubsDetails(userInfo,wo);
