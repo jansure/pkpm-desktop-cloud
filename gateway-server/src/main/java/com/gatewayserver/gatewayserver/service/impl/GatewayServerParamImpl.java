@@ -26,6 +26,7 @@ import com.gatewayserver.gatewayserver.service.GatewayServerParam;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import sun.awt.image.IntegerInterleavedRaster;
 
 /**
  * @Description 供云平台使用Service实现类
@@ -124,8 +125,13 @@ public class GatewayServerParamImpl implements GatewayServerParam {
 						// 根据adIpAddress查到ProjectId放入map
 						List<PkpmProjectDef> pkpmProjectDefList = this.getProjectDefs(adIpAddress, areaCode);
 						// 随机选择一个project
-						String projectId = pkpmProjectDefList.get(r.nextInt(pkpmProjectDefList.size())).getProjectId();
+						Integer random = r.nextInt(pkpmProjectDefList.size());
+						String projectId = pkpmProjectDefList.get(random).getProjectId();
 						map.put("projectId", projectId);
+
+						//get destination ip by projectId
+						String destinationIp = pkpmProjectDefList.get(random).getDestinationIp();
+						map.put("destinationIp",destinationIp);
 
 						return map;
 					}
