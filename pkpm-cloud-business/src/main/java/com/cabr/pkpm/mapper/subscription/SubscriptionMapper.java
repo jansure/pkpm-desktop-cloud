@@ -29,6 +29,8 @@ public interface SubscriptionMapper {
 	Integer saveSubscription(SubsCription subscription);
 
 	Integer selectCount(@Param("userId") Integer userId, @Param("status") String status);
+
+	Integer selectProductCountByAdId(@Param("productId") Integer productId,@Param("adId") Integer adId);
 	
 	Integer selectTotalById(@Param("userId") Integer userId);
 

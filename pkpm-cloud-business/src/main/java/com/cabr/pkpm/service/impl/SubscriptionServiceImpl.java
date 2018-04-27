@@ -284,5 +284,23 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		Preconditions.checkArgument(result==1,"订单更新失败");
 		return "更新状态成功";
 	}
+	@Override
+	public List<SubsCription> findSubsCriptionByProductName(Integer userId) {
+
+		String str = stringRedisTemplate.opsForValue().get("subsCriptionByUserId:" + userId);
+
+		// 若存在Redis缓存，从缓存中读取
+		if (StringUtils.isNotBlank(str)) {
+			List<SubsCription> subsCription = JSON.parseArray(str, SubsCription.class);
+			return subsCription;
+		} else {
+			// 若不存在对应的Redis缓存，从数据库查询
+			List<SubsCription> subsCription = subscriptionMapper.findSubsCriptionByUserId(userId);
+			// 写入Redis缓存
+			//fixme 解决JSON序列化问题
+			/*stringRedisTemplate.opsForValue().set("subsCriptionByUserId:" + userId, JSON.toJSONString(subsCription));*/
+			return subsCription;
+		}
+	}
 
 }
