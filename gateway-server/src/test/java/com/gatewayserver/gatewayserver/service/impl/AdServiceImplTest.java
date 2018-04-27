@@ -101,9 +101,9 @@ public class AdServiceImplTest {
     }
 
     @Test
-    public void getAvailableComputerName(){
-        String response = adService.getAvailableComputerName("testatestbtestc",4);
-        System.out.println(response);
+    public void check(){
+        Boolean aBoolean = adService.checkComputer("pkpm-all-25",1);
+        System.out.println(aBoolean);
     }
 
 }
