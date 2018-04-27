@@ -12,11 +12,11 @@ public class MyProduct implements Serializable {
 	private String productDesc;
 	private List<String> componentName;
 	private String createTime;
-	private String invalidtime;
+	private String invalidTime;
 	private boolean flagTime;
 	private String hostIp;
 	private Integer status;
-	
-	//增加订单ID
 	private Long subsId;
+	private String adId;
+	private String projectId;
 }
