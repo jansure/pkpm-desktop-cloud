@@ -26,6 +26,7 @@ public class CommonRequestBean implements Serializable {
     private String projectId;
     private Integer adId;
     private String desktopId;
+    private String computerName;
 
     // **前端传递**创建桌面所需参数
     private String imageId;

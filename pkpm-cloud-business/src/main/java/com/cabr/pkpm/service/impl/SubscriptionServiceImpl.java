@@ -303,4 +303,42 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		}
 	}
 
+	@Override
+	public String getAvailableComputerName(Integer productId, Integer adId) {
+		//adId+productId对应的产品总数
+		Integer productCount = subscriptionMapper.selectProductCountByAdId(productId,adId);
+		//count自增，返回对应的可用计算机名
+		productCount++;
+		String productName = productMapper.getProductByProductId(productId).get(0).getProductName();
+		String availableComputerName = productName+"-"+productCount;
+		//检查AD域中该计算机名不存在，确认可用
+		if (!checkComputerNameByAdId(availableComputerName, adId)){
+			return availableComputerName ;
+		}
+		throw Exceptions.newBusinessException("计算机名已存在");
+
+	}
+
+	public Boolean checkComputerNameByAdId(String computerName, Integer adId) {
+		CommonRequestBean requestBean = new CommonRequestBean();
+		requestBean.setComputerName(computerName);
+		requestBean.setAdId(adId);
+		try {
+			String url =serverHost + "/ad/computer/check";
+			String strJson = JsonUtil.serialize(requestBean);
+			String strResponse = HttpClientUtil.mysend(
+                    HttpConfigBuilder.buildHttpConfigNoToken(url, strJson, 5, "utf-8", 10000).method(HttpMethods.POST));
+			MyHttpResponse myHttpResponse = JsonUtil.deserialize(strResponse, MyHttpResponse.class);
+			System.out.println(myHttpResponse);
+			if (myHttpResponse.getStatusCode()==HttpStatus.OK.value()){
+				System.out.println("TRUE");
+				return Boolean.TRUE;
+			}
+		} catch (HttpProcessException e) {
+			e.printStackTrace();
+		}
+		return Boolean.FALSE;
+	}
+
+
 }
