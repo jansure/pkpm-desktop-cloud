@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.desktop.utils.page.ResultObject;
 import com.gateway.common.domain.PkpmProjectDef;
 import com.gatewayserver.gatewayserver.service.GatewayServerParam;
+import com.pkpm.httpclientutil.common.util.JsonUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,6 +62,8 @@ public class GatewayServerParamController {
 	@RequestMapping(value = "/getProjectDef", method = RequestMethod.GET)
 	public ResultObject getProjectDef(String projectId, String areaCode) {
 		PkpmProjectDef projectDef = gatewayServerParam.getProjectDef(projectId, areaCode);
-		return ResultObject.success(projectDef, "获取成功!");
+		String jsonProjectDef = JsonUtil.serialize(projectDef);
+		//return ResultObject.success(projectDef, "获取成功!");
+		return ResultObject.success(jsonProjectDef, "获取成功!");
 	}
 }

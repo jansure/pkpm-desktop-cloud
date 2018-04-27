@@ -6,7 +6,7 @@ import com.gateway.common.domain.CommonRequestBean;
 public interface StatusService {
 
 
-    ResultObject queryDesktopStatus(CommonRequestBean commonRequestBean);
+    String queryDesktopStatus(CommonRequestBean commonRequestBean);
 
     ResultObject queryOperateStatus(CommonRequestBean commonRequestBean);
 

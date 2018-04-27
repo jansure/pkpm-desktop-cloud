@@ -6,10 +6,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cabr.pkpm.entity.user.UserInfo;
 import com.cabr.pkpm.service.IStatusService;
+import com.cabr.pkpm.service.IUserService;
 import com.cabr.pkpm.utils.ResponseResult;
 import com.cabr.pkpm.utils.ResultObject;
 import com.gateway.common.domain.CommonRequestBean;
+import com.gateway.common.dto.StatusObject;
 
 @RestController
 @RequestMapping("/status")
@@ -17,6 +20,9 @@ public class StatusController {
 	
 	@Autowired
 	private IStatusService statusService;
+	
+	@Autowired
+	private IUserService userService;
     /**
      * 查询创建桌面时的 桌面创建状态
      * @param commonRequestBean
@@ -26,14 +32,37 @@ public class StatusController {
 	
 	@PostMapping("/desktopStatus")
 	public ResponseResult desktopStatus(@RequestBody CommonRequestBean commonRequestBean){
-		
-		String response = statusService.queryDesktopStatus(commonRequestBean);
-		
-		if(response == null ){
-			this.result.set("查询桌面状态失败,请重新尝试!", 0);
+		StatusObject statusObject = null ;
+		try {
+			statusObject = statusService.queryDesktopStatus(commonRequestBean);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.result.set("查询桌面状态失败,请重新尝试!",0 , statusObject);
 			return this.result;
 		}
-		this.result.set("查询桌面状态成功!",1 , response);
+		//StatusObject statusObject = statusService.queryDesktopStatus(commonRequestBean);
+		//String response = statusService.queryDesktopStatus(commonRequestBean);
+		
+//		if(response == null ){
+//			this.result.set("查询桌面状态失败,请重新尝试!", 0);
+//			return this.result;
+//		}
+//		this.result.set("查询桌面状态成功!",1 , response);
+//		return this.result;
+		
+		if(statusObject == null ){
+			//this.result.set("查询桌面状态失败,请重新尝试!", 0);
+			this.result.set("查询桌面状态失败,请重新尝试!",0 , statusObject);
+			return this.result;
+		
+		}
+		
+		UserInfo user = userService.findUser(commonRequestBean.getUserId());
+		String userName = user.getUserName();
+		//statusObject.put("username", userName);
+		statusObject.setUsername(userName);
+		
+		this.result.set("查询桌面状态成功!",1 , statusObject);
 		return this.result;
 		
 	}

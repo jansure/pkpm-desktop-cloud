@@ -101,17 +101,17 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		//a、保存订单之前先查询有没有 初始化的订单
 		Integer userId = userInfo.getUserID();
 		Integer invalidCount = subscriptionMapper.selectCount(userId,invalidStatus);
-		/*if(invalidCount >= 1){
-			throw  Exceptions.newBusinessException("您有正在创建中的桌面,请重新尝试!");
+		/*   
+		 * 测试阶段注掉
+		 * if(invalidCount >= 1){
+				throw  Exceptions.newBusinessException("您有正在创建中的桌面,请重新尝试!");
 		}*/
 		Integer regionId = wo.getRegionId();
 		ComponentInfo regionComponentInfo = componentMapper.getComponentInfo(regionId, ComponentTypeConstant.region_type);
 		String areaCode = regionComponentInfo.getComponentDesc();
 		
-	   //	String areaCode = "cn-north-1";
 		String urlGetAdAndProject =serverHost + "/params/getAdAndProject?areaCode=" + areaCode ;
 		String adAndProjectResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(urlGetAdAndProject,  5, "utf-8", 100000).method(HttpMethods.GET));
-		
 		MyHttpResponse adAndProjectHttpResponse = JsonUtil.deserialize(adAndProjectResponse, MyHttpResponse.class);
 		Integer adStatusCode = adAndProjectHttpResponse.getStatusCode();
 		
@@ -159,7 +159,6 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		
 		List<ProductInfo> products = productMapper.getProductByProductId(productId);
 		ProductInfo productInfo = products.get(0);
-		//String imageId = productInfo.getImageId();
 		String productName = productInfo.getProductName();
 		
 		//2、传入commonrequestbean,创建ad和desktop
@@ -176,8 +175,6 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		String hwProductId = hostConfigcomponentInfo.getHwProductId();
 		commonRequestBean.setHwProductId(hwProductId);   // workspace.c2.large.windows
 		
-		//commonRequestBean.setOuName(ouName);
-		//commonRequestBean.setOuName("远大北京公司/销售部");
 		commonRequestBean.setUserEmail(userEmail);
 		commonRequestBean.setProjectId(projectId);   
 		commonRequestBean.setAdId(Integer.parseInt(adId));
@@ -186,7 +183,6 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 				DesktopConstant.DEFAULT_IMAGE_ID:productInfo.getImageId());   //997488ed-fa23-4671-b88c-d364c0405334
 		
 		//根据user_id和status查询计算机名
-
 		String userName = userInfo.getUserName();
 		//查询成功的条数
 		Integer nextNum = 1 + subscriptionMapper.selectTotalById(userId);
@@ -214,7 +210,6 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 					+ nextNum);
 		}
 
-
 		commonRequestBean.setAreaCode(areaCode);
 		String urlCreateAdAndDesktop =serverHost + "/desktop/createAdAndDesktop";
 		String strJson = JsonUtil.serialize(commonRequestBean);
@@ -226,9 +221,6 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 			//3、创建成功后,返回参数给前台
 			if(HttpStatus.OK.value() == statusCode){
 				
-//				String body = myHttpResponse.getBody();
-//				ResultObject result = JsonUtil.deserialize(body, ResultObject.class);
-//				Integer code = result.getCode();
 				 body = myHttpResponse.getBody();
 				 result = JsonUtil.deserialize(body, ResultObject.class);
 				 code = result.getCode();
@@ -240,7 +232,12 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 					pkpmOperatorStatus.setAdId(Integer.parseInt(adId));
 					pkpmOperatorStatus.setUserId(userId);
 					pkpmOperatorStatus.setAreaCode(areaCode);
-					//redisCacheUtil.delete("MyProduct:"+userId);
+					
+					List<Object> cacheList = redisCacheUtil.getCacheList("MyProduct:"+userId);
+					if(cacheList !=null ){
+						redisCacheUtil.delete("MyProduct:"+userId);
+					}
+					
 					return pkpmOperatorStatus;
 					
 				}

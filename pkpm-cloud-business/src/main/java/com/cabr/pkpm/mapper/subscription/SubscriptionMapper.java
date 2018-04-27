@@ -34,4 +34,6 @@ public interface SubscriptionMapper {
 	
 	Integer selectTotalById(@Param("userId") Integer userId);
 
+	SubsCription selectSubscriptionBySubsId(Long subsId);
+
 }

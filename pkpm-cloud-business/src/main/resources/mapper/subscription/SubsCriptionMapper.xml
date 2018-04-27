@@ -11,6 +11,7 @@
             <result property="adId" column="ad_id" jdbcType="INTEGER"/>
             <result property="projectId" column="project_id" jdbcType="VARCHAR"/>
             <result property="desktopId" column="desktop_id" jdbcType="VARCHAR"/>
+            <result property="areaCode" column="area_code" jdbcType="VARCHAR"/>
             <result property="status" column="status" jdbcType="INTEGER"/>
 	</resultMap>
 	
@@ -33,8 +34,8 @@
 		where user_id = #{userId,jdbcType=INTEGER} order by create_time
 	</select>
 	<insert id="saveSubscription"  parameterType="com.cabr.pkpm.entity.subscription.SubsCription" useGeneratedKeys="true" keyProperty="id">
-	    insert into pkpm_cloud_subscription(subs_id,user_id,create_time,pay_channel,ad_id,project_id,status) values
-	    (#{subsId},#{userId},#{createTime},#{payChannel},#{adId},#{projectId},#{status});
+	    insert into pkpm_cloud_subscription(area_code,subs_id,user_id,create_time,pay_channel,ad_id,project_id,status) values
+	    (#{areaCode},#{subsId},#{userId},#{createTime},#{payChannel},#{adId},#{projectId},#{status});
 	</insert>
 	
 	<select id="selectCount"  resultType="java.lang.Integer" >
@@ -67,5 +68,12 @@
 		WHERE
 			user_id = #{userId}
 	</select>
-	
+	<select id="selectSubscriptionBySubsId"  parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT
+			*
+		FROM
+			pkpm_cloud_subscription
+		WHERE
+			subs_id = #{subsId}
+	</select>
 </mapper>
