@@ -23,7 +23,7 @@
  *
  */
 
-package com.pkpmdesktopcloud.desktopcloudbusiness.utils;
+package com.desktop.utils;
 
 import java.io.FilterOutputStream;
 import java.io.InputStream;

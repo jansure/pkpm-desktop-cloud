@@ -11,16 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.desktop.utils.page.ResultObject;
 import com.gateway.common.domain.PkpmOperatorStatus;
+import com.google.common.base.Preconditions;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.MyProduct;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.WorkOrderVO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubscriptionService;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.UserService;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.RedisCacheUtil;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.ResponseResult;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.ResultObject;
 
 @RestController
 @RequestMapping("/subscription")
@@ -30,44 +29,34 @@ public class SubscriptionController {
 	private SubscriptionService subscription;
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private RedisCacheUtil<MyProduct> redisCacheUtil;
-	
-	protected ResponseResult result = new ResponseResult();
 	
 	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
 	@RequestMapping(value="/immediatelyUse",method=RequestMethod.POST)
-	public ResponseResult immediatelyUse(@RequestBody WorkOrderVO wo,HttpServletResponse response){
+	public ResultObject immediatelyUse(@RequestBody WorkOrderVO wo,HttpServletResponse response){
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		Integer userId = wo.getUserId();
-		if(userId == null){
-			this.result.set("请您先登录账号才可以使用", 2);
-			return this.result;
-		}
+		Preconditions.checkNotNull(wo.getUserId(), "请您先登录账号才可以使用");
+				
 		UserInfo userInfo = userService.findUser(wo.getUserId());
 		if(userInfo == null){
-			this.result.set("请重新登录", 2);
-			return this.result;
+			
+			return ResultObject.failure("请重新登录");
 		}
 		
 		List<MyProduct> myProducts = redisCacheUtil.getCacheList("MyProduct:"+userId);
-		if(myProducts != null && myProducts.size() > 0){
-			if(myProducts.size() >= 5){
-				this.result.set("您购买的条数已达到上限", 0);
-				return this.result;
-			}
+		if(myProducts != null && myProducts.size() > 5){
+			
+			return ResultObject.failure("您购买的条数已达到上限");
 		}
 		
 		try {
 			PkpmOperatorStatus pkpmOperatorStatus = subscription.saveSubsDetails(userInfo,wo);
-			this.result.set("恭喜您申请免费使用成功,请稍等,马上为您开通！", 1, pkpmOperatorStatus);
-			return this.result;
+			return ResultObject.success(pkpmOperatorStatus, "恭喜您申请免费使用成功,请稍等,马上为您开通！");
 		} catch (Exception e) {
 			e.printStackTrace();
-			//this.result.set("创建订单失败,请重新创建订单", 0);
-			this.result.set(e.getMessage(), 0);
-			return this.result;
 		}
+		
+		return ResultObject.failure("创建订单失败,请重新创建订单");
 		
 	}
 

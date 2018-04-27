@@ -37,7 +37,7 @@ public interface ProductService {
 	 * @param productType 父类id
 	 * @return
 	 */
-    List<ComponentVO> getComponentByPid(String productType, String componentType);
+    List<ComponentVO> getComponentByPid(Integer productType, Integer componentType);
     /**
      * 根据产品套餐类型获取对应的配置类别list
      * @param productType
