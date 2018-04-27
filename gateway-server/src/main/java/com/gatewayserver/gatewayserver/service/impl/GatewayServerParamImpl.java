@@ -146,8 +146,8 @@ public class GatewayServerParamImpl implements GatewayServerParam {
 	@Override
 	public PkpmProjectDef getProjectDef(String projectId, String areaCode) {
 		try {
-			Preconditions.checkNotNull(projectId, "projectId不能为空");
-			Preconditions.checkNotNull(areaCode, "areaCode不能为空");
+			Preconditions.checkArgument(StringUtils.isNotBlank(projectId), "projectId不能为空");
+			Preconditions.checkArgument(StringUtils.isNotBlank(areaCode), "areaCode不能为空");
 			PkpmProjectDef pkpmProjectDef = pkpmProjectDefDAO.selectByProjectIdAndAreaCode(projectId, areaCode);
 			// 结果不空，返回项目信息
 			if (null != pkpmProjectDef) {
