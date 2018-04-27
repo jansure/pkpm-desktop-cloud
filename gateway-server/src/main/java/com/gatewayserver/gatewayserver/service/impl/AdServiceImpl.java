@@ -460,9 +460,37 @@ public class AdServiceImpl implements AdService {
 
         return Boolean.FALSE;
     }
+    public Boolean checkComputer(String computerName , Integer adId) {
+        PkpmAdDef adDef = getAdDefByAdId(adId);
+        Preconditions.checkNotNull(adDef);
+        LDAPConnectionPool connectionPool = getConnectionPool(adDef);
+        LDAPConnection connection = null;
+        try {
+            connection = connectionPool.getConnection();
+            Preconditions.checkNotNull(connection, "AD连接空指针异常");
 
-    //fixme  deleteUser不给前端返回信息吗？
-    public void deleteUser(String userName, Integer adId) {
+            //AD属性:获取组织ouDN;
+            String ouDN = AdUtil.getOuDN(adDef);
+
+            String userDN = String.format("CN=%s,%s", computerName, ouDN);
+            SearchResultEntry entry = connection.getEntry(userDN);
+            if (entry == null)
+                return Boolean.FALSE;
+            else {
+                Attribute nameAttr = entry.getAttribute("samAccountName");
+                if (nameAttr != null && nameAttr.getValue().equals(computerName))
+                    return Boolean.TRUE;
+            }
+        } catch (LDAPException e) {
+            e.printStackTrace();
+        } finally {
+            log.info(String.format("AD连接资源(%s)被释放", connection.toString()));
+            connectionPool.releaseConnection(connection);
+        }
+        return Boolean.FALSE;
+    }
+
+    public String deleteUser(String userName, Integer adId) {
         PkpmAdDef adDef = getAdDefByAdId(adId);
         Preconditions.checkNotNull(adDef);
         LDAPConnectionPool connectionPool = getConnectionPool(adDef);
@@ -479,7 +507,7 @@ public class AdServiceImpl implements AdService {
             Preconditions.checkNotNull(entry, "用户名不存在");
             LDAPResult result = connection.delete(userDN);
             if (result.getResultCode().getName().equals("success"))
-                return;
+                return "用户已删除";
             else
                 throw Exceptions.newBusinessException("用户删除失败");
         } catch (LDAPException e) {

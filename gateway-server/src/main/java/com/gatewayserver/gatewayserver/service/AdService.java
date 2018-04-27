@@ -40,7 +40,9 @@ public interface AdService {
      */
     Boolean checkUser(String userName, Integer adId);
 
-    void deleteUser(String userName, Integer adId);
+    Boolean checkComputer(String computerName, Integer adId);
+
+    String deleteUser(String userName, Integer adId);
 
     void deleteComputer(String computerName, Integer adId);
 
