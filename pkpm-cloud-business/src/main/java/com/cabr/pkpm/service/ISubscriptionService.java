@@ -23,5 +23,8 @@ public interface ISubscriptionService {
 	 */
 	String updateSubsCriptionBySubsId(SubsCription subsCription);
 
+	List<SubsCription> findSubsCriptionByProductName(Integer userId);
+
+
 	/*Integer selectProductCountByAdId();*/
 }

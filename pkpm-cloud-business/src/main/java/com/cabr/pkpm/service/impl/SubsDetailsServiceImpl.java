@@ -60,7 +60,7 @@ public class SubsDetailsServiceImpl implements ISubsDetailsService {
 		if(myProducts!= null && myProducts.size()>0) {
 			
 			for (MyProduct myProduct : myProducts) {
-				String invalid = myProduct.getInvalidtime();
+				String invalid = myProduct.getInvalidTime();
 				LocalDateTime invalidTime = StringOrDate.stringToDate(invalid, "yyyy年MM月dd日  HH:mm:ss");
 				boolean flagTime;
 				if (nowTime.isAfter(invalidTime)) {
@@ -126,7 +126,7 @@ public class SubsDetailsServiceImpl implements ISubsDetailsService {
 					
 					myProduct.setComponentName(componentNames);
 					myProduct.setCreateTime(create);
-					myProduct.setInvalidtime(invalid);
+					myProduct.setInvalidTime(invalid);
 					myProduct.setProductDesc(productDesc);
 					myProduct.setFlagTime(flagTime);
 					myProduct.setHostIp(hostIp.get(0));
