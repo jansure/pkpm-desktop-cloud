@@ -180,7 +180,9 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		commonRequestBean.setUserEmail(userEmail);
 		commonRequestBean.setProjectId(projectId);   
 		commonRequestBean.setAdId(Integer.parseInt(adId));
-		commonRequestBean.setImageId("asdf");   //997488ed-fa23-4671-b88c-d364c0405334
+		commonRequestBean.setImageId(StringUtils.isBlank(
+				productInfo.getImageId())?
+				DesktopConstant.DEFAULT_IMAGE_ID:productInfo.getImageId());   //997488ed-fa23-4671-b88c-d364c0405334
 		
 		//根据user_id和status查询计算机名
 
