@@ -21,4 +21,14 @@ public interface PkpmProjectDefDAO {
      * @time 2018年4月13日 上午9:24:23
      */
     List<PkpmProjectDef> select(PkpmProjectDef pkpmProjectDef);
+    
+    /**
+	 * 根据projectId、areaCode获取ProjectDef
+	 * @param projectId
+	 * @param areaCode
+	 * @return PkpmProjectDef
+	 * @author yangpengfei
+	 * @date 2018/04/27
+	 */
+    PkpmProjectDef selectByProjectIdAndAreaCode(String projectId, String areaCode);
 }

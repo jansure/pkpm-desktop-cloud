@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.desktop.utils.page.ResultObject;
+import com.gateway.common.domain.PkpmProjectDef;
 import com.gatewayserver.gatewayserver.service.GatewayServerParam;
 
 import lombok.extern.slf4j.Slf4j;
@@ -50,9 +51,16 @@ public class GatewayServerParamController {
 		return ResultObject.failure("没有获取到AdId和ProjectId！");
 	}
 
+	/**
+	 * 根据projectId、areaCode获取ProjectDef
+	 * @param projectId
+	 * @param areaCode
+	 * @author yangpengfei
+	 * @date 2018/04/27
+	 */
 	@RequestMapping(value = "/getProjectDef", method = RequestMethod.GET)
-	public ResultObject getAdAndProject(String areaCode,String projectId) {
-
-		return ResultObject.failure("没有获取到AdId和ProjectId！");
+	public ResultObject getProjectDef(String projectId, String areaCode) {
+		PkpmProjectDef projectDef = gatewayServerParam.getProjectDef(projectId, areaCode);
+		return ResultObject.success(projectDef, "获取成功!");
 	}
 }
