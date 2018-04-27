@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SubsCription implements Serializable {
 	private Integer id;
 	private Long subsId;
+	private String areaCode;
 	private Integer userId;
 	private LocalDateTime createTime;
 	private String remark;
