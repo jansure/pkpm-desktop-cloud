@@ -104,7 +104,9 @@ public class AdController {
      */
 
     @RequestMapping(value = "computer/check",method = RequestMethod.POST)
-    public ResultObject checkComputer(@RequestParam("computerName") String computerName, @RequestParam("adId") Integer adId) {
+    public ResultObject checkComputer(@RequestBody CommonRequestBean requestBean) {
+        String computerName =requestBean.getComputerName();
+        Integer adId =requestBean.getAdId();
         Boolean result = adService.checkComputer(computerName, adId);
         if (result)
             return ResultObject.success(null, "计算机名存在");
