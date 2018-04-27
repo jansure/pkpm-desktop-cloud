@@ -46,7 +46,19 @@
 			user_id = #{userId}
 		AND STATUS = #{status};
 	</select>
-	
+
+	<select id="selectProductCountByAdId" resultType="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			pkpm_cloud_subscription AS sub,
+			pkpm_cloud_subs_details AS subDetail
+		WHERE
+			sub.subs_id = subDetail.subs_id
+			AND sub.ad_id = #{adId}
+			AND subDetail.product_id = #{productId};
+	</select>
+
 	<select id="selectTotalById" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
 	    SELECT
 			count(1)

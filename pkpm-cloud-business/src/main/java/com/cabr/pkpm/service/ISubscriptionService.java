@@ -22,4 +22,6 @@ public interface ISubscriptionService {
 	 * @return java.lang.String
 	 */
 	String updateSubsCriptionBySubsId(SubsCription subsCription);
+
+	/*Integer selectProductCountByAdId();*/
 }
