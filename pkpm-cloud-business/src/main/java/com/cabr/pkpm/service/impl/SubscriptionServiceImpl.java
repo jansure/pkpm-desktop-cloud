@@ -184,6 +184,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		
 		//根据user_id和status查询计算机名
 		String userName = userInfo.getUserName();
+		productName = getAvailableComputerName(productId, Integer.parseInt(adId));
 		//查询成功的条数
 		Integer nextNum = 1 + subscriptionMapper.selectTotalById(userId);
 		if(nextNum >= 1 + DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT)
@@ -300,24 +301,44 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 			return subsCription;
 		}
 	}
-
+	/**
+	 *获取可用计算机名
+	 *
+	 * @author xuhe
+	 * @param productId, adId
+	 * @return java.lang.String
+	 */
 	@Override
 	public String getAvailableComputerName(Integer productId, Integer adId) {
+
 		//adId+productId对应的产品总数
 		Integer productCount = subscriptionMapper.selectProductCountByAdId(productId,adId);
 		//count自增，返回对应的可用计算机名
 		productCount++;
 		String productName = productMapper.getProductByProductId(productId).get(0).getProductName();
-		String availableComputerName = productName+"-"+productCount;
 		//检查AD域中该计算机名不存在，确认可用
-		if (!checkComputerNameByAdId(availableComputerName, adId)){
-			return availableComputerName ;
-		}
-		throw Exceptions.newBusinessException("计算机名已存在");
+		return getAvailableComputerName(productName, adId, productCount);
 
 	}
+	//循环体，如果AD中计算机名已存在，自增ID，直到计算机名可用为止
+	private String getAvailableComputerName(String productName, Integer adId,Integer order){
+		String newComputerName = productName+"-"+order;
+		//如果已存在，递增进入下一循环
+		if (checkComputerNameByAdId(newComputerName, adId)){
+			logger.info("计算机名已存在"+newComputerName+"  序号自增+1为"+(++order));
+			newComputerName = getAvailableComputerName(productName, adId, ++order);
+		}
+		return newComputerName;
 
-	public Boolean checkComputerNameByAdId(String computerName, Integer adId) {
+	}
+	/**
+	 *检测桌面是否存在，存在返回TRUE，不存在返回FALSE
+	 * @author xuhe
+	 * @param computerName, adId
+	 * @return java.lang.Boolean
+	 */
+	private Boolean checkComputerNameByAdId(String computerName, Integer adId) {
+
 		CommonRequestBean requestBean = new CommonRequestBean();
 		requestBean.setComputerName(computerName);
 		requestBean.setAdId(adId);
@@ -326,16 +347,19 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 			String strJson = JsonUtil.serialize(requestBean);
 			String strResponse = HttpClientUtil.mysend(
                     HttpConfigBuilder.buildHttpConfigNoToken(url, strJson, 5, "utf-8", 10000).method(HttpMethods.POST));
-			MyHttpResponse myHttpResponse = JsonUtil.deserialize(strResponse, MyHttpResponse.class);
-			System.out.println(myHttpResponse);
-			if (myHttpResponse.getStatusCode()==HttpStatus.OK.value()){
+			MyHttpResponse response = JsonUtil.deserialize(strResponse, MyHttpResponse.class);
+			ResultObject resultObject = JsonUtil.deserialize(response.getBody(), ResultObject.class);
+			//计算机存在，返回200，不存在返回400
+			if (resultObject.getCode()==HttpStatus.OK.value()){
 				System.out.println("TRUE");
 				return Boolean.TRUE;
+			} else if (resultObject.getCode() == HttpStatus.BAD_REQUEST.value()) {
+				return Boolean.FALSE;
 			}
 		} catch (HttpProcessException e) {
-			e.printStackTrace();
+			throw Exceptions.newBusinessException(e.getMessage());
 		}
-		return Boolean.FALSE;
+		throw Exceptions.newBusinessException("桌面检查失败");
 	}
 
 
