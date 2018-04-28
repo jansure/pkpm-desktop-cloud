@@ -22,7 +22,7 @@ public class SubscriptionServiceImplTest {
 
     @Test
     public void getAvailableComputerName() throws Exception {
-        String availableName = service.getAvailableComputerName(1, 1);
+        String availableName = service.getAvailableComputerName(1, 4);
         System.out.println(availableName);
     }
 
