@@ -116,7 +116,7 @@ public class AdServiceImpl implements AdService {
         Preconditions.checkNotNull(requestBean);
         PkpmOperatorStatus operatorStatus = new PkpmOperatorStatus().setDefault();
         BeanUtil.copyPropertiesIgnoreNull(requestBean, operatorStatus);
-        operatorStatus.setStatus(JobStatusEnum.AD_CREATE.toString());
+        operatorStatus.setStatus(JobStatusEnum.INITIAL.toString());
         operatorStatus.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
         PkpmOperatorStatusBeanUtil.checkNotNull(operatorStatus);
 
@@ -204,7 +204,7 @@ public class AdServiceImpl implements AdService {
         Preconditions.checkNotNull(requestBean);
         PkpmOperatorStatus operatorStatus = new PkpmOperatorStatus().setDefault();
         BeanUtil.copyPropertiesIgnoreNull(requestBean, operatorStatus);
-        operatorStatus.setStatus(JobStatusEnum.AD_CREATE.toString());
+        operatorStatus.setStatus(JobStatusEnum.INITIAL.toString());
         operatorStatus.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
         PkpmOperatorStatusBeanUtil.checkNotNull(operatorStatus);
 
