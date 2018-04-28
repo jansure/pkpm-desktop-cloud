@@ -123,6 +123,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		if(HttpStatus.OK.value() != code){
 			throw  Exceptions.newBusinessException(result.getMessage());
 		}
+		
 		Map<String,String> map = (Map<String, String>) result.getData();
 		adId = map.get("adId");
 		projectId = map.get("projectId");
