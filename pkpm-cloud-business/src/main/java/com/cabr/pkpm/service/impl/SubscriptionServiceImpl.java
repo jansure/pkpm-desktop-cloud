@@ -64,7 +64,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	
 	@Resource
 	private ComponentMapper componentMapper;
-	
+	@Resource
 	private RedisCacheUtil<MyProduct> redisCacheUtil;
 	
 	protected ResponseResult result = new ResponseResult();
@@ -277,12 +277,26 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	 * @return java.lang.String
 	 */
 	@Override
-	public String  updateSubsCriptionBySubsId(SubsCription subsCription) {
+	public String  updateSubsCriptionBySubsId(SubsCription sub) {
 
-		int result =subscriptionMapper.updateSubsCriptionBySubsId(subsCription);
+		//根据subsId获取完整信息;
+		SubsCription oldSub = subscriptionMapper.selectSubscriptionBySubsId(sub.getSubsId());
+		Preconditions.checkNotNull(oldSub, "订单信息不存在，输入错误");
+
+		//清空缓存
+		Integer userId = oldSub.getUserId();
+		List<Object> cacheList = redisCacheUtil.getCacheList("MyProduct:"+userId);
+		if(cacheList !=null&&cacheList.size()>0 ){
+			redisCacheUtil.delete("MyProduct:"+userId);
+			logger.info("MyProduct:"+userId+" 缓存被清空");
+		}
+
+		//更新数据库状态
+		int result =subscriptionMapper.updateSubsCriptionBySubsId(sub);
 		Preconditions.checkArgument(result==1,"订单更新失败");
-		return "更新状态成功";
+		return String.format("状态更新成功 %s更新至%s",oldSub.getStatus(),sub.getStatus());
 	}
+
 	@Override
 	public List<SubsCription> findSubsCriptionByProductName(Integer userId) {
 

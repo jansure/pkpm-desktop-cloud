@@ -95,6 +95,7 @@ public class UserServiceImpl implements IUserService {
     @Transactional
     //0428 新增事务管理，若gateway请求失败，则数据库回滚，保证密码一致性
     public String changeUserPassword(UserInfoForChangePassword newUserInfo, List<SubsCription> subsList) {
+
         Integer userID = newUserInfo.getUserId();
         String oldPassword = newUserInfo.getOldPassword();
         String newPassword = newUserInfo.getNewPassword();
