@@ -6,12 +6,10 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSON;
 import com.desktop.utils.Base64Util;
 import com.desktop.utils.HttpConfigBuilder;
 import com.desktop.utils.JsonUtil;
@@ -29,18 +27,18 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dao.UserDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.UserService;
+import com.pkpmdesktopcloud.redis.RedisCache;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
+	
+	private static final String USER_ID = "user";
 
     @Resource
     private UserDAO userMapper;
-
-    @Resource
-    private StringRedisTemplate stringRedisTemplate;
 
     @Value("${server.host}")
     private String serverHost;
@@ -55,7 +53,10 @@ public class UserServiceImpl implements UserService {
     public boolean updateUserInfo(UserInfo userInfo) {
 
         if (userMapper.updateUserInfo(userInfo) > 0) {
-            stringRedisTemplate.opsForValue().set("user:" + userInfo.getUserID(), JSON.toJSONString(userInfo));
+        	
+        	RedisCache cache = new RedisCache(USER_ID);
+        	cache.putObject(userInfo.getUserID(), userInfo);
+            
             return true;
         } else {
             return false;

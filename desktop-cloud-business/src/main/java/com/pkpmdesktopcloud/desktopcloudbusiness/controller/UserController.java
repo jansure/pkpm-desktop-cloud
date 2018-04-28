@@ -3,7 +3,6 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,10 +10,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.ibatis.executor.loader.ResultLoader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,23 +28,23 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.domain.WorkOrder;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubscriptionService;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.UserService;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.WorkOrderService;
+import com.pkpmdesktopcloud.redis.RedisCache;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
+	
+	//Redis Cache ID： 验证码
+	private static final String REAL_CHECK_CODE_ID = "realCheckCode";
 
 	@Autowired
-	private StringRedisTemplate stringRedisTemplate;
-	@Autowired
 	private UserService userService;
+	
 	@Autowired
 	private WorkOrderService workOrderService;
+	
 	@Autowired
 	private SubscriptionService subscriptionService;
-	
-	
-	@Value("${server.host}")
-	private String serverHost;
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
@@ -70,7 +66,9 @@ public class UserController {
 		Preconditions.checkArgument(StringUtils.isBlank(userName),"用户名不能为空");
 		Preconditions.checkArgument(StringUtils.isBlank(userLoginPassword),"密码不能为空");
 		
-		String realCheckCode = stringRedisTemplate.opsForValue().get(userMobileNumber);
+		RedisCache cache = new RedisCache(REAL_CHECK_CODE_ID);
+		String realCheckCode = (String)cache.getObject(userMobileNumber);
+		
 		if (!checkCode.equals(realCheckCode)) {
 			response.setContentType("text/html;charset=utf-8");
 			return ResultObject.failure("验证码错误");
@@ -91,7 +89,7 @@ public class UserController {
 		userInfo.setUserLoginPassword(userLoginPassword);
 		userService.saveUserInfo(userInfo);
 		
-		stringRedisTemplate.delete(userMobileNumber);
+		cache.removeObject(userMobileNumber);
 		
 		return ResultObject.success("恭喜您注册成功");
 		
@@ -156,7 +154,11 @@ public class UserController {
 		
 		try {
 			String checkCode = RandomStringUtils.randomNumeric(4);
-			stringRedisTemplate.opsForValue().set(userMobileNumber, checkCode, 60 * 15, TimeUnit.SECONDS);
+			
+			RedisCache cache = new RedisCache(REAL_CHECK_CODE_ID);
+			cache.setTimeOut(60 * 15);
+			cache.putObject(userMobileNumber, checkCode);
+			
 			String message = "您的短信验证码是:" + checkCode + "，请注意查收";
 			SmsUtil clientDemo = new SmsUtil();
 			clientDemo.smsPublish(userMobileNumber, message);
@@ -305,7 +307,8 @@ public class UserController {
 		String userMobileNumber = user.getUserMobileNumber();
 		
 		//获取真正验证码
-		String realCheckCode = stringRedisTemplate.opsForValue().get(userMobileNumber);
+		RedisCache cache = new RedisCache(REAL_CHECK_CODE_ID);
+		String realCheckCode = (String)cache.getObject(userMobileNumber);
 		
 		Preconditions.checkArgument(!userMobileNumber.equals(oldMobileNumber), "原手机号输入错误");
 		Preconditions.checkArgument(!checkCode.equals(realCheckCode), "验证码输入错误");
@@ -351,7 +354,8 @@ public class UserController {
 		Preconditions.checkArgument(StringUtils.isBlank(checkCode), "验证码不能为空");
 		
 		//获取真正验证码
-		String realCheckCode = stringRedisTemplate.opsForValue().get(mobileNumber);
+		RedisCache cache = new RedisCache(REAL_CHECK_CODE_ID);
+		String realCheckCode = (String)cache.getObject(mobileNumber);
 		if (!checkCode.equals(realCheckCode)) {
 
 			return ResultObject.failure("验证码输入错误");

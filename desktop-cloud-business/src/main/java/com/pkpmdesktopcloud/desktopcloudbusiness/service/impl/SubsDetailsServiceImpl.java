@@ -17,10 +17,12 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dao.SubsDetailsDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.SubscriptionDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.WorkOrderDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ProductInfo;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsDetails;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.MyProduct;
 import com.pkpmdesktopcloud.desktopcloudbusiness.page.PageBean;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubsDetailsService;
+import com.pkpmdesktopcloud.redis.RedisCache;
 
 @Service
 public class SubsDetailsServiceImpl implements SubsDetailsService {
@@ -46,7 +48,9 @@ public class SubsDetailsServiceImpl implements SubsDetailsService {
 		PageHelper.startPage(currentPage, pageSize);
 		
 		
-		List<MyProduct> myProducts = redisCacheUtil.getCacheList("MyProduct:"+userId);
+		RedisCache cache = new RedisCache(MY_PRODUCT_ID);
+		List<MyProduct> myProducts = (List<MyProduct>)cache.getObject(userId);
+		
 		
 		LocalDateTime nowTime = LocalDateTime.now();
 		// 若存在Redis缓存，从缓存中读取
@@ -118,7 +122,7 @@ public class SubsDetailsServiceImpl implements SubsDetailsService {
 				
 			}
 			
-			redisCacheUtil.setCacheList("MyProduct:"+userId, myProducts);
+			cache.putObject(userId, myProducts);
 		}
 		
 		PageBean<MyProduct> pageData = new PageBean<>(currentPage,pageSize,myProducts.size());

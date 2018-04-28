@@ -2,6 +2,7 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.controller;
 
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +19,23 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.MyProduct;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.WorkOrderVO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubsDetailsService;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubscriptionService;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.UserService;
+import com.pkpmdesktopcloud.redis.RedisCache;
 
 @RestController
 @RequestMapping("/subscription")
 public class SubscriptionController {
 	
-	@Autowired
+	@Resource
 	private SubscriptionService subscription;
-	@Autowired
+	
+	@Resource
 	private UserService userService;
+	
+	@Resource
+	private SubsDetailsService subsDetailsService;
 	
 	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
 	@RequestMapping(value="/immediatelyUse",method=RequestMethod.POST)
@@ -43,7 +50,9 @@ public class SubscriptionController {
 			return ResultObject.failure("请重新登录");
 		}
 		
-		List<MyProduct> myProducts = redisCacheUtil.getCacheList("MyProduct:"+userId);
+		RedisCache cache = new RedisCache(subsDetailsService.MY_PRODUCT_ID);
+		List<MyProduct> myProducts = (List<MyProduct>)cache.getObject(userId);
+		
 		if(myProducts != null && myProducts.size() > 5){
 			
 			return ResultObject.failure("您购买的条数已达到上限");
