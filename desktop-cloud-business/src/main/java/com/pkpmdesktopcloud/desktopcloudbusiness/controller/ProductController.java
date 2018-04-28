@@ -10,26 +10,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.desktop.utils.Base64Util;
 import com.desktop.utils.FileUtil;
 import com.desktop.utils.SmsUtil;
-import com.desktop.utils.StringUtil;
 import com.desktop.utils.page.ResultObject;
 import com.google.common.base.Preconditions;
+import com.pkpm.httpclientutil.common.util.JsonUtil;
 import com.pkpmdesktopcloud.desktopcloudbusiness.constants.SysConstant;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.Navigation;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dto.FileServerResponse;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.ProductService;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.WorkOrderService;
+import com.pkpmdesktopcloud.redis.RedisCache;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,15 +41,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping(value = "/product")
 public class ProductController {
+	
+	private static final String ALL_NAVIGATION_ID = "allNavigation";
+	
 	@Resource
 	private ProductService productService;
 	
 	@Resource
 	private WorkOrderService workOrderService;
 	
-	@Resource
-	private StringRedisTemplate stringRedisTemplate;
-
 	/**
 	 * 获取全部导航列表
 	 * 
@@ -62,18 +60,21 @@ public class ProductController {
 	public List<Navigation> getNavigation(HttpServletResponse response) {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		String str = stringRedisTemplate.opsForValue().get("allNavigation");
+		
+		RedisCache cache = new RedisCache(ALL_NAVIGATION_ID);
+		List<Navigation> listNav = (List<Navigation>)cache.getObject("all");
+		
 		// 若存在Redis缓存，从缓存中读取
-		if (StringUtils.isNotBlank(str)) {
-			List<Navigation> listNav = JSON.parseArray(str, Navigation.class);
-			return listNav;
-		} else {
-			// 若不存在对应的Redis缓存，从数据库查询
-			List<Navigation> listNav = productService.getNavByPid(SysConstant.NAVIGATION_ID);
-			// 写入Redis缓存
-			stringRedisTemplate.opsForValue().set("allNavigation", JSON.toJSONString(listNav));
+		if (listNav != null) {
+
 			return listNav;
 		}
+		
+		// 若不存在对应的Redis缓存，从数据库查询
+		listNav = productService.getNavByPid(SysConstant.NAVIGATION_ID);
+		// 写入Redis缓存
+		cache.putObject("all", listNav);
+		return listNav;
 	}
 
 	//fixme 移到其他资源类里边
@@ -100,31 +101,30 @@ public class ProductController {
 
 		String json = FileUtil.loadJson(fileUrl);
 		// System.out.println(json); //检测是否正确获得
-		JSONObject jsonObject = JSONObject.parseObject(json);
-		// System.out.println(jsonObject.get("files"));
-		JSONArray array = null;
-		if (jsonObject.get("files") != null) {
-			array = JSON.parseArray(jsonObject.get("files").toString());
-			// 遍历已有的文件列表，看文件名是否存在
-			for (int i = 0; i < array.size(); i++) {
-				try {
-					if (filename.equals(array.getString(i))) {
-						// 若存在该文件名，则开启下载；若不存在，抛出异常
-						String filePath = fileUrl + "/" + filename;
-						FileUtil.downloadFile(filePath, isOnLine, request, response);
-						log.debug("FileUtil.downloadFile:" + filePath);
-						return ResultObject.success(filePath, "下载成功！");
-					}
-					
-				} catch (Exception e) {
-					String msg = "<" + array.getString(i) + ">下载失败！";
-					log.error(e.getMessage());
-					return ResultObject.failure(msg);
-				}
-			}
-		} 
 		
-		return ResultObject.failure("该文件不存在！");
+		FileServerResponse fileServerResponse = JsonUtil.deserialize(json, FileServerResponse.class);
+		if (fileServerResponse != null && fileServerResponse.getFiles() != null) {
+		// 遍历已有的文件列表，看文件名是否存在
+			try {
+				if (fileServerResponse.getFiles().contains(filename)) {
+					// 若存在该文件名，则开启下载；若不存在，抛出异常
+					String filePath = fileUrl + "/" + filename;
+					FileUtil.downloadFile(filePath, isOnLine, request, response);
+					log.debug("FileUtil.downloadFile:" + filePath);
+					return ResultObject.success(filePath, "下载成功！");
+				}
+				
+				return ResultObject.failure("该文件不存在！");
+				
+			} catch (Exception e) {
+				
+				log.error(e.getMessage());
+				
+			}
+		}
+		
+		String msg = "<" + filename + ">下载失败！";
+		return ResultObject.failure(msg);
 	}
 
 	/**
@@ -250,4 +250,5 @@ public class ProductController {
 		
 		return ResultObject.failure("获取失败");
 	}
+	
 }

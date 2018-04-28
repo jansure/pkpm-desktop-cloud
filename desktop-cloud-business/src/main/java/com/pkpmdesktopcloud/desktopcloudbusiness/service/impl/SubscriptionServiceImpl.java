@@ -6,16 +6,13 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSON;
 import com.desktop.constant.ComponentTypeConstant;
 import com.desktop.constant.DesktopConstant;
 import com.desktop.utils.HttpConfigBuilder;
@@ -42,18 +39,20 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsDetails;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.WorkOrderVO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubscriptionService;
+import com.pkpmdesktopcloud.redis.RedisCache;
 
 @Service
 @Transactional
 public class SubscriptionServiceImpl implements SubscriptionService {
 	
+	private static final String SUBSCRIPTION_USERID_ID = "subsCriptionByUserId";
+	
 	@Resource
 	private SubscriptionDAO subscriptionMapper;
+	
 	@Resource
 	private SubsDetailsDAO subsDetailsMapper;
-	@Resource
-	private StringRedisTemplate stringRedisTemplate;
-
+	
 	@Resource
 	private ProductDAO productMapper;
 	
@@ -255,20 +254,20 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	@Override
 	public List<SubsCription> findSubsCriptionByUserId(Integer userId) {
 		
-		String str = stringRedisTemplate.opsForValue().get("subsCriptionByUserId:" + userId);
+		RedisCache cache = new RedisCache(SUBSCRIPTION_USERID_ID);
+		List<SubsCription> subsCriptionList = (List<SubsCription>)cache.getObject(userId);
 		
 		// 若存在Redis缓存，从缓存中读取
-		if (StringUtils.isNotBlank(str)) {
-			List<SubsCription> subsCription = JSON.parseArray(str, SubsCription.class);
-			return subsCription;
-		} else {
-			// 若不存在对应的Redis缓存，从数据库查询
-			List<SubsCription> subsCription = subscriptionMapper.findSubsCriptionByUserId(userId);
-			// 写入Redis缓存
-			//fixme 解决JSON序列化问题
-			/*stringRedisTemplate.opsForValue().set("subsCriptionByUserId:" + userId, JSON.toJSONString(subsCription));*/
-			return subsCription;
+		if(subsCriptionList != null) {
+			
+			return subsCriptionList;
 		}
+		
+		// 若不存在对应的Redis缓存，从数据库查询
+		subsCriptionList = subscriptionMapper.findSubsCriptionByUserId(userId);
+		// 写入Redis缓存
+		cache.putObject(userId, subsCriptionList);
+		return subsCriptionList;
 	}
 	/**
 	 *根据subsId更新订单状态
