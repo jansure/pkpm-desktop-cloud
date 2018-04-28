@@ -226,7 +226,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 					pkpmOperatorStatus.setAreaCode(areaCode);
 					
 					List<Object> cacheList = redisCacheUtil.getCacheList("MyProduct:"+userId);
-					if(cacheList.size() == 0 ){
+					if(cacheList.size() != 0 ){
 						redisCacheUtil.delete("MyProduct:"+userId);
 					}
 					

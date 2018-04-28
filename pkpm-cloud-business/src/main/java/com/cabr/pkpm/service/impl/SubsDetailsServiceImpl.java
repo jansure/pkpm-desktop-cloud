@@ -26,6 +26,7 @@ import com.cabr.pkpm.utils.sdk.PageBean;
 import com.cabr.pkpm.utils.sdk.RedisCacheUtil;
 import com.cabr.pkpm.utils.sdk.StringOrDate;
 import com.cabr.pkpm.vo.MyProduct;
+import com.desktop.constant.SubscriptionStatusEnum;
 import com.desktop.utils.HttpConfigBuilder;
 import com.desktop.utils.JsonUtil;
 import com.desktop.utils.exception.Exceptions;
@@ -74,7 +75,7 @@ public class SubsDetailsServiceImpl implements ISubsDetailsService {
 		
 		LocalDateTime nowTime = LocalDateTime.now();
 		// 若存在Redis缓存，从缓存中读取
-		if(myProducts!= null && myProducts.size()>0) {
+		/*if(myProducts!= null && myProducts.size()>0) {
 			
 			for (MyProduct myProduct : myProducts) {
 				String invalid = myProduct.getInvalidTime();
@@ -89,13 +90,14 @@ public class SubsDetailsServiceImpl implements ISubsDetailsService {
 			}
 			this.result.set("读取成功", 1, myProducts.size()+"", myProducts);
 			return this.result;
-		} else {
-			List<Long> subsIds = subscriptionMapper.findSubsId(userId);
+		} else {*/
 			
-			for (Long subsId : subsIds) {
+			List<SubsCription> subsCriptionList = subscriptionMapper.findSubsCriptionByUserId(userId);
+			
+			for (SubsCription subsCription : subsCriptionList) {
 				
+				Long subsId = subsCription.getSubsId();
 				List<SubsDetails> subsDetails = subsDetailsMapper.findSubsDetailsList(subsId);
-				SubsCription subsCription = subscriptionMapper.selectSubscriptionBySubsId(subsId);
 				
 				for (SubsDetails subs : subsDetails) {
 					Integer productId = subs.getProductId();
@@ -115,18 +117,6 @@ public class SubsDetailsServiceImpl implements ISubsDetailsService {
 					List<ProductInfo> products = productMapper.getProductByProductId(productId);
 					String productDesc = products.get(0).getProductDesc(); 
 					List<String> componentNames = new ArrayList<>();
-//					List<String> hostIp = workOrderMapper.findHostIp(userId, subsId, productId);
-//					List<Integer> status = workOrderMapper.findStatus(userId, subsId, productId);
-					
-//					if (null == hostIp || hostIp.size() == 0) {
-//						this.result.set("主机Ip不能为空", 0);
-//						return this.result;
-//					}
-//					
-//					if (null == status || status.size() == 0) {
-//						this.result.set("status不能为空", 0);
-//						return this.result;
-//					}
 					
 					for (ProductInfo productInfo : products) {
 						
@@ -147,8 +137,6 @@ public class SubsDetailsServiceImpl implements ISubsDetailsService {
 					myProduct.setInvalidTime(invalid);
 					myProduct.setProductDesc(productDesc);
 					myProduct.setFlagTime(flagTime);
-//					myProduct.setHostIp(hostIp.get(0));
-//					myProduct.setStatus(status.get(0));
 					
 					String status2 = subsCription.getStatus();
 					String areaCode = subsCription.getAreaCode();
@@ -183,7 +171,7 @@ public class SubsDetailsServiceImpl implements ISubsDetailsService {
 						
 						e.printStackTrace();
 					}
-					if(StringUtils.isNotEmpty(status2) && "VALID".equals(status2)){
+					if(StringUtils.isNotEmpty(status2) && SubscriptionStatusEnum.VALID.toString().equals(status2)){
 						myProduct.setStatus(1);
 						myProduct.setHostIp(destinationIp);
 					}else{
@@ -194,15 +182,16 @@ public class SubsDetailsServiceImpl implements ISubsDetailsService {
 				}
 				
 			}
+	
 			
 			PageBean<MyProduct> pageData = new PageBean<>(currentPage,pageSize,myProducts.size());
 			
 			pageData.setItems(myProducts);
 			
-			redisCacheUtil.setCacheList("MyProduct:"+userId, pageData.getItems());
+			//redisCacheUtil.setCacheList("MyProduct:"+userId, pageData.getItems());
 			this.result.set("读取成功", 1, pageData.getTotalNum()+"", myProducts);
 		    return this.result;
-		}
+		//}
 	}
 
 }
