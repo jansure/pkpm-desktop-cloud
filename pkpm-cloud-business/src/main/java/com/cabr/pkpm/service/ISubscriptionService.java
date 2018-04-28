@@ -25,5 +25,5 @@ public interface ISubscriptionService {
 
 	List<SubsCription> findSubsCriptionByProductName(Integer userId);
 
-	String getAvailableComputerName(Integer productId, Integer adId);
+	String getAvailableComputerName(Integer productId, String projectId,Integer adId);
 }

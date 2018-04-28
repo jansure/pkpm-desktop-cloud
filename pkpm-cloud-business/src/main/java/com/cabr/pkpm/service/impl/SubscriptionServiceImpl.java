@@ -184,7 +184,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		
 		//根据user_id和status查询计算机名
 		String userName = userInfo.getUserName();
-		productName = getAvailableComputerName(productId, Integer.parseInt(adId));
+		productName = getAvailableComputerName(productId,projectId, Integer.parseInt(adId));
 		//查询成功的条数
 		Integer nextNum = 1 + subscriptionMapper.selectTotalById(userId);
 		if(nextNum >= 1 + DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT)
@@ -323,10 +323,10 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	 * @return java.lang.String
 	 */
 	@Override
-	public String getAvailableComputerName(Integer productId, Integer adId) {
+	public String getAvailableComputerName(Integer productId, String projectId,Integer adId) {
 
 		//adId+productId对应的产品总数
-		Integer productCount = subscriptionMapper.selectProductCountByAdId(productId,adId);
+		Integer productCount = subscriptionMapper.selectProductCountByProjectId(productId,projectId);
 		//count自增，返回对应的可用计算机名
 		productCount++;
 		String productName = productMapper.getProductByProductId(productId).get(0).getProductName();
@@ -371,7 +371,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 				return Boolean.FALSE;
 			}
 		} catch (HttpProcessException e) {
-			throw Exceptions.newBusinessException(e.getMessage());
+			throw Exceptions.newBusinessException("http连接建立失败，请确认gateway服务是否开启\n"+e.getMessage());
 		}
 		throw Exceptions.newBusinessException("桌面检查失败");
 	}
