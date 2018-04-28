@@ -116,13 +116,8 @@ public class CommonRequestBeanBuilder {
 		desktop.setUserGroup("USERS");
 		desktop.setUserEmail(commonRequestBean.getUserEmail());
 		desktop.setProductId(commonRequestBean.getHwProductId());
-		// TODO 有私有镜像后需设置ImageId
-		// if (null != commonRequestBean.getImageId()) {
-		// desktop.setImageId(commonRequestBean.getImageId());
-		// }
-		// ComputerName随机生成，多线程环境下使用ThreadLocalRandom类
-		// ThreadLocalRandom tlr = ThreadLocalRandom.current();
-		// desktop.setComputerName("GL" + tlr.nextInt());
+		// 有私有镜像后需设置ImageId
+		desktop.setImageId(commonRequestBean.getImageId());
 		desktop.setComputerName(commonRequestBean.getGloryProductName());
 		desktop.setRootVolume(rootVolume);
 		DataVolume dataVolume = new DataVolume();
