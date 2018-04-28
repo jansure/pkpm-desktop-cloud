@@ -19,4 +19,6 @@ public class MyProduct implements Serializable {
 	private Long subsId;
 	private Integer adId;
 	private String projectId;
+	
+	private String areaCode;
 }

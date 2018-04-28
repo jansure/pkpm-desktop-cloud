@@ -49,7 +49,6 @@ import com.pkpm.httpclientutil.common.HttpMethods;
 import com.pkpm.httpclientutil.exception.HttpProcessException;
 
 @Service
-@Transactional
 public class SubscriptionServiceImpl implements ISubscriptionService {
 	
 	@Resource
@@ -194,23 +193,15 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 
 		//productName.length < 15
 		if(DesktopConstant.DESKTOP_NAME_MAX_LEN > productName.length()) {
-			commonRequestBean.setGloryProductName(productName + nextNum);
-			if(productName.length() + nextNum.toString().length() >
-					DesktopConstant.DESKTOP_NAME_MAX_LEN) {
-				Integer minus = nextNum.toString().length() -
-						(DesktopConstant.DESKTOP_NAME_MAX_LEN - productName.length());
+			commonRequestBean.setGloryProductName(productName );
+			if(productName.length() >DesktopConstant.DESKTOP_NAME_MAX_LEN) {
+				
 				commonRequestBean.setGloryProductName(productName.substring(0,
-						DesktopConstant.DESKTOP_NAME_MAX_LEN - minus
-				) + nextNum);
+						DesktopConstant.DESKTOP_NAME_MAX_LEN));
 			}
 
 		}
-		else {
-			commonRequestBean.setGloryProductName(productName.substring(0,
-					DesktopConstant.DESKTOP_NAME_MAX_LEN - nextNum.toString().length())
-					+ nextNum);
-		}
-
+		
 		commonRequestBean.setAreaCode(areaCode);
 		String urlCreateAdAndDesktop =serverHost + "/desktop/createAdAndDesktop";
 		String strJson = JsonUtil.serialize(commonRequestBean);
@@ -235,7 +226,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 					pkpmOperatorStatus.setAreaCode(areaCode);
 					
 					List<Object> cacheList = redisCacheUtil.getCacheList("MyProduct:"+userId);
-					if(cacheList !=null ){
+					if(cacheList.size() == 0 ){
 						redisCacheUtil.delete("MyProduct:"+userId);
 					}
 					
@@ -277,6 +268,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	 * @return java.lang.String
 	 */
 	@Override
+
 	public String  updateSubsCriptionBySubsId(SubsCription sub) {
 
 		//根据subsId获取完整信息;
@@ -293,6 +285,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 
 		//更新数据库状态
 		int result =subscriptionMapper.updateSubsCriptionBySubsId(sub);
+
 		Preconditions.checkArgument(result==1,"订单更新失败");
 		return String.format("状态更新成功 %s更新至%s",oldSub.getStatus(),sub.getStatus());
 	}
@@ -339,7 +332,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		String newComputerName = productName+"-"+order;
 		//如果已存在，递增进入下一循环
 		if (checkComputerNameByAdId(newComputerName, adId)){
-			logger.info("计算机名已存在"+newComputerName+"  序号自增+1为"+(++order));
+			logger.info("计算机名已存在"+newComputerName+"  序号自增+1为"+(order+1));
 			newComputerName = getAvailableComputerName(productName, adId, ++order);
 		}
 		return newComputerName;

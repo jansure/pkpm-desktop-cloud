@@ -159,7 +159,7 @@ public class SubsDetailsServiceImpl implements ISubsDetailsService {
 					myProduct.setSubsId(subsId);
 					myProduct.setAdId(subsCription.getAdId());
 					myProduct.setProjectId(projectId);
-					
+					myProduct.setAreaCode(areaCode);
 					try {
 						
 						String urlGetProjectDef =serverHost + "/params/getProjectDef?areaCode=" + areaCode + "&projectId=" +  projectId;

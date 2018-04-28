@@ -40,18 +40,8 @@ public class StatusController {
 			this.result.set("查询桌面状态失败,请重新尝试!",0 , statusObject);
 			return this.result;
 		}
-		//StatusObject statusObject = statusService.queryDesktopStatus(commonRequestBean);
-		//String response = statusService.queryDesktopStatus(commonRequestBean);
-		
-//		if(response == null ){
-//			this.result.set("查询桌面状态失败,请重新尝试!", 0);
-//			return this.result;
-//		}
-//		this.result.set("查询桌面状态成功!",1 , response);
-//		return this.result;
 		
 		if(statusObject == null ){
-			//this.result.set("查询桌面状态失败,请重新尝试!", 0);
 			this.result.set("查询桌面状态失败,请重新尝试!",0 , statusObject);
 			return this.result;
 		
@@ -59,7 +49,6 @@ public class StatusController {
 		
 		UserInfo user = userService.findUser(commonRequestBean.getUserId());
 		String userName = user.getUserName();
-		//statusObject.put("username", userName);
 		statusObject.setUsername(userName);
 		
 		this.result.set("查询桌面状态成功!",1 , statusObject);
