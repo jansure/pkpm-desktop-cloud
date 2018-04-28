@@ -232,22 +232,19 @@ public class UserController {
 		
 		if (StringUtils.isBlank(userInfo.getUserIdentificationCard()) && StringUtils.isBlank(userInfo.getUserIdentificationName())
 				&& StringUtils.isBlank(userInfo.getUserOrganization())) {
-			this.result.set("至少选择一项填写", 0);
-			return this.result;
+			return ResultObject.failure("至少选择一项填写");
 		}
 		
 		// 
 		if (StringUtils.isNotBlank(userInfo.getUserIdentificationCard()) && userInfo.getUserIdentificationCard().length()>18) {
-			this.result.set("身份证号长度不能大于18", 0);
-			return this.result;
+			return ResultObject.failure("身份证号长度不能大于18");
 		}
+		
 		if (StringUtils.isNotBlank(userInfo.getUserIdentificationName()) && userInfo.getUserIdentificationName().length()>40) {
-			this.result.set("姓名长度不能大于40", 0);
-			return this.result;
+			return ResultObject.failure("姓名长度不能大于40");
 		}
 		if (StringUtils.isNotBlank(userInfo.getUserOrganization()) && userInfo.getUserOrganization().length()>45) {
-			this.result.set("公司名称长度不能大于45", 0);
-			return this.result;
+			return ResultObject.failure("公司名称长度不能大于45");
 		}
 		
 		String userIdentificationCard = StringUtils.deleteWhitespace(userInfo.getUserIdentificationCard());
@@ -266,11 +263,11 @@ public class UserController {
 		}
 	
 		if (!userService.updateUserInfo(user)) {
-			this.result.set("更新失败", 0);
-		} else {
-			this.result.set("更新成功", 1, user);
+
+			return ResultObject.failure("更新失败");
 		}
-		return this.result;
+		
+		return ResultObject.success(user, "更新成功");
 
 	}
 	
@@ -286,32 +283,18 @@ public class UserController {
 		// 允许跨域访问
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		
+		Preconditions.checkArgument(map == null || map.size() < 5, "参数个数不对");
 		Integer userID = new Integer(map.get("userID"));
 		String oldMobileNumber = map.get("oldMobileNumber");
 		String checkCode = map.get("checkCode");
 		String newMobileNumber = map.get("newMobileNumber");
 		String password = map.get("password");
 		
-		if (StringUtils.isBlank(checkCode)) {
-			this.result.set("验证码不能为空", 0);
-			return this.result;
-		}
-
-		if (StringUtils.isBlank(newMobileNumber)) {
-			this.result.set("手机号不能为空", 0);
-			return this.result;
-		}
+		Preconditions.checkArgument(StringUtils.isBlank(checkCode), "验证码不能为空");
+		Preconditions.checkArgument(StringUtils.isBlank(newMobileNumber), "手机号不能为空");
+		Preconditions.checkArgument(!newMobileNumber.equals(StringUtils.deleteWhitespace(newMobileNumber)), "手机号不能带空格");
+		Preconditions.checkArgument(StringUtils.isBlank(password), "密码不能为空");
 		
-		if (!newMobileNumber.equals(StringUtils.deleteWhitespace(newMobileNumber))) {
-			this.result.set("手机号不能带空格", 0);
-			return this.result;
-		}
-		
-		if (StringUtils.isBlank(password)) {
-			this.result.set("密码不能为空", 0);
-			return this.result;
-		}
-
 		UserInfo user = userService.findUser(userID);
 		
 		// 从数据库中查出password并解密
@@ -324,44 +307,29 @@ public class UserController {
 		//获取真正验证码
 		String realCheckCode = stringRedisTemplate.opsForValue().get(userMobileNumber);
 		
-		if (!userMobileNumber.equals(oldMobileNumber)) {
-			this.result.set("原手机号输入错误", 0);
-			return this.result;
-		}
+		Preconditions.checkArgument(!userMobileNumber.equals(oldMobileNumber), "原手机号输入错误");
+		Preconditions.checkArgument(!checkCode.equals(realCheckCode), "验证码输入错误");
+		Preconditions.checkArgument(!realPassword.equals(password), "密码输入错误");
 		
-		if (!checkCode.equals(realCheckCode)) {
-			this.result.set("验证码输入错误", 0);
-			return this.result;
-		}
+		UserInfo userInfo = userService.findByUserNameOrTelephoneOrUserEmail(newMobileNumber);
+		Preconditions.checkNotNull(userInfo, "该手机号已存在，请换一个手机号");
 		
-		if (!realPassword.equals(password)) {
-			this.result.set("密码输入错误", 0);
-			return this.result;
-		}
-		
-		if (userService.findByUserNameOrTelephoneOrUserEmail(newMobileNumber)!=null) {
-			this.result.set("该手机号已存在，请换一个手机号", 0);
-			return this.result;
-		}
-
 		user.setUserMobileNumber(newMobileNumber);
 		
 		List<WorkOrder> workOrders = workOrderService.findWorkOrderListByUserId(userID);
 		
 		if(workOrders!=null && !workOrders.isEmpty()){
 			if (!userService.updateUserInfo(user) || !workOrderService.updatePasswordOrMobileNumber(userID, null, newMobileNumber)) {
-				this.result.set("手机号修改失败，请再试一次", 0);
-				return this.result;
+				
+				return ResultObject.failure("手机号修改失败，请再试一次");
 			}
 		}else{
 			if (!userService.updateUserInfo(user)) {
-				this.result.set("密码修改失败", 0);
-				return this.result;
+				return ResultObject.failure("密码修改失败");
 			}
 		}
 		
-		this.result.set("手机号修改成功", 1, user);
-		return this.result;
+		return ResultObject.success(user, "手机号修改成功");
 	}
 	
 	/**
@@ -375,35 +343,24 @@ public class UserController {
 	public ResultObject getBackPassword(@RequestBody Map<String, String> map, HttpServletResponse response) throws Exception {	
 		// 允许跨域访问
 		response.setHeader("Access-Control-Allow-Origin", "*");
+		Preconditions.checkArgument(map == null || map.size() < 2, "参数个数不对");
 		
 		String mobileNumber = map.get("mobileNumber");
-
-		if (StringUtils.isBlank(mobileNumber)) {
-			this.result.set("手机号不能为空", 0);
-			logger.debug(this.result.getMessage());
-			return this.result;
-		}
-		
 		String checkCode = map.get("checkCode");
+		Preconditions.checkArgument(StringUtils.isBlank(mobileNumber), "手机号不能为空");
+		Preconditions.checkArgument(StringUtils.isBlank(checkCode), "验证码不能为空");
 		
-		if (StringUtils.isBlank(checkCode)) {
-			this.result.set("验证码不能为空", 0);
-			return this.result;
-		}
-		
-		UserInfo user = userService.findByUserNameOrTelephoneOrUserEmail(mobileNumber);
-		
-		if(user == null){
-			this.result.set("您的手机号尚未注册，快去注册吧", 0);
-			return this.result;
-		}
-
 		//获取真正验证码
 		String realCheckCode = stringRedisTemplate.opsForValue().get(mobileNumber);
-		
 		if (!checkCode.equals(realCheckCode)) {
-			this.result.set("验证码输入错误", 0);
-			return this.result;
+
+			return ResultObject.failure("验证码输入错误");
+		}
+				
+		UserInfo user = userService.findByUserNameOrTelephoneOrUserEmail(mobileNumber);
+		if(user == null){
+
+			return ResultObject.failure("您的手机号尚未注册，快去注册吧");
 		}
 		
 		try {
@@ -411,14 +368,14 @@ public class UserController {
 			String message = "您的密码是:" + password + "，请记住密码";
 			SmsUtil clientDemo = new SmsUtil();
 			clientDemo.smsPublish(mobileNumber, message);
-			this.result.set("您的密码将以短信的形式发送到您的手机上，请注意查收", 1);
-			logger.debug(this.result.getMessage());
+
+			return ResultObject.success("您的密码将以短信的形式发送到您的手机上，请注意查收");
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("发送短信产异常:" + e);
-			this.result.set("发送短信失败", 0);
 		}
-		return this.result;
+		
+		return ResultObject.failure("发送短信失败");
 	}
 
 	/**
@@ -430,10 +387,13 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
 	public ResultObject changPassword(@RequestBody UserInfoForChangePassword newUserInfo) throws Exception {
+		
 		Integer userId = newUserInfo.getUserId();
 		List<SubsCription> subsCriptionList = subscriptionService.findSubsCriptionByUserId(userId);
+		
 		logger.info(subsCriptionList);
 		userService.changeUserPassword(newUserInfo, subsCriptionList);
+		
 		return ResultObject.success("密码修改成功");
 	}
 }

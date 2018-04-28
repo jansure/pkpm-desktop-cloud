@@ -19,7 +19,7 @@ public interface ProductService {
 	 * @param productType 父类id
 	 * @return
 	 */
-	List<ProductInfo> getProductByParentId(String productType);
+	List<ProductInfo> getProductByType(Integer productType);
 	/**
      * 根据key值获取对应的value
      * @param key SysConfig的主键

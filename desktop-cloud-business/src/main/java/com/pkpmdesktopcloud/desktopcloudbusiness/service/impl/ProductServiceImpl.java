@@ -44,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
 	private StringRedisTemplate stringRedisTemplate;
 
 	@Override
-	public List<ProductInfo> getProductByParentId(String productType) {
+	public List<ProductInfo> getProductByType(Integer productType) {
 		String str = stringRedisTemplate.opsForValue().get("product:" + productType);
 		// 若存在Redis缓存，从缓存中读取
 		if (StringUtils.isNotBlank(str)) {
@@ -52,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
 			return productInfo;
 		} else {
 			// 若不存在对应的Redis缓存，从数据库查询
-			List<ProductInfo> productInfo = productDAO.getProductByType(StringUtil.stringToInt(productType));
+			List<ProductInfo> productInfo = productDAO.getProductByType(productType);
 			// 写入Redis缓存
 			stringRedisTemplate.opsForValue().set("product:" + productType, JSON.toJSONString(productInfo));
 			return productInfo;
