@@ -3,6 +3,7 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.dao.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -10,10 +11,12 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dao.SubscriptionDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.SubscriptionMapper;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
 
+import javax.annotation.Resource;
+
 @Repository
 public class SubscriptionDAOImpl implements SubscriptionDAO{
 	
-	@Autowired
+	@Resource
 	private SubscriptionMapper subscriptionMapper;
 	
 	/**

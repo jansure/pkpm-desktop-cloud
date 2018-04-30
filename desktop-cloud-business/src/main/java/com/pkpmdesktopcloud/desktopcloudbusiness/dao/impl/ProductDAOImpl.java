@@ -13,10 +13,12 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ProductInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SysConfig;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 
+import javax.annotation.Resource;
+
 @Repository
 public class ProductDAOImpl implements ProductDAO{
 	
-	@Autowired
+	@Resource
 	private ProductMapper productMapper;
 	
 	/**
@@ -86,6 +88,7 @@ public class ProductDAOImpl implements ProductDAO{
 	@Override
 	public List<ComponentVO> getComponentByPid(Integer productType, Integer componentType){
 		//多表查询
+		return null;
 	}
 	
 	/**
@@ -96,6 +99,7 @@ public class ProductDAOImpl implements ProductDAO{
 	@Override
 	public List<Integer> getCompTypeList(Integer productType){
 		//多表查询
+		return null;
 	}
     
     /**

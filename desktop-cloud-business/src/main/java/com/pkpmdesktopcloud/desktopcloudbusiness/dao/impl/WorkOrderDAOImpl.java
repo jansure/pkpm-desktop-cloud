@@ -12,10 +12,13 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dao.WorkOrderDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.WorkOrderMapper;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.WorkOrder;
 
+import javax.annotation.Resource;
+import javax.xml.ws.RequestWrapper;
+
 @Repository
 public class WorkOrderDAOImpl implements WorkOrderDAO{
 	
-	@Autowired
+	@Resource
 	private WorkOrderMapper workOrderMapper;
 
     /**

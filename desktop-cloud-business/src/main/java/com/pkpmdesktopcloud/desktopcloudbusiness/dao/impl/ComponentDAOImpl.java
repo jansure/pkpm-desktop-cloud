@@ -10,10 +10,12 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ComponentDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.ComponentMapper;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ComponentInfo;
 
+import javax.annotation.Resource;
+
 @Repository
 public class ComponentDAOImpl implements ComponentDAO{
 	
-	@Autowired
+	@Resource
 	private ComponentMapper componentMapper;
 	
 	/**

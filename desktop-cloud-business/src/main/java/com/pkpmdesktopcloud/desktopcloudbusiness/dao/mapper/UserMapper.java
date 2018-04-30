@@ -20,7 +20,11 @@ public interface UserMapper {
 	@Select("select * from pkpm_cloud_user_info (#{userInfo})")
     @Lang(SimpleSelectLangDriver.class)
 	List<UserInfo> findUserInfoList(UserInfo userInfo);
-	
+
+	@Select("select * from pkpm_cloud_user_info (#{userInfo})")
+    @Lang(SimpleInsertLangDriver.class)
+    List<UserInfo> select(UserInfo userInfo);
+
 	@Insert("insert into pkpm_cloud_user_info (#{userInfo})")
     @Lang(SimpleInsertLangDriver.class)
     @Options(useGeneratedKeys = true, keyProperty = "userId", keyColumn = "user_id")

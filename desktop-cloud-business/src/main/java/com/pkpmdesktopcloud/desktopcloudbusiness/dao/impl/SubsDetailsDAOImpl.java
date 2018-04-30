@@ -3,6 +3,7 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.dao.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -10,10 +11,12 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dao.SubsDetailsDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.SubsDetailsMapper;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsDetails;
 
+import javax.annotation.Resource;
+
 @Repository
 public class SubsDetailsDAOImpl implements SubsDetailsDAO{
 	
-	@Autowired
+	@Resource
 	private SubsDetailsMapper subsDetailsMapper;
 	
 	/* (非 Javadoc)  
