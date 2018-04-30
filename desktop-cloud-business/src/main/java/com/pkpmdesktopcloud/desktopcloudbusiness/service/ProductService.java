@@ -19,7 +19,7 @@ public interface ProductService {
 	 * @param productType 父类id
 	 * @return
 	 */
-	List<ProductInfo> getProductByParentId(String productType);
+	List<ProductInfo> getProductByType(Integer productType);
 	/**
      * 根据key值获取对应的value
      * @param key SysConfig的主键
@@ -37,7 +37,7 @@ public interface ProductService {
 	 * @param productType 父类id
 	 * @return
 	 */
-    List<ComponentVO> getComponentByPid(String productType, String componentType);
+    List<ComponentVO> getComponentByPid(Integer productType, Integer componentType);
     /**
      * 根据产品套餐类型获取对应的配置类别list
      * @param productType

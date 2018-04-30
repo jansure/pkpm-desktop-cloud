@@ -2,10 +2,15 @@ package com.desktop.constant;
 
 public class DesktopStatusConstant {
 
-    public static final Double initial = 0.05;
-
-    public static final Integer frequency = 5;
-
-    public static final Double range = 0.15;
+	public static final Integer INITIAL = 5;
+	    
+    public static final Integer FREQUENCY = 5;
+    
+    public static final Integer RANGE = 15;
+    
+    
+    public static final String OPERATE_INITIAL = "30"; 
+    
+    public static final String OPERATE_SUCESS = "100"; 
 
 }

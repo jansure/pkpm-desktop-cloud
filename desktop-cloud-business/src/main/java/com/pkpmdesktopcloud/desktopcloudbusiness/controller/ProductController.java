@@ -10,25 +10,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.desktop.utils.Base64Util;
+import com.desktop.utils.FileUtil;
+import com.desktop.utils.SmsUtil;
+import com.desktop.utils.page.ResultObject;
+import com.google.common.base.Preconditions;
+import com.pkpm.httpclientutil.common.util.JsonUtil;
 import com.pkpmdesktopcloud.desktopcloudbusiness.constants.SysConstant;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.Navigation;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dto.FileServerResponse;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.ProductService;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.WorkOrderService;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.Base64Utils;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.ClientDemo;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.FileUtil;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.ResponseResult;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.StringUtil;
+import com.pkpmdesktopcloud.redis.RedisCache;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,17 +41,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping(value = "/product")
 public class ProductController {
+	
+	private static final String ALL_NAVIGATION_ID = "allNavigation";
+	
 	@Resource
 	private ProductService productService;
 	
 	@Resource
 	private WorkOrderService workOrderService;
 	
-	@Resource
-	private StringRedisTemplate stringRedisTemplate;
-
-	protected ResponseResult result = new ResponseResult();
-
 	/**
 	 * 获取全部导航列表
 	 * 
@@ -63,18 +60,21 @@ public class ProductController {
 	public List<Navigation> getNavigation(HttpServletResponse response) {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		String str = stringRedisTemplate.opsForValue().get("allNavigation");
+		
+		RedisCache cache = new RedisCache(ALL_NAVIGATION_ID);
+		List<Navigation> listNav = (List<Navigation>)cache.getObject("all");
+		
 		// 若存在Redis缓存，从缓存中读取
-		if (StringUtils.isNotBlank(str)) {
-			List<Navigation> listNav = JSON.parseArray(str, Navigation.class);
-			return listNav;
-		} else {
-			// 若不存在对应的Redis缓存，从数据库查询
-			List<Navigation> listNav = productService.getNavByPid(SysConstant.NAVIGATION_ID);
-			// 写入Redis缓存
-			stringRedisTemplate.opsForValue().set("allNavigation", JSON.toJSONString(listNav));
+		if (listNav != null) {
+
 			return listNav;
 		}
+		
+		// 若不存在对应的Redis缓存，从数据库查询
+		listNav = productService.getNavByPid(SysConstant.NAVIGATION_ID);
+		// 写入Redis缓存
+		cache.putObject("all", listNav);
+		return listNav;
 	}
 
 	//fixme 移到其他资源类里边
@@ -86,48 +86,45 @@ public class ProductController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/downloads", method = RequestMethod.GET)
-	public ResponseResult getHelp(String filename, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ResultObject getHelp(String filename, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		boolean isOnLine = false;
 		//filename = "BIM协同设计管理云平台.pdf";
-		if (StringUtils.isBlank(filename)) {
-			this.result.set("文件名不能为空", 0);
-			return this.result;
-		}
+		
+		Preconditions.checkArgument(StringUtils.isBlank(filename), "文件名不能为空");
+		
 		log.debug("filename:" + filename + "; isOnLine:" + isOnLine);
+		
 		// 文件系统路径
 		String fileUrl = productService.getSysValue(SysConstant.FILE_BASE_URL);
 
 		String json = FileUtil.loadJson(fileUrl);
 		// System.out.println(json); //检测是否正确获得
-		JSONObject jsonObject = JSONObject.parseObject(json);
-		// System.out.println(jsonObject.get("files"));
-		JSONArray array = null;
-		if (jsonObject.get("files") != null) {
-			array = JSON.parseArray(jsonObject.get("files").toString());
-			// 遍历已有的文件列表，看文件名是否存在
-			for (int i = 0; i < array.size(); i++) {
-				try {
-					if (filename.equals(array.getString(i))) {
-						// 若存在该文件名，则开启下载；若不存在，抛出异常
-						String filePath = fileUrl + "/" + filename;
-						FileUtil.downloadFile(filePath, isOnLine, request, response);
-						log.debug("FileUtil.downloadFile:" + filePath);
-						this.result.set("下载成功！", 1, filePath);
-					} else {
-						this.result.set("该文件不存在！", 0);
-					}
-				} catch (Exception e) {
-					String msg = "<" + array.getString(i) + ">下载失败！";
-					log.error(e.getMessage());
-					this.result.set(msg, 0);
+		
+		FileServerResponse fileServerResponse = JsonUtil.deserialize(json, FileServerResponse.class);
+		if (fileServerResponse != null && fileServerResponse.getFiles() != null) {
+		// 遍历已有的文件列表，看文件名是否存在
+			try {
+				if (fileServerResponse.getFiles().contains(filename)) {
+					// 若存在该文件名，则开启下载；若不存在，抛出异常
+					String filePath = fileUrl + "/" + filename;
+					FileUtil.downloadFile(filePath, isOnLine, request, response);
+					log.debug("FileUtil.downloadFile:" + filePath);
+					return ResultObject.success(filePath, "下载成功！");
 				}
+				
+				return ResultObject.failure("该文件不存在！");
+				
+			} catch (Exception e) {
+				
+				log.error(e.getMessage());
+				
 			}
-		} else {
-			this.result.set("该文件不存在！", 0);
 		}
-		return this.result;
+		
+		String msg = "<" + filename + ">下载失败！";
+		return ResultObject.failure(msg);
 	}
 
 	/**
@@ -139,22 +136,19 @@ public class ProductController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/legalTerms", method = RequestMethod.GET)
-	public ResponseResult getLegalTerms(HttpServletResponse response) {
+	public ResultObject getLegalTerms(HttpServletResponse response) {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		String filename = "法律条款声明.txt";
-		if (StringUtils.isBlank(filename)) {
-			this.result.set("文件名不能为空", 0);
-			return this.result;
-		}
+//		Preconditions.checkArgument(StringUtils.isBlank(filename), "文件名不能为空");
+		
 		String url = productService.getSysValue(SysConstant.FILE_BASE_URL) + "/" + filename;
 		String termsJson = FileUtil.getHttpResponse(url);
 		if (!StringUtils.isEmpty(termsJson)) {
-			this.result.set("获取成功", 1, "1", termsJson);
-		} else {
-			this.result.set("获取失败", 0);
-		}
-		return this.result;
+			return ResultObject.success(termsJson, "获取成功");
+		} 
+		
+		return ResultObject.failure("获取失败");
 	}
 	/**
 	 * 返回默认的产品套餐配置列表
@@ -163,7 +157,7 @@ public class ProductController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/product-buy", method = RequestMethod.POST)
-	public Map<String, List<Map<String, Object>>> getProductTypeList(HttpServletResponse response) {
+	public ResultObject getProductTypeList(HttpServletResponse response) {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		Map<String, List<Map<String, Object>>> map = new HashMap<String, List<Map<String, Object>>>(16);
@@ -178,7 +172,7 @@ public class ProductController {
 			map.put(componentType.toString(), productService.getConfigByComponentType(componentType));
 		}
 		log.debug("map ：" + map);
-		return map;
+		return ResultObject.success(map);
 	}
 	/**
 	 * 根据产品类型id获取自动配置的components
@@ -188,19 +182,20 @@ public class ProductController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/subComponents", method = RequestMethod.POST)
-	public Map<Integer, List<ComponentVO>> getComponentByProductType(String productType, HttpServletResponse response) {
+	public ResultObject getComponentByProductType(Integer productType, HttpServletResponse response) {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		
-		List<Integer> compTypeList = productService.getCompTypeList(StringUtil.stringToInt(productType));
+		List<Integer> compTypeList = productService.getCompTypeList(productType);
 		log.debug("compTypeList ：" + compTypeList);
 		Map<Integer, List<ComponentVO>> componentsMap = new LinkedHashMap<Integer, List<ComponentVO>>();
 		// 每种产品配置类别中的配置项
 		for (Integer compType : compTypeList) {
-			List<ComponentVO> components = productService.getComponentByPid(productType, compType.toString());
+			List<ComponentVO> components = productService.getComponentByPid(productType, compType);
 			componentsMap.put(compType, components);
 		}
-		return componentsMap;
+		
+		return ResultObject.success(componentsMap);
 	}
 	/**
 	 * 根据用户手机号及工单号发短信通知用户云桌面开户信息
@@ -210,33 +205,28 @@ public class ProductController {
 	 * @return
 	 */
 	@RequestMapping(value = "/sendClientMessage", method = RequestMethod.POST)
-	public ResponseResult sendClientMessage(String userMobileNumber, String workId, HttpServletResponse response) {
+	public ResultObject sendClientMessage(String userMobileNumber, Long workId, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		if (StringUtils.isBlank(userMobileNumber)||StringUtils.isBlank(workId)) {
-			this.result.set("手机号/工单号不能为空", 0);
-			log.debug(this.result.getMessage());
-			return this.result;
-		}
+		Preconditions.checkArgument(StringUtils.isBlank(userMobileNumber), "手机号不能为空");
+		Preconditions.checkNotNull(workId, "工单号不能为空");
+		
 		try {
-			List<Map<String, String>> sendList = workOrderService.getClientInfo(userMobileNumber, StringUtil.stringToLong(workId));
-			if (sendList.size()==0) {
-				this.result.set("查无此手机号或工单号", 0);
-			} else {
-				Map<String, String> map = sendList.get(0);
-				String password = Base64Utils.stringFromB64(map.get("userLoginPassword").toString());
-				String message = "您好，已成功为您开通构力云桌面，服务器地址是" + map.get("hostIp") + "，登录用户名是" + map.get("userName") + "，登录密码是" + password + "，请注意查收！";
-				ClientDemo clientDemo = new ClientDemo();
-				clientDemo.smsPublish(userMobileNumber, message);
-				this.result.set("发送短信成功", 1);
-				log.debug(this.result.getMessage());
-			}
+			List<Map<String, String>> sendList = workOrderService.getClientInfo(userMobileNumber, workId);
+			Preconditions.checkArgument(sendList.size()==0, "查无此手机号或工单号");
+		
+			Map<String, String> map = sendList.get(0);
+			String password = Base64Util.stringFromB64(map.get("userLoginPassword").toString());
+			String message = "您好，已成功为您开通构力云桌面，服务器地址是" + map.get("hostIp") + "，登录用户名是" + map.get("userName") + "，登录密码是" + password + "，请注意查收！";
+			SmsUtil smsUtil = new SmsUtil();
+			smsUtil.smsPublish(userMobileNumber, message);
+			
+			return ResultObject.success("发送短信成功");
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("发送短信产生异常:" + e);
-			this.result.set("发送短信失败", 0);
 		}
 
-		return this.result;
+		return ResultObject.failure("发送短信失败");
 		
 	}
 	
@@ -248,17 +238,17 @@ public class ProductController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/manual", method = RequestMethod.GET)
-	public ResponseResult getManual(HttpServletResponse response) {
+	public ResultObject getManual(HttpServletResponse response) {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		String filename = "使用教程说明.txt";
 		String url = productService.getSysValue(SysConstant.FILE_BASE_URL) + "/" + filename;
 		String termsJson = FileUtil.getHttpResponse(url);
 		if (!StringUtils.isEmpty(termsJson)) {
-			this.result.set("获取成功", 1, "1", termsJson);
-		} else {
-			this.result.set("获取失败", 0);
+			return ResultObject.success(termsJson, "获取成功");
 		}
-		return this.result;
+		
+		return ResultObject.failure("获取失败");
 	}
+	
 }

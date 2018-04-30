@@ -49,7 +49,6 @@ import com.pkpm.httpclientutil.common.HttpMethods;
 import com.pkpm.httpclientutil.exception.HttpProcessException;
 
 @Service
-@Transactional
 public class SubscriptionServiceImpl implements ISubscriptionService {
 	
 	@Resource
@@ -64,7 +63,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	
 	@Resource
 	private ComponentMapper componentMapper;
-	
+	@Resource
 	private RedisCacheUtil<MyProduct> redisCacheUtil;
 	
 	protected ResponseResult result = new ResponseResult();
@@ -101,17 +100,17 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		//a、保存订单之前先查询有没有 初始化的订单
 		Integer userId = userInfo.getUserID();
 		Integer invalidCount = subscriptionMapper.selectCount(userId,invalidStatus);
-		/*if(invalidCount >= 1){
-			throw  Exceptions.newBusinessException("您有正在创建中的桌面,请重新尝试!");
+		/*   
+		 * 测试阶段注掉
+		 * if(invalidCount >= 1){
+				throw  Exceptions.newBusinessException("您有正在创建中的桌面,请重新尝试!");
 		}*/
 		Integer regionId = wo.getRegionId();
 		ComponentInfo regionComponentInfo = componentMapper.getComponentInfo(regionId, ComponentTypeConstant.region_type);
 		String areaCode = regionComponentInfo.getComponentDesc();
 		
-	   //	String areaCode = "cn-north-1";
 		String urlGetAdAndProject =serverHost + "/params/getAdAndProject?areaCode=" + areaCode ;
 		String adAndProjectResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(urlGetAdAndProject,  5, "utf-8", 100000).method(HttpMethods.GET));
-		
 		MyHttpResponse adAndProjectHttpResponse = JsonUtil.deserialize(adAndProjectResponse, MyHttpResponse.class);
 		Integer adStatusCode = adAndProjectHttpResponse.getStatusCode();
 		
@@ -124,6 +123,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		if(HttpStatus.OK.value() != code){
 			throw  Exceptions.newBusinessException(result.getMessage());
 		}
+		
 		Map<String,String> map = (Map<String, String>) result.getData();
 		adId = map.get("adId");
 		projectId = map.get("projectId");
@@ -138,6 +138,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		subscription.setProjectId(projectId);
 		subscription.setAdId(Integer.parseInt(adId));
 		subscription.setStatus(invalidStatus);
+		subscription.setAreaCode(areaCode);
 		Integer subscriptionCount = subscriptionMapper.saveSubscription(subscription);
 		if(subscriptionCount<1){
 			throw  Exceptions.newBusinessException("保存订单失败,请您重试!");
@@ -158,7 +159,6 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		
 		List<ProductInfo> products = productMapper.getProductByProductId(productId);
 		ProductInfo productInfo = products.get(0);
-		//String imageId = productInfo.getImageId();
 		String productName = productInfo.getProductName();
 		
 		//2、传入commonrequestbean,创建ad和desktop
@@ -175,16 +175,16 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		String hwProductId = hostConfigcomponentInfo.getHwProductId();
 		commonRequestBean.setHwProductId(hwProductId);   // workspace.c2.large.windows
 		
-		//commonRequestBean.setOuName(ouName);
-		//commonRequestBean.setOuName("远大北京公司/销售部");
 		commonRequestBean.setUserEmail(userEmail);
 		commonRequestBean.setProjectId(projectId);   
 		commonRequestBean.setAdId(Integer.parseInt(adId));
-		commonRequestBean.setImageId("asdf");   //997488ed-fa23-4671-b88c-d364c0405334
+		commonRequestBean.setImageId(StringUtils.isBlank(
+				productInfo.getImageId())?
+				DesktopConstant.DEFAULT_IMAGE_ID:productInfo.getImageId());   //997488ed-fa23-4671-b88c-d364c0405334
 		
 		//根据user_id和status查询计算机名
-
 		String userName = userInfo.getUserName();
+		productName = getAvailableComputerName(productId,projectId, Integer.parseInt(adId));
 		//查询成功的条数
 		Integer nextNum = 1 + subscriptionMapper.selectTotalById(userId);
 		if(nextNum >= 1 + DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT)
@@ -194,24 +194,15 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 
 		//productName.length < 15
 		if(DesktopConstant.DESKTOP_NAME_MAX_LEN > productName.length()) {
-			commonRequestBean.setGloryProductName(productName + nextNum);
-			if(productName.length() + nextNum.toString().length() >
-					DesktopConstant.DESKTOP_NAME_MAX_LEN) {
-				Integer minus = nextNum.toString().length() -
-						(DesktopConstant.DESKTOP_NAME_MAX_LEN - productName.length());
+			commonRequestBean.setGloryProductName(productName );
+			if(productName.length() >DesktopConstant.DESKTOP_NAME_MAX_LEN) {
+				
 				commonRequestBean.setGloryProductName(productName.substring(0,
-						DesktopConstant.DESKTOP_NAME_MAX_LEN - minus
-				) + nextNum);
+						DesktopConstant.DESKTOP_NAME_MAX_LEN));
 			}
 
 		}
-		else {
-			commonRequestBean.setGloryProductName(productName.substring(0,
-					DesktopConstant.DESKTOP_NAME_MAX_LEN - nextNum.toString().length())
-					+ nextNum);
-		}
-
-
+		
 		commonRequestBean.setAreaCode(areaCode);
 		String urlCreateAdAndDesktop =serverHost + "/desktop/createAdAndDesktop";
 		String strJson = JsonUtil.serialize(commonRequestBean);
@@ -223,9 +214,6 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 			//3、创建成功后,返回参数给前台
 			if(HttpStatus.OK.value() == statusCode){
 				
-//				String body = myHttpResponse.getBody();
-//				ResultObject result = JsonUtil.deserialize(body, ResultObject.class);
-//				Integer code = result.getCode();
 				 body = myHttpResponse.getBody();
 				 result = JsonUtil.deserialize(body, ResultObject.class);
 				 code = result.getCode();
@@ -237,7 +225,12 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 					pkpmOperatorStatus.setAdId(Integer.parseInt(adId));
 					pkpmOperatorStatus.setUserId(userId);
 					pkpmOperatorStatus.setAreaCode(areaCode);
-					//redisCacheUtil.delete("MyProduct:"+userId);
+					
+					List<Object> cacheList = redisCacheUtil.getCacheList("MyProduct:"+userId);
+					if(cacheList.size() != 0 ){
+						redisCacheUtil.delete("MyProduct:"+userId);
+					}
+					
 					return pkpmOperatorStatus;
 					
 				}
@@ -276,11 +269,106 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	 * @return java.lang.String
 	 */
 	@Override
-	public String  updateSubsCriptionBySubsId(SubsCription subsCription) {
 
-		int result =subscriptionMapper.updateSubsCriptionBySubsId(subsCription);
+	public String  updateSubsCriptionBySubsId(SubsCription sub) {
+
+		//根据subsId获取完整信息;
+		SubsCription oldSub = subscriptionMapper.selectSubscriptionBySubsId(sub.getSubsId());
+		Preconditions.checkNotNull(oldSub, "订单信息不存在，输入错误");
+
+		//清空缓存
+		Integer userId = oldSub.getUserId();
+		List<Object> cacheList = redisCacheUtil.getCacheList("MyProduct:"+userId);
+		if(cacheList !=null&&cacheList.size()>0 ){
+			redisCacheUtil.delete("MyProduct:"+userId);
+			logger.info("MyProduct:"+userId+" 缓存被清空");
+		}
+
+		//更新数据库状态
+		int result =subscriptionMapper.updateSubsCriptionBySubsId(sub);
+
 		Preconditions.checkArgument(result==1,"订单更新失败");
-		return "更新状态成功";
+		return String.format("状态更新成功 %s更新至%s",oldSub.getStatus(),sub.getStatus());
 	}
+
+	@Override
+	public List<SubsCription> findSubsCriptionByProductName(Integer userId) {
+
+		String str = stringRedisTemplate.opsForValue().get("subsCriptionByUserId:" + userId);
+
+		// 若存在Redis缓存，从缓存中读取
+		if (StringUtils.isNotBlank(str)) {
+			List<SubsCription> subsCription = JSON.parseArray(str, SubsCription.class);
+			return subsCription;
+		} else {
+			// 若不存在对应的Redis缓存，从数据库查询
+			List<SubsCription> subsCription = subscriptionMapper.findSubsCriptionByUserId(userId);
+			// 写入Redis缓存
+			//fixme 解决JSON序列化问题
+			/*stringRedisTemplate.opsForValue().set("subsCriptionByUserId:" + userId, JSON.toJSONString(subsCription));*/
+			return subsCription;
+		}
+	}
+	/**
+	 *获取可用计算机名
+	 *
+	 * @author xuhe
+	 * @param productId, adId
+	 * @return java.lang.String
+	 */
+	@Override
+	public String getAvailableComputerName(Integer productId, String projectId,Integer adId) {
+
+		//adId+productId对应的产品总数
+		Integer productCount = subscriptionMapper.selectProductCountByProjectId(productId,projectId);
+		//count自增，返回对应的可用计算机名
+		productCount++;
+		String productName = productMapper.getProductByProductId(productId).get(0).getProductName();
+		//检查AD域中该计算机名不存在，确认可用
+		return getAvailableComputerName(productName, adId, productCount);
+
+	}
+	//循环体，如果AD中计算机名已存在，自增ID，直到计算机名可用为止
+	private String getAvailableComputerName(String productName, Integer adId,Integer order){
+		String newComputerName = productName+"-"+order;
+		//如果已存在，递增进入下一循环
+		if (checkComputerNameByAdId(newComputerName, adId)){
+			logger.info("计算机名已存在"+newComputerName+"  序号自增+1为"+(order+1));
+			newComputerName = getAvailableComputerName(productName, adId, ++order);
+		}
+		return newComputerName;
+
+	}
+	/**
+	 *检测桌面是否存在，存在返回TRUE，不存在返回FALSE
+	 * @author xuhe
+	 * @param computerName, adId
+	 * @return java.lang.Boolean
+	 */
+	private Boolean checkComputerNameByAdId(String computerName, Integer adId) {
+
+		CommonRequestBean requestBean = new CommonRequestBean();
+		requestBean.setComputerName(computerName);
+		requestBean.setAdId(adId);
+		try {
+			String url =serverHost + "/ad/computer/check";
+			String strJson = JsonUtil.serialize(requestBean);
+			String strResponse = HttpClientUtil.mysend(
+                    HttpConfigBuilder.buildHttpConfigNoToken(url, strJson, 5, "utf-8", 10000).method(HttpMethods.POST));
+			MyHttpResponse response = JsonUtil.deserialize(strResponse, MyHttpResponse.class);
+			ResultObject resultObject = JsonUtil.deserialize(response.getBody(), ResultObject.class);
+			//计算机存在，返回200，不存在返回400
+			if (resultObject.getCode()==HttpStatus.OK.value()){
+				System.out.println("TRUE");
+				return Boolean.TRUE;
+			} else if (resultObject.getCode() == HttpStatus.BAD_REQUEST.value()) {
+				return Boolean.FALSE;
+			}
+		} catch (HttpProcessException e) {
+			throw Exceptions.newBusinessException("http连接建立失败，请确认gateway服务是否开启\n"+e.getMessage());
+		}
+		throw Exceptions.newBusinessException("桌面检查失败");
+	}
+
 
 }

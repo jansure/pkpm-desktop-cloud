@@ -3,7 +3,7 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.domain;
 import java.io.Serializable;
 import java.util.List;
 
-import org.springframework.data.annotation.Transient;
+import com.desktop.utils.mybatis.Invisible;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,8 @@ public class ProductInfo implements Serializable {
     private Integer productType;
     private String productDesc;
     private Integer componentId;
-    @Transient
+    
+    @Invisible
     private List<ProductInfo> children;
     
     private String imageId;

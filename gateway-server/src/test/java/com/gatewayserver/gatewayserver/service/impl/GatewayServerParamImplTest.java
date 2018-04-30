@@ -28,5 +28,14 @@ public class GatewayServerParamImplTest {
         pkpmCloudService.getAdAndProject(areaCode, ouName);
 
     }
+    
+    @Test
+    public void testGetProjectDef() throws Exception {
+
+        String projectId = "58cd927978ff4f85b16ee64468da0e53";
+        String areaCode = "cn-south-1";
+        pkpmCloudService.getProjectDef(projectId, areaCode);
+
+    }
 
 }

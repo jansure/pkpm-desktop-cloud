@@ -3,8 +3,6 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.domain;
 import java.io.Serializable;
 import java.util.List;
 
-import org.springframework.data.annotation.Transient;
-
 import com.desktop.utils.mybatis.Invisible;
 
 import lombok.Data;
@@ -28,7 +26,6 @@ public class Navigation implements Serializable {
     @Invisible
     private List<Navigation> children;
     
-
 	@Override
     public String toString() {
         return "Navigation [navId=" + navId + ", navName=" + navName + ", parentNavId=" + parentNavId

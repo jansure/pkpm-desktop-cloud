@@ -7,6 +7,7 @@ import com.gateway.common.dto.ad.AdUser;
 import com.gatewayserver.gatewayserver.service.AdService;
 import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -83,15 +84,35 @@ public class AdController {
     }
 
     /**
-     * @Description: 检查用户是否存在
+     * @Description: 检查用户名是否存在
      * @Param: * @param userName,adId
      * @Return ResultObject
      */
 
     @RequestMapping(value = "user/check",method = RequestMethod.POST)
-    public boolean checkUser(@RequestParam("userName") String userName, @RequestParam("adId") Integer adId) {
-        boolean result = adService.checkUser(userName, adId);
-        return result;
+    public ResultObject checkUser(@RequestParam("userName") String userName, @RequestParam("adId") Integer adId) {
+        Boolean result = adService.checkUser(userName, adId);
+        if (result)
+            return ResultObject.success(null, "用户存在");
+        else
+            return ResultObject.success(null, "用户不存在！");
+    }
+
+    /**
+     * @Description: 检查计算机名是否存在
+     * @Param: * @param userName,adId
+     * @Return ResultObject
+     */
+
+    @RequestMapping(value = "computer/check",method = RequestMethod.POST)
+    public ResultObject checkComputer(@RequestBody CommonRequestBean requestBean) {
+        String computerName =requestBean.getComputerName();
+        Integer adId =requestBean.getAdId();
+        Boolean result = adService.checkComputer(computerName, adId);
+        if (result)
+            return ResultObject.success(null, "计算机名存在");
+        else
+            return ResultObject.failure(HttpStatus.BAD_REQUEST.value(),"计算机名不存在");
     }
 
     /**

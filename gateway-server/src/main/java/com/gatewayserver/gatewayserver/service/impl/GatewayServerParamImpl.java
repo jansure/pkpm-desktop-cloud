@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.gatewayserver.gatewayserver.service.impl;
 
 import java.util.HashMap;
@@ -47,8 +44,8 @@ public class GatewayServerParamImpl implements GatewayServerParam {
 	@Override
 	public List<PkpmProjectDef> getProjectDefs(String adIpAddress, String areaCode) {
 		try {
-			Preconditions.checkNotNull(areaCode, "adIpAddress不能为空");
-			Preconditions.checkNotNull(areaCode, "areaCode不能为空");
+			Preconditions.checkArgument(StringUtils.isNotBlank(adIpAddress), "adIpAddress不能为空");
+			Preconditions.checkArgument(StringUtils.isNotBlank(areaCode), "areaCode不能为空");
 
 			PkpmProjectDef pkpmProjectDef = new PkpmProjectDef();
 			pkpmProjectDef.setAdIpAddress(adIpAddress);
@@ -68,10 +65,10 @@ public class GatewayServerParamImpl implements GatewayServerParam {
 	@Override
 	public List<PkpmAdDef> getAdDefs(String adIpAddress, String areaCode, String adOu, Integer isValid) {
 		try {
-			Preconditions.checkNotNull(areaCode, "adIpAddress不能为空");
-			Preconditions.checkNotNull(areaCode, "areaCode不能为空");
-			Preconditions.checkNotNull(areaCode, "adOu不能为空");
-			Preconditions.checkNotNull(areaCode, "isValid不能为空");
+			Preconditions.checkArgument(StringUtils.isNotBlank(adIpAddress), "adIpAddress不能为空");
+			Preconditions.checkArgument(StringUtils.isNotBlank(areaCode), "areaCode不能为空");
+			Preconditions.checkArgument(StringUtils.isNotBlank(adOu), "adOu不能为空");
+			Preconditions.checkNotNull(isValid, "isValid不能为空");
 
 			PkpmAdDef pkpmAdDef = new PkpmAdDef();
 			pkpmAdDef.setAdIpAddress(adIpAddress);
@@ -124,8 +121,13 @@ public class GatewayServerParamImpl implements GatewayServerParam {
 						// 根据adIpAddress查到ProjectId放入map
 						List<PkpmProjectDef> pkpmProjectDefList = this.getProjectDefs(adIpAddress, areaCode);
 						// 随机选择一个project
-						String projectId = pkpmProjectDefList.get(r.nextInt(pkpmProjectDefList.size())).getProjectId();
+						Integer random = r.nextInt(pkpmProjectDefList.size());
+						String projectId = pkpmProjectDefList.get(random).getProjectId();
 						map.put("projectId", projectId);
+
+						//get destination ip by projectId
+						String destinationIp = pkpmProjectDefList.get(random).getDestinationIp();
+						map.put("destinationIp", destinationIp);
 
 						return map;
 					}
@@ -135,6 +137,22 @@ public class GatewayServerParamImpl implements GatewayServerParam {
 			log.error(e.getMessage());
 		}
 		throw Exceptions.newBusinessException("该区域没有可用的AD域！");
+	}
+
+	@Override
+	public PkpmProjectDef getProjectDef(String projectId, String areaCode) {
+		try {
+			Preconditions.checkArgument(StringUtils.isNotBlank(projectId), "projectId不能为空");
+			Preconditions.checkArgument(StringUtils.isNotBlank(areaCode), "areaCode不能为空");
+			PkpmProjectDef pkpmProjectDef = pkpmProjectDefDAO.selectByProjectIdAndAreaCode(projectId, areaCode);
+			// 结果不空，返回项目信息
+			if (null != pkpmProjectDef) {
+				return pkpmProjectDef;
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		throw Exceptions.newBusinessException("此项目信息不存在！");
 	}
 
 }

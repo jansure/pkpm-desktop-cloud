@@ -11,13 +11,14 @@
             <result property="adId" column="ad_id" jdbcType="INTEGER"/>
             <result property="projectId" column="project_id" jdbcType="VARCHAR"/>
             <result property="desktopId" column="desktop_id" jdbcType="VARCHAR"/>
+            <result property="areaCode" column="area_code" jdbcType="VARCHAR"/>
             <result property="status" column="status" jdbcType="INTEGER"/>
 	</resultMap>
 	
 	<select id="findSubsCriptionByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
 		select *
 		from pkpm_cloud_subscription
-		where user_id = #{userId,jdbcType=INTEGER} order by create_time
+		where user_id = #{userId,jdbcType=INTEGER} order by create_time desc
 	</select>
 
 	<update id="updateSubsCriptionBySubsId" parameterType="com.cabr.pkpm.entity.subscription.SubsCription">
@@ -33,8 +34,8 @@
 		where user_id = #{userId,jdbcType=INTEGER} order by create_time
 	</select>
 	<insert id="saveSubscription"  parameterType="com.cabr.pkpm.entity.subscription.SubsCription" useGeneratedKeys="true" keyProperty="id">
-	    insert into pkpm_cloud_subscription(subs_id,user_id,create_time,pay_channel,ad_id,project_id,status) values
-	    (#{subsId},#{userId},#{createTime},#{payChannel},#{adId},#{projectId},#{status});
+	    insert into pkpm_cloud_subscription(area_code,subs_id,user_id,create_time,pay_channel,ad_id,project_id,status) values
+	    (#{areaCode},#{subsId},#{userId},#{createTime},#{payChannel},#{adId},#{projectId},#{status});
 	</insert>
 	
 	<select id="selectCount"  resultType="java.lang.Integer" >
@@ -46,7 +47,31 @@
 			user_id = #{userId}
 		AND STATUS = #{status};
 	</select>
-	
+
+	<select id="selectProductCountByAdId" resultType="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			pkpm_cloud_subscription AS sub,
+			pkpm_cloud_subs_details AS subDetail
+		WHERE
+			sub.subs_id = subDetail.subs_id
+			AND sub.ad_id = #{adId}
+			AND subDetail.product_id = #{productId};
+	</select>
+
+	<select id="selectProductCountByProjectId" resultType="java.lang.Integer">
+		SELECT
+		COUNT(*)
+		FROM
+		pkpm_cloud_subscription AS sub,
+		pkpm_cloud_subs_details AS subDetail
+		WHERE
+		sub.subs_id = subDetail.subs_id
+		AND sub.project_id = #{projectId}
+		AND subDetail.product_id = #{productId};
+	</select>
+
 	<select id="selectTotalById" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
 	    SELECT
 			count(1)
@@ -55,5 +80,12 @@
 		WHERE
 			user_id = #{userId}
 	</select>
-	
+	<select id="selectSubscriptionBySubsId"  parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT
+			*
+		FROM
+			pkpm_cloud_subscription
+		WHERE
+			subs_id = #{subsId}
+	</select>
 </mapper>

@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.desktop.utils.DateUtils;
 import com.github.pagehelper.PageHelper;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ComponentDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ProductDAO;
@@ -16,12 +17,12 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dao.SubsDetailsDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.SubscriptionDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.WorkOrderDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ProductInfo;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsDetails;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.MyProduct;
 import com.pkpmdesktopcloud.desktopcloudbusiness.page.PageBean;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubsDetailsService;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.RedisCacheUtil;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.StringOrDate;
+import com.pkpmdesktopcloud.redis.RedisCache;
 
 @Service
 public class SubsDetailsServiceImpl implements SubsDetailsService {
@@ -41,16 +42,15 @@ public class SubsDetailsServiceImpl implements SubsDetailsService {
 	@Resource
 	private WorkOrderDAO workOrderMapper;
 	
-	@Resource
-	private RedisCacheUtil<MyProduct> redisCacheUtil;
-
 	@Override
 	public PageBean<MyProduct> showList(int userId,Integer currentPage,Integer pageSize) {
 		
 		PageHelper.startPage(currentPage, pageSize);
 		
 		
-		List<MyProduct> myProducts = redisCacheUtil.getCacheList("MyProduct:"+userId);
+		RedisCache cache = new RedisCache(MY_PRODUCT_ID);
+		List<MyProduct> myProducts = (List<MyProduct>)cache.getObject(userId);
+		
 		
 		LocalDateTime nowTime = LocalDateTime.now();
 		// 若存在Redis缓存，从缓存中读取
@@ -58,7 +58,7 @@ public class SubsDetailsServiceImpl implements SubsDetailsService {
 			
 			for (MyProduct myProduct : myProducts) {
 				String invalid = myProduct.getInvalidtime();
-				LocalDateTime invalidTime = StringOrDate.stringToDate(invalid, "yyyy年MM月dd日  HH:mm:ss");
+				LocalDateTime invalidTime = DateUtils.string2LocalDateTime(invalid, "yyyy年MM月dd日  HH:mm:ss");
 				boolean flagTime;
 				if (nowTime.isAfter(invalidTime)) {
 					flagTime = false;
@@ -77,7 +77,7 @@ public class SubsDetailsServiceImpl implements SubsDetailsService {
 				for (SubsDetails subs : subsDetails) {
 					Integer productId = subs.getProductId();
 					LocalDateTime createTime = subs.getCreateTime();
-					String create = StringOrDate.dateToString(createTime, "yyyy年MM月dd日  HH:mm:ss");
+					String create = DateUtils.time2String(createTime, "yyyy年MM月dd日  HH:mm:ss");
 					LocalDateTime invalidTime = subs.getInvalidTime();
 					boolean flagTime;
 					
@@ -88,7 +88,7 @@ public class SubsDetailsServiceImpl implements SubsDetailsService {
 						flagTime = true;
 					}
 					
-					String invalid = StringOrDate.dateToString(invalidTime, "yyyy年MM月dd日  HH:mm:ss");
+					String invalid = DateUtils.time2String(invalidTime, "yyyy年MM月dd日  HH:mm:ss");
 					List<ProductInfo> products = productMapper.getProductByProductId(productId);
 					String productDesc = products.get(0).getProductDesc(); 
 					List<String> componentNames = new ArrayList<>();
@@ -122,7 +122,7 @@ public class SubsDetailsServiceImpl implements SubsDetailsService {
 				
 			}
 			
-			redisCacheUtil.setCacheList("MyProduct:"+userId, myProducts);
+			cache.putObject(userId, myProducts);
 		}
 		
 		PageBean<MyProduct> pageData = new PageBean<>(currentPage,pageSize,myProducts.size());

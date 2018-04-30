@@ -31,4 +31,9 @@ public class DesktopConstant {
      * 查询桌面详情列表
      */
     public static final String QUERY_DESKTOP_DETAIL="detail";
+
+    /**
+     * default image id for create desktop
+     */
+    public static final String DEFAULT_IMAGE_ID = "default_image_id";
 }

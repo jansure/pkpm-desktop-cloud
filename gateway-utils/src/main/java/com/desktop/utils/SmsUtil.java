@@ -1,4 +1,4 @@
-package com.pkpmdesktopcloud.desktopcloudbusiness.utils;
+package com.desktop.utils;
 
 import com.smn.account.CloudAccount;
 import com.smn.client.SmnClient;
@@ -16,13 +16,13 @@ import com.smn.model.request.topic.*;
 
 import java.util.*;
 
-public class ClientDemo {
+public class SmsUtil {
     private SmnClient smnClient;
 
     /**
      * 构造函数
      */
-    public ClientDemo() {
+    public SmsUtil() {
         CloudAccount cloudAccount = new CloudAccount(
                 "liboxi",
                 "caBr905",
@@ -59,7 +59,7 @@ public class ClientDemo {
     }
 
     public static void main(String[] args) {
-        ClientDemo clientDemo = new ClientDemo();
+        SmsUtil clientDemo = new SmsUtil();
         clientDemo.publishMsgWithTemplate();
         clientDemo.listTopics();
        // clientDemo.smsPublish();

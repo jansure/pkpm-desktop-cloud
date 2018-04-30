@@ -116,7 +116,7 @@ public class AdServiceImpl implements AdService {
         Preconditions.checkNotNull(requestBean);
         PkpmOperatorStatus operatorStatus = new PkpmOperatorStatus().setDefault();
         BeanUtil.copyPropertiesIgnoreNull(requestBean, operatorStatus);
-        operatorStatus.setStatus(JobStatusEnum.AD_CREATE.toString());
+        operatorStatus.setStatus(JobStatusEnum.INITIAL.toString());
         operatorStatus.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
         PkpmOperatorStatusBeanUtil.checkNotNull(operatorStatus);
 
@@ -204,7 +204,7 @@ public class AdServiceImpl implements AdService {
         Preconditions.checkNotNull(requestBean);
         PkpmOperatorStatus operatorStatus = new PkpmOperatorStatus().setDefault();
         BeanUtil.copyPropertiesIgnoreNull(requestBean, operatorStatus);
-        operatorStatus.setStatus(JobStatusEnum.AD_CREATE.toString());
+        operatorStatus.setStatus(JobStatusEnum.INITIAL.toString());
         operatorStatus.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
         PkpmOperatorStatusBeanUtil.checkNotNull(operatorStatus);
 
@@ -363,38 +363,39 @@ public class AdServiceImpl implements AdService {
 
         throw Exceptions.newBusinessException("用户列表获取失败");
     }
+
     /**
+     * 申请可用计算机名  尾部为3个数字 如test001 ,如果输入超过12位，则自动截取前12位
      *
-     *申请可用计算机名  尾部为3个数字 如test001 ,如果输入超过12位，则自动截取前12位
-     * @author xuhe
      * @param computerName, adId
      * @return java.lang.String
+     * @author xuhe
      */
-    public  String getAvailableComputerName(String computerName, Integer adId) {
+    public String getAvailableComputerName(String computerName, Integer adId) {
 
-        if (computerName.length()>12)
+        if (computerName.length() > 12)
             computerName = computerName.substring(0, 12);
         log.info(computerName);
         List<AdComputer> computerList = getComputersByAdId(adId);
         String pattern = computerName + "\\d+";
         String numPattern = "(\\D*)(\\d+)";
-        int max=0;
+        int max = 0;
         for (AdComputer adComputer : computerList) {
-            String comName =adComputer.getComputerName();
+            String comName = adComputer.getComputerName();
             if (Pattern.matches(pattern, comName)) {
                 //匹配数字
                 Matcher m = Pattern.compile(numPattern).matcher(comName);
-                String numStr="";
-                if (m.find()){
+                String numStr = "";
+                if (m.find()) {
                     numStr = m.group(2);
                 }
                 Integer order = Integer.valueOf(numStr);
                 if (order > max) {
-                    max=order;
+                    max = order;
                 }
             }
         }
-        return computerName + String.format("%03d", max+1);
+        return computerName + String.format("%03d", max + 1);
     }
 
     public List<AdComputer> getComputersByAdId(Integer adId) {
@@ -461,8 +462,37 @@ public class AdServiceImpl implements AdService {
         return Boolean.FALSE;
     }
 
-    //fixme  deleteUser不给前端返回信息吗？
-    public void deleteUser(String userName, Integer adId) {
+    public Boolean checkComputer(String computerName, Integer adId) {
+        PkpmAdDef adDef = getAdDefByAdId(adId);
+        Preconditions.checkNotNull(adDef);
+        LDAPConnectionPool connectionPool = getConnectionPool(adDef);
+        LDAPConnection connection = null;
+        try {
+            connection = connectionPool.getConnection();
+            Preconditions.checkNotNull(connection, "AD连接空指针异常");
+
+            //AD属性:获取组织ouDN;
+            String ouDN = AdUtil.getOuDN(adDef);
+
+            String computerDN = String.format("CN=%s,%s", computerName, ouDN);
+            log.info(computerDN);
+            SearchResultEntry entry = connection.getEntry(computerDN);
+            log.info(entry + "");
+            if (entry == null)
+                return Boolean.FALSE;
+            else {
+                return Boolean.TRUE;
+            }
+        } catch (LDAPException e) {
+            e.printStackTrace();
+        } finally {
+            log.info(String.format("AD连接资源(%s)被释放", connection.toString()));
+            connectionPool.releaseConnection(connection);
+        }
+        return Boolean.FALSE;
+    }
+
+    public String deleteUser(String userName, Integer adId) {
         PkpmAdDef adDef = getAdDefByAdId(adId);
         Preconditions.checkNotNull(adDef);
         LDAPConnectionPool connectionPool = getConnectionPool(adDef);
@@ -479,7 +509,7 @@ public class AdServiceImpl implements AdService {
             Preconditions.checkNotNull(entry, "用户名不存在");
             LDAPResult result = connection.delete(userDN);
             if (result.getResultCode().getName().equals("success"))
-                return;
+                return "用户已删除";
             else
                 throw Exceptions.newBusinessException("用户删除失败");
         } catch (LDAPException e) {

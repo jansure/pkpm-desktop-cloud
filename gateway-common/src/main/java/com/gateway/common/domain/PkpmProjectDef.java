@@ -10,5 +10,6 @@ public class PkpmProjectDef implements Serializable {
     private String areaName;
     private String areaCode;
     private String workspaceId;
+    private String destinationIp;
     private String adIpAddress;
 }

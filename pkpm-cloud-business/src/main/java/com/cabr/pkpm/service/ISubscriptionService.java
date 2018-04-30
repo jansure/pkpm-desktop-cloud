@@ -22,4 +22,8 @@ public interface ISubscriptionService {
 	 * @return java.lang.String
 	 */
 	String updateSubsCriptionBySubsId(SubsCription subsCription);
+
+	List<SubsCription> findSubsCriptionByProductName(Integer userId);
+
+	String getAvailableComputerName(Integer productId, String projectId,Integer adId);
 }

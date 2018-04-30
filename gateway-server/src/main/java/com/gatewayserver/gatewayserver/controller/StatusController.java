@@ -28,9 +28,16 @@ public class StatusController {
     @PostMapping("desktopStatus")
     public ResultObject desktopStatus(@RequestBody CommonRequestBean commonRequestBean) {
 
-        CommonRequestBeanUtil.checkStatusCommonRequestBean(commonRequestBean);
-        ResultObject resultObject = statusService.queryDesktopStatus(commonRequestBean);
-        return resultObject;
+    	  CommonRequestBeanUtil.checkStatusCommonRequestBean(commonRequestBean);
+          String statusObject = null;
+          try {
+  			 statusObject = statusService.queryDesktopStatus(commonRequestBean);
+  		} catch (Exception e) {
+  			e.printStackTrace();
+  			return ResultObject.failure(e.getMessage());
+  		}
+          
+          return ResultObject.success(statusObject);
     }
 
     /**

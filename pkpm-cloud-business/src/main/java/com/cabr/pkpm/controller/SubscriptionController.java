@@ -47,22 +47,14 @@ public class SubscriptionController {
 			this.result.set("请重新登录", 2);
 			return this.result;
 		}
-		//删除掉
-	/*	List<MyProduct> myProducts = redisCacheUtil.getCacheList("MyProduct:"+userId);
-		if(myProducts != null && myProducts.size() > 0){
-			if(myProducts.size() >= 5){
-				this.result.set("您购买的条数已达到上限", 0);
-				return this.result;
-			}
-		}*/
 		
 		try {
 			PkpmOperatorStatus pkpmOperatorStatus = subscription.saveSubsDetails(userInfo,wo);
 			this.result.set("恭喜您申请免费使用成功,请稍等,马上为您开通！", 1, pkpmOperatorStatus);
 			return this.result;
 		} catch (Exception e) {
+			
 			e.printStackTrace();
-			//this.result.set("创建订单失败,请重新创建订单", 0);
 			this.result.set(e.getMessage(), 0);
 			return this.result;
 		}

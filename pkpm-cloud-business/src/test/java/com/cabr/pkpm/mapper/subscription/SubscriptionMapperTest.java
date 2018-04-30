@@ -35,4 +35,10 @@ public class SubscriptionMapperTest {
         System.out.println(result);
     }
 
+    @Test
+    public void  selectProductCountByAdId(){
+        int count = mapper.selectProductCountByAdId(1, 1);
+        System.out.println(count);
+    }
+
 }

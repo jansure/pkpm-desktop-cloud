@@ -1,21 +1,13 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.service.impl;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pkpmdesktopcloud.desktopcloudbusiness.constants.SysConstant;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ComponentDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ProductDAO;
@@ -24,7 +16,7 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ProductInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SysConfig;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.ProductService;
-import com.pkpmdesktopcloud.desktopcloudbusiness.utils.StringUtil;
+import com.pkpmdesktopcloud.redis.RedisCache;
 
 /**
  * 产品接口实现类
@@ -34,45 +26,58 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.utils.StringUtil;
  */
 @Service
 public class ProductServiceImpl implements ProductService {
+	
+	
+	private static final String PRODUCT_ID = "product";
+	
+	private static final String SYS_CONFIG_ID = "sysconfig";
+	
+	private static final String PRODUCT_TYPE_LIST_ID = "productTypeList";
+	
+	private static final String COMPOENT_TYPE_LIST_ID = "componentTypeList";
+	
+	private static final String ALL_TYPE_REDIS_KEY = "allTypeRedisKey";
+	
 	@Autowired
 	private ProductDAO productDAO;
 	
 	@Resource
 	private ComponentDAO componentDAO;
 
-	@Autowired
-	private StringRedisTemplate stringRedisTemplate;
-
 	@Override
-	public List<ProductInfo> getProductByParentId(String productType) {
-		String str = stringRedisTemplate.opsForValue().get("product:" + productType);
+	public List<ProductInfo> getProductByType(Integer productType) {
+		
 		// 若存在Redis缓存，从缓存中读取
-		if (StringUtils.isNotBlank(str)) {
-			List<ProductInfo> productInfo = JSON.parseArray(str, ProductInfo.class);
-			return productInfo;
-		} else {
-			// 若不存在对应的Redis缓存，从数据库查询
-			List<ProductInfo> productInfo = productDAO.getProductByType(StringUtil.stringToInt(productType));
-			// 写入Redis缓存
-			stringRedisTemplate.opsForValue().set("product:" + productType, JSON.toJSONString(productInfo));
+		RedisCache cache = new RedisCache(PRODUCT_ID);
+		List<ProductInfo> productInfo = (List<ProductInfo>)cache.getObject(productType);
+		if(productInfo != null) {
+			
 			return productInfo;
 		}
+			
+		// 若不存在对应的Redis缓存，从数据库查询
+		productInfo = productDAO.getProductByType(productType);
+		// 写入Redis缓存
+		cache.putObject(PRODUCT_ID, productInfo);
+		return productInfo;
 	}
 
 	@Override
 	public String getSysValue(String key) {
-		String keystr = stringRedisTemplate.opsForValue().get("sysconfig:" + key);
+		RedisCache cache = new RedisCache(SYS_CONFIG_ID);
+		SysConfig sysConfig = (SysConfig)cache.getObject(key);
+		
 		// 若存在Redis缓存，从缓存中读取
-		if (StringUtils.isNotBlank(keystr)) {
-			SysConfig sysConfig = JSON.parseObject(keystr, SysConfig.class);
-			return sysConfig.getValue();
-		} else {
-			// 若不存在对应的Redis缓存，从数据库查询
-			SysConfig sysConfig = productDAO.getSysConfig(key);
-			// 写入Redis缓存
-			stringRedisTemplate.opsForValue().set("sysconfig:" + key, JSON.toJSONString(sysConfig));
+		if (sysConfig != null) {
 			return sysConfig.getValue();
 		}
+		
+		// 若不存在对应的Redis缓存，从数据库查询
+		sysConfig = productDAO.getSysConfig(key);
+		
+		// 写入Redis缓存
+		cache.putObject(PRODUCT_ID, sysConfig);
+		return sysConfig.getValue();
 	}
 
 	@Override
@@ -82,45 +87,34 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<ComponentVO> getComponentByPid(String productType, String componentType) {
-		List<ComponentVO> componentInfo = productDAO.getComponentByPid(StringUtil.stringToInt(productType), StringUtil.stringToInt(componentType));
+	public List<ComponentVO> getComponentByPid(Integer productType, Integer componentType) {
+		List<ComponentVO> componentInfo = productDAO.getComponentByPid(productType, componentType);
 		return componentInfo;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> getProductTypeList() {
-		String str = stringRedisTemplate.opsForValue().get("productTypeList");
+		RedisCache cache = new RedisCache(PRODUCT_TYPE_LIST_ID);
+		List<Map<String, Object>> productTypeList = (List<Map<String, Object>>)cache.getObject(ALL_TYPE_REDIS_KEY);
+		
 		// 若存在Redis缓存，从缓存中读取
-		if (StringUtils.isNotBlank(str)) {
-			ObjectMapper objectMapper = new ObjectMapper();
-			List<Map<String, Object>> productTypeList = new ArrayList<Map<String, Object>>();
-			try {
-				productTypeList = objectMapper.readValue(str, List.class);
-			} catch (JsonParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return productTypeList;
-		} else {
-			// 若不存在对应的Redis缓存，从数据库查询
-			List<Map<String, Object>> productTypeList = productDAO.getProductTypeList();
-			for (Map<String, Object> productType : productTypeList) {
-				// 设置“全家桶类型”为默认套餐
-				if (SysConstant.PRODUCT_TYPE_ALL.equals(productType.get("productType").toString())) {
-					productType.put("isDefault", SysConstant.IS_DEFAULT_YES);
-				}
-			}
-			// 写入Redis缓存
-			stringRedisTemplate.opsForValue().set("productTypeList", JSON.toJSONString(productTypeList));
+		if (productTypeList != null) {
 			return productTypeList;
 		}
+		
+		// 若不存在对应的Redis缓存，从数据库查询
+		productTypeList = productDAO.getProductTypeList();
+		for (Map<String, Object> productType : productTypeList) {
+			// 设置“全家桶类型”为默认套餐
+			if (SysConstant.PRODUCT_TYPE_ALL.equals(productType.get("productType").toString())) {
+				productType.put("isDefault", SysConstant.IS_DEFAULT_YES);
+			}
+		}
+		
+		// 写入Redis缓存
+		cache.putObject(ALL_TYPE_REDIS_KEY, productTypeList);
+		return productTypeList;
 	}
 
 	@Override
@@ -132,61 +126,42 @@ public class ProductServiceImpl implements ProductService {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> getComponentTypeList() {
-		String str = stringRedisTemplate.opsForValue().get("componentTypeList");
+		
+		RedisCache cache = new RedisCache(COMPOENT_TYPE_LIST_ID);
+		List<Map<String, Object>> componentTypeList = (List<Map<String, Object>>)cache.getObject(ALL_TYPE_REDIS_KEY);
+		
 		// 若存在Redis缓存，从缓存中读取
-		if (StringUtils.isNotBlank(str)) {
-			ObjectMapper objectMapper = new ObjectMapper();
-			List<Map<String, Object>> componentTypeList = new ArrayList<Map<String, Object>>();
-			try {
-				componentTypeList = objectMapper.readValue(str, List.class);
-			} catch (JsonParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return componentTypeList;
-		} else {
-			// 若不存在对应的Redis缓存，从数据库查询
-			List<Map<String, Object>> componentTypeList = componentDAO.getComponentTypeList();
-			// 写入Redis缓存
-			stringRedisTemplate.opsForValue().set("componentTypeList", JSON.toJSONString(componentTypeList));
+		if (componentTypeList != null) {
+			
 			return componentTypeList;
 		}
+		
+		// 若不存在对应的Redis缓存，从数据库查询
+		componentTypeList = componentDAO.getComponentTypeList();
+		
+		// 写入Redis缓存
+		cache.putObject(ALL_TYPE_REDIS_KEY, componentTypeList);
+		return componentTypeList;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> getConfigByComponentType(Integer componentType) {
-		String str = stringRedisTemplate.opsForValue().get("componentList:" + componentType);
+		RedisCache cache = new RedisCache(COMPOENT_TYPE_LIST_ID);
+		List<Map<String, Object>> componentTypeList = (List<Map<String, Object>>)cache.getObject(componentType);
+		
 		// 若存在Redis缓存，从缓存中读取
-		if (StringUtils.isNotBlank(str)) {
-			ObjectMapper objectMapper = new ObjectMapper();
-			List<Map<String, Object>> configList = new ArrayList<Map<String, Object>>();
-			try {
-				configList = objectMapper.readValue(str, List.class);
-			} catch (JsonParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return configList;
-		} else {
-			// 若不存在对应的Redis缓存，从数据库查询
-			List<Map<String, Object>> configList = componentDAO.getConfigByComponentType(componentType);
-			// 写入Redis缓存
-			stringRedisTemplate.opsForValue().set("componentList:" + componentType, JSON.toJSONString(configList));
-			return configList;
+		if (componentTypeList != null) {
+			
+			return componentTypeList;
 		}
+		
+		// 若不存在对应的Redis缓存，从数据库查询
+		componentTypeList = componentDAO.getConfigByComponentType(componentType);
+		
+		// 写入Redis缓存
+		cache.putObject(componentType, componentTypeList);
+		return componentTypeList;
 	}
 
 }
