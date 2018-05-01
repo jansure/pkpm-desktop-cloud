@@ -78,60 +78,12 @@ public class ProductController {
 	}
 
 	//fixme 移到其他资源类里边
-	/**
-	 * 获取帮助文档、使用教程、下载云桌面客户端
-	 * 
-	 * @param filename
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/downloads", method = RequestMethod.GET)
-	public ResultObject getHelp(String filename, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		// 允许跨域调用
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		boolean isOnLine = false;
-		//filename = "BIM协同设计管理云平台.pdf";
-		
-		Preconditions.checkArgument(StringUtils.isBlank(filename), "文件名不能为空");
-		
-		log.debug("filename:" + filename + "; isOnLine:" + isOnLine);
-		
-		// 文件系统路径
-		String fileUrl = productService.getSysValue(SysConstant.FILE_BASE_URL);
-
-		String json = FileUtil.loadJson(fileUrl);
-		// System.out.println(json); //检测是否正确获得
-		
-		FileServerResponse fileServerResponse = JsonUtil.deserialize(json, FileServerResponse.class);
-		if (fileServerResponse != null && fileServerResponse.getFiles() != null) {
-		// 遍历已有的文件列表，看文件名是否存在
-			try {
-				if (fileServerResponse.getFiles().contains(filename)) {
-					// 若存在该文件名，则开启下载；若不存在，抛出异常
-					String filePath = fileUrl + "/" + filename;
-					FileUtil.downloadFile(filePath, isOnLine, request, response);
-					log.debug("FileUtil.downloadFile:" + filePath);
-					return ResultObject.success(filePath, "下载成功！");
-				}
-				
-				return ResultObject.failure("该文件不存在！");
-				
-			} catch (Exception e) {
-				
-				log.error(e.getMessage());
-				
-			}
-		}
-		
-		String msg = "<" + filename + ">下载失败！";
-		return ResultObject.failure(msg);
-	}
 
 	/**
 	 * 获取法律条款说明
 	 * 
-	 * @param filename
-	 * @param model
+	 * @param response
+	 * @param response
 	 * @return
 	 */
 	@ResponseBody
@@ -200,7 +152,7 @@ public class ProductController {
 	/**
 	 * 根据用户手机号及工单号发短信通知用户云桌面开户信息
 	 * @param userMobileNumber
-	 * @param subsId
+	 * @param
 	 * @param response
 	 * @return
 	 */
