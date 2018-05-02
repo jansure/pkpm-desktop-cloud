@@ -13,25 +13,20 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
  * @date 2017/12/25
  *
  */
-public interface ProductService {
+public interface PkpmCloudComponentDefService {
+	
 	/**
-	 * 根据父id获取子目录
+	 * 根据产品类型id获取自动配置的components
 	 * @param productType 父类id
 	 * @return
 	 */
-	List<PkpmCloudProductDef> getProductByType(Integer productType);
-	
-    /**
-     * 返回产品套餐类型列表
-     * @return
-     */
-    List<Map<String, Object>> getProductTypeList();
+    List<ComponentVO> getComponentListByProductType(Integer productType);
     
     /**
-     * 根据配置项类型返回对应的所有配置项
-     * @param componentType
+     * 返回购买配置项类型列表(如地域、软件名称、主机配置、云存储)
      * @return
      */
-    List<Map<String, Object>> getConfigByComponentType(Integer componentType);
+    List<Map<String, Object>> getComponentTypeList();
+    
 
 }

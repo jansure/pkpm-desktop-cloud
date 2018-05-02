@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudComponentDefDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.PkpmCloudComponentDefMapper;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudComponentDef;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 
 @Repository
 public class PkpmCloudComponentDefImpl implements PkpmCloudComponentDefDAO{
@@ -40,7 +41,7 @@ public class PkpmCloudComponentDefImpl implements PkpmCloudComponentDefDAO{
 		componentInfo.setComponentId(componentId);
 		componentInfo.setComponentType(componentType);
 		
-		List<PkpmCloudComponentDef> list = componentMapper.getComponentInfoList(componentInfo );
+		List<PkpmCloudComponentDef> list = componentMapper.select(componentInfo );
 		if(list != null && list.size() > 0) {
 			
 			return list.get(0);
@@ -77,7 +78,7 @@ public class PkpmCloudComponentDefImpl implements PkpmCloudComponentDefDAO{
 		PkpmCloudComponentDef componentInfo = new PkpmCloudComponentDef();
 		componentInfo.setComponentType(componentType);
 		
-		List<PkpmCloudComponentDef> list = componentMapper.getComponentInfoList(componentInfo );
+		List<PkpmCloudComponentDef> list = componentMapper.select(componentInfo );
 		if(list != null && list.size() > 0) {
 			
 			//obj2Map
@@ -87,4 +88,8 @@ public class PkpmCloudComponentDefImpl implements PkpmCloudComponentDefDAO{
 		return null;
 	}
 	
+	@Override
+	public List<ComponentVO> getComponentListByProductType(Integer productType){
+		return componentMapper.getComponentListByProductType(productType);
+	}
 }

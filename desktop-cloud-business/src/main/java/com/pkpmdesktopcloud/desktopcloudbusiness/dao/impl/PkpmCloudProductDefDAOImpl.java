@@ -78,26 +78,6 @@ public class PkpmCloudProductDefDAOImpl implements PkpmCloudProductDefDAO{
 		List<PkpmCloudProductDef> list = productMapper.getProductList(productInfo );
 		return list;
 	}
-    /**
-	 * 根据产品类型id获取自动配置的components
-	 * @param productType 产品套餐类型
-	 * @param componentType 配置类型
-	 * @return
-	 */
-	@Override
-	public List<ComponentVO> getComponentByPid(Integer productType, Integer componentType){
-		//多表查询
-	}
-	
-	/**
-     * 根据产品套餐类型获取对应的配置类别list
-     * @param productType
-     * @return
-     */
-	@Override
-	public List<Integer> getCompTypeList(Integer productType){
-		//多表查询
-	}
     
     /**
      * 返回全部产品套餐列表

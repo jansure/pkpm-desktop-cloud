@@ -37,27 +37,12 @@ public interface PkpmCloudProductDefDAO {
     PkpmSysConfig getSysConfig(String key);
     
     /**
-     * 根据产品套餐类型获取对应的配置类别list
-     * @param productType
-     * @return
-     */
-    List<Integer> getCompTypeList(Integer productType);
-    
-    /**
      * 根据productId获取对应的product实体
      * @param productId
      * @return
      */
     List<PkpmCloudProductDef> getProductByProductId(Integer productId);
     
-    /**
-	 * 根据产品类型id获取自动配置的components
-	 * @param productType 产品套餐类型
-	 * @param componentType 配置类型
-	 * @return
-	 */
-    List<ComponentVO> getComponentByPid(Integer productType,  Integer componentType);
-   
     /**
      * 返回全部产品套餐列表
      * @return

@@ -62,29 +62,6 @@ public class ProductServiceImpl implements ProductService {
 		return productInfo;
 	}
 
-	@Override
-	public String getSysValue(String key) {
-		RedisCache cache = new RedisCache(SYS_CONFIG_ID);
-		PkpmSysConfig sysConfig = (PkpmSysConfig)cache.getObject(key);
-		
-		// 若存在Redis缓存，从缓存中读取
-		if (sysConfig != null) {
-			return sysConfig.getValue();
-		}
-		
-		// 若不存在对应的Redis缓存，从数据库查询
-		sysConfig = productDAO.getSysConfig(key);
-		
-		// 写入Redis缓存
-		cache.putObject(PRODUCT_ID, sysConfig);
-		return sysConfig.getValue();
-	}
-
-	@Override
-	public List<PkpmCloudNavigation> getNavByPid(Integer parentNavId) {
-		List<PkpmCloudNavigation> list = productDAO.getNavByPid(parentNavId);
-		return list;
-	}
 
 	@Override
 	public List<ComponentVO> getComponentByPid(Integer productType, Integer componentType) {

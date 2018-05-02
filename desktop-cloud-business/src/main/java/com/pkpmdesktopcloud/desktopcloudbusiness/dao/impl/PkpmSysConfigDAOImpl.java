@@ -7,7 +7,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.List;
 
-public class PkpmSysConfigImpl implements PkpmSysConfigDAO{
+public class PkpmSysConfigDAOImpl implements PkpmSysConfigDAO{
     @Resource
     private PkpmSysConfigMapper mapper;
 

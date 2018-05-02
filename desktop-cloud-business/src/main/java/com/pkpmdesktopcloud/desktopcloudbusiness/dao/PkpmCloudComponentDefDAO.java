@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudComponentDef;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 
 public interface PkpmCloudComponentDefDAO {
 	/**
@@ -27,4 +28,6 @@ public interface PkpmCloudComponentDefDAO {
      * @return
      */
     List<Map<String, Object>> getConfigByComponentType(Integer componentType);
+    
+    List<ComponentVO> getComponentListByProductType(Integer productType);
 }

@@ -1,12 +1,10 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.controller;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,18 +14,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.desktop.utils.Base64Util;
-import com.desktop.utils.FileUtil;
 import com.desktop.utils.SmsUtil;
 import com.desktop.utils.page.ResultObject;
 import com.google.common.base.Preconditions;
-import com.pkpm.httpclientutil.common.util.JsonUtil;
 import com.pkpmdesktopcloud.desktopcloudbusiness.constants.SysConstant;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudNavigation;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dto.FileServerResponse;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudComponentDefService;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.ProductService;
-import com.pkpmdesktopcloud.desktopcloudbusiness.service.WorkOrderService;
-import com.pkpmdesktopcloud.redis.RedisCache;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,66 +34,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(value = "/product")
 public class ProductController {
 	
-	private static final String ALL_NAVIGATION_ID = "allNavigation";
-	
 	@Resource
 	private ProductService productService;
 	
 	@Resource
-	private WorkOrderService workOrderService;
+	private PkpmCloudComponentDefService componentDefService;
 	
-	/**
-	 * 获取全部导航列表
-	 * 
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/subProducts", method = RequestMethod.GET)
-	public List<PkpmCloudNavigation> getNavigation(HttpServletResponse response) {
-		// 允许跨域调用
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		
-		RedisCache cache = new RedisCache(ALL_NAVIGATION_ID);
-		List<PkpmCloudNavigation> listNav = (List<PkpmCloudNavigation>)cache.getObject("all");
-		
-		// 若存在Redis缓存，从缓存中读取
-		if (listNav != null) {
-
-			return listNav;
-		}
-		
-		// 若不存在对应的Redis缓存，从数据库查询
-		listNav = productService.getNavByPid(SysConstant.NAVIGATION_ID);
-		// 写入Redis缓存
-		cache.putObject("all", listNav);
-		return listNav;
-	}
-
-	//fixme 移到其他资源类里边
-
-	/**
-	 * 获取法律条款说明
-	 * 
-	 * @param response
-	 * @param response
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/legalTerms", method = RequestMethod.GET)
-	public ResultObject getLegalTerms(HttpServletResponse response) {
-		// 允许跨域调用
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		String filename = "法律条款声明.txt";
-//		Preconditions.checkArgument(StringUtils.isBlank(filename), "文件名不能为空");
-		
-		String url = productService.getSysValue(SysConstant.FILE_BASE_URL) + "/" + filename;
-		String termsJson = FileUtil.getHttpResponse(url);
-		if (!StringUtils.isEmpty(termsJson)) {
-			return ResultObject.success(termsJson, "获取成功");
-		} 
-		
-		return ResultObject.failure("获取失败");
-	}
 	/**
 	 * 返回默认的产品套餐配置列表
 	 * @param response
@@ -117,7 +55,7 @@ public class ProductController {
 		List<Map<String, Object>> productTypeList = productService.getProductTypeList();
 		map.put(SysConstant.BUY_TYPE, productTypeList);
 		// 配置类型列表
-		List<Map<String, Object>> componentTypeList = productService.getComponentTypeList();
+		List<Map<String, Object>> componentTypeList = componentDefService.getComponentTypeList();
 		for (Map<String, Object> component : componentTypeList) {
 			Integer componentType = (Integer) component.get("componentType");
 			// 每一种配置类型对应其包含的配置项列表
@@ -126,29 +64,7 @@ public class ProductController {
 		log.debug("map ：" + map);
 		return ResultObject.success(map);
 	}
-	/**
-	 * 根据产品类型id获取自动配置的components
-	 * 
-	 * @param productType
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/subComponents", method = RequestMethod.POST)
-	public ResultObject getComponentByProductType(Integer productType, HttpServletResponse response) {
-		// 允许跨域调用
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		
-		List<Integer> compTypeList = productService.getCompTypeList(productType);
-		log.debug("compTypeList ：" + compTypeList);
-		Map<Integer, List<ComponentVO>> componentsMap = new LinkedHashMap<Integer, List<ComponentVO>>();
-		// 每种产品配置类别中的配置项
-		for (Integer compType : compTypeList) {
-			List<ComponentVO> components = productService.getComponentByPid(productType, compType);
-			componentsMap.put(compType, components);
-		}
-		
-		return ResultObject.success(componentsMap);
-	}
+
 	/**
 	 * 根据用户手机号及工单号发短信通知用户云桌面开户信息
 	 * @param userMobileNumber
@@ -180,27 +96,6 @@ public class ProductController {
 
 		return ResultObject.failure("发送短信失败");
 		
-	}
-	
-	/**
-	 * 获取使用教程说明
-	 * @author yangpengfei
-	 * @param response
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/manual", method = RequestMethod.GET)
-	public ResultObject getManual(HttpServletResponse response) {
-		// 允许跨域调用
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		String filename = "使用教程说明.txt";
-		String url = productService.getSysValue(SysConstant.FILE_BASE_URL) + "/" + filename;
-		String termsJson = FileUtil.getHttpResponse(url);
-		if (!StringUtils.isEmpty(termsJson)) {
-			return ResultObject.success(termsJson, "获取成功");
-		}
-		
-		return ResultObject.failure("获取失败");
 	}
 	
 }

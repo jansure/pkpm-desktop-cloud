@@ -41,9 +41,6 @@ public class UserController {
 	private UserService userService;
 	
 	@Autowired
-	private WorkOrderService workOrderService;
-	
-	@Autowired
 	private SubscriptionService subscriptionService;
 
 	protected final Log logger = LogFactory.getLog(getClass());
@@ -114,7 +111,7 @@ public class UserController {
 			return ResultObject.failure("密码有误");
 		}
 		
-		return ResultObject.success(realUserInfo.getUserID(), "登陆成功");
+		return ResultObject.success(realUserInfo.getUserId(), "登陆成功");
 	}
     
 	/**
@@ -230,7 +227,7 @@ public class UserController {
 	// 允许跨域访问
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		
-		Integer userID = userInfo.getUserID();
+		Integer userID = userInfo.getUserId();
 		
 		if (StringUtils.isBlank(userInfo.getUserIdentificationCard()) && StringUtils.isBlank(userInfo.getUserIdentificationName())
 				&& StringUtils.isBlank(userInfo.getUserOrganization())) {
