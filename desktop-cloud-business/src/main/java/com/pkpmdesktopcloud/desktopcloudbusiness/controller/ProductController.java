@@ -22,7 +22,7 @@ import com.desktop.utils.page.ResultObject;
 import com.google.common.base.Preconditions;
 import com.pkpm.httpclientutil.common.util.JsonUtil;
 import com.pkpmdesktopcloud.desktopcloudbusiness.constants.SysConstant;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.Navigation;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudNavigation;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.FileServerResponse;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.ProductService;
@@ -57,12 +57,12 @@ public class ProductController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/subProducts", method = RequestMethod.GET)
-	public List<Navigation> getNavigation(HttpServletResponse response) {
+	public List<PkpmCloudNavigation> getNavigation(HttpServletResponse response) {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		
 		RedisCache cache = new RedisCache(ALL_NAVIGATION_ID);
-		List<Navigation> listNav = (List<Navigation>)cache.getObject("all");
+		List<PkpmCloudNavigation> listNav = (List<PkpmCloudNavigation>)cache.getObject("all");
 		
 		// 若存在Redis缓存，从缓存中读取
 		if (listNav != null) {

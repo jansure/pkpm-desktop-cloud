@@ -5,15 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.UserDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.UserMapper;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudUserInfoDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.PkpmCloudUserInfoMapper;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudUserInfo;
 
 @Repository
-public class UserDAOImpl implements UserDAO{
+public class PkpmCloudUserInfoDAOImpl implements PkpmCloudUserInfoDAO{
 	
 	@Autowired
-	private UserMapper userMapper;
+	private PkpmCloudUserInfoMapper userMapper;
 	
 	/* (非 Javadoc)  
 	 *   
@@ -22,9 +22,9 @@ public class UserDAOImpl implements UserDAO{
 	 * @see com.pkpmdesktopcloud.desktopcloudbusiness.dao.UserDAO#saveUserInfo(com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo)  
 	 */  
 	@Override
-	public void saveUserInfo(UserInfo userInfo) {
+	public void saveUserInfo(PkpmCloudUserInfo userInfo) {
 		
-		userInfo.setUserID(null);
+		userInfo.setUserId(null);
 		userMapper.insert(userInfo);
 	}
 
@@ -40,23 +40,23 @@ public class UserDAOImpl implements UserDAO{
 	 * @see com.pkpmdesktopcloud.desktopcloudbusiness.dao.UserDAO#findByUserNameOrTelephoneOrUserEmail(java.lang.String, java.lang.String, java.lang.String)  
 	 */  
 	@Override
-	public UserInfo findByUserNameOrTelephoneOrUserEmail(String userName, String userMobileNumber, String userEmail) {
+	public PkpmCloudUserInfo findByUserNameOrTelephoneOrUserEmail(String userName, String userMobileNumber, String userEmail) {
 		
-		UserInfo userInfo = new UserInfo();
+		PkpmCloudUserInfo userInfo = new PkpmCloudUserInfo();
 		userInfo.setUserName(userName);
-		List<UserInfo> list = userMapper.findUserInfoList(userInfo);
+		List<PkpmCloudUserInfo> list = userMapper.findUserInfoList(userInfo);
 		if(list != null && list.size() > 0) {
 			return list.get(0);
 		}
 		
-		userInfo = new UserInfo();
+		userInfo = new PkpmCloudUserInfo();
 		userInfo.setUserMobileNumber(userMobileNumber);
 		list = userMapper.findUserInfoList(userInfo);
 		if(list != null && list.size() > 0) {
 			return list.get(0);
 		}
 		
-		userInfo = new UserInfo();
+		userInfo = new PkpmCloudUserInfo();
 		userInfo.setUserEmail(userEmail);
 		list = userMapper.findUserInfoList(userInfo);
 		if(list != null && list.size() > 0) {
@@ -76,7 +76,7 @@ public class UserDAOImpl implements UserDAO{
 	 * @see com.pkpmdesktopcloud.desktopcloudbusiness.dao.UserDAO#updateUserInfo(com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo)  
 	 */  
 	@Override
-	public int updateUserInfo(UserInfo userInfo) {
+	public int updateUserInfo(PkpmCloudUserInfo userInfo) {
 		
 		return userMapper.update(userInfo);
 	}
@@ -91,11 +91,11 @@ public class UserDAOImpl implements UserDAO{
 	 * @see com.pkpmdesktopcloud.desktopcloudbusiness.dao.UserDAO#getUserById(int)  
 	 */  
 	@Override
-	public UserInfo getUserById(int userID) {
-		UserInfo userInfo = new UserInfo();
-		userInfo.setUserID(userID);
+	public PkpmCloudUserInfo getUserById(int userID) {
+		PkpmCloudUserInfo userInfo = new PkpmCloudUserInfo();
+		userInfo.setUserId(userID);
 		
-		List<UserInfo> list = userMapper.findUserInfoList(userInfo );
+		List<PkpmCloudUserInfo> list = userMapper.findUserInfoList(userInfo );
 		if(list != null && list.size() > 0) {
 			return list.get(0);
 		}

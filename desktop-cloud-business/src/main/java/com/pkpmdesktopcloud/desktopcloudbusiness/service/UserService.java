@@ -3,23 +3,25 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.service;
 import java.util.List;
 
 import com.gateway.common.dto.user.UserInfoForChangePassword;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubscription;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudUserInfo;
 
 public interface UserService {
 
-	void saveUserInfo(UserInfo userInfo);
+	void saveUserInfo(PkpmCloudUserInfo userInfo);
 	
-	boolean updateUserInfo(UserInfo userInfo);
+	boolean updateUserInfo(PkpmCloudUserInfo userInfo);
 
 	/**
 	 * @return
 	 * @author xuhe
 	 */
-	String changeUserPassword(UserInfoForChangePassword newUserInfo, List<SubsCription> subsList);
+	String changeUserPassword(UserInfoForChangePassword newUserInfo, List<PkpmCloudSubscription> subsList);
 	
-	public UserInfo findUser(Integer userID);
+	public PkpmCloudUserInfo findUser(Integer userID);
 
-	UserInfo findByUserNameOrTelephoneOrUserEmail(String name);
+	PkpmCloudUserInfo findByUserNameOrTelephoneOrUserEmail(String name);
+	
+	boolean updatePasswordOrMobileNumber(Integer userId, String userLoginPassword, String userMobileNumber);
 
 }

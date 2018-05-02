@@ -2,9 +2,9 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.dao;
 
 import java.util.List;
 
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubscription;
 
-public interface SubscriptionDAO {
+public interface PkpmCloudSubscriptionDAO {
 	
 	/**
 	 * 根据用户id获取订单Id
@@ -20,11 +20,11 @@ public interface SubscriptionDAO {
 	 * @param userId
 	 * @return
 	 */
-	List<SubsCription> findSubsCriptionByUserId(int userId);
+	List<PkpmCloudSubscription> findSubsCriptionByUserId(int userId);
 
-	Integer updateSubsCriptionBySubsId(SubsCription subsCription);
+	Integer updateSubsCriptionBySubsId(PkpmCloudSubscription subsCription);
 
-	Integer saveSubscription(SubsCription subscription);
+	Integer saveSubscription(PkpmCloudSubscription subscription);
 
 	Integer selectCount(Integer userId,  String status);
 	

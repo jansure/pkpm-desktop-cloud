@@ -12,21 +12,21 @@ import org.apache.ibatis.annotations.Update;
 import com.desktop.utils.mybatis.SimpleInsertLangDriver;
 import com.desktop.utils.mybatis.SimpleSelectLangDriver;
 import com.desktop.utils.mybatis.SimpleUpdateLangDriver;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubscription;
 @Mapper
-public interface SubscriptionMapper {
+public interface PkpmCloudSubscriptionMapper {
 	
 	@Select("select * from pkpm_cloud_subscription (#{subsCription})")
     @Lang(SimpleSelectLangDriver.class)
-    List<SubsCription> getSubsCriptionList(SubsCription subsCription );
+    List<PkpmCloudSubscription> getSubsCriptionList(PkpmCloudSubscription subsCription );
     
     @Insert("insert into pkpm_cloud_subscription (#{subsCription})")
     @Lang(SimpleInsertLangDriver.class)
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    Integer insert(SubsCription subsCription);
+    Integer insert(PkpmCloudSubscription subsCription);
 
     @Update("update pkpm_cloud_subscription (#{subsCription}) WHERE id = #{id}")
     @Lang(SimpleUpdateLangDriver.class)
-    Integer update(SubsCription subsCription);
+    Integer update(PkpmCloudSubscription subsCription);
 
 }

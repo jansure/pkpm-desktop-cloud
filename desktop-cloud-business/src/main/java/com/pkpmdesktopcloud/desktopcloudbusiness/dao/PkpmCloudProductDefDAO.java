@@ -3,9 +3,9 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.Navigation;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ProductInfo;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SysConfig;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudNavigation;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudProductDef;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmSysConfig;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 
 /**
@@ -14,27 +14,27 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
  * @date 2017/12/25
  *
  */
-public interface ProductDAO {
+public interface PkpmCloudProductDefDAO {
 	/**
 	 * 根据父id获取子目录
 	 * @param productType 产品类型
 	 * @return
 	 */
-    List<ProductInfo> getProductByType(Integer productType);
+    List<PkpmCloudProductDef> getProductByType(Integer productType);
     
     /**
      * 获取导航子目录并控制层级
      * @param parentNavId
      * @return
      */
-    List<Navigation> getNavByPid(Integer parentNavId);
+    List<PkpmCloudNavigation> getNavByPid(Integer parentNavId);
     
     /**
      * 根据key值获取对应的SysConfig实体
      * @param key
      * @return
      */
-    SysConfig getSysConfig(String key);
+    PkpmSysConfig getSysConfig(String key);
     
     /**
      * 根据产品套餐类型获取对应的配置类别list
@@ -48,7 +48,7 @@ public interface ProductDAO {
      * @param productId
      * @return
      */
-    List<ProductInfo> getProductByProductId(Integer productId);
+    List<PkpmCloudProductDef> getProductByProductId(Integer productId);
     
     /**
 	 * 根据产品类型id获取自动配置的components

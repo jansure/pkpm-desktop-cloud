@@ -3,8 +3,8 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.service;
 import java.util.List;
 import java.util.Map;
 
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.Navigation;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ProductInfo;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudNavigation;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudProductDef;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 
 /**
@@ -19,7 +19,7 @@ public interface ProductService {
 	 * @param productType 父类id
 	 * @return
 	 */
-	List<ProductInfo> getProductByType(Integer productType);
+	List<PkpmCloudProductDef> getProductByType(Integer productType);
 	/**
      * 根据key值获取对应的value
      * @param key SysConfig的主键
@@ -31,7 +31,7 @@ public interface ProductService {
      * @param parentNavId
      * @return
      */
-    List<Navigation> getNavByPid(Integer parentNavId);
+    List<PkpmCloudNavigation> getNavByPid(Integer parentNavId);
 	/**
 	 * 根据产品类型id获取自动配置的components
 	 * @param productType 父类id

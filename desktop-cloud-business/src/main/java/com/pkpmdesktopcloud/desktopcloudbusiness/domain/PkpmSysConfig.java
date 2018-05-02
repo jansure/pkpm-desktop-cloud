@@ -7,7 +7,7 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.domain;
  * @date 2017/12/26
  *
  */
-public class SysConfig {
+public class PkpmSysConfig {
 	private String key;
 	private String value;
 

@@ -22,8 +22,8 @@ import com.desktop.utils.StringUtil;
 import com.desktop.utils.page.ResultObject;
 import com.gateway.common.dto.user.UserInfoForChangePassword;
 import com.google.common.base.Preconditions;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubscription;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudUserInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.WorkOrder;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubscriptionService;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.UserService;
@@ -81,7 +81,7 @@ public class UserController {
 		}
 		
 		
-		UserInfo userInfo = new UserInfo();
+		PkpmCloudUserInfo userInfo = new PkpmCloudUserInfo();
 		userInfo.setUserName(userName);
 		userInfo.setUserMobileNumber(userMobileNumber);
 		
@@ -103,7 +103,7 @@ public class UserController {
 		Preconditions.checkArgument(StringUtils.isBlank(username), "登录账号不能为空");
 		Preconditions.checkArgument(StringUtils.isBlank(password), "密码不能为空");
 		
-		UserInfo realUserInfo = userService.findByUserNameOrTelephoneOrUserEmail(username);
+		PkpmCloudUserInfo realUserInfo = userService.findByUserNameOrTelephoneOrUserEmail(username);
 		if(realUserInfo == null) {
 			return ResultObject.failure("账号不存在");
 		}
@@ -129,7 +129,7 @@ public class UserController {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		Preconditions.checkNotNull(userId, "请您先登录");
 		
-		UserInfo user = userService.findUser(userId);
+		PkpmCloudUserInfo user = userService.findUser(userId);
 		Preconditions.checkNotNull(user, "请您先登录");
 		
 		String userName = user.getUserName();
@@ -184,7 +184,7 @@ public class UserController {
 		Preconditions.checkArgument(StringUtils.isBlank(userName), "请输入账户名");
 		Preconditions.checkNotNull(type, "type不能为空");
 		
-		UserInfo realUserInfo = userService.findByUserNameOrTelephoneOrUserEmail(userName);
+		PkpmCloudUserInfo realUserInfo = userService.findByUserNameOrTelephoneOrUserEmail(userName);
 		if (realUserInfo == null) {
 			return ResultObject.success("可以注册");
 		}
@@ -210,7 +210,7 @@ public class UserController {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		Preconditions.checkNotNull(userID, "userID不能为空");
 		
-		UserInfo user = userService.findUser(userID);
+		PkpmCloudUserInfo user = userService.findUser(userID);
 
 		if (user != null) {
 			return ResultObject.success(user, "获取个人信息成功");
@@ -226,7 +226,7 @@ public class UserController {
 	 * @return ResultObject
 	 */
 	@RequestMapping(value = "/perfectInfo", method = RequestMethod.POST)
-	public ResultObject perfectInfo(@RequestBody UserInfo userInfo, HttpServletResponse response) {
+	public ResultObject perfectInfo(@RequestBody PkpmCloudUserInfo userInfo, HttpServletResponse response) {
 	// 允许跨域访问
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		
@@ -253,7 +253,7 @@ public class UserController {
 		String userIdentificationName = StringUtils.deleteWhitespace(userInfo.getUserIdentificationName());
 		String userOrganization = StringUtils.deleteWhitespace(userInfo.getUserOrganization());
 		
-		UserInfo user = userService.findUser(userID);
+		PkpmCloudUserInfo user = userService.findUser(userID);
 		if (StringUtils.isNotBlank(userIdentificationCard)) {
 			user.setUserIdentificationCard(userIdentificationCard);
 		}
@@ -297,7 +297,7 @@ public class UserController {
 		Preconditions.checkArgument(!newMobileNumber.equals(StringUtils.deleteWhitespace(newMobileNumber)), "手机号不能带空格");
 		Preconditions.checkArgument(StringUtils.isBlank(password), "密码不能为空");
 		
-		UserInfo user = userService.findUser(userID);
+		PkpmCloudUserInfo user = userService.findUser(userID);
 		
 		// 从数据库中查出password并解密
 		String userPassword = user.getUserLoginPassword();
@@ -314,7 +314,7 @@ public class UserController {
 		Preconditions.checkArgument(!checkCode.equals(realCheckCode), "验证码输入错误");
 		Preconditions.checkArgument(!realPassword.equals(password), "密码输入错误");
 		
-		UserInfo userInfo = userService.findByUserNameOrTelephoneOrUserEmail(newMobileNumber);
+		PkpmCloudUserInfo userInfo = userService.findByUserNameOrTelephoneOrUserEmail(newMobileNumber);
 		Preconditions.checkNotNull(userInfo, "该手机号已存在，请换一个手机号");
 		
 		user.setUserMobileNumber(newMobileNumber);
@@ -361,7 +361,7 @@ public class UserController {
 			return ResultObject.failure("验证码输入错误");
 		}
 				
-		UserInfo user = userService.findByUserNameOrTelephoneOrUserEmail(mobileNumber);
+		PkpmCloudUserInfo user = userService.findByUserNameOrTelephoneOrUserEmail(mobileNumber);
 		if(user == null){
 
 			return ResultObject.failure("您的手机号尚未注册，快去注册吧");
@@ -393,7 +393,7 @@ public class UserController {
 	public ResultObject changPassword(@RequestBody UserInfoForChangePassword newUserInfo) throws Exception {
 		
 		Integer userId = newUserInfo.getUserId();
-		List<SubsCription> subsCriptionList = subscriptionService.findSubsCriptionByUserId(userId);
+		List<PkpmCloudSubscription> subsCriptionList = subscriptionService.findSubsCriptionByUserId(userId);
 		
 		logger.info(subsCriptionList);
 		userService.changeUserPassword(newUserInfo, subsCriptionList);

@@ -23,9 +23,9 @@ import com.pkpm.httpclientutil.HttpClientUtil;
 import com.pkpm.httpclientutil.MyHttpResponse;
 import com.pkpm.httpclientutil.common.HttpMethods;
 import com.pkpm.httpclientutil.exception.HttpProcessException;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.UserDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudUserInfoDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubscription;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudUserInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.UserService;
 import com.pkpmdesktopcloud.redis.RedisCache;
 
@@ -38,24 +38,24 @@ public class UserServiceImpl implements UserService {
 	private static final String USER_ID = "user";
 
     @Resource
-    private UserDAO userMapper;
+    private PkpmCloudUserInfoDAO userDAO;
 
     @Value("${server.host}")
     private String serverHost;
 
     @Override
     @Transactional
-    public void saveUserInfo(UserInfo userInfo) {
-        userMapper.saveUserInfo(userInfo);
+    public void saveUserInfo(PkpmCloudUserInfo userInfo) {
+        userDAO.saveUserInfo(userInfo);
     }
 
     @Override
-    public boolean updateUserInfo(UserInfo userInfo) {
+    public boolean updateUserInfo(PkpmCloudUserInfo userInfo) {
 
-        if (userMapper.updateUserInfo(userInfo) > 0) {
+        if (userDAO.updateUserInfo(userInfo) > 0) {
         	
         	RedisCache cache = new RedisCache(USER_ID);
-        	cache.putObject(userInfo.getUserID(), userInfo);
+        	cache.putObject(userInfo.getUserId(), userInfo);
             
             return true;
         } else {
@@ -64,10 +64,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfo findUser(Integer userID) {
+    public PkpmCloudUserInfo findUser(Integer userID) {
 
         // 若不存在对应的Redis缓存，从数据库查询
-			UserInfo userInfo = userMapper.getUserById(userID);
+			PkpmCloudUserInfo userInfo = userDAO.getUserById(userID);
 			return userInfo;
     //    String str = stringRedisTemplate.opsForValue().get("user:" + userID);
         // 若存在Redis缓存，从缓存中读取
@@ -89,20 +89,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfo findByUserNameOrTelephoneOrUserEmail(String name) {
+    public PkpmCloudUserInfo findByUserNameOrTelephoneOrUserEmail(String name) {
 
-        return userMapper.findByUserNameOrTelephoneOrUserEmail(name, name, name);
+        return userDAO.findByUserNameOrTelephoneOrUserEmail(name, name, name);
     }
 
     @Override
-    public String changeUserPassword(UserInfoForChangePassword newUserInfo, List<SubsCription> subsList) {
+    public String changeUserPassword(UserInfoForChangePassword newUserInfo, List<PkpmCloudSubscription> subsList) {
         Integer userID = newUserInfo.getUserId();
         String oldPassword = newUserInfo.getOldPassword();
         String newPassword = newUserInfo.getNewPassword();
 
         Preconditions.checkNotNull(newPassword, "密码不能设置为空");
 
-        UserInfo userInfo = userMapper.getUserById(userID);
+        PkpmCloudUserInfo userInfo = userDAO.getUserById(userID);
 
         String userName = userInfo.getUserName();
         Preconditions.checkArgument(StringUtil.checkPassword(userName, newPassword), "您输入的密码不合法,请重新输入!");
@@ -118,14 +118,14 @@ public class UserServiceImpl implements UserService {
 
         String encryptedPassword = Base64Util.b64FromString(newPassword);
         userInfo.setUserLoginPassword(encryptedPassword);
-        userMapper.updateUserInfo(userInfo);
+        userDAO.updateUserInfo(userInfo);
 
         try {
 
             String url = serverHost + "/ad/user/update";
             CommonRequestBean requestBean = new CommonRequestBean();
             requestBean.setUserName(userName);
-            for (SubsCription subInfo : subsList) {
+            for (PkpmCloudSubscription subInfo : subsList) {
                 BeanUtil.copyPropertiesIgnoreNull(subInfo,requestBean);
                 requestBean.setUserLoginPassword(newPassword);
                 String jsonStr = JsonUtil.serialize(requestBean);
@@ -146,5 +146,15 @@ public class UserServiceImpl implements UserService {
         }
         throw Exceptions.newBusinessException("密码修改失败");
     }
+    
+    @Override
+	public boolean updatePasswordOrMobileNumber(Integer userId, String userLoginPassword, String userMobileNumber) {
+		
+		if(userDAO.updatePasswordOrMobileNumberByUserID(userId, userLoginPassword, userMobileNumber)>0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }

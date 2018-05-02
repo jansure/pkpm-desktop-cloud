@@ -11,14 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.desktop.utils.DateUtils;
 import com.github.pagehelper.PageHelper;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ComponentDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ProductDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.SubsDetailsDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.SubscriptionDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.WorkOrderDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ProductInfo;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsDetails;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudComponentDefDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudProductDefDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudSubsDetailsDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudSubscriptionDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudProductDef;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubsDetails;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.MyProduct;
 import com.pkpmdesktopcloud.desktopcloudbusiness.page.PageBean;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubsDetailsService;
@@ -28,19 +26,16 @@ import com.pkpmdesktopcloud.redis.RedisCache;
 public class SubsDetailsServiceImpl implements SubsDetailsService {
 	
 	@Resource
-	private SubscriptionDAO subscriptionMapper;
+	private PkpmCloudSubscriptionDAO subscriptionMapper;
 	
 	@Resource
-	private SubsDetailsDAO subsDetailsMapper;
+	private PkpmCloudSubsDetailsDAO subsDetailsMapper;
 	
 	@Resource
-	private ProductDAO productMapper;
+	private PkpmCloudProductDefDAO productMapper;
 	
 	@Resource
-	private ComponentDAO componentMapper;
-	
-	@Resource
-	private WorkOrderDAO workOrderMapper;
+	private PkpmCloudComponentDefDAO componentMapper;
 	
 	@Override
 	public PageBean<MyProduct> showList(int userId,Integer currentPage,Integer pageSize) {
@@ -72,9 +67,9 @@ public class SubsDetailsServiceImpl implements SubsDetailsService {
 			
 			for (Long subsId : subsIds) {
 				
-				List<SubsDetails> subsDetails = subsDetailsMapper.findSubsDetailsList(subsId);
+				List<PkpmCloudSubsDetails> subsDetails = subsDetailsMapper.findSubsDetailsList(subsId);
 				
-				for (SubsDetails subs : subsDetails) {
+				for (PkpmCloudSubsDetails subs : subsDetails) {
 					Integer productId = subs.getProductId();
 					LocalDateTime createTime = subs.getCreateTime();
 					String create = DateUtils.time2String(createTime, "yyyy年MM月dd日  HH:mm:ss");
@@ -89,13 +84,14 @@ public class SubsDetailsServiceImpl implements SubsDetailsService {
 					}
 					
 					String invalid = DateUtils.time2String(invalidTime, "yyyy年MM月dd日  HH:mm:ss");
-					List<ProductInfo> products = productMapper.getProductByProductId(productId);
+					List<PkpmCloudProductDef> products = productMapper.getProductByProductId(productId);
 					String productDesc = products.get(0).getProductDesc(); 
 					List<String> componentNames = new ArrayList<>();
+					
 					List<String> hostIp = workOrderMapper.findHostIp(userId, subsId, productId);
 					List<Integer> status = workOrderMapper.findStatus(userId, subsId, productId);
 					
-					for (ProductInfo productInfo : products) {
+					for (PkpmCloudProductDef productInfo : products) {
 						
 						Integer componentId = productInfo.getComponentId();
 						Integer componentType = 0;

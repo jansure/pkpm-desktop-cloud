@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pkpmdesktopcloud.desktopcloudbusiness.constants.SysConstant;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ComponentDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ProductDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.Navigation;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ProductInfo;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SysConfig;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudComponentDefDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudProductDefDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudNavigation;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudProductDef;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmSysConfig;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.ProductService;
 import com.pkpmdesktopcloud.redis.RedisCache;
@@ -39,17 +39,17 @@ public class ProductServiceImpl implements ProductService {
 	private static final String ALL_TYPE_REDIS_KEY = "allTypeRedisKey";
 	
 	@Autowired
-	private ProductDAO productDAO;
+	private PkpmCloudProductDefDAO productDAO;
 	
 	@Resource
-	private ComponentDAO componentDAO;
+	private PkpmCloudComponentDefDAO componentDAO;
 
 	@Override
-	public List<ProductInfo> getProductByType(Integer productType) {
+	public List<PkpmCloudProductDef> getProductByType(Integer productType) {
 		
 		// 若存在Redis缓存，从缓存中读取
 		RedisCache cache = new RedisCache(PRODUCT_ID);
-		List<ProductInfo> productInfo = (List<ProductInfo>)cache.getObject(productType);
+		List<PkpmCloudProductDef> productInfo = (List<PkpmCloudProductDef>)cache.getObject(productType);
 		if(productInfo != null) {
 			
 			return productInfo;
@@ -65,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public String getSysValue(String key) {
 		RedisCache cache = new RedisCache(SYS_CONFIG_ID);
-		SysConfig sysConfig = (SysConfig)cache.getObject(key);
+		PkpmSysConfig sysConfig = (PkpmSysConfig)cache.getObject(key);
 		
 		// 若存在Redis缓存，从缓存中读取
 		if (sysConfig != null) {
@@ -81,8 +81,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<Navigation> getNavByPid(Integer parentNavId) {
-		List<Navigation> list = productDAO.getNavByPid(parentNavId);
+	public List<PkpmCloudNavigation> getNavByPid(Integer parentNavId) {
+		List<PkpmCloudNavigation> list = productDAO.getNavByPid(parentNavId);
 		return list;
 	}
 

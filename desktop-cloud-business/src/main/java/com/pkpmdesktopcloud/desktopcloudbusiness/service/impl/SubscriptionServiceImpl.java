@@ -28,15 +28,15 @@ import com.pkpm.httpclientutil.HttpClientUtil;
 import com.pkpm.httpclientutil.MyHttpResponse;
 import com.pkpm.httpclientutil.common.HttpMethods;
 import com.pkpm.httpclientutil.exception.HttpProcessException;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ComponentDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ProductDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.SubsDetailsDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.SubscriptionDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ComponentInfo;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ProductInfo;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsDetails;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudComponentDefDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudProductDefDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudSubsDetailsDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudSubscriptionDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudComponentDef;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudProductDef;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubscription;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubsDetails;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudUserInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.WorkOrderVO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubscriptionService;
 import com.pkpmdesktopcloud.redis.RedisCache;
@@ -48,16 +48,16 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	private static final String SUBSCRIPTION_USERID_ID = "subsCriptionByUserId";
 	
 	@Resource
-	private SubscriptionDAO subscriptionMapper;
+	private PkpmCloudSubscriptionDAO subscriptionMapper;
 	
 	@Resource
-	private SubsDetailsDAO subsDetailsMapper;
+	private PkpmCloudSubsDetailsDAO subsDetailsMapper;
 	
 	@Resource
-	private ProductDAO productMapper;
+	private PkpmCloudProductDefDAO productMapper;
 	
 	@Resource
-	private ComponentDAO componentMapper;
+	private PkpmCloudComponentDefDAO componentMapper;
 	
 	protected final Log logger = LogFactory.getLog(getClass());
 	
@@ -82,7 +82,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	 */
 	@SuppressWarnings({ "unused", "unchecked" })
 	@Override
-	public PkpmOperatorStatus saveSubsDetails(UserInfo userInfo,WorkOrderVO wo) {
+	public PkpmOperatorStatus saveSubsDetails(PkpmCloudUserInfo userInfo,WorkOrderVO wo) {
 		
 		
 		String adId = "";
@@ -95,7 +95,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 			throw  Exceptions.newBusinessException("您有正在创建中的桌面,请重新尝试!");
 		}
 		Integer regionId = wo.getRegionId();
-		ComponentInfo regionComponentInfo = componentMapper.getComponentInfo(regionId, ComponentTypeConstant.region_type);
+		PkpmCloudComponentDef regionComponentInfo = componentMapper.getComponentInfo(regionId, ComponentTypeConstant.region_type);
 		String areaCode = regionComponentInfo.getComponentDesc();
 		
 	   //	String areaCode = "cn-north-1";
@@ -129,7 +129,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 		adId = map.get("adId");
 		projectId = map.get("projectId");
 		
-		SubsCription subscription = new SubsCription();
+		PkpmCloudSubscription subscription = new PkpmCloudSubscription();
 		long subsId = IDUtil.genOrderId();
 		subscription.setSubsId(subsId);
 		LocalDateTime date = LocalDateTime.now();
@@ -144,7 +144,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 			throw  Exceptions.newBusinessException("保存订单失败,请您重试!");
 		}
 		
-		SubsDetails subsDetails = new SubsDetails();
+		PkpmCloudSubsDetails subsDetails = new PkpmCloudSubsDetails();
 		subsDetails.setSubsId(subsId);
 		Integer productId = (Integer) wo.getProductId();
 		subsDetails.setProductId(productId);
@@ -157,8 +157,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 			throw  Exceptions.newBusinessException("保存订单明细失败,请您重试!");
 		}
 		
-		List<ProductInfo> products = productMapper.getProductByProductId(productId);
-		ProductInfo productInfo = products.get(0);
+		List<PkpmCloudProductDef> products = productMapper.getProductByProductId(productId);
+		PkpmCloudProductDef productInfo = products.get(0);
 		//String imageId = productInfo.getImageId();
 		String productName = productInfo.getProductName();
 		
@@ -172,7 +172,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 		commonRequestBean.setOperatorStatusId(null);  
 		
 		Integer hostConfigId = wo.getHostConfigId();
-		ComponentInfo hostConfigcomponentInfo = componentMapper.getComponentInfo(hostConfigId, ComponentTypeConstant.host_config);
+		PkpmCloudComponentDef hostConfigcomponentInfo = componentMapper.getComponentInfo(hostConfigId, ComponentTypeConstant.host_config);
 		String hwProductId = hostConfigcomponentInfo.getHwProductId();
 		commonRequestBean.setHwProductId(hwProductId);   // workspace.c2.large.windows
 		
@@ -252,10 +252,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	}
 
 	@Override
-	public List<SubsCription> findSubsCriptionByUserId(Integer userId) {
+	public List<PkpmCloudSubscription> findSubsCriptionByUserId(Integer userId) {
 		
 		RedisCache cache = new RedisCache(SUBSCRIPTION_USERID_ID);
-		List<SubsCription> subsCriptionList = (List<SubsCription>)cache.getObject(userId);
+		List<PkpmCloudSubscription> subsCriptionList = (List<PkpmCloudSubscription>)cache.getObject(userId);
 		
 		// 若存在Redis缓存，从缓存中读取
 		if(subsCriptionList != null) {
@@ -277,7 +277,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	 * @return java.lang.String
 	 */
 	@Override
-	public String  updateSubsCriptionBySubsId(SubsCription subsCription) {
+	public String  updateSubsCriptionBySubsId(PkpmCloudSubscription subsCription) {
 
 		int result =subscriptionMapper.updateSubsCriptionBySubsId(subsCription);
 		Preconditions.checkArgument(result==1,"订单更新失败");

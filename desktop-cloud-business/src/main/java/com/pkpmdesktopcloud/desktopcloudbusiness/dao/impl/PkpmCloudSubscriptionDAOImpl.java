@@ -6,15 +6,15 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.SubscriptionDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.SubscriptionMapper;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudSubscriptionDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.PkpmCloudSubscriptionMapper;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubscription;
 
 @Repository
-public class SubscriptionDAOImpl implements SubscriptionDAO{
+public class PkpmCloudSubscriptionDAOImpl implements PkpmCloudSubscriptionDAO{
 	
 	@Autowired
-	private SubscriptionMapper subscriptionMapper;
+	private PkpmCloudSubscriptionMapper subscriptionMapper;
 	
 	/**
 	 * 根据用户id获取订单Id
@@ -24,12 +24,12 @@ public class SubscriptionDAOImpl implements SubscriptionDAO{
 	 */
 	@Override
 	public List<Long> findSubsId(int userId) {
-		SubsCription subsCription = new SubsCription();
+		PkpmCloudSubscription subsCription = new PkpmCloudSubscription();
 		subsCription.setUserId(userId);
 		
-		List<SubsCription> list = subscriptionMapper.getSubsCriptionList(subsCription);
+		List<PkpmCloudSubscription> list = subscriptionMapper.getSubsCriptionList(subsCription);
 		if(list != null && list.size() > 0) {
-			return list.stream().map(SubsCription::getSubsId).collect(Collectors.toList());
+			return list.stream().map(PkpmCloudSubscription::getSubsId).collect(Collectors.toList());
 		}
 		
 		return null;
@@ -42,16 +42,16 @@ public class SubscriptionDAOImpl implements SubscriptionDAO{
 	 * @return
 	 */
 	@Override
-	public List<SubsCription> findSubsCriptionByUserId(int userId){
-		SubsCription subsCription = new SubsCription();
+	public List<PkpmCloudSubscription> findSubsCriptionByUserId(int userId){
+		PkpmCloudSubscription subsCription = new PkpmCloudSubscription();
 		subsCription.setUserId(userId);
 		
-		List<SubsCription> list = subscriptionMapper.getSubsCriptionList(subsCription);
+		List<PkpmCloudSubscription> list = subscriptionMapper.getSubsCriptionList(subsCription);
 		return list;
 	}
 
 	@Override
-	public Integer updateSubsCriptionBySubsId(SubsCription subsCription) {
+	public Integer updateSubsCriptionBySubsId(PkpmCloudSubscription subsCription) {
 		
 		int num = 0;
 		
@@ -60,13 +60,13 @@ public class SubscriptionDAOImpl implements SubscriptionDAO{
 		}
 		
 		//先获取相关信息
-		SubsCription subs = new SubsCription();
+		PkpmCloudSubscription subs = new PkpmCloudSubscription();
 		subs.setSubsId(subsCription.getSubsId());
-		List<SubsCription> list = subscriptionMapper.getSubsCriptionList(subs);
+		List<PkpmCloudSubscription> list = subscriptionMapper.getSubsCriptionList(subs);
 		
 		//批量更新
 		if(list != null && list.size() > 0) {
-			for(SubsCription subsCriptionItem : list) {
+			for(PkpmCloudSubscription subsCriptionItem : list) {
 				
 				subs.setId(subsCriptionItem.getId());
 				subs.setStatus(subsCription.getStatus());
@@ -78,7 +78,7 @@ public class SubscriptionDAOImpl implements SubscriptionDAO{
 	}
 
 	@Override
-	public Integer saveSubscription(SubsCription subscription) {
+	public Integer saveSubscription(PkpmCloudSubscription subscription) {
 		
 		subscription.setId(null);
 		return subscriptionMapper.insert(subscription);
@@ -86,11 +86,11 @@ public class SubscriptionDAOImpl implements SubscriptionDAO{
 
 	@Override
 	public Integer selectCount(Integer userId,  String status) {
-		SubsCription subsCription = new SubsCription();
+		PkpmCloudSubscription subsCription = new PkpmCloudSubscription();
 		subsCription.setUserId(userId);
 		subsCription.setStatus(status);
 		
-		List<SubsCription> list = subscriptionMapper.getSubsCriptionList(subsCription);
+		List<PkpmCloudSubscription> list = subscriptionMapper.getSubsCriptionList(subsCription);
 		if(list != null) {
 			return list.size();
 		}

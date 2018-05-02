@@ -6,18 +6,18 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.ProductDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.ProductMapper;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.Navigation;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ProductInfo;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SysConfig;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudProductDefDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.PkpmCloudProductDefMapper;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudNavigation;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudProductDef;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmSysConfig;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 
 @Repository
-public class ProductDAOImpl implements ProductDAO{
+public class PkpmCloudProductDefDAOImpl implements PkpmCloudProductDefDAO{
 	
 	@Autowired
-	private ProductMapper productMapper;
+	private PkpmCloudProductDefMapper productMapper;
 	
 	/**
 	 * 根据父id获取子目录
@@ -25,24 +25,25 @@ public class ProductDAOImpl implements ProductDAO{
 	 * @return
 	 */
 	@Override
-	public List<ProductInfo> getProductByType(Integer productType) {
-		ProductInfo productInfo = new ProductInfo();
+	public List<PkpmCloudProductDef> getProductByType(Integer productType) {
+		PkpmCloudProductDef productInfo = new PkpmCloudProductDef();
 		productInfo.setProductType(productType);
 		
-		List<ProductInfo> list = productMapper.getProductList(productInfo );
+		List<PkpmCloudProductDef> list = productMapper.getProductList(productInfo );
 		return list;
 	}
+	
     /**
      * 获取导航子目录并控制层级
      * @param parentNavId
      * @return
      */
 	@Override
-	public List<Navigation> getNavByPid(Integer parentNavId){
-		Navigation navigation = new Navigation();
+	public List<PkpmCloudNavigation> getNavByPid(Integer parentNavId){
+		PkpmCloudNavigation navigation = new PkpmCloudNavigation();
 		navigation.setParentNavId(parentNavId);
 		
-		List<Navigation> list = productMapper.getNavigationList(navigation );
+		List<PkpmCloudNavigation> list = productMapper.getNavigationList(navigation );
 		return list;
 		
 	}
@@ -52,11 +53,11 @@ public class ProductDAOImpl implements ProductDAO{
      * @return
      */
 	@Override
-	public SysConfig getSysConfig(String key) {
-		SysConfig sysConfig = new SysConfig();
+	public PkpmSysConfig getSysConfig(String key) {
+		PkpmSysConfig sysConfig = new PkpmSysConfig();
 		sysConfig.setKey(key);
 		
-		List<SysConfig> list = productMapper.getSysConfigList(sysConfig );
+		List<PkpmSysConfig> list = productMapper.getSysConfigList(sysConfig );
 		if(list != null && list.size() > 0) {
 			return list.get(0);
 		}
@@ -70,11 +71,11 @@ public class ProductDAOImpl implements ProductDAO{
      * @return
      */
 	@Override
-	public List<ProductInfo> getProductByProductId(Integer productId){
-		ProductInfo productInfo = new ProductInfo();
+	public List<PkpmCloudProductDef> getProductByProductId(Integer productId){
+		PkpmCloudProductDef productInfo = new PkpmCloudProductDef();
 		productInfo.setProductId(productId);
 		
-		List<ProductInfo> list = productMapper.getProductList(productInfo );
+		List<PkpmCloudProductDef> list = productMapper.getProductList(productInfo );
 		return list;
 	}
     /**
@@ -105,7 +106,7 @@ public class ProductDAOImpl implements ProductDAO{
 	@Override
 	public List<Map<String, Object>> getProductTypeList(){
 		
-		List<ProductInfo> list = productMapper.getProductTypeList();
+		List<PkpmCloudProductDef> list = productMapper.getProductTypeList();
 		if(list != null && list.size() > 0) {
 			
 			//obj2Map

@@ -6,15 +6,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.SubsDetailsDAO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.SubsDetailsMapper;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsDetails;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudSubsDetailsDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.PkpmCloudSubsDetailsMapper;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubsDetails;
 
 @Repository
-public class SubsDetailsDAOImpl implements SubsDetailsDAO{
+public class PkpmCloudSubsDetailsDAOImpl implements PkpmCloudSubsDetailsDAO{
 	
 	@Autowired
-	private SubsDetailsMapper subsDetailsMapper;
+	private PkpmCloudSubsDetailsMapper subsDetailsMapper;
 	
 	/* (非 Javadoc)  
 	 *   
@@ -24,8 +24,8 @@ public class SubsDetailsDAOImpl implements SubsDetailsDAO{
 	 * @see com.pkpmdesktopcloud.desktopcloudbusiness.dao.SubsDetailsDAO#findSubsDetailsList(java.lang.Long)  
 	 */  
 	@Override
-	public List<SubsDetails> findSubsDetailsList(Long subsId) {
-		SubsDetails subsDetails = new SubsDetails();
+	public List<PkpmCloudSubsDetails> findSubsDetailsList(Long subsId) {
+		PkpmCloudSubsDetails subsDetails = new PkpmCloudSubsDetails();
 		subsDetails.setSubsId(subsId);
 		
 		return subsDetailsMapper.findSubsDetailsList(subsDetails );
@@ -41,7 +41,7 @@ public class SubsDetailsDAOImpl implements SubsDetailsDAO{
 	 * @see com.pkpmdesktopcloud.desktopcloudbusiness.dao.SubsDetailsDAO#saveSubsDetails(com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsDetails)  
 	 */  
 	@Override
-	public Integer saveSubsDetails(SubsDetails subsDetails) {
+	public Integer saveSubsDetails(PkpmCloudSubsDetails subsDetails) {
 		
 		subsDetails.setId(null);
 		return subsDetailsMapper.insert(subsDetails);
@@ -60,13 +60,13 @@ public class SubsDetailsDAOImpl implements SubsDetailsDAO{
 		int num = 0;
 		
 		//先获取相关信息
-		SubsDetails subs = new SubsDetails();
+		PkpmCloudSubsDetails subs = new PkpmCloudSubsDetails();
 		subs.setSubsId(subsId);
-		List<SubsDetails> list = subsDetailsMapper.findSubsDetailsList(subs);
+		List<PkpmCloudSubsDetails> list = subsDetailsMapper.findSubsDetailsList(subs);
 		
 		//批量更新
 		if(list != null && list.size() > 0) {
-			for(SubsDetails subsDetailsItem : list) {
+			for(PkpmCloudSubsDetails subsDetailsItem : list) {
 				
 				subs.setId(subsDetailsItem.getId());
 				subs.setValidTime(LocalDateTime.now());

@@ -9,9 +9,9 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import com.desktop.utils.mybatis.SimpleSelectLangDriver;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.Navigation;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ProductInfo;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SysConfig;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudNavigation;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudProductDef;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmSysConfig;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 
 /**
@@ -21,19 +21,19 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
  *
  */
 @Mapper
-public interface ProductMapper {
+public interface PkpmCloudProductDefMapper {
 	
 	@Select("select * from pkpm_cloud_product_def (#{productInfo})")
 	@Lang(SimpleSelectLangDriver.class)
-    List<ProductInfo> getProductList(ProductInfo productInfo);
+    List<PkpmCloudProductDef> getProductList(PkpmCloudProductDef productInfo);
 	
 	@Select("select * from pkpm_cloud_navigation (#{navigation})")
 	@Lang(SimpleSelectLangDriver.class)
-    List<Navigation> getNavigationList(Navigation navigation);
+    List<PkpmCloudNavigation> getNavigationList(PkpmCloudNavigation navigation);
 	
 	@Select("select * from pkpm_sys_config (#{sysConfig})")
 	@Lang(SimpleSelectLangDriver.class)
-	List<SysConfig> getSysConfigList(SysConfig sysConfig);
+	List<PkpmSysConfig> getSysConfigList(PkpmSysConfig sysConfig);
     
     /**
 	 * 根据产品类型id获取自动配置的components
@@ -53,7 +53,7 @@ public interface ProductMapper {
     
     @Select("select DISTINCT(product_type), product_id, product_desc from pkpm_cloud_product_def")
 	@Lang(SimpleSelectLangDriver.class)
-    List<ProductInfo> getProductTypeList();
+    List<PkpmCloudProductDef> getProductTypeList();
     
     
     /**

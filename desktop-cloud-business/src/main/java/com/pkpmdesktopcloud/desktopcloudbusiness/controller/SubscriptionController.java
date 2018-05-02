@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.desktop.utils.page.ResultObject;
 import com.gateway.common.domain.PkpmOperatorStatus;
 import com.google.common.base.Preconditions;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.SubsCription;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.UserInfo;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubscription;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudUserInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.MyProduct;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.WorkOrderVO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubsDetailsService;
@@ -44,7 +44,7 @@ public class SubscriptionController {
 		Integer userId = wo.getUserId();
 		Preconditions.checkNotNull(wo.getUserId(), "请您先登录账号才可以使用");
 				
-		UserInfo userInfo = userService.findUser(wo.getUserId());
+		PkpmCloudUserInfo userInfo = userService.findUser(wo.getUserId());
 		if(userInfo == null){
 			
 			return ResultObject.failure("请重新登录");
@@ -70,7 +70,7 @@ public class SubscriptionController {
 	}
 
 	@PostMapping(value = "/setSubsStatus")
-	public ResultObject updateSubscription(@RequestBody SubsCription subsCription){
+	public ResultObject updateSubscription(@RequestBody PkpmCloudSubscription subsCription){
 		String response = subscription.updateSubsCriptionBySubsId(subsCription);
 		return ResultObject.success(response);
 	}

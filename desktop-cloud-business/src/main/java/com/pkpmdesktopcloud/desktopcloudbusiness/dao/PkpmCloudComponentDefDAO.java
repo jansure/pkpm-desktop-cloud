@@ -3,9 +3,9 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.ComponentInfo;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudComponentDef;
 
-public interface ComponentDAO {
+public interface PkpmCloudComponentDefDAO {
 	/**
      * 根据componentId和componentType获取对应的子产品名
      * @param componentId,componentId
@@ -13,7 +13,7 @@ public interface ComponentDAO {
      */
     String getComponentName(Integer componentId, Integer componentType);
     
-    ComponentInfo getComponentInfo(Integer componentId, Integer componentType);
+    PkpmCloudComponentDef getComponentInfo(Integer componentId, Integer componentType);
     
     /**
      * 返回购买配置项类型列表(如地域、软件名称、主机配置、云存储)
