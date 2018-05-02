@@ -10,10 +10,12 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudSubscriptionDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.PkpmCloudSubscriptionMapper;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubscription;
 
+import javax.annotation.Resource;
+
 @Repository
 public class PkpmCloudSubscriptionDAOImpl implements PkpmCloudSubscriptionDAO{
 	
-	@Autowired
+	@Resource
 	private PkpmCloudSubscriptionMapper subscriptionMapper;
 	
 	/**

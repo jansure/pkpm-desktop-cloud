@@ -13,10 +13,12 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudProductDef;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmSysConfig;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 
+import javax.annotation.Resource;
+
 @Repository
 public class PkpmCloudProductDefDAOImpl implements PkpmCloudProductDefDAO{
 	
-	@Autowired
+	@Resource
 	private PkpmCloudProductDefMapper productMapper;
 	
 	/**

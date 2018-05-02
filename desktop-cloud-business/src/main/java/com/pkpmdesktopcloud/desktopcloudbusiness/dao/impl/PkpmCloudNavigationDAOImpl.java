@@ -9,10 +9,12 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudNavigationDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.PkpmCloudNavigationMapper;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudNavigation;
 
+import javax.annotation.Resource;
+
 @Repository
 public class PkpmCloudNavigationDAOImpl implements PkpmCloudNavigationDAO{
 	
-	@Autowired
+	@Resource
 	private PkpmCloudNavigationMapper pkpmCloudNavigationMapper;
 	
 	
