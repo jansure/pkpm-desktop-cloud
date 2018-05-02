@@ -8,7 +8,7 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudUserInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.WorkOrderVO;
 
 
-public interface SubscriptionService {
+public interface PkpmCloudSubscriptionService {
 
 	PkpmOperatorStatus saveSubsDetails(PkpmCloudUserInfo userInfo,WorkOrderVO wo);
 

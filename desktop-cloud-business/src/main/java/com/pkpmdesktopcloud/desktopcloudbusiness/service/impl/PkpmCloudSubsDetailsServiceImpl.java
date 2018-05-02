@@ -19,11 +19,11 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudProductDef;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubsDetails;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.MyProduct;
 import com.pkpmdesktopcloud.desktopcloudbusiness.page.PageBean;
-import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubsDetailsService;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudSubsDetailsService;
 import com.pkpmdesktopcloud.redis.RedisCache;
 
 @Service
-public class SubsDetailsServiceImpl implements SubsDetailsService {
+public class PkpmCloudSubsDetailsServiceImpl implements PkpmCloudSubsDetailsService {
 	
 	@Resource
 	private PkpmCloudSubscriptionDAO subscriptionMapper;
@@ -88,8 +88,9 @@ public class SubsDetailsServiceImpl implements SubsDetailsService {
 					String productDesc = products.get(0).getProductDesc(); 
 					List<String> componentNames = new ArrayList<>();
 					
-					List<String> hostIp = workOrderMapper.findHostIp(userId, subsId, productId);
-					List<Integer> status = workOrderMapper.findStatus(userId, subsId, productId);
+					// fixme
+//					List<String> hostIp = workOrderMapper.findHostIp(userId, subsId, productId);
+//					List<Integer> status = workOrderMapper.findStatus(userId, subsId, productId);
 					
 					for (PkpmCloudProductDef productInfo : products) {
 						
@@ -110,8 +111,8 @@ public class SubsDetailsServiceImpl implements SubsDetailsService {
 					myProduct.setInvalidtime(invalid);
 					myProduct.setProductDesc(productDesc);
 					myProduct.setFlagTime(flagTime);
-					myProduct.setHostIp(hostIp.get(0));
-					myProduct.setStatus(status.get(0));
+//					myProduct.setHostIp(hostIp.get(0));
+//					myProduct.setStatus(status.get(0));
 					
 					myProducts.add(myProduct);
 				}

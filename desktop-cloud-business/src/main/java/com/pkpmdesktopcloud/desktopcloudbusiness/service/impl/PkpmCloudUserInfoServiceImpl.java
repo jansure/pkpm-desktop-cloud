@@ -26,14 +26,14 @@ import com.pkpm.httpclientutil.exception.HttpProcessException;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudUserInfoDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubscription;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudUserInfo;
-import com.pkpmdesktopcloud.desktopcloudbusiness.service.UserService;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudUserInfoService;
 import com.pkpmdesktopcloud.redis.RedisCache;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class PkpmCloudUserInfoServiceImpl implements PkpmCloudUserInfoService {
 	
 	private static final String USER_ID = "user";
 
@@ -147,14 +147,4 @@ public class UserServiceImpl implements UserService {
         throw Exceptions.newBusinessException("密码修改失败");
     }
     
-    @Override
-	public boolean updatePasswordOrMobileNumber(Integer userId, String userLoginPassword, String userMobileNumber) {
-		
-		if(userDAO.updatePasswordOrMobileNumberByUserID(userId, userLoginPassword, userMobileNumber)>0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 }

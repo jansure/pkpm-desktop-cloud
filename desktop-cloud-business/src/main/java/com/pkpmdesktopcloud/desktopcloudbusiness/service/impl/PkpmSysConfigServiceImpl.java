@@ -15,6 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class PkpmSysConfigServiceImpl implements PkpmSysConfigService {
+	
+	private static final String SYS_CONFIG_ID = "sysconfig";
+	
     @Resource
     private PkpmSysConfigDAO sysConfigDAO;
 

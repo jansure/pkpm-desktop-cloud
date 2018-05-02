@@ -47,6 +47,6 @@ public interface PkpmCloudProductDefDAO {
      * 返回全部产品套餐列表
      * @return
      */
-    List<Map<String, Object>> getProductTypeList();
+    List<PkpmCloudProductDef> getProductTypeList();
     
 }

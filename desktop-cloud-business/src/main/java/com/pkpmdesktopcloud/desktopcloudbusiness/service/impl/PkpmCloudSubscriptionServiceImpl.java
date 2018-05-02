@@ -38,12 +38,12 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubscription;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubsDetails;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudUserInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.WorkOrderVO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubscriptionService;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudSubscriptionService;
 import com.pkpmdesktopcloud.redis.RedisCache;
 
 @Service
 @Transactional
-public class SubscriptionServiceImpl implements SubscriptionService {
+public class PkpmCloudSubscriptionServiceImpl implements PkpmCloudSubscriptionService {
 	
 	private static final String SUBSCRIPTION_USERID_ID = "subsCriptionByUserId";
 	
@@ -89,7 +89,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 		String projectId = "";
 	try {
 		//a、保存订单之前先查询有没有 初始化的订单
-		Integer userId = userInfo.getUserID();
+		Integer userId = userInfo.getUserId();
 		Integer invalidCount = subscriptionMapper.selectCount(userId,invalidStatus);
 		if(invalidCount >= 1){
 			throw  Exceptions.newBusinessException("您有正在创建中的桌面,请重新尝试!");

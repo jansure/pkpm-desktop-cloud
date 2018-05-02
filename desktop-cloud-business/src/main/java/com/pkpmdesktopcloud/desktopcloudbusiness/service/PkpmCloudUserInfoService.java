@@ -6,7 +6,7 @@ import com.gateway.common.dto.user.UserInfoForChangePassword;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubscription;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudUserInfo;
 
-public interface UserService {
+public interface PkpmCloudUserInfoService {
 
 	void saveUserInfo(PkpmCloudUserInfo userInfo);
 	
@@ -21,7 +21,4 @@ public interface UserService {
 	public PkpmCloudUserInfo findUser(Integer userID);
 
 	PkpmCloudUserInfo findByUserNameOrTelephoneOrUserEmail(String name);
-	
-	boolean updatePasswordOrMobileNumber(Integer userId, String userLoginPassword, String userMobileNumber);
-
 }

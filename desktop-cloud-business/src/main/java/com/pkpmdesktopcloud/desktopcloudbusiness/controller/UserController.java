@@ -24,10 +24,8 @@ import com.gateway.common.dto.user.UserInfoForChangePassword;
 import com.google.common.base.Preconditions;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubscription;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudUserInfo;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.WorkOrder;
-import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubscriptionService;
-import com.pkpmdesktopcloud.desktopcloudbusiness.service.UserService;
-import com.pkpmdesktopcloud.desktopcloudbusiness.service.WorkOrderService;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudSubscriptionService;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudUserInfoService;
 import com.pkpmdesktopcloud.redis.RedisCache;
 
 @RestController
@@ -38,10 +36,10 @@ public class UserController {
 	private static final String REAL_CHECK_CODE_ID = "realCheckCode";
 
 	@Autowired
-	private UserService userService;
+	private PkpmCloudUserInfoService userService;
 	
 	@Autowired
-	private SubscriptionService subscriptionService;
+	private PkpmCloudSubscriptionService subscriptionService;
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
@@ -316,14 +314,10 @@ public class UserController {
 		
 		user.setUserMobileNumber(newMobileNumber);
 		
-		List<WorkOrder> workOrders = workOrderService.findWorkOrderListByUserId(userID);
-		
-		if(workOrders!=null && !workOrders.isEmpty()){
-			if (!userService.updateUserInfo(user) || !workOrderService.updatePasswordOrMobileNumber(userID, null, newMobileNumber)) {
-				
-				return ResultObject.failure("手机号修改失败，请再试一次");
-			}
-		}else{
+		if (!userService.updateUserInfo(user)) {
+			
+			return ResultObject.failure("手机号修改失败，请再试一次");
+		} else{
 			if (!userService.updateUserInfo(user)) {
 				return ResultObject.failure("密码修改失败");
 			}

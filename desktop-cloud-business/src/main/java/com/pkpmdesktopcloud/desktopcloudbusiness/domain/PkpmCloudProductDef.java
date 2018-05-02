@@ -38,6 +38,9 @@ public class PkpmCloudProductDef implements Serializable {
 	 * 如果component_type为5的时候此字段生效
 	 */
 	private String imageId;
+	
+	@Invisible
+	private String isDefault;
 
 	  
 	/* (非 Javadoc)  

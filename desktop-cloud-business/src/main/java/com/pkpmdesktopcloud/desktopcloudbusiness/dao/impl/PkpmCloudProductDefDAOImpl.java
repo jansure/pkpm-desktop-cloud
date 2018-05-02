@@ -84,16 +84,11 @@ public class PkpmCloudProductDefDAOImpl implements PkpmCloudProductDefDAO{
      * @return
      */
 	@Override
-	public List<Map<String, Object>> getProductTypeList(){
+	public List<PkpmCloudProductDef> getProductTypeList(){
 		
 		List<PkpmCloudProductDef> list = productMapper.getProductTypeList();
-		if(list != null && list.size() > 0) {
-			
-			//obj2Map
-			
-			
-		}
-		return null;
+		
+		return list;
 	}
 	  
 }

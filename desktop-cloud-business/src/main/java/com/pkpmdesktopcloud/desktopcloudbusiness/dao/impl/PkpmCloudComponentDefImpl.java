@@ -92,4 +92,20 @@ public class PkpmCloudComponentDefImpl implements PkpmCloudComponentDefDAO{
 	public List<ComponentVO> getComponentListByProductType(Integer productType){
 		return componentMapper.getComponentListByProductType(productType);
 	}
+
+	  
+	/* (非 Javadoc)  
+	 *   
+	 *   
+	 * @return  
+	 * @see com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudComponentDefDAO#getList()  
+	 */  
+	    
+	@Override
+	public List<PkpmCloudComponentDef> getList() {
+		
+		PkpmCloudComponentDef componentInfo = new PkpmCloudComponentDef();
+		
+		return componentMapper.select(componentInfo );
+	}
 }

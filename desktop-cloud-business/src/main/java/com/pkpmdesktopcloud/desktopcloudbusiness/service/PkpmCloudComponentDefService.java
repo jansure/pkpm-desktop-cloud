@@ -3,8 +3,7 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.service;
 import java.util.List;
 import java.util.Map;
 
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudNavigation;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudProductDef;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudComponentDef;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 
 /**
@@ -28,5 +27,21 @@ public interface PkpmCloudComponentDefService {
      */
     List<Map<String, Object>> getComponentTypeList();
     
+    /**
+     * 根据配置项类型返回对应的所有配置项
+     * @param componentType
+     * @return
+     */
+    List<Map<String, Object>> getConfigByComponentType(Integer componentType);
+
+    /**
+	 * 
+	 * @Title: getList  
+	 * @Description: 获取所有列表
+	 * @param @return    参数  
+	 * @return List<ComponentVO>    返回类型  
+	 * @throws
+	 */
+	List<PkpmCloudComponentDef> getList();
 
 }

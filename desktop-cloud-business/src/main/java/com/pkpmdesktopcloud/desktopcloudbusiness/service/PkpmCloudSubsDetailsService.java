@@ -3,7 +3,7 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.service;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.MyProduct;
 import com.pkpmdesktopcloud.desktopcloudbusiness.page.PageBean;
 
-public interface SubsDetailsService {
+public interface PkpmCloudSubsDetailsService {
 	
 	final String MY_PRODUCT_ID = "MyProduct";
 	

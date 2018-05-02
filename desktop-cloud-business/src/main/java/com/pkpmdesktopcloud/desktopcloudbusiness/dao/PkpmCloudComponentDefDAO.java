@@ -30,4 +30,14 @@ public interface PkpmCloudComponentDefDAO {
     List<Map<String, Object>> getConfigByComponentType(Integer componentType);
     
     List<ComponentVO> getComponentListByProductType(Integer productType);
+
+	  
+	/**  
+	 * @Title: getList  
+	 * @Description: TODO(这里用一句话描述这个方法的作用)  
+	 * @param @return    参数  
+	 * @return List<ComponentVO>    返回类型  
+	 * @throws  
+	 */  
+	List<PkpmCloudComponentDef> getList();
 }
