@@ -13,6 +13,7 @@ import org.apache.ibatis.annotations.Update;
 import com.desktop.utils.mybatis.SimpleInsertLangDriver;
 import com.desktop.utils.mybatis.SimpleSelectLangDriver;
 import com.desktop.utils.mybatis.SimpleUpdateLangDriver;
+import com.gateway.common.domain.PkpmJobStatus;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudComponentDef;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 
@@ -23,9 +24,9 @@ public interface PkpmCloudComponentDefMapper {
     @Lang(SimpleSelectLangDriver.class)
     List<PkpmCloudComponentDef> select(PkpmCloudComponentDef componentInfo );
     
-    @Insert("insert into pkpm_cloud_component_def (#{componentInfo})")
-    @Lang(SimpleInsertLangDriver.class)
-    @Options(useGeneratedKeys = true, keyProperty = "componentId", keyColumn = "component_id")
+//    @Insert("insert into pkpm_cloud_component_def (#{componentInfo})")
+//    @Lang(SimpleInsertLangDriver.class)
+//    @Options(useGeneratedKeys = true, keyProperty = "componentId", keyColumn = "component_id")
     Integer insert(PkpmCloudComponentDef componentInfo);
 
     @Update("update pkpm_cloud_component_def (#{componentInfo}) WHERE component_id = #{componentId}")

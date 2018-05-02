@@ -63,12 +63,10 @@ public class PkpmCloudSubscriptionServiceImpl implements PkpmCloudSubscriptionSe
 	
 	@Value("${server.host}")
 	private String serverHost;
-	@Value("${ouName}")
-	private String ouName;
+	
 	@Value("${userEmail}")
 	private String userEmail;
-	@Value("${status}")
-	private String status;
+	
 	@Value("${invalidStatus}")
 	private String invalidStatus;
 	@Value("${dataVolumeSize}")

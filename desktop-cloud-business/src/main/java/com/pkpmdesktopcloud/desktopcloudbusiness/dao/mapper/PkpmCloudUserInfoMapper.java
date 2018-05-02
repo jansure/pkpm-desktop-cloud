@@ -21,9 +21,9 @@ public interface PkpmCloudUserInfoMapper {
     @Lang(SimpleSelectLangDriver.class)
 	List<PkpmCloudUserInfo> findUserInfoList(PkpmCloudUserInfo userInfo);
 	
-	@Insert("insert into pkpm_cloud_user_info (#{userInfo})")
-    @Lang(SimpleInsertLangDriver.class)
-    @Options(useGeneratedKeys = true, keyProperty = "userId", keyColumn = "user_id")
+//	@Insert("insert into pkpm_cloud_user_info (#{userInfo})")
+//    @Lang(SimpleInsertLangDriver.class)
+//    @Options(useGeneratedKeys = true, keyProperty = "userId", keyColumn = "user_id")
     Integer insert(PkpmCloudUserInfo userInfo);
 
     @Update("update pkpm_cloud_user_info (#{userInfo}) WHERE user_id = #{userId}")
