@@ -53,8 +53,8 @@ public class SubscriptionController {
 			this.result.set("恭喜您申请免费使用成功,请稍等,马上为您开通！", 1, pkpmOperatorStatus);
 			return this.result;
 		} catch (Exception e) {
+			
 			e.printStackTrace();
-			//this.result.set("创建订单失败,请重新创建订单", 0);
 			this.result.set(e.getMessage(), 0);
 			return this.result;
 		}

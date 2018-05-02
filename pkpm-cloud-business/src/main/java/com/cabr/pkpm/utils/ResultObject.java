@@ -24,6 +24,14 @@ public class ResultObject {
         return result;
     }
 
+    public static ResultObject success(Object data,String message) {
+        ResultObject result = new ResultObject();
+        result.code = HttpStatus.OK.value();
+        result.message=message;
+        result.data = data;
+        return result;
+    }
+
     public static ResultObject failure(String message) {
         ResultObject result = new ResultObject();
         result.code = HttpStatus.INTERNAL_SERVER_ERROR.value();

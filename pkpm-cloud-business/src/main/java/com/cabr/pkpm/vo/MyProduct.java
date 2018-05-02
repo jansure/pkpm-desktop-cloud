@@ -17,6 +17,8 @@ public class MyProduct implements Serializable {
 	private String hostIp;
 	private Integer status;
 	private Long subsId;
-	private String adId;
+	private Integer adId;
 	private String projectId;
+	
+	private String areaCode;
 }

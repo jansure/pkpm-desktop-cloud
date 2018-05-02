@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,5 +60,11 @@ public class UserController {
 		// 根据token获取用户信息
 		// 判断登录状态
 		return userService.isLogin(token);
+	}
+	
+	@PreAuthorize("")
+	@RequestMapping("/test")
+	public String test() {
+		return "Ok";
 	}
 }

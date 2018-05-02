@@ -19,7 +19,8 @@
 		<module>config-server</module>
 		<module>eureka-server</module>
 		<module>pkpm-redis-util</module>
-	</modules>
+        <module>message-server</module>
+    </modules>
 
 	<!-- 统一版本号依赖 -->
 	<parent>

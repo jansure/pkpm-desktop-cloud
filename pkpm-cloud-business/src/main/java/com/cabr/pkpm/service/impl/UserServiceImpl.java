@@ -6,9 +6,10 @@ import com.cabr.pkpm.entity.user.UserInfo;
 import com.cabr.pkpm.mapper.user.UserMapper;
 import com.cabr.pkpm.service.IUserService;
 import com.cabr.pkpm.utils.Base64Utils;
+import com.cabr.pkpm.utils.ResultObject;
+import com.cabr.pkpm.utils.StringUtil;
 import com.desktop.utils.HttpConfigBuilder;
 import com.desktop.utils.JsonUtil;
-import com.desktop.utils.StringUtil;
 import com.desktop.utils.exception.Exceptions;
 import com.desktop.utils.page.BeanUtil;
 import com.gateway.common.domain.CommonRequestBean;
@@ -91,7 +92,10 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @Transactional
+    //0428 新增事务管理，若gateway请求失败，则数据库回滚，保证密码一致性
     public String changeUserPassword(UserInfoForChangePassword newUserInfo, List<SubsCription> subsList) {
+
         Integer userID = newUserInfo.getUserId();
         String oldPassword = newUserInfo.getOldPassword();
         String newPassword = newUserInfo.getNewPassword();
@@ -127,20 +131,21 @@ public class UserServiceImpl implements IUserService {
                 String jsonStr = JsonUtil.serialize(requestBean);
 
                 String response = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(url, jsonStr,5, "utf-8", 100000).method(HttpMethods.POST));
+                //检查与gateway连接状态
                 MyHttpResponse myHttpResponse = JsonUtil.deserialize(response, MyHttpResponse.class);
-
                 Integer statusCode = myHttpResponse.getStatusCode();
+                Preconditions.checkArgument(statusCode==HttpStatus.OK.value(),"http请求失败 Code="+statusCode);
+                //检查AD修改密码服务返回状态
                 String body = myHttpResponse.getBody();
-                if (statusCode!= HttpStatus.OK.value()){
-                    throw Exceptions.newBusinessException("AD域密码修改失败");
-                }
+                ResultObject resultObject = JsonUtil.deserialize(body, ResultObject.class);
+                Integer gatewayCode = resultObject.getCode();
+                Preconditions.checkArgument(gatewayCode== HttpStatus.OK.value(),"AD域修改失败 Code="+gatewayCode);
                 log.info("密码修改成功 --adId={}",subInfo.getAdId());
             }
             return "密码修改成功";
         } catch (HttpProcessException e) {
-            e.printStackTrace();
+            throw Exceptions.newBusinessException("http建立连接失败,请确认GateWay服务是否开启");
         }
-        throw Exceptions.newBusinessException("密码修改失败");
     }
 
 }

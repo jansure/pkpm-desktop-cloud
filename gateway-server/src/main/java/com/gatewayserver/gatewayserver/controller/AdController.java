@@ -7,6 +7,7 @@ import com.gateway.common.dto.ad.AdUser;
 import com.gatewayserver.gatewayserver.service.AdService;
 import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -111,7 +112,7 @@ public class AdController {
         if (result)
             return ResultObject.success(null, "计算机名存在");
         else
-            return ResultObject.success(null, "计算机名不存在！");
+            return ResultObject.failure(HttpStatus.BAD_REQUEST.value(),"计算机名不存在");
     }
 
     /**

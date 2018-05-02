@@ -116,7 +116,7 @@ public class AdServiceImpl implements AdService {
         Preconditions.checkNotNull(requestBean);
         PkpmOperatorStatus operatorStatus = new PkpmOperatorStatus().setDefault();
         BeanUtil.copyPropertiesIgnoreNull(requestBean, operatorStatus);
-        operatorStatus.setStatus(JobStatusEnum.AD_CREATE.toString());
+        operatorStatus.setStatus(JobStatusEnum.INITIAL.toString());
         operatorStatus.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
         PkpmOperatorStatusBeanUtil.checkNotNull(operatorStatus);
 
@@ -204,7 +204,7 @@ public class AdServiceImpl implements AdService {
         Preconditions.checkNotNull(requestBean);
         PkpmOperatorStatus operatorStatus = new PkpmOperatorStatus().setDefault();
         BeanUtil.copyPropertiesIgnoreNull(requestBean, operatorStatus);
-        operatorStatus.setStatus(JobStatusEnum.AD_CREATE.toString());
+        operatorStatus.setStatus(JobStatusEnum.INITIAL.toString());
         operatorStatus.setOperatorType(OperatoreTypeEnum.DESKTOP.toString());
         PkpmOperatorStatusBeanUtil.checkNotNull(operatorStatus);
 
@@ -363,38 +363,39 @@ public class AdServiceImpl implements AdService {
 
         throw Exceptions.newBusinessException("用户列表获取失败");
     }
+
     /**
+     * 申请可用计算机名  尾部为3个数字 如test001 ,如果输入超过12位，则自动截取前12位
      *
-     *申请可用计算机名  尾部为3个数字 如test001 ,如果输入超过12位，则自动截取前12位
-     * @author xuhe
      * @param computerName, adId
      * @return java.lang.String
+     * @author xuhe
      */
-    public  String getAvailableComputerName(String computerName, Integer adId) {
+    public String getAvailableComputerName(String computerName, Integer adId) {
 
-        if (computerName.length()>12)
+        if (computerName.length() > 12)
             computerName = computerName.substring(0, 12);
         log.info(computerName);
         List<AdComputer> computerList = getComputersByAdId(adId);
         String pattern = computerName + "\\d+";
         String numPattern = "(\\D*)(\\d+)";
-        int max=0;
+        int max = 0;
         for (AdComputer adComputer : computerList) {
-            String comName =adComputer.getComputerName();
+            String comName = adComputer.getComputerName();
             if (Pattern.matches(pattern, comName)) {
                 //匹配数字
                 Matcher m = Pattern.compile(numPattern).matcher(comName);
-                String numStr="";
-                if (m.find()){
+                String numStr = "";
+                if (m.find()) {
                     numStr = m.group(2);
                 }
                 Integer order = Integer.valueOf(numStr);
                 if (order > max) {
-                    max=order;
+                    max = order;
                 }
             }
         }
-        return computerName + String.format("%03d", max+1);
+        return computerName + String.format("%03d", max + 1);
     }
 
     public List<AdComputer> getComputersByAdId(Integer adId) {
@@ -460,7 +461,8 @@ public class AdServiceImpl implements AdService {
 
         return Boolean.FALSE;
     }
-    public Boolean checkComputer(String computerName , Integer adId) {
+
+    public Boolean checkComputer(String computerName, Integer adId) {
         PkpmAdDef adDef = getAdDefByAdId(adId);
         Preconditions.checkNotNull(adDef);
         LDAPConnectionPool connectionPool = getConnectionPool(adDef);
@@ -472,14 +474,14 @@ public class AdServiceImpl implements AdService {
             //AD属性:获取组织ouDN;
             String ouDN = AdUtil.getOuDN(adDef);
 
-            String userDN = String.format("CN=%s,%s", computerName, ouDN);
-            SearchResultEntry entry = connection.getEntry(userDN);
+            String computerDN = String.format("CN=%s,%s", computerName, ouDN);
+            log.info(computerDN);
+            SearchResultEntry entry = connection.getEntry(computerDN);
+            log.info(entry + "");
             if (entry == null)
                 return Boolean.FALSE;
             else {
-                Attribute nameAttr = entry.getAttribute("samAccountName");
-                if (nameAttr != null && nameAttr.getValue().equals(computerName))
-                    return Boolean.TRUE;
+                return Boolean.TRUE;
             }
         } catch (LDAPException e) {
             e.printStackTrace();
