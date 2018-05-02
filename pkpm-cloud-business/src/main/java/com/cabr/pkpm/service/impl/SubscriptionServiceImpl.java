@@ -320,7 +320,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 
 	}
 
-	public Boolean checkComputerNameByAdId(String computerName, Integer adId) {
+	private Boolean checkComputerNameByAdId(String computerName, Integer adId) {
 		CommonRequestBean requestBean = new CommonRequestBean();
 		requestBean.setComputerName(computerName);
 		requestBean.setAdId(adId);
