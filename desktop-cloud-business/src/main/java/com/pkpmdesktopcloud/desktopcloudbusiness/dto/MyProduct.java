@@ -12,8 +12,13 @@ public class MyProduct implements Serializable {
 	private String productDesc;
 	private List<String> componentName;
 	private String createTime;
-	private String invalidtime;
-	private boolean flagTime;
+	private String invalidTime;
+	private Boolean flagTime;
 	private String hostIp;
 	private Integer status;
+	private Long subsId;
+	private Integer adId;
+	private String projectId;
+	
+	private String areaCode;
 }

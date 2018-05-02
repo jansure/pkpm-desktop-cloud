@@ -2,11 +2,13 @@ package com.pkpm.cloud.auth.server.config;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -33,15 +35,15 @@ public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     @Resource
     private OAuth2ClientProperties clientProperties;
     
-//	@Autowired
-//	private UserDetailsService userDetailsService;
+	@Autowired
+	private CustomUserDetailsService userDetailsService;
 	
     /**
      * 配置授权服务器端点，如令牌存储，令牌自定义，用户批准和授权类型，不包括端点安全配置
      */
     @Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints
+        endpoints.userDetailsService(userDetailsService)
                 .authenticationManager(authenticationManager)   //直接注入一个AuthenticationManager，自动开启密码授权类型
                 .tokenStore(tokenStore())
                 .tokenEnhancer(tokenEnhancer());

@@ -46,5 +46,11 @@ public class SysConstant {
 	 * "是"默认值
 	 */
 	public static final String IS_DEFAULT_YES = "1";
+	
+	/**
+	 * "否"默认值
+	 */
+	public static final String IS_DEFAULT_NO = "0";
+	
 
 }

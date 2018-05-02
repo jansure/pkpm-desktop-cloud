@@ -13,14 +13,14 @@ import com.desktop.utils.page.ResultObject;
 import com.google.common.base.Preconditions;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.MyProduct;
 import com.pkpmdesktopcloud.desktopcloudbusiness.page.PageBean;
-import com.pkpmdesktopcloud.desktopcloudbusiness.service.SubsDetailsService;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudSubsDetailsService;
 
 @RestController
 @RequestMapping("/subsdetails")
 public class SubsDetailsController {
 	
 	@Autowired
-	private SubsDetailsService subsDetailsService;
+	private PkpmCloudSubsDetailsService subsDetailsService;
 	/**
 	 * 获取我的产品列表
 	 */
