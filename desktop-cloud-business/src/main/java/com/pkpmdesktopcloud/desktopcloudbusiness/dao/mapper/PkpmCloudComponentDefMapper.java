@@ -32,10 +32,6 @@ public interface PkpmCloudComponentDefMapper {
     @Lang(SimpleUpdateLangDriver.class)
     Integer update(PkpmCloudComponentDef componentInfo);
     
-    @Select("select  DISTINCT(component_type),component_type_name from pkpm_cloud_component_def")
-    @Lang(SimpleSelectLangDriver.class)
-    List<PkpmCloudComponentDef> getComponentTypeList();
-    
     @Select("SELECT prod.product_id product_id,prod.product_name product_name,prod.product_desc product_desc," +
     		"prod.component_id component_id,comp.component_name component_name," + 
     		"comp.component_type	component_type,comp.component_type_name component_type_name" + 

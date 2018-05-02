@@ -29,12 +29,6 @@ public interface PkpmCloudProductDefDAO {
      */
     List<PkpmCloudNavigation> getNavByPid(Integer parentNavId);
     
-    /**
-     * 根据key值获取对应的SysConfig实体
-     * @param key
-     * @return
-     */
-    PkpmSysConfig getSysConfig(String key);
     
     /**
      * 根据productId获取对应的product实体

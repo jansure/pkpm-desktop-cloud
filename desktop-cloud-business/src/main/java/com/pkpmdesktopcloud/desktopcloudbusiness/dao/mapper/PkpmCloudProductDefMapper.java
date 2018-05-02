@@ -35,32 +35,9 @@ public interface PkpmCloudProductDefMapper {
 	@Lang(SimpleSelectLangDriver.class)
 	List<PkpmSysConfig> getSysConfigList(PkpmSysConfig sysConfig);
     
-    /**
-	 * 根据产品类型id获取自动配置的components
-	 * @param productType 产品套餐类型
-	 * @param componentType 配置类型
-	 * @return
-	 */
-    List<ComponentVO> getComponentByPid(@Param("productType") Integer productType, @Param("componentType") Integer componentType);
-    
-    /**
-     * 根据产品套餐类型获取对应的配置类别list
-     * @param productType
-     * @return
-     */
-    List<Integer> getCompTypeList(@Param("productType") Integer productType);
-   
     
     @Select("select DISTINCT(product_type), product_id, product_desc from pkpm_cloud_product_def")
 	@Lang(SimpleSelectLangDriver.class)
     List<PkpmCloudProductDef> getProductTypeList();
     
-    
-    /**
-     * 根据配置项类型返回对应的所有配置项
-     * @param componentType
-     * @return
-     */
-    List<Map<String, Object>> getConfigByComponentType(@Param("componentType") Integer componentType);
-   
 }

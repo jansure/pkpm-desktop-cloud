@@ -18,6 +18,7 @@ public class PkpmSysConfigDAOImpl implements PkpmSysConfigDAO{
             return list;
         return null;
     }
+    
     @Override
     public PkpmSysConfig getPkpmSysConfigByKey(String key) {
         PkpmSysConfig criteria = new PkpmSysConfig();

@@ -50,49 +50,10 @@ public class PkpmCloudComponentDefImpl implements PkpmCloudComponentDefDAO{
 		return null;
 	}
 	
-	 /**
-     * 返回购买配置项类型列表(如地域、软件名称、主机配置、云存储)
-     * @return
-     */
-	@Override
-	public List<Map<String, Object>> getComponentTypeList() {
-		
-		
-		List<PkpmCloudComponentDef> list = componentMapper.getComponentTypeList();
-		if(list != null && list.size() > 0) {
-			
-			//obj2Map
-			
-			
-		}
-		return null;
-	}
-	
-	 /**
-     * 根据配置项类型返回对应的所有配置项
-     * @param componentType
-     * @return
-     */
-	@Override
-	public List<Map<String, Object>> getConfigByComponentType(Integer componentType){
-		PkpmCloudComponentDef componentInfo = new PkpmCloudComponentDef();
-		componentInfo.setComponentType(componentType);
-		
-		List<PkpmCloudComponentDef> list = componentMapper.select(componentInfo );
-		if(list != null && list.size() > 0) {
-			
-			//obj2Map
-			
-			
-		}
-		return null;
-	}
-	
 	@Override
 	public List<ComponentVO> getComponentListByProductType(Integer productType){
 		return componentMapper.getComponentListByProductType(productType);
 	}
-
 	  
 	/* (非 Javadoc)  
 	 *   

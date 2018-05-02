@@ -10,8 +10,8 @@ import java.util.List;
 
 @Mapper
 public interface PkpmSysConfigMapper {
+	
 	@Select("select * from pkpm_sys_config (#{sysConfig})")
 	@Lang(SimpleSelectLangDriver.class)
-	
 	List<PkpmSysConfig> select(PkpmSysConfig sysConfig);
 }

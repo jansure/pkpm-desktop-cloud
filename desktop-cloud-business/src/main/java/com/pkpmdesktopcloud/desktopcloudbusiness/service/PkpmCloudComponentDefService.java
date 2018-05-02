@@ -22,19 +22,6 @@ public interface PkpmCloudComponentDefService {
     List<ComponentVO> getComponentListByProductType(Integer productType);
     
     /**
-     * 返回购买配置项类型列表(如地域、软件名称、主机配置、云存储)
-     * @return
-     */
-    List<Map<String, Object>> getComponentTypeList();
-    
-    /**
-     * 根据配置项类型返回对应的所有配置项
-     * @param componentType
-     * @return
-     */
-    List<Map<String, Object>> getConfigByComponentType(Integer componentType);
-
-    /**
 	 * 
 	 * @Title: getList  
 	 * @Description: 获取所有列表

@@ -16,22 +16,8 @@ public interface PkpmCloudComponentDefDAO {
     
     PkpmCloudComponentDef getComponentInfo(Integer componentId, Integer componentType);
     
-    /**
-     * 返回购买配置项类型列表(如地域、软件名称、主机配置、云存储)
-     * @return
-     */
-    List<Map<String, Object>> getComponentTypeList();
-    
-    /**
-     * 根据配置项类型返回对应的所有配置项
-     * @param componentType
-     * @return
-     */
-    List<Map<String, Object>> getConfigByComponentType(Integer componentType);
-    
     List<ComponentVO> getComponentListByProductType(Integer productType);
 
-	  
 	/**  
 	 * @Title: getList  
 	 * @Description: TODO(这里用一句话描述这个方法的作用)  

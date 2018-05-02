@@ -47,23 +47,6 @@ public class PkpmCloudProductDefDAOImpl implements PkpmCloudProductDefDAO{
 		return list;
 		
 	}
-    /**
-     * 根据key值获取对应的SysConfig实体
-     * @param key
-     * @return
-     */
-	@Override
-	public PkpmSysConfig getSysConfig(String key) {
-		PkpmSysConfig sysConfig = new PkpmSysConfig();
-		sysConfig.setKey(key);
-		
-		List<PkpmSysConfig> list = productMapper.getSysConfigList(sysConfig );
-		if(list != null && list.size() > 0) {
-			return list.get(0);
-		}
-		
-		return null;
-	}
     
     /**
      * 根据productId获取对应的product实体
