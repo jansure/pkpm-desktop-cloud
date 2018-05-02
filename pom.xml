@@ -19,8 +19,8 @@
 		<module>config-server</module>
 		<module>eureka-server</module>
 		<module>pkpm-redis-util</module>
-        <module>message-server</module>
-    </modules>
+		<module>message-server</module>
+	</modules>
 
 	<!-- 统一版本号依赖 -->
 	<parent>
@@ -63,7 +63,9 @@
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
+			</plugin>
 
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
