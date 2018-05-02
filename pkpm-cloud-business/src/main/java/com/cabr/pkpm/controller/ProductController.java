@@ -185,10 +185,10 @@ public class ProductController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/subComponents", method = RequestMethod.POST)
-	public Map<Integer, List<ComponentVO>> getComponentByProductType(String productType, HttpServletResponse response) {
+	public Map<Integer, List<ComponentVO>> getComponentByProductType(@RequestBody Map<String,String> map, HttpServletResponse response) {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		
+		String productType = map.get("productType");
 		List<Integer> compTypeList = productService.getCompTypeList(StringUtil.stringToInt(productType));
 		log.debug("compTypeList ：" + compTypeList);
 		Map<Integer, List<ComponentVO>> componentsMap = new LinkedHashMap<Integer, List<ComponentVO>>();
