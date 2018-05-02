@@ -24,9 +24,9 @@ public interface PkpmCloudComponentDefMapper {
     @Lang(SimpleSelectLangDriver.class)
     List<PkpmCloudComponentDef> select(PkpmCloudComponentDef componentInfo );
     
-//    @Insert("insert into pkpm_cloud_component_def (#{componentInfo})")
-//    @Lang(SimpleInsertLangDriver.class)
-//    @Options(useGeneratedKeys = true, keyProperty = "componentId", keyColumn = "component_id")
+    @Insert("insert into pkpm_cloud_component_def (#{componentInfo})")
+    @Lang(SimpleInsertLangDriver.class)
+    @Options(useGeneratedKeys = true, keyProperty = "componentId", keyColumn = "component_id")
     Integer insert(PkpmCloudComponentDef componentInfo);
 
     @Update("update pkpm_cloud_component_def (#{componentInfo}) WHERE component_id = #{componentId}")
