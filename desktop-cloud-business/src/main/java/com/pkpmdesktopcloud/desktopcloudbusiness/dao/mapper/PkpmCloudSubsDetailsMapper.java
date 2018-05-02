@@ -21,9 +21,9 @@ public interface PkpmCloudSubsDetailsMapper {
     @Lang(SimpleSelectLangDriver.class)
 	List<PkpmCloudSubsDetails> findSubsDetailsList(PkpmCloudSubsDetails subsDetails);
 	
-//	@Insert("insert into pkpm_cloud_subs_details (#{subsDetails})")
-//    @Lang(SimpleInsertLangDriver.class)
-//    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+	@Insert("insert into pkpm_cloud_subs_details (#{subsDetails})")
+	@Lang(SimpleInsertLangDriver.class)
+	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     Integer insert(PkpmCloudSubsDetails subsDetails);
 
     @Update("update pkpm_cloud_subs_details (#{subsDetails}) WHERE id = #{id}")
