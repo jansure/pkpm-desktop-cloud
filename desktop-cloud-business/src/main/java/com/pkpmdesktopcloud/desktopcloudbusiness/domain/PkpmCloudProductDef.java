@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2017/12/25
  *
  */
-@Slf4j
 @Data
 public class PkpmCloudProductDef implements Serializable {
 
