@@ -34,21 +34,6 @@ public class PkpmCloudProductDefDAOImpl implements PkpmCloudProductDefDAO{
 		List<PkpmCloudProductDef> list = productMapper.getProductList(productInfo );
 		return list;
 	}
-	
-    /**
-     * 获取导航子目录并控制层级
-     * @param parentNavId
-     * @return
-     */
-	@Override
-	public List<PkpmCloudNavigation> getNavByPid(Integer parentNavId){
-		PkpmCloudNavigation navigation = new PkpmCloudNavigation();
-		navigation.setParentNavId(parentNavId);
-		
-		List<PkpmCloudNavigation> list = productMapper.getNavigationList(navigation );
-		return list;
-		
-	}
     
     /**
      * 根据productId获取对应的product实体

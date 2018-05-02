@@ -26,15 +26,6 @@ public interface PkpmCloudProductDefMapper {
 	@Select("select * from pkpm_cloud_product_def (#{productInfo})")
 	@Lang(SimpleSelectLangDriver.class)
     List<PkpmCloudProductDef> getProductList(PkpmCloudProductDef productInfo);
-	
-	@Select("select * from pkpm_cloud_navigation (#{navigation})")
-	@Lang(SimpleSelectLangDriver.class)
-    List<PkpmCloudNavigation> getNavigationList(PkpmCloudNavigation navigation);
-	
-	@Select("select * from pkpm_sys_config (#{sysConfig})")
-	@Lang(SimpleSelectLangDriver.class)
-	List<PkpmSysConfig> getSysConfigList(PkpmSysConfig sysConfig);
-    
     
     @Select("select DISTINCT(product_type), product_id, product_desc from pkpm_cloud_product_def")
 	@Lang(SimpleSelectLangDriver.class)

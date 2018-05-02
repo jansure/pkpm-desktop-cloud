@@ -21,9 +21,9 @@ public interface PkpmCloudNavigationMapper {
     @Lang(SimpleSelectLangDriver.class)
     List<PkpmCloudNavigation> select(PkpmCloudNavigation pkpmCloudNavigation );
     
-//    @Insert("insert into pkpm_cloud_navigation (#{pkpmCloudNavigation})")
-//    @Lang(SimpleInsertLangDriver.class)
-//    @Options(useGeneratedKeys = true, keyProperty = "navId", keyColumn = "nav_id")
+    @Insert("insert into pkpm_cloud_navigation (#{pkpmCloudNavigation})")
+    @Lang(SimpleInsertLangDriver.class)
+    @Options(useGeneratedKeys = true, keyProperty = "navId", keyColumn = "nav_id")
     Integer insert(PkpmCloudNavigation pkpmCloudNavigation);
 
     @Update("update pkpm_cloud_navigation (#{pkpmCloudNavigation}) WHERE nav_id = #{navId}")

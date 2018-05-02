@@ -20,9 +20,9 @@ public interface PkpmCloudSubscriptionMapper {
     @Lang(SimpleSelectLangDriver.class)
     List<PkpmCloudSubscription> getSubsCriptionList(PkpmCloudSubscription subsCription );
     
-//    @Insert("insert into pkpm_cloud_subscription (#{subsCription})")
-//    @Lang(SimpleInsertLangDriver.class)
-//    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+    @Insert("insert into pkpm_cloud_subscription (#{subsCription})")
+    @Lang(SimpleInsertLangDriver.class)
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     Integer insert(PkpmCloudSubscription subsCription);
 
     @Update("update pkpm_cloud_subscription (#{subsCription}) WHERE id = #{id}")

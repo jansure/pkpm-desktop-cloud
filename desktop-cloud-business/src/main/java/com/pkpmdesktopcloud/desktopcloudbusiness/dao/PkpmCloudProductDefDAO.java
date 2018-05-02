@@ -22,13 +22,6 @@ public interface PkpmCloudProductDefDAO {
 	 */
     List<PkpmCloudProductDef> getProductByType(Integer productType);
     
-    /**
-     * 获取导航子目录并控制层级
-     * @param parentNavId
-     * @return
-     */
-    List<PkpmCloudNavigation> getNavByPid(Integer parentNavId);
-    
     
     /**
      * 根据productId获取对应的product实体
