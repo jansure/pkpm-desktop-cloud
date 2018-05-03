@@ -60,6 +60,7 @@ public class Test {
 		System.out.println(System.currentTimeMillis() - start);
 	}
 
+	
 	public static void fetchFrameByFfmpeg(String ffmpegPath, String videofile, String framefile) {
 		long start = System.currentTimeMillis();
 
@@ -99,8 +100,10 @@ public class Test {
 
 	public static void main(String[] args) {
 		try {
-//			Test.fetchFrameByJavacv("D:/test.mp4", "D:/test.jpg");
-			Test.fetchFrameByFfmpeg("D:/ffmpeg-20180102-41e51fb-win64-static/bin/ffmpeg.exe", "d:/test.mp4", "D:/test1.jpg");
+			Test.fetchFrameByJavacv("D:/test.mp4", "D:/test.jpg");
+			
+			//linux下ffmpegPath： /usr/local/ffmpeg2/bin/./ffmpeg
+//			Test.fetchFrameByFfmpeg("D:/ffmpeg-20180102-41e51fb-win64-static/bin/ffmpeg.exe", "d:/test.mp4", "D:/test1.jpg");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
