@@ -10,6 +10,12 @@ import org.apache.commons.lang.StringUtils;
 import java.io.Serializable;
 import java.util.Map;
 
+/**
+ * EmailMessageSenderImpl
+ *
+ * author jansure.zhang
+ * @since 5/5/2018
+ */
 @Data
 public class Message implements Serializable{
     private String from;
