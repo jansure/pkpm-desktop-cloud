@@ -1,5 +1,7 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.domain;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 /**
@@ -10,7 +12,7 @@ import lombok.Data;
  *
  */
 @Data
-public class PkpmSysConfig {
+public class PkpmSysConfig implements Serializable{
 	private String key;
 	private String value;
 

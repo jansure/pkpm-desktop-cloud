@@ -62,7 +62,6 @@ public class UserController {
 		return userService.isLogin(token);
 	}
 	
-	@PreAuthorize("")
 	@RequestMapping("/test")
 	public String test() {
 		return "Ok";
