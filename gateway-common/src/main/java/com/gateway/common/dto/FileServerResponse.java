@@ -8,7 +8,7 @@
  * @version V1.0    
  */  
     
-package com.pkpmdesktopcloud.desktopcloudbusiness.dto;
+package com.gateway.common.dto;
 
 import java.util.Set;
 

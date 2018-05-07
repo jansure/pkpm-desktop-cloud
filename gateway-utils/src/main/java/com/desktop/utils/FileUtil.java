@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 文件操作工具
@@ -216,6 +217,27 @@ public class FileUtil {
 		}
 		return null;
 	}
+	
+	/**
+	 * 
+	 * @Title: getFileType  
+	 * @Description: 获取文件类型
+	 * @param fileName 文件名
+	 * @return String  文件类型(.mp4)
+	 * @throws
+	 */
+	public static String getFileType(String fileName){
+		String type = "";
+		if(StringUtils.isEmpty(fileName)) {
+			return type;
+		}
+		
+		int index = fileName.lastIndexOf(".");
+		if(index > -1) {
+			type = fileName.substring(index, fileName.length());
+		}
+		return type;
+	}
 
 	public static void main(String[] args) {
 		// // 测试从http url下载文件的方法
@@ -233,6 +255,9 @@ public class FileUtil {
 			// 测试从URL获取json
 			String json = FileUtil.loadJson("http://49.4.8.123:8888/files");
 			System.out.println(json);
+			
+			String fileName = "aa.bb.cc.mp4";
+			System.out.println(getFileType(fileName));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
