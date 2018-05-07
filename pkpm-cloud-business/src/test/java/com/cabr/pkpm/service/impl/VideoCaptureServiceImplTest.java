@@ -24,7 +24,7 @@ public class VideoCaptureServiceImplTest {
     IVideoCaptureService service;
 
     @Test
-    public void getAvailableComputerName() throws Exception {
+    public void initData() throws Exception {
     	boolean isOk = service.initData();
         System.out.println(isOk);
     }
