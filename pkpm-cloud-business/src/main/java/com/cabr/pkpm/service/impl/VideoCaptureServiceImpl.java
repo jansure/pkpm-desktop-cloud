@@ -15,6 +15,7 @@ import com.cabr.pkpm.mapper.PkpmCloudVideoCaptureMapper;
 import com.cabr.pkpm.service.IProductService;
 import com.cabr.pkpm.service.IVideoCaptureService;
 import com.desktop.utils.FileUtil;
+import com.desktop.utils.VideoCaptureUtil;
 import com.desktop.utils.page.ResultObject;
 import com.gateway.common.dto.FileServerResponse;
 import com.google.common.base.Preconditions;
@@ -120,13 +121,22 @@ public class VideoCaptureServiceImpl implements IVideoCaptureService {
 		
 		if(CollectionUtils.isNotEmpty(fileList)) {
 			
-			//将视频文件截图
-			
+			for(String file : fileList) {
+				
+				//将视频文件截图
+				byte[] data = VideoCaptureUtil.fetchFrameByJavacv(fileUrl + "/" + file);
+				
+				//保存数据库
+				if(data != null) {
+					PkpmCloudVideoCapture videoCapture = new PkpmCloudVideoCapture();
+					videoCapture.setCapValue(data);
+					videoCapture.setCapType("jpg");
+					insert(videoCapture);
+				}
+				
+			}
 			
 		}
-		
-		
-		//保存数据到数据库
 		
 		return true;
 	}
