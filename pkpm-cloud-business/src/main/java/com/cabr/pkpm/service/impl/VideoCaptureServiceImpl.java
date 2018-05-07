@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.cabr.pkpm.constants.SysConstant;
 import com.cabr.pkpm.entity.PkpmCloudVideoCapture;
+import com.cabr.pkpm.entity.SysConfig;
 import com.cabr.pkpm.mapper.PkpmCloudVideoCaptureMapper;
-import com.cabr.pkpm.service.IProductService;
+import com.cabr.pkpm.mapper.product.ProductMapper;
 import com.cabr.pkpm.service.IVideoCaptureService;
 import com.desktop.utils.FileUtil;
 import com.desktop.utils.VideoCaptureUtil;
-import com.desktop.utils.page.ResultObject;
 import com.gateway.common.dto.FileServerResponse;
 import com.google.common.base.Preconditions;
 import com.pkpm.httpclientutil.common.util.JsonUtil;
@@ -44,7 +44,7 @@ public class VideoCaptureServiceImpl implements IVideoCaptureService {
 	private PkpmCloudVideoCaptureMapper videoCaptureMapper;
 
 	@Resource
-	private IProductService productService;
+	private ProductMapper productMapper;
 
 	/*
 	 * (非 Javadoc)
@@ -113,8 +113,10 @@ public class VideoCaptureServiceImpl implements IVideoCaptureService {
 		}
 		
 		// 获取文件系统路径
-		String fileUrl = productService.getSysValue(SysConstant.FILE_BASE_URL);
-		Preconditions.checkArgument(StringUtils.isEmpty(fileUrl), "文件URL为空。");
+		SysConfig sysConfig = productMapper.getSysConfig(SysConstant.FILE_BASE_URL);
+		Preconditions.checkNotNull(sysConfig, "文件系统配置为空。");
+		String fileUrl = sysConfig.getValue();
+		Preconditions.checkArgument(StringUtils.isNotEmpty(fileUrl), "文件URL为空。");
 				
 		//获取所有视频文件
 		List<String> fileList = getAllVideoFile(fileUrl);
@@ -153,7 +155,7 @@ public class VideoCaptureServiceImpl implements IVideoCaptureService {
 		
 		List<String> fileList = new ArrayList<String>();
 		String json = FileUtil.loadJson(fileUrl);
-		Preconditions.checkArgument(StringUtils.isEmpty(json), "文件服务器返回数据为空。");
+		Preconditions.checkArgument(StringUtils.isNotEmpty(json), "文件服务器返回数据为空。");
 		
 		 try {
 			FileServerResponse fileServerResponse = JsonUtil.deserialize(json, FileServerResponse.class);

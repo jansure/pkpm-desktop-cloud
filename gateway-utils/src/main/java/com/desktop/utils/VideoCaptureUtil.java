@@ -2,7 +2,9 @@ package com.desktop.utils;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
@@ -64,8 +66,9 @@ public class VideoCaptureUtil {
 			bi.getGraphics().drawImage(f.image.getBufferedImage().getScaledInstance(width, height, Image.SCALE_SMOOTH), 0,
 					0, null);
 			
-//			ImageIO.write(bi, "jpg", targetFile);
-			data = ((DataBufferByte) bi.getData().getDataBuffer()).getData();
+			ByteArrayOutputStream os=new ByteArrayOutputStream();
+			ImageIO.write(bi, "jpg", os);
+			data = os.toByteArray();
 			// ff.flush();
 			ff.stop();
 			
