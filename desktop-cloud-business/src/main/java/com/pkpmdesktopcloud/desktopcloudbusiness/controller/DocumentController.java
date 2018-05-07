@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.desktop.utils.FileUtil;
 import com.desktop.utils.page.ResultObject;
+import com.gateway.common.dto.FileServerResponse;
 import com.google.common.base.Preconditions;
 import com.pkpm.httpclientutil.common.util.JsonUtil;
 import com.pkpmdesktopcloud.desktopcloudbusiness.constants.SysConstant;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dto.FileServerResponse;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmSysConfigService;
 
 import lombok.extern.slf4j.Slf4j;
