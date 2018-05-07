@@ -98,6 +98,13 @@
 			<version>2.4</version>
 		</dependency>
 		
+		<!-- 视频截图依赖javacv -->
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>javacv</artifactId>
+			<version>0.8</version>
+		</dependency>
+		
 	</dependencies>
 
 

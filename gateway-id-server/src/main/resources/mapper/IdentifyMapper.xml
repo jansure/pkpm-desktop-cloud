@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idserver.dao.IdentifyDAO">
+    <insert id="insert" parameterType="com.idserver.model.Identify" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            pkpm_idserver_identify(ad_id,identify_prefix,identify_index)
+        VALUES(#{adId},#{identifyPrefix},#{identifyIndex})
+
+    </insert>
+
+    <select id="count" resultType="int" parameterType="com.idserver.model.Identify">
+        SELECT
+            count(*)
+        FROM
+            pkpm_idserver_identify
+        WHERE
+            ad_id = #{adId}  AND identify_prefix = #{identifyPrefix}
+    </select>
+</mapper>
