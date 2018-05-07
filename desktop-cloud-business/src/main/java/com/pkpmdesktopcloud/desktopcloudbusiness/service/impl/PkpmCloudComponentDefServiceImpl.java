@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudComponentDefDAO;
@@ -20,6 +21,7 @@ import com.pkpmdesktopcloud.redis.RedisCache;
  *
  */
 @Service
+@Slf4j
 public class PkpmCloudComponentDefServiceImpl implements PkpmCloudComponentDefService {
 	
 	@Resource

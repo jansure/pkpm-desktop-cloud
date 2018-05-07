@@ -3,7 +3,6 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.domain;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Data
 public class PkpmCloudProductFeeRule {
     /** 产品计费规则ID*/

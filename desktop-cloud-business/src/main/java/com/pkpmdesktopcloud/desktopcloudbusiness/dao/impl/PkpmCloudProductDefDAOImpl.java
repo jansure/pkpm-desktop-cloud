@@ -13,10 +13,12 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudProductDef;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmSysConfig;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 
+import javax.annotation.Resource;
+
 @Repository
 public class PkpmCloudProductDefDAOImpl implements PkpmCloudProductDefDAO{
 	
-	@Autowired
+	@Resource
 	private PkpmCloudProductDefMapper productMapper;
 	
 	/**
@@ -31,21 +33,6 @@ public class PkpmCloudProductDefDAOImpl implements PkpmCloudProductDefDAO{
 		
 		List<PkpmCloudProductDef> list = productMapper.getProductList(productInfo );
 		return list;
-	}
-	
-    /**
-     * 获取导航子目录并控制层级
-     * @param parentNavId
-     * @return
-     */
-	@Override
-	public List<PkpmCloudNavigation> getNavByPid(Integer parentNavId){
-		PkpmCloudNavigation navigation = new PkpmCloudNavigation();
-		navigation.setParentNavId(parentNavId);
-		
-		List<PkpmCloudNavigation> list = productMapper.getNavigationList(navigation );
-		return list;
-		
 	}
     
     /**

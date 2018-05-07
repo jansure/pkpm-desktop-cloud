@@ -19,8 +19,8 @@
 		<module>config-server</module>
 		<module>eureka-server</module>
 		<module>pkpm-redis-util</module>
-        <module>message-server</module>
-    </modules>
+		<module>message-server</module>
+	</modules>
 
 	<!-- 统一版本号依赖 -->
 	<parent>
@@ -49,6 +49,7 @@
 					<source>1.8</source>
 					<target>1.8</target>
 					<encoding>UTF-8</encoding>
+					<forceJavacCompilerUse>true</forceJavacCompilerUse>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
@@ -71,6 +72,7 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 </project>

@@ -10,7 +10,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-@Slf4j  
+
 @Data
 public class PkpmCloudUserInfo implements Serializable{
 	

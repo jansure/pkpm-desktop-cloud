@@ -1,5 +1,9 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.domain;
 
+import java.io.Serializable;
+
+import lombok.Data;
+
 /**
  * pkpm_sys_config表对应的实体类
  * 
@@ -7,7 +11,8 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.domain;
  * @date 2017/12/26
  *
  */
-public class PkpmSysConfig {
+@Data
+public class PkpmSysConfig implements Serializable{
 	private String key;
 	private String value;
 

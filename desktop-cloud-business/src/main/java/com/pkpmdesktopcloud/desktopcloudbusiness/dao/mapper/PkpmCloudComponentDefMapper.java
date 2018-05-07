@@ -13,6 +13,7 @@ import org.apache.ibatis.annotations.Update;
 import com.desktop.utils.mybatis.SimpleInsertLangDriver;
 import com.desktop.utils.mybatis.SimpleSelectLangDriver;
 import com.desktop.utils.mybatis.SimpleUpdateLangDriver;
+import com.gateway.common.domain.PkpmJobStatus;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudComponentDef;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 

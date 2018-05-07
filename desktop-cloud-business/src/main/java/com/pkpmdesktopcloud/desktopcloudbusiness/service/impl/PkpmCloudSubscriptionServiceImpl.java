@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,12 +64,10 @@ public class PkpmCloudSubscriptionServiceImpl implements PkpmCloudSubscriptionSe
 	
 	@Value("${server.host}")
 	private String serverHost;
-	@Value("${ouName}")
-	private String ouName;
+	
 	@Value("${userEmail}")
 	private String userEmail;
-	@Value("${status}")
-	private String status;
+	
 	@Value("${invalidStatus}")
 	private String invalidStatus;
 	@Value("${dataVolumeSize}")
@@ -181,8 +180,10 @@ public class PkpmCloudSubscriptionServiceImpl implements PkpmCloudSubscriptionSe
 		commonRequestBean.setUserEmail(userEmail);
 		commonRequestBean.setProjectId(projectId);   
 		commonRequestBean.setAdId(Integer.parseInt(adId));
-		commonRequestBean.setImageId("asdf");   //997488ed-fa23-4671-b88c-d364c0405334
-		
+		commonRequestBean.setImageId(StringUtils.isBlank(
+				productInfo.getImageId())?
+				DesktopConstant.DEFAULT_IMAGE_ID:productInfo.getImageId());   //997488ed-fa23-4671-b88c-d364c0405334
+
 		//根据user_id和status查询计算机名
 
 		String userName = userInfo.getUserName();

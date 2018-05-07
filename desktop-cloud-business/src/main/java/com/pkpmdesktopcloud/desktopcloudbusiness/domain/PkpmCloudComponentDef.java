@@ -3,9 +3,7 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.domain;
 import java.io.Serializable;
 
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Data
 public class PkpmCloudComponentDef implements Serializable {
 

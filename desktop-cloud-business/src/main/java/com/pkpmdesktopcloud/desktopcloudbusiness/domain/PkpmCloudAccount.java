@@ -1,14 +1,10 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.domain;
 
-import java.util.List;
 
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Data
 public class PkpmCloudAccount {
-	
 	/** 账户ID */
 	private Integer accountId;
 
