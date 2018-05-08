@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.desktop.utils.FileUtil;
 import com.desktop.utils.page.ResultObject;
 import com.gateway.common.dto.FileServerResponse;
+import com.github.pagehelper.util.StringUtil;
 import com.google.common.base.Preconditions;
 import com.pkpm.httpclientutil.common.util.JsonUtil;
 import com.pkpmdesktopcloud.desktopcloudbusiness.constants.SysConstant;
@@ -36,7 +37,7 @@ public class DocumentController {
         boolean isOnLine = false;
         //filename = "BIM协同设计管理云平台.pdf";
 
-        Preconditions.checkArgument(StringUtils.isBlank(filename), "文件名不能为空");
+        Preconditions.checkArgument(StringUtil.isNotEmpty(filename), "文件名不能为空");
 
         log.debug("filename:" + filename + "; isOnLine:" + isOnLine);
 
@@ -84,7 +85,7 @@ public class DocumentController {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		String filename = "法律条款声明.txt";
-//		Preconditions.checkArgument(StringUtils.isBlank(filename), "文件名不能为空");
+//		Preconditions.checkArgument(StringUtils.isNotEmpty(filename), "文件名不能为空");
 		
 		String url = sysConfigService.getPkpmSysConfigByKey(SysConstant.FILE_BASE_URL).getValue() + "/" + filename;
 		String termsJson = FileUtil.getHttpResponse(url);

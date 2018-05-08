@@ -56,10 +56,10 @@ public class UserController {
 		
 		
 		
-		Preconditions.checkArgument(StringUtils.isBlank(checkCode),"验证码不能为空");
-		Preconditions.checkArgument(StringUtils.isBlank(userMobileNumber),"手机号不能为空");
-		Preconditions.checkArgument(StringUtils.isBlank(userName),"用户名不能为空");
-		Preconditions.checkArgument(StringUtils.isBlank(userLoginPassword),"密码不能为空");
+		Preconditions.checkArgument(StringUtils.isNotEmpty(checkCode),"验证码不能为空");
+		Preconditions.checkArgument(StringUtils.isNotEmpty(userMobileNumber),"手机号不能为空");
+		Preconditions.checkArgument(StringUtils.isNotEmpty(userName),"用户名不能为空");
+		Preconditions.checkArgument(StringUtils.isNotEmpty(userLoginPassword),"密码不能为空");
 		
 		RedisCache cache = new RedisCache(REAL_CHECK_CODE_ID);
 		String realCheckCode = (String)cache.getObject(userMobileNumber);
@@ -95,8 +95,8 @@ public class UserController {
 	public ResultObject login(String username, String password, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
   
-		Preconditions.checkArgument(StringUtils.isBlank(username), "登录账号不能为空");
-		Preconditions.checkArgument(StringUtils.isBlank(password), "密码不能为空");
+		Preconditions.checkArgument(StringUtils.isNotEmpty(username), "登录账号不能为空");
+		Preconditions.checkArgument(StringUtils.isNotEmpty(password), "密码不能为空");
 		
 		PkpmCloudUserInfo realUserInfo = userService.findByUserNameOrTelephoneOrUserEmail(username);
 		if(realUserInfo == null) {
@@ -145,7 +145,7 @@ public class UserController {
 	public ResultObject sendMessage(String userMobileNumber, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		
-		Preconditions.checkArgument(StringUtils.isBlank(userMobileNumber), "手机号不能为空");
+		Preconditions.checkArgument(StringUtils.isNotEmpty(userMobileNumber), "手机号不能为空");
 		
 		try {
 			String checkCode = RandomStringUtils.randomNumeric(4);
@@ -176,7 +176,7 @@ public class UserController {
 	public ResultObject findByEmailOrUserMobileNumber(String userName, Integer type, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		
-		Preconditions.checkArgument(StringUtils.isBlank(userName), "请输入账户名");
+		Preconditions.checkArgument(StringUtils.isNotEmpty(userName), "请输入账户名");
 		Preconditions.checkNotNull(type, "type不能为空");
 		
 		PkpmCloudUserInfo realUserInfo = userService.findByUserNameOrTelephoneOrUserEmail(userName);
@@ -280,17 +280,17 @@ public class UserController {
 		// 允许跨域访问
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		
-		Preconditions.checkArgument(map == null || map.size() < 5, "参数个数不对");
+		Preconditions.checkArgument(map != null && map.size() >= 5, "参数个数不对");
 		Integer userID = new Integer(map.get("userID"));
 		String oldMobileNumber = map.get("oldMobileNumber");
 		String checkCode = map.get("checkCode");
 		String newMobileNumber = map.get("newMobileNumber");
 		String password = map.get("password");
 		
-		Preconditions.checkArgument(StringUtils.isBlank(checkCode), "验证码不能为空");
-		Preconditions.checkArgument(StringUtils.isBlank(newMobileNumber), "手机号不能为空");
-		Preconditions.checkArgument(!newMobileNumber.equals(StringUtils.deleteWhitespace(newMobileNumber)), "手机号不能带空格");
-		Preconditions.checkArgument(StringUtils.isBlank(password), "密码不能为空");
+		Preconditions.checkArgument(StringUtils.isNotEmpty(checkCode), "验证码不能为空");
+		Preconditions.checkArgument(StringUtils.isNotEmpty(newMobileNumber), "手机号不能为空");
+		Preconditions.checkArgument(newMobileNumber.equals(StringUtils.deleteWhitespace(newMobileNumber)), "手机号不能带空格");
+		Preconditions.checkArgument(StringUtils.isNotEmpty(password), "密码不能为空");
 		
 		PkpmCloudUserInfo user = userService.findUser(userID);
 		
@@ -305,9 +305,9 @@ public class UserController {
 		RedisCache cache = new RedisCache(REAL_CHECK_CODE_ID);
 		String realCheckCode = (String)cache.getObject(userMobileNumber);
 		
-		Preconditions.checkArgument(!userMobileNumber.equals(oldMobileNumber), "原手机号输入错误");
-		Preconditions.checkArgument(!checkCode.equals(realCheckCode), "验证码输入错误");
-		Preconditions.checkArgument(!realPassword.equals(password), "密码输入错误");
+		Preconditions.checkArgument(userMobileNumber.equals(oldMobileNumber), "原手机号输入错误");
+		Preconditions.checkArgument(checkCode.equals(realCheckCode), "验证码输入错误");
+		Preconditions.checkArgument(realPassword.equals(password), "密码输入错误");
 		
 		PkpmCloudUserInfo userInfo = userService.findByUserNameOrTelephoneOrUserEmail(newMobileNumber);
 		Preconditions.checkNotNull(userInfo, "该手机号已存在，请换一个手机号");
@@ -337,12 +337,12 @@ public class UserController {
 	public ResultObject getBackPassword(@RequestBody Map<String, String> map, HttpServletResponse response) throws Exception {	
 		// 允许跨域访问
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		Preconditions.checkArgument(map == null || map.size() < 2, "参数个数不对");
+		Preconditions.checkArgument(map != null && map.size() >= 2, "参数个数不对");
 		
 		String mobileNumber = map.get("mobileNumber");
 		String checkCode = map.get("checkCode");
-		Preconditions.checkArgument(StringUtils.isBlank(mobileNumber), "手机号不能为空");
-		Preconditions.checkArgument(StringUtils.isBlank(checkCode), "验证码不能为空");
+		Preconditions.checkArgument(StringUtils.isNotEmpty(mobileNumber), "手机号不能为空");
+		Preconditions.checkArgument(StringUtils.isNotEmpty(checkCode), "验证码不能为空");
 		
 		//获取真正验证码
 		RedisCache cache = new RedisCache(REAL_CHECK_CODE_ID);

@@ -105,15 +105,15 @@ public class PkpmCloudUserInfoServiceImpl implements PkpmCloudUserInfoService {
         PkpmCloudUserInfo userInfo = userDAO.getUserById(userID);
 
         String userName = userInfo.getUserName();
-        Preconditions.checkArgument(StringUtil.checkPassword(userName, newPassword), "您输入的密码不合法,请重新输入!");
+        Preconditions.checkArgument(!StringUtil.checkPassword(userName, newPassword), "您输入的密码不合法,请重新输入!");
 
         // 从数据库中查出password并解密
         String password = userInfo.getUserLoginPassword();
         String realPassword = Base64Util.stringFromB64(password);
 
-        Preconditions.checkArgument(realPassword.equals(oldPassword), "原密码输入错误");
-        Preconditions.checkArgument(newPassword.equals(StringUtils.deleteWhitespace(newPassword)));
-        Preconditions.checkArgument(!oldPassword.equals(newPassword), "密码与原密码相同");
+        Preconditions.checkArgument(!realPassword.equals(oldPassword), "原密码输入错误");
+        Preconditions.checkArgument(!newPassword.equals(StringUtils.deleteWhitespace(newPassword)));
+        Preconditions.checkArgument(oldPassword.equals(newPassword), "密码与原密码相同");
 
 
         String encryptedPassword = Base64Util.b64FromString(newPassword);

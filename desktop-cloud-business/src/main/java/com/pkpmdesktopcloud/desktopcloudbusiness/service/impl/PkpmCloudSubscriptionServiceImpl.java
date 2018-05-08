@@ -281,7 +281,7 @@ public class PkpmCloudSubscriptionServiceImpl implements PkpmCloudSubscriptionSe
 	public String  updateSubsCriptionBySubsId(PkpmCloudSubscription subsCription) {
 
 		int result =subscriptionMapper.updateSubsCriptionBySubsId(subsCription);
-		Preconditions.checkArgument(result==1,"订单更新失败");
+		Preconditions.checkArgument(result == 1,"订单更新失败");
 		return "更新状态成功";
 	}
 
