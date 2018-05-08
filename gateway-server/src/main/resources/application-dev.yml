@@ -1,0 +1,65 @@
+server:
+  port: 18030
+#  context-path: /pkpm-desktop-cloud
+spring:
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://114.115.159.245:3306/mydb?useUnicode=true&characterEncoding=utf8&useSSL=false&useAffectedRows=true
+    username: pkpm1
+    password: Pkpm=123
+  mail:
+    from: fly_free@yeah.net
+    host: smtp.yeah.net
+    port: 25
+    username: fly_free
+    password: FLY_FREE
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: false
+      mail.smtp.starttls.required: false
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+#Hystrix超时配置
+hystrix:
+  command:
+    choose:
+      default:
+        execution:
+          timeout:
+            enabled: false
+        isolation:
+          thread:
+            timeoutInMilliseconds:  60000
+ribbon:
+  ConnectTimeout: 60000
+  ReadTimeout: 60000
+
+oss:
+  bucket:
+    endpoint: https://oss-cn-huhehaote.aliyuncs.com
+    accessKey: LTAI5LhXzgfsnZgT
+    secretKey: tNhu2GBhMLXJ2MQbIysNGjCwPZud5H
+    resumeBucket: hermes-resume
+    logoBucket: hermes-logo
+    photoBucket: hermes-photo
+    
+    
+#配置分页插件pagehelper
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+
+#SQL日志    
+
+logging:
+  file: ./logs/gateway.log 
+  level:
+    com.gatewayserver.gatewayserver.dao.mapper: trace # 改成你的mapper文件所在包路径
+
