@@ -5,7 +5,6 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +41,7 @@ public class SubscriptionController {
 	public ResultObject immediatelyUse(@RequestBody WorkOrderVO wo,HttpServletResponse response){
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		Integer userId = wo.getUserId();
-		Preconditions.checkNotNull(wo.getUserId(), "请您先登录账号才可以使用");
+		Preconditions.checkNotNull(userId, "请您先登录账号才可以使用");
 				
 		PkpmCloudUserInfo userInfo = userService.findUser(userId);
 		if(userInfo == null){
