@@ -6,7 +6,6 @@ import java.util.List;
 
 /**
  * 字符串分割工具类
- * Created by Chenjing on 2017/5/31.
  */
 public class SplitUtil {
     /**

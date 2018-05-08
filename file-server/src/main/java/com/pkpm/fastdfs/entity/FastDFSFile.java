@@ -1,10 +1,5 @@
 package com.pkpm.fastdfs.entity;
 
-/**
- * Created by Chenjing on 2018/1/18.
- *
- * @author Chenjing
- */
 public class FastDFSFile {
     private String name;
 

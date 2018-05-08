@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.pkpm.fastdfs.entity.Result;
 import com.pkpm.fastdfs.util.ResultUtil;
 
-/**
- * @author Chenjing
- */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

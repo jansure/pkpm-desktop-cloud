@@ -15,9 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
 /**
- * Created by Chenjing on 2018/1/22.
  *
- * @author Chenjing
  */
 @Component
 @Aspect

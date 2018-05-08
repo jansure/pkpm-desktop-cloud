@@ -19,11 +19,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
-/**
- * Created by Chenjing on 2018/1/18.
- *
- * @author Chenjing
- */
 public class FastDFSClient {
     private static Logger logger = LoggerFactory.getLogger(FastDFSClient.class);
     private static TrackerClient trackerClient;

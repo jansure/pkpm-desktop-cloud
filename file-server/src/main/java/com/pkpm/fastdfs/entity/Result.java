@@ -2,7 +2,6 @@ package com.pkpm.fastdfs.entity;
 
 /**
  * @param <T> 限定类型
- * @author Chenjing
  */
 public class Result<T> {
     private Boolean isSuccess;

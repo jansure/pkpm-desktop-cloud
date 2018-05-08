@@ -1,10 +1,5 @@
 package com.pkpm.fastdfs.entity;
 
-/**
- * Created by Chenjing on 2018/1/22.
- *
- * @author Chenjing
- */
 public enum HttpStatus {
     SUCCESS(true, "成功"),
     FAIL(false, "失败");

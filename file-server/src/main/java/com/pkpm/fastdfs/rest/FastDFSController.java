@@ -11,9 +11,6 @@ import com.pkpm.fastdfs.entity.Result;
 import com.pkpm.fastdfs.fastdfs.FastDFSClient;
 import com.pkpm.fastdfs.util.ResultUtil;
 
-/**
- * @author Chenjing
- */
 @RestController
 @RequestMapping("fast")
 @Api(description = "FastDFS文件接口")
@@ -21,7 +18,7 @@ public class FastDFSController {
 
     @ApiOperation(value = "文件上传")
     @PostMapping("/upload")
-    public Result singleFileUpload(@RequestParam("file") @ApiParam(value = "文件，小于10M") MultipartFile file) throws Exception {
+    public Result singleFileUpload(@RequestParam("file") @ApiParam(value = "文件，小于500M") MultipartFile file) throws Exception {
         if (file.isEmpty()) {
             return ResultUtil.failed("文件为空");
         }
