@@ -8,16 +8,12 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.desktop.utils.Base64Util;
-import com.desktop.utils.SmsUtil;
 import com.desktop.utils.page.ResultObject;
-import com.google.common.base.Preconditions;
 import com.pkpmdesktopcloud.desktopcloudbusiness.constants.SysConstant;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudComponentDef;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudProductDef;
