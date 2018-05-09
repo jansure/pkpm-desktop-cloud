@@ -12,6 +12,7 @@ logs/
 .metadata
 
 ### IntelliJ IDEA ###
+.mvn
 .idea
 *.iws
 *.ipr

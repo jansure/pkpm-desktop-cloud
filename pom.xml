@@ -22,6 +22,7 @@
 		<module>pkpm-redis-util</module>
 		<module>message-server</module>
 		<module>file-server</module>
+		<module>gateway-shutdown</module>
 	</modules>
 
 	<!-- 统一版本号依赖 -->
