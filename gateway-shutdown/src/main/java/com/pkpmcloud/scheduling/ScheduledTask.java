@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * @author xuhe
- * @description
+ * @description 自动定时任务
  * @date 2018/5/9
  */
 @Component
