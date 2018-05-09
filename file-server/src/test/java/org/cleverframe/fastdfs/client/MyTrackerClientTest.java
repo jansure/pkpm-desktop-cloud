@@ -8,7 +8,6 @@ import org.cleverframe.fastdfs.model.GroupState;
 import org.cleverframe.fastdfs.model.StorageNode;
 import org.cleverframe.fastdfs.model.StorageNodeInfo;
 import org.cleverframe.fastdfs.model.StorageState;
-import org.cleverframe.fastdfs.pool.ConnectionPool;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
