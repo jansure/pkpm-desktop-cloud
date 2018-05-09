@@ -9,7 +9,6 @@ import java.util.List;
 
 /**
  * 目录服务(Tracker)客户端接口
- * 作者：LiZW <br/>
  * 创建时间：2016/11/21 15:45 <br/>
  */
 public interface TrackerClient {

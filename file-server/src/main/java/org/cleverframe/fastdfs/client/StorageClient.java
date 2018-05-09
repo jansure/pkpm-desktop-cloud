@@ -10,7 +10,6 @@ import java.util.Set;
 
 /**
  * 存储服务(Storage)客户端接口
- * 作者：LiZW <br/>
  * 创建时间：2016/11/21 16:11 <br/>
  */
 public interface StorageClient {

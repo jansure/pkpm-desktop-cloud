@@ -19,11 +19,11 @@ import javax.annotation.Resource;
 /**
  * 目录服务(Tracker)客户端接口 默认实现<br/>
  * <b>注意: 当前类最好使用单例，一个应用只需要一个实例</b>
- * 作者：LiZW <br/>
  * 创建时间：2016/11/21 16:26 <br/>
  */
 @Component
 public class DefaultTrackerClient implements TrackerClient {
+	
     /**
      * 日志
      */
