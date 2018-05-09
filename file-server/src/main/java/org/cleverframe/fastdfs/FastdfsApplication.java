@@ -1,12 +1,11 @@
-package com.pkpm.fastdfs;
+package org.cleverframe.fastdfs;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FastdfsClientApplication {
-
+public class FastdfsApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(FastdfsClientApplication.class, args);
+		SpringApplication.run(FastdfsApplication.class, args);
 	}
 }
