@@ -4,6 +4,7 @@ import org.apache.commons.pool2.KeyedPooledObjectFactory;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 import org.cleverframe.fastdfs.conn.Connection;
+import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
 
@@ -27,4 +28,5 @@ public class ConnectionPool extends GenericKeyedObjectPool<InetSocketAddress, Co
     public ConnectionPool(KeyedPooledObjectFactory<InetSocketAddress, Connection> factory) {
         super(factory);
     }
+    
 }

@@ -1,8 +1,8 @@
 package org.cleverframe.fastdfs.config;
 
+import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 import org.cleverframe.fastdfs.pool.ConnectionPool;
 import org.cleverframe.fastdfs.pool.PooledConnectionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,18 +25,18 @@ public class FastdfsConfig {
 	@Value("${fileupload.FastDFS.trackers}")
 	public String trackers;
 	
-	@Autowired
-	MyPoolConfig genericKeyedObjectPoolConfig;
+//	@Autowired
+//	MyPoolConfig genericKeyedObjectPoolConfig;
 	
 	 /**
 	  * FastDFS连接池配置
 	  * @return ConnectionPool
 	  */
-	@Bean
+//	@Bean
 	public ConnectionPool connectionPool(){
 		//ConnectionPool connectionPool = new ConnectionPool(factory);
 		PooledConnectionFactory pooledConnectionFactory = new PooledConnectionFactory(soTimeout, connectTimeout);
-//		GenericKeyedObjectPoolConfig genericKeyedObjectPoolConfig = new GenericKeyedObjectPoolConfig();
+		GenericKeyedObjectPoolConfig  genericKeyedObjectPoolConfig = new GenericKeyedObjectPoolConfig();
 		
 		genericKeyedObjectPoolConfig.setMaxTotal(maxTotal);
 		genericKeyedObjectPoolConfig.setMaxTotalPerKey(maxTotalPerKey);
