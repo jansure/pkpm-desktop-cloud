@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper>
+    <resultMap id="BaseResultMapper" type="com.pkpmcloud.dao.ProjectDAO">
+        <constructor>
+            <idArg name="id" column="id"/>
+            <arg name="projectId" column="project_id"/>
+            <arg name="projectDesc" column="project_desc"/>
+            <arg name="adminName" column="admin_name"/>
+            <arg name="adminPassword" column="admin_password"/>
+            <arg name="valid" column="valid"/>
+            <arg name="createTime" column="create_time"/>
+        </constructor>
+    </resultMap>
+
+    <select id="listValidProject" resultMap="BaseResultMap">
+        SELECT * FROM pkpm_shutdown_
+    </select>
+
+</mapper>
