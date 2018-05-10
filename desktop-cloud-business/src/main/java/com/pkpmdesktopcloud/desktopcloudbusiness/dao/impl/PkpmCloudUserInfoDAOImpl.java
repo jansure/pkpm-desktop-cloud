@@ -9,10 +9,12 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudUserInfoDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.PkpmCloudUserInfoMapper;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudUserInfo;
 
+import javax.annotation.Resource;
+
 @Repository
 public class PkpmCloudUserInfoDAOImpl implements PkpmCloudUserInfoDAO{
 	
-	@Autowired
+	@Resource
 	private PkpmCloudUserInfoMapper userMapper;
 	
 	/* (非 Javadoc)  
