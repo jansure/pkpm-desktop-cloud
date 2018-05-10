@@ -3,9 +3,9 @@ package com.pkpmcloud.fileserver.utils;
 import com.pkpmcloud.fileserver.exception.FastDfsColumnMapException;
 import com.pkpmcloud.fileserver.mapper.FieldMateData;
 import com.pkpmcloud.fileserver.mapper.ObjectMateData;
-import org.cleverframe.fastdfs.exception.FastDfsColumnMapException;
-import org.cleverframe.fastdfs.mapper.FieldMateData;
-import org.cleverframe.fastdfs.mapper.ObjectMateData;
+import com.pkpmcloud.fileserver.exception.FastDfsColumnMapException;
+import com.pkpmcloud.fileserver.mapper.FieldMateData;
+import com.pkpmcloud.fileserver.mapper.ObjectMateData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,9 +1,10 @@
 package com.pkpmcloud.fileserver.pool;
 
+import com.pkpmcloud.fileserver.conn.Connection;
 import org.apache.commons.pool2.KeyedPooledObjectFactory;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
-import org.cleverframe.fastdfs.conn.Connection;
+import com.pkpmcloud.fileserver.conn.Connection;
 import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;

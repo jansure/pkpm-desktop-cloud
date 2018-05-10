@@ -1,7 +1,9 @@
 package com.pkpmcloud.fileserver.testbase;
 
-import org.cleverframe.fastdfs.conn.Connection;
-import org.cleverframe.fastdfs.conn.SocketConnection;
+import com.pkpmcloud.fileserver.conn.Connection;
+import com.pkpmcloud.fileserver.conn.SocketConnection;
+import com.pkpmcloud.fileserver.conn.Connection;
+import com.pkpmcloud.fileserver.conn.SocketConnection;
 
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;

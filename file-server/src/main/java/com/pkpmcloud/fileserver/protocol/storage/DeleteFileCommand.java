@@ -1,8 +1,8 @@
 package com.pkpmcloud.fileserver.protocol.storage;
 
 import com.pkpmcloud.fileserver.protocol.storage.request.DeleteFileRequest;
-import org.cleverframe.fastdfs.protocol.BaseResponse;
-import org.cleverframe.fastdfs.protocol.storage.request.DeleteFileRequest;
+import com.pkpmcloud.fileserver.protocol.BaseResponse;
+import com.pkpmcloud.fileserver.protocol.storage.request.DeleteFileRequest;
 
 /**
  * 删除文件爱你命令

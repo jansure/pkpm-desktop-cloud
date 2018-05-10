@@ -1,9 +1,9 @@
 package com.pkpmcloud.fileserver.client;
 
-import org.cleverframe.fastdfs.model.GroupState;
-import org.cleverframe.fastdfs.model.StorageNode;
-import org.cleverframe.fastdfs.model.StorageNodeInfo;
-import org.cleverframe.fastdfs.model.StorageState;
+import com.pkpmcloud.fileserver.model.GroupState;
+import com.pkpmcloud.fileserver.model.StorageNode;
+import com.pkpmcloud.fileserver.model.StorageNodeInfo;
+import com.pkpmcloud.fileserver.model.StorageState;
 
 import java.util.List;
 

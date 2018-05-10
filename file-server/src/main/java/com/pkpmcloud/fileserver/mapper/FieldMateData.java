@@ -2,12 +2,12 @@ package com.pkpmcloud.fileserver.mapper;
 
 import com.pkpmcloud.fileserver.constant.OtherConstants;
 import com.pkpmcloud.fileserver.exception.FastDfsColumnMapException;
-import org.cleverframe.fastdfs.constant.OtherConstants;
-import org.cleverframe.fastdfs.exception.FastDfsColumnMapException;
-import org.cleverframe.fastdfs.model.MateData;
-import org.cleverframe.fastdfs.utils.BytesUtil;
-import org.cleverframe.fastdfs.utils.MetadataMapperUtils;
-import org.cleverframe.fastdfs.utils.ReflectionsUtils;
+import com.pkpmcloud.fileserver.constant.OtherConstants;
+import com.pkpmcloud.fileserver.exception.FastDfsColumnMapException;
+import com.pkpmcloud.fileserver.model.MateData;
+import com.pkpmcloud.fileserver.utils.BytesUtil;
+import com.pkpmcloud.fileserver.utils.MetadataMapperUtils;
+import com.pkpmcloud.fileserver.utils.ReflectionsUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

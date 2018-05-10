@@ -1,8 +1,7 @@
 package com.pkpmcloud.fileserver.protocol.tracker;
 
+import com.pkpmcloud.fileserver.protocol.BaseResponse;
 import com.pkpmcloud.fileserver.protocol.tracker.request.DeleteStorageRequest;
-import org.cleverframe.fastdfs.protocol.BaseResponse;
-import org.cleverframe.fastdfs.protocol.tracker.request.DeleteStorageRequest;
 
 /**
  * 删除存储服务器

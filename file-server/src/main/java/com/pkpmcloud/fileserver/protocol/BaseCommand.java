@@ -1,6 +1,7 @@
 package com.pkpmcloud.fileserver.protocol;
 
-import org.cleverframe.fastdfs.conn.Connection;
+import com.pkpmcloud.fileserver.conn.Connection;
+import com.pkpmcloud.fileserver.conn.Connection;
 
 /**
  * FastDFS命令操执行接口

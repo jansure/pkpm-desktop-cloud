@@ -1,11 +1,12 @@
 package com.pkpmcloud.fileserver.protocol.storage.request;
 
-import org.cleverframe.fastdfs.constant.CmdConstants;
-import org.cleverframe.fastdfs.constant.OtherConstants;
-import org.cleverframe.fastdfs.protocol.BaseRequest;
-import org.cleverframe.fastdfs.protocol.ProtocolHead;
-import org.cleverframe.fastdfs.mapper.DynamicFieldType;
-import org.cleverframe.fastdfs.mapper.FastDFSColumn;
+import com.pkpmcloud.fileserver.constant.CmdConstants;
+import com.pkpmcloud.fileserver.constant.OtherConstants;
+import com.pkpmcloud.fileserver.mapper.DynamicFieldType;
+import com.pkpmcloud.fileserver.mapper.FastDFSColumn;
+import com.pkpmcloud.fileserver.protocol.BaseRequest;
+import com.pkpmcloud.fileserver.protocol.ProtocolHead;
+
 
 /**
  * 作者：LiZW <br/>

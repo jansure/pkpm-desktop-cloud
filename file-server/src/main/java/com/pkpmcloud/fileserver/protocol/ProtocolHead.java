@@ -1,10 +1,10 @@
 package com.pkpmcloud.fileserver.protocol;
 
 import com.pkpmcloud.fileserver.exception.FastDfsServerException;
-import org.cleverframe.fastdfs.constant.CmdConstants;
-import org.cleverframe.fastdfs.constant.OtherConstants;
-import org.cleverframe.fastdfs.exception.FastDfsServerException;
-import org.cleverframe.fastdfs.utils.BytesUtil;
+import com.pkpmcloud.fileserver.constant.CmdConstants;
+import com.pkpmcloud.fileserver.constant.OtherConstants;
+import com.pkpmcloud.fileserver.exception.FastDfsServerException;
+import com.pkpmcloud.fileserver.utils.BytesUtil;
 
 import java.io.IOException;
 import java.io.InputStream;

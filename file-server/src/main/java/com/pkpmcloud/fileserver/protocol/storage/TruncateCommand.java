@@ -1,8 +1,8 @@
 package com.pkpmcloud.fileserver.protocol.storage;
 
 import com.pkpmcloud.fileserver.protocol.storage.request.TruncateRequest;
-import org.cleverframe.fastdfs.protocol.BaseResponse;
-import org.cleverframe.fastdfs.protocol.storage.request.TruncateRequest;
+import com.pkpmcloud.fileserver.protocol.BaseResponse;
+import com.pkpmcloud.fileserver.protocol.storage.request.TruncateRequest;
 
 /**
  * 文件Truncate命令

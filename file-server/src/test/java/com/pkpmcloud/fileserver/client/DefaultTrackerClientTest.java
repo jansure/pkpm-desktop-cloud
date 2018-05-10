@@ -1,13 +1,14 @@
 package com.pkpmcloud.fileserver.client;
 
+import com.pkpmcloud.fileserver.conn.DefaultCommandExecutor;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
-import org.cleverframe.fastdfs.conn.DefaultCommandExecutor;
-import org.cleverframe.fastdfs.model.GroupState;
-import org.cleverframe.fastdfs.model.StorageNode;
-import org.cleverframe.fastdfs.model.StorageNodeInfo;
-import org.cleverframe.fastdfs.model.StorageState;
-import org.cleverframe.fastdfs.pool.ConnectionPool;
-import org.cleverframe.fastdfs.pool.PooledConnectionFactory;
+import com.pkpmcloud.fileserver.conn.DefaultCommandExecutor;
+import com.pkpmcloud.fileserver.model.GroupState;
+import com.pkpmcloud.fileserver.model.StorageNode;
+import com.pkpmcloud.fileserver.model.StorageNodeInfo;
+import com.pkpmcloud.fileserver.model.StorageState;
+import com.pkpmcloud.fileserver.pool.ConnectionPool;
+import com.pkpmcloud.fileserver.pool.PooledConnectionFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

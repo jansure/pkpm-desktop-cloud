@@ -1,7 +1,7 @@
 package com.pkpmcloud.fileserver.protocol;
 
-import org.cleverframe.fastdfs.mapper.ObjectMateData;
-import org.cleverframe.fastdfs.utils.FastDfsParamMapperUtils;
+import com.pkpmcloud.fileserver.mapper.ObjectMateData;
+import com.pkpmcloud.fileserver.utils.FastDfsParamMapperUtils;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;

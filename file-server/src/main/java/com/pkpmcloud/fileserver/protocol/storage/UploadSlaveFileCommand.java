@@ -1,9 +1,9 @@
 package com.pkpmcloud.fileserver.protocol.storage;
 
 import com.pkpmcloud.fileserver.protocol.storage.request.UploadSlaveFileRequest;
-import org.cleverframe.fastdfs.model.StorePath;
-import org.cleverframe.fastdfs.protocol.BaseResponse;
-import org.cleverframe.fastdfs.protocol.storage.request.UploadSlaveFileRequest;
+import com.pkpmcloud.fileserver.model.StorePath;
+import com.pkpmcloud.fileserver.protocol.BaseResponse;
+import com.pkpmcloud.fileserver.protocol.storage.request.UploadSlaveFileRequest;
 
 import java.io.InputStream;
 

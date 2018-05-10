@@ -1,10 +1,8 @@
 package com.pkpmcloud.fileserver.protocol.storage;
 
+import com.pkpmcloud.fileserver.model.MateData;
 import com.pkpmcloud.fileserver.protocol.storage.request.GetMetadataRequest;
 import com.pkpmcloud.fileserver.protocol.storage.response.GetMetadataResponse;
-import org.cleverframe.fastdfs.model.MateData;
-import org.cleverframe.fastdfs.protocol.storage.request.GetMetadataRequest;
-import org.cleverframe.fastdfs.protocol.storage.response.GetMetadataResponse;
 
 import java.util.Set;
 

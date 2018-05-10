@@ -1,9 +1,10 @@
 package com.pkpmcloud.fileserver.protocol.tracker;
 
+import com.pkpmcloud.fileserver.conn.Connection;
 import com.pkpmcloud.fileserver.testbase.GetTrackerConnection;
-import org.cleverframe.fastdfs.conn.Connection;
-import org.cleverframe.fastdfs.model.StorageState;
-import org.cleverframe.fastdfs.testbase.GetTrackerConnection;
+import com.pkpmcloud.fileserver.conn.Connection;
+import com.pkpmcloud.fileserver.model.StorageState;
+import com.pkpmcloud.fileserver.testbase.GetTrackerConnection;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

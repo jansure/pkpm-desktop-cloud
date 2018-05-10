@@ -1,11 +1,12 @@
 package com.pkpmcloud.fileserver.protocol.storage;
 
+import com.pkpmcloud.fileserver.conn.Connection;
 import com.pkpmcloud.fileserver.protocol.tracker.GetGroupListCommandTest;
 import com.pkpmcloud.fileserver.testbase.GetStorageConnection;
-import org.cleverframe.fastdfs.conn.Connection;
-import org.cleverframe.fastdfs.protocol.storage.callback.DownloadFileWriter;
-import org.cleverframe.fastdfs.protocol.tracker.GetGroupListCommandTest;
-import org.cleverframe.fastdfs.testbase.GetStorageConnection;
+import com.pkpmcloud.fileserver.conn.Connection;
+import com.pkpmcloud.fileserver.protocol.storage.callback.DownloadFileWriter;
+import com.pkpmcloud.fileserver.protocol.tracker.GetGroupListCommandTest;
+import com.pkpmcloud.fileserver.testbase.GetStorageConnection;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

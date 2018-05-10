@@ -1,8 +1,8 @@
 package com.pkpmcloud.fileserver.protocol.storage.response;
 
-import org.cleverframe.fastdfs.model.MateData;
-import org.cleverframe.fastdfs.protocol.BaseResponse;
-import org.cleverframe.fastdfs.utils.MetadataMapperUtils;
+import com.pkpmcloud.fileserver.model.MateData;
+import com.pkpmcloud.fileserver.protocol.BaseResponse;
+import com.pkpmcloud.fileserver.utils.MetadataMapperUtils;
 
 import java.io.IOException;
 import java.io.InputStream;

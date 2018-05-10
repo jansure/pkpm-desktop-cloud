@@ -1,8 +1,8 @@
 package com.pkpmcloud.fileserver.protocol.storage.response;
 
 import com.pkpmcloud.fileserver.protocol.storage.callback.DownloadCallback;
-import org.cleverframe.fastdfs.protocol.BaseResponse;
-import org.cleverframe.fastdfs.protocol.storage.callback.DownloadCallback;
+import com.pkpmcloud.fileserver.protocol.BaseResponse;
+import com.pkpmcloud.fileserver.protocol.storage.callback.DownloadCallback;
 
 import java.io.IOException;
 import java.io.InputStream;

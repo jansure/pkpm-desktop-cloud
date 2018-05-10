@@ -3,9 +3,9 @@ package com.pkpmcloud.fileserver.protocol.storage;
 import com.pkpmcloud.fileserver.protocol.storage.callback.DownloadCallback;
 import com.pkpmcloud.fileserver.protocol.storage.request.DownloadFileRequest;
 import com.pkpmcloud.fileserver.protocol.storage.response.DownloadFileResponse;
-import org.cleverframe.fastdfs.protocol.storage.callback.DownloadCallback;
-import org.cleverframe.fastdfs.protocol.storage.request.DownloadFileRequest;
-import org.cleverframe.fastdfs.protocol.storage.response.DownloadFileResponse;
+import com.pkpmcloud.fileserver.protocol.storage.callback.DownloadCallback;
+import com.pkpmcloud.fileserver.protocol.storage.request.DownloadFileRequest;
+import com.pkpmcloud.fileserver.protocol.storage.response.DownloadFileResponse;
 
 /**
  * 下载文件

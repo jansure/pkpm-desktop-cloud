@@ -1,7 +1,7 @@
 package com.pkpmcloud.fileserver.protocol;
 
-import org.cleverframe.fastdfs.utils.FastDfsParamMapperUtils;
-import org.cleverframe.fastdfs.utils.ReflectionsUtils;
+import com.pkpmcloud.fileserver.utils.FastDfsParamMapperUtils;
+import com.pkpmcloud.fileserver.utils.ReflectionsUtils;
 
 import java.io.IOException;
 import java.io.InputStream;

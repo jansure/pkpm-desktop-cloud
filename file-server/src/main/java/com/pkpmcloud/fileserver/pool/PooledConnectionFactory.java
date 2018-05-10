@@ -1,10 +1,12 @@
 package com.pkpmcloud.fileserver.pool;
 
+import com.pkpmcloud.fileserver.conn.Connection;
+import com.pkpmcloud.fileserver.conn.SocketConnection;
 import org.apache.commons.pool2.BaseKeyedPooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
-import org.cleverframe.fastdfs.conn.Connection;
-import org.cleverframe.fastdfs.conn.SocketConnection;
+import com.pkpmcloud.fileserver.conn.Connection;
+import com.pkpmcloud.fileserver.conn.SocketConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,9 +1,10 @@
 package com.pkpmcloud.fileserver.pool;
 
+import com.pkpmcloud.fileserver.conn.DefaultCommandExecutor;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
-import org.cleverframe.fastdfs.conn.DefaultCommandExecutor;
-import org.cleverframe.fastdfs.model.StorageNode;
-import org.cleverframe.fastdfs.protocol.tracker.GetStorageNodeCommand;
+import com.pkpmcloud.fileserver.conn.DefaultCommandExecutor;
+import com.pkpmcloud.fileserver.model.StorageNode;
+import com.pkpmcloud.fileserver.protocol.tracker.GetStorageNodeCommand;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

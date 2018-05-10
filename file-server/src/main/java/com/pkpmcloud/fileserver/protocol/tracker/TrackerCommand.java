@@ -1,6 +1,6 @@
 package com.pkpmcloud.fileserver.protocol.tracker;
 
-import org.cleverframe.fastdfs.protocol.AbstractCommand;
+import com.pkpmcloud.fileserver.protocol.AbstractCommand;
 
 /**
  * Tracker Server 服务端命令

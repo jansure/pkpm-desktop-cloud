@@ -1,6 +1,6 @@
 package com.pkpmcloud.fileserver.protocol.storage;
 
-import org.cleverframe.fastdfs.protocol.AbstractCommand;
+import com.pkpmcloud.fileserver.protocol.AbstractCommand;
 
 /**
  * 作者：LiZW <br/>

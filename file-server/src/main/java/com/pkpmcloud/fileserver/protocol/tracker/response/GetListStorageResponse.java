@@ -1,9 +1,9 @@
 package com.pkpmcloud.fileserver.protocol.tracker.response;
 
-import org.cleverframe.fastdfs.model.StorageState;
-import org.cleverframe.fastdfs.protocol.BaseResponse;
-import org.cleverframe.fastdfs.mapper.ObjectMateData;
-import org.cleverframe.fastdfs.utils.FastDfsParamMapperUtils;
+import com.pkpmcloud.fileserver.mapper.ObjectMateData;
+import com.pkpmcloud.fileserver.model.StorageState;
+import com.pkpmcloud.fileserver.protocol.BaseResponse;
+import com.pkpmcloud.fileserver.utils.FastDfsParamMapperUtils;
 
 import java.io.IOException;
 import java.io.InputStream;

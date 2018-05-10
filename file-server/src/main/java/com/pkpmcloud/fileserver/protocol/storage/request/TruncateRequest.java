@@ -1,10 +1,10 @@
 package com.pkpmcloud.fileserver.protocol.storage.request;
 
-import org.cleverframe.fastdfs.constant.CmdConstants;
-import org.cleverframe.fastdfs.protocol.BaseRequest;
-import org.cleverframe.fastdfs.protocol.ProtocolHead;
-import org.cleverframe.fastdfs.mapper.DynamicFieldType;
-import org.cleverframe.fastdfs.mapper.FastDFSColumn;
+import com.pkpmcloud.fileserver.constant.CmdConstants;
+import com.pkpmcloud.fileserver.mapper.DynamicFieldType;
+import com.pkpmcloud.fileserver.mapper.FastDFSColumn;
+import com.pkpmcloud.fileserver.protocol.BaseRequest;
+import com.pkpmcloud.fileserver.protocol.ProtocolHead;
 
 import java.nio.charset.Charset;
 

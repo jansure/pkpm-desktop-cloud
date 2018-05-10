@@ -4,8 +4,7 @@ import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.annotation.Resource;
-
+import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 import com.pkpmcloud.fileserver.exception.FastDfsConnectException;
 import com.pkpmcloud.fileserver.exception.FastDfsException;
 import com.pkpmcloud.fileserver.pool.ConnectionPool;
@@ -15,21 +14,10 @@ import com.pkpmcloud.fileserver.protocol.AbstractCommand;
 import com.pkpmcloud.fileserver.protocol.storage.StorageCommand;
 import com.pkpmcloud.fileserver.protocol.tracker.TrackerCommand;
 import com.pkpmcloud.fileserver.utils.StringUtils;
-import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
-import org.cleverframe.fastdfs.config.FastdfsConfig;
-import org.cleverframe.fastdfs.exception.FastDfsConnectException;
-import org.cleverframe.fastdfs.exception.FastDfsException;
-import org.cleverframe.fastdfs.pool.ConnectionPool;
-import org.cleverframe.fastdfs.pool.PooledConnectionFactory;
-import org.cleverframe.fastdfs.pool.TrackerLocator;
-import org.cleverframe.fastdfs.protocol.AbstractCommand;
-import org.cleverframe.fastdfs.protocol.storage.StorageCommand;
-import org.cleverframe.fastdfs.protocol.tracker.TrackerCommand;
-import org.cleverframe.fastdfs.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 /**
@@ -40,7 +28,6 @@ import org.springframework.stereotype.Component;
  * 创建时间：2016/11/20 19:26 <br/>
  */
 @Component
-@Configuration
 public class DefaultCommandExecutor implements CommandExecutor {
 	
     /**
@@ -49,17 +36,17 @@ public class DefaultCommandExecutor implements CommandExecutor {
     private static final Logger logger = LoggerFactory.getLogger(DefaultCommandExecutor.class);
 
     @Value("${fileupload.FastDFS.soTimeout}")
-	public Integer soTimeout = 10000;
+	public Integer soTimeout;
 	@Value("${fileupload.FastDFS.connectTimeout}")
-	public Integer connectTimeout = 5000;
+	public Integer connectTimeout;
 	@Value("${fileupload.FastDFS.maxTotal}")
-	public Integer maxTotal = 200;
+	public Integer maxTotal;
 	@Value("${fileupload.FastDFS.maxTotalPerKey}")
-	public Integer maxTotalPerKey = 200;
+	public Integer maxTotalPerKey;
 	@Value("${fileupload.FastDFS.maxIdlePerKey}")
-	public Integer maxIdlePerKey = 50;
+	public Integer maxIdlePerKey;
 	@Value("${fileupload.FastDFS.trackers}")
-	public String trackers = "139.159.254.232:22122,139.159.254.232:22122";
+	public String trackers;
 	
     /**
      * Tracker定位
@@ -71,8 +58,16 @@ public class DefaultCommandExecutor implements CommandExecutor {
      */
     private ConnectionPool pool;
     
-    
-    public DefaultCommandExecutor(){
+    /**
+     * 
+     * @Title: init  
+     * @Description:  初始化连接池，使用@bean注解才可以使用@Value获取到值 
+     * @param @return    参数  
+     * @return int    返回类型  
+     * @throws
+     */
+    @Bean
+    public int init(){
     	PooledConnectionFactory pooledConnectionFactory = new PooledConnectionFactory(soTimeout, connectTimeout);
 		GenericKeyedObjectPoolConfig  genericKeyedObjectPoolConfig = new GenericKeyedObjectPoolConfig();
 		
@@ -94,36 +89,21 @@ public class DefaultCommandExecutor implements CommandExecutor {
             throw new RuntimeException("Tracker Server服务器IP地址解析失败:[" + trackers + "]");
         }
         trackerLocator = new TrackerLocator(trackerSet);
+        
+        return 200;
     }
-    /**
-     * 构造函数
-     *
-     * @param trackerStr Tracker Server服务器IP地址,格式 host:port(多个用用“,”隔开)
-     * @param pool       连接池
-     */
-//    public DefaultCommandExecutor(String trackerStr, ConnectionPool pool) {
-//        logger.debug("初始化Tracker Server连接 {}", trackerStr);
-//        Set<String> trackerSet = new HashSet<String>();
-//        String[] trackerArray = StringUtils.split(trackerStr, ",");
-//        for (String tracker : trackerArray) {
-//            if (StringUtils.isBlank(tracker)) {
-//                continue;
-//            }
-//            trackerSet.add(tracker.trim());
-//        }
-//        if (trackerSet.size() <= 0) {
-//            throw new RuntimeException("Tracker Server服务器IP地址解析失败:[" + trackerStr + "]");
-//        }
-//        this.pool = pool;
-//        trackerLocator = new TrackerLocator(trackerSet);
-//    }
-
+    
+    private DefaultCommandExecutor(){
+    	
+    }
+    
     /**
      * 构造函数
      *
      * @param trackerSet Tracker Server服务器IP地址集合
      * @param pool       连接池
      */
+    @Deprecated
     public DefaultCommandExecutor(Set<String> trackerSet, ConnectionPool pool) {
         logger.debug("初始化Tracker Server连接 {}", trackerSet);
         this.pool = pool;

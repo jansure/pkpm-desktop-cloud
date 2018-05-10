@@ -1,7 +1,7 @@
 package com.pkpmcloud.fileserver.protocol.storage.callback;
 
 
-import org.cleverframe.fastdfs.utils.IOUtils;
+import com.pkpmcloud.fileserver.utils.IOUtils;
 
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;

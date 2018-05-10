@@ -1,8 +1,8 @@
 package com.pkpmcloud.fileserver.protocol.storage;
 
 import com.pkpmcloud.fileserver.protocol.storage.request.ModifyRequest;
-import org.cleverframe.fastdfs.protocol.BaseResponse;
-import org.cleverframe.fastdfs.protocol.storage.request.ModifyRequest;
+import com.pkpmcloud.fileserver.protocol.BaseResponse;
+import com.pkpmcloud.fileserver.protocol.storage.request.ModifyRequest;
 
 import java.io.InputStream;
 

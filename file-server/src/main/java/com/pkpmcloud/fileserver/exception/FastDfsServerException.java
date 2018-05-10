@@ -1,6 +1,6 @@
 package com.pkpmcloud.fileserver.exception;
 
-import org.cleverframe.fastdfs.constant.ErrorCodeConstants;
+import com.pkpmcloud.fileserver.constant.ErrorCodeConstants;
 
 import java.util.Collections;
 import java.util.HashMap;

@@ -5,11 +5,6 @@ import com.pkpmcloud.fileserver.constant.OtherConstants;
 import com.pkpmcloud.fileserver.exception.FastDfsConnectException;
 import com.pkpmcloud.fileserver.utils.BytesUtil;
 import com.pkpmcloud.fileserver.utils.IOUtils;
-import org.cleverframe.fastdfs.constant.CmdConstants;
-import org.cleverframe.fastdfs.constant.OtherConstants;
-import org.cleverframe.fastdfs.exception.FastDfsConnectException;
-import org.cleverframe.fastdfs.utils.BytesUtil;
-import org.cleverframe.fastdfs.utils.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

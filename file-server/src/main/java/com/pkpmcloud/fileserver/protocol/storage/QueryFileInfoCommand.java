@@ -1,9 +1,9 @@
 package com.pkpmcloud.fileserver.protocol.storage;
 
 import com.pkpmcloud.fileserver.protocol.storage.request.QueryFileInfoRequest;
-import org.cleverframe.fastdfs.model.FileInfo;
-import org.cleverframe.fastdfs.protocol.BaseResponse;
-import org.cleverframe.fastdfs.protocol.storage.request.QueryFileInfoRequest;
+import com.pkpmcloud.fileserver.model.FileInfo;
+import com.pkpmcloud.fileserver.protocol.BaseResponse;
+import com.pkpmcloud.fileserver.protocol.storage.request.QueryFileInfoRequest;
 
 /**
  * 作者：LiZW <br/>

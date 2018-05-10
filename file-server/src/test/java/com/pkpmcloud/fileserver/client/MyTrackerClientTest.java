@@ -4,10 +4,10 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.cleverframe.fastdfs.model.GroupState;
-import org.cleverframe.fastdfs.model.StorageNode;
-import org.cleverframe.fastdfs.model.StorageNodeInfo;
-import org.cleverframe.fastdfs.model.StorageState;
+import com.pkpmcloud.fileserver.model.GroupState;
+import com.pkpmcloud.fileserver.model.StorageNode;
+import com.pkpmcloud.fileserver.model.StorageNodeInfo;
+import com.pkpmcloud.fileserver.model.StorageState;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;

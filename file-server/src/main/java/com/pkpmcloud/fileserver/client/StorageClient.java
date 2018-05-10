@@ -1,10 +1,9 @@
 package com.pkpmcloud.fileserver.client;
 
+import com.pkpmcloud.fileserver.model.FileInfo;
+import com.pkpmcloud.fileserver.model.MateData;
+import com.pkpmcloud.fileserver.model.StorePath;
 import com.pkpmcloud.fileserver.protocol.storage.callback.DownloadCallback;
-import org.cleverframe.fastdfs.model.FileInfo;
-import org.cleverframe.fastdfs.model.MateData;
-import org.cleverframe.fastdfs.model.StorePath;
-import org.cleverframe.fastdfs.protocol.storage.callback.DownloadCallback;
 
 import java.io.InputStream;
 import java.util.Set;
