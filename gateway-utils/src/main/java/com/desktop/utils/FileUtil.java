@@ -106,8 +106,10 @@ public class FileUtil {
 				}
 			}
 		} catch (Exception e) {
+			
 			e.printStackTrace();
 			System.out.println("抛出异常！！");
+			throw new IOException(e);
 		}
 	}
 
