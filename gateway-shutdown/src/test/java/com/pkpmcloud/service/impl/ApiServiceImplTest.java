@@ -33,7 +33,7 @@ public class ApiServiceImplTest {
     @Test
     public void invokeDesktopShutdownShell() throws Exception {
         List<Project> projects = dao.listValidProject();
-        service.invokeDesktopShutdownShell(projects.get(0));
+        /*service.invokeDesktopShutdownShell(projects.get(0));*/
     }
 
 
