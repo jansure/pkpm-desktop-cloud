@@ -1,5 +1,7 @@
-package org.cleverframe.fastdfs.protocol.storage;
+package com.pkpmcloud.fileserver.protocol.storage;
 
+import com.pkpmcloud.fileserver.protocol.storage.enums.StorageMetadataSetType;
+import com.pkpmcloud.fileserver.protocol.storage.request.SetMetadataRequest;
 import org.cleverframe.fastdfs.model.MateData;
 import org.cleverframe.fastdfs.protocol.BaseResponse;
 import org.cleverframe.fastdfs.protocol.storage.enums.StorageMetadataSetType;

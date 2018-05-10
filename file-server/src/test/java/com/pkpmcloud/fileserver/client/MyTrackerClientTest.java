@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.client;
+package com.pkpmcloud.fileserver.client;
 
 import java.util.List;
 

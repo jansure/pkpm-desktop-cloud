@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.mapper;
+package com.pkpmcloud.fileserver.mapper;
 
 /**
  * 动态属性类型<br/>

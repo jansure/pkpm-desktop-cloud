@@ -1,5 +1,6 @@
-package org.cleverframe.fastdfs.utils;
+package com.pkpmcloud.fileserver.utils;
 
+import com.pkpmcloud.fileserver.constant.OtherConstants;
 import org.cleverframe.fastdfs.constant.OtherConstants;
 import org.cleverframe.fastdfs.model.MateData;
 

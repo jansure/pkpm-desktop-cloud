@@ -1,5 +1,7 @@
-package org.cleverframe.fastdfs.model;
+package com.pkpmcloud.fileserver.model;
 
+import com.pkpmcloud.fileserver.constant.OtherConstants;
+import com.pkpmcloud.fileserver.mapper.FastDFSColumn;
 import org.cleverframe.fastdfs.constant.OtherConstants;
 import org.cleverframe.fastdfs.mapper.FastDFSColumn;
 

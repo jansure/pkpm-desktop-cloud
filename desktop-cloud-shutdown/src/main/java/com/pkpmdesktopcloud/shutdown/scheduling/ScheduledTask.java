@@ -1,6 +1,6 @@
-package com.pkpmcloud.scheduling;
+package com.pkpmdesktopcloud.shutdown.scheduling;
 
-import com.pkpmcloud.constants.SchedulingConst;
+import com.pkpmdesktopcloud.shutdown.constants.SchedulingConst;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

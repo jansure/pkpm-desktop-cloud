@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.mapper;
+package com.pkpmcloud.fileserver.mapper;
 
 
 import java.lang.annotation.*;

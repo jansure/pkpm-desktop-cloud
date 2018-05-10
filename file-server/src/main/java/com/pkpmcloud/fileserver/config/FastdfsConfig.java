@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.config;
+package com.pkpmcloud.fileserver.config;
 
 import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 import org.cleverframe.fastdfs.pool.ConnectionPool;

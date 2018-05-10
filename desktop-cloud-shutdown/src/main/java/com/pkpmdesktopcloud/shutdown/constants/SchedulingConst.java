@@ -1,4 +1,4 @@
-package com.pkpmcloud.constants;
+package com.pkpmdesktopcloud.shutdown.constants;
 
 /**
  * @author xuhe

@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.client;
+package com.pkpmcloud.fileserver.client;
 
 import org.cleverframe.fastdfs.model.GroupState;
 import org.cleverframe.fastdfs.model.StorageNode;

@@ -1,5 +1,6 @@
-package org.cleverframe.fastdfs.client;
+package com.pkpmcloud.fileserver.client;
 
+import com.pkpmcloud.fileserver.protocol.storage.callback.DownloadCallback;
 import org.cleverframe.fastdfs.model.FileInfo;
 import org.cleverframe.fastdfs.model.MateData;
 import org.cleverframe.fastdfs.model.StorePath;

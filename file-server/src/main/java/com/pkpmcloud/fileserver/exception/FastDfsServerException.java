@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.exception;
+package com.pkpmcloud.fileserver.exception;
 
 import org.cleverframe.fastdfs.constant.ErrorCodeConstants;
 

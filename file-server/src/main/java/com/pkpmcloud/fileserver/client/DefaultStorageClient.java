@@ -1,5 +1,10 @@
-package org.cleverframe.fastdfs.client;
+package com.pkpmcloud.fileserver.client;
 
+import com.pkpmcloud.fileserver.constant.ErrorCodeConstants;
+import com.pkpmcloud.fileserver.exception.FastDfsServerException;
+import com.pkpmcloud.fileserver.protocol.storage.*;
+import com.pkpmcloud.fileserver.protocol.storage.callback.DownloadCallback;
+import com.pkpmcloud.fileserver.protocol.storage.enums.StorageMetadataSetType;
 import org.cleverframe.fastdfs.conn.CommandExecutor;
 import org.cleverframe.fastdfs.constant.ErrorCodeConstants;
 import org.cleverframe.fastdfs.exception.FastDfsServerException;

@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.model;
+package com.pkpmcloud.fileserver.model;
 
 import java.io.Serializable;
 

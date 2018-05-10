@@ -1,5 +1,6 @@
-package org.cleverframe.fastdfs.protocol.storage.response;
+package com.pkpmcloud.fileserver.protocol.storage.response;
 
+import com.pkpmcloud.fileserver.protocol.storage.callback.DownloadCallback;
 import org.cleverframe.fastdfs.protocol.BaseResponse;
 import org.cleverframe.fastdfs.protocol.storage.callback.DownloadCallback;
 

@@ -1,5 +1,7 @@
-package org.cleverframe.fastdfs.mapper;
+package com.pkpmcloud.fileserver.mapper;
 
+import com.pkpmcloud.fileserver.constant.OtherConstants;
+import com.pkpmcloud.fileserver.exception.FastDfsColumnMapException;
 import org.cleverframe.fastdfs.constant.OtherConstants;
 import org.cleverframe.fastdfs.exception.FastDfsColumnMapException;
 import org.cleverframe.fastdfs.model.MateData;

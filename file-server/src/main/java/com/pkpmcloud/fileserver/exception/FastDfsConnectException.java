@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.exception;
+package com.pkpmcloud.fileserver.exception;
 
 /**
  * 非FastDFS本身的错误码抛出的异常，socket连不上时抛出的异常

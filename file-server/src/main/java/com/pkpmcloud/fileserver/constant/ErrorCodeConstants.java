@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.constant;
+package com.pkpmcloud.fileserver.constant;
 
 /**
  * FastDFS协议错误码的常量

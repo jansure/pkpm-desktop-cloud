@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.exception;
+package com.pkpmcloud.fileserver.exception;
 
 /**
  * 不支持的图片格式

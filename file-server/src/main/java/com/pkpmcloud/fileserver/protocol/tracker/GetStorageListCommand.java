@@ -1,5 +1,7 @@
-package org.cleverframe.fastdfs.protocol.tracker;
+package com.pkpmcloud.fileserver.protocol.tracker;
 
+import com.pkpmcloud.fileserver.protocol.tracker.request.GetListStorageRequest;
+import com.pkpmcloud.fileserver.protocol.tracker.response.GetListStorageResponse;
 import org.cleverframe.fastdfs.model.StorageState;
 import org.cleverframe.fastdfs.protocol.tracker.request.GetListStorageRequest;
 import org.cleverframe.fastdfs.protocol.tracker.response.GetListStorageResponse;

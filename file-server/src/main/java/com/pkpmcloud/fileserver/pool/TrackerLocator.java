@@ -1,5 +1,7 @@
-package org.cleverframe.fastdfs.pool;
+package com.pkpmcloud.fileserver.pool;
 
+import com.pkpmcloud.fileserver.exception.FastDfsUnavailableException;
+import com.pkpmcloud.fileserver.utils.StringUtils;
 import org.cleverframe.fastdfs.exception.FastDfsUnavailableException;
 import org.cleverframe.fastdfs.utils.StringUtils;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs;
+package com.pkpmcloud.fileserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.conn;
+package com.pkpmcloud.fileserver.conn;
 
 import java.io.Closeable;
 import java.io.IOException;

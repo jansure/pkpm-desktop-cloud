@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.cfg;
+package com.pkpmcloud.fileserver.cfg;
 
 /**
  *

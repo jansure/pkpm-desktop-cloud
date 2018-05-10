@@ -1,5 +1,6 @@
-package org.cleverframe.fastdfs.mapper;
+package com.pkpmcloud.fileserver.mapper;
 
+import com.pkpmcloud.fileserver.exception.FastDfsColumnMapException;
 import org.cleverframe.fastdfs.exception.FastDfsColumnMapException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

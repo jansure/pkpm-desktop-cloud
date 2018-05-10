@@ -1,5 +1,6 @@
-package org.cleverframe.fastdfs.protocol.storage;
+package com.pkpmcloud.fileserver.protocol.storage;
 
+import com.pkpmcloud.fileserver.protocol.storage.request.UploadSlaveFileRequest;
 import org.cleverframe.fastdfs.model.StorePath;
 import org.cleverframe.fastdfs.protocol.BaseResponse;
 import org.cleverframe.fastdfs.protocol.storage.request.UploadSlaveFileRequest;

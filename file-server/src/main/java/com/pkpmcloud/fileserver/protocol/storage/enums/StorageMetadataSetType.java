@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.protocol.storage.enums;
+package com.pkpmcloud.fileserver.protocol.storage.enums;
 
 /**
  * 元数据设置方式

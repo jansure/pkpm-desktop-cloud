@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.exception;
+package com.pkpmcloud.fileserver.exception;
 
 /**
  * 非FastDFS本身的错误码抛出的异常，取服务端连接取不到时抛出的异常

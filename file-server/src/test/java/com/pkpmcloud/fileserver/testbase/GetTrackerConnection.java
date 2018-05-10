@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.testbase;
+package com.pkpmcloud.fileserver.testbase;
 
 import org.cleverframe.fastdfs.conn.Connection;
 import org.cleverframe.fastdfs.conn.SocketConnection;

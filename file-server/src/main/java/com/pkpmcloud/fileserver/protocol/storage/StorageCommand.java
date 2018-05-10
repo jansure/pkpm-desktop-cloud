@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.protocol.storage;
+package com.pkpmcloud.fileserver.protocol.storage;
 
 import org.cleverframe.fastdfs.protocol.AbstractCommand;
 

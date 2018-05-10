@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.protocol.storage.response;
+package com.pkpmcloud.fileserver.protocol.storage.response;
 
 import org.cleverframe.fastdfs.model.MateData;
 import org.cleverframe.fastdfs.protocol.BaseResponse;

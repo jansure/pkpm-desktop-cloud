@@ -1,5 +1,6 @@
-package org.cleverframe.fastdfs.protocol;
+package com.pkpmcloud.fileserver.protocol;
 
+import com.pkpmcloud.fileserver.exception.FastDfsIOException;
 import org.cleverframe.fastdfs.conn.Connection;
 import org.cleverframe.fastdfs.exception.FastDfsIOException;
 import org.slf4j.Logger;

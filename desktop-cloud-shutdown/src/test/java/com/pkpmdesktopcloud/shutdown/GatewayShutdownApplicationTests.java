@@ -1,4 +1,4 @@
-package com.pkpmcloud;
+package com.pkpmdesktopcloud.shutdown;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

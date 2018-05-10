@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.protocol;
+package com.pkpmcloud.fileserver.protocol;
 
 import org.cleverframe.fastdfs.mapper.ObjectMateData;
 import org.cleverframe.fastdfs.utils.FastDfsParamMapperUtils;

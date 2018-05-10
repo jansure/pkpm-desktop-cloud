@@ -1,5 +1,6 @@
-package org.cleverframe.fastdfs.protocol;
+package com.pkpmcloud.fileserver.protocol;
 
+import com.pkpmcloud.fileserver.exception.FastDfsServerException;
 import org.cleverframe.fastdfs.constant.CmdConstants;
 import org.cleverframe.fastdfs.constant.OtherConstants;
 import org.cleverframe.fastdfs.exception.FastDfsServerException;

@@ -1,5 +1,10 @@
-package org.cleverframe.fastdfs.model;
+package com.pkpmcloud.fileserver.model;
 
+import com.pkpmcloud.fileserver.constant.OtherConstants;
+import com.pkpmcloud.fileserver.exception.FastDfsUnsupportStorePathException;
+import com.pkpmcloud.fileserver.mapper.DynamicFieldType;
+import com.pkpmcloud.fileserver.mapper.FastDFSColumn;
+import com.pkpmcloud.fileserver.utils.Validate;
 import org.cleverframe.fastdfs.constant.OtherConstants;
 import org.cleverframe.fastdfs.exception.FastDfsUnsupportStorePathException;
 import org.cleverframe.fastdfs.mapper.DynamicFieldType;

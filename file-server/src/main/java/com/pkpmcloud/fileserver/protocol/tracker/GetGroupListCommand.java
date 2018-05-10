@@ -1,5 +1,7 @@
-package org.cleverframe.fastdfs.protocol.tracker;
+package com.pkpmcloud.fileserver.protocol.tracker;
 
+import com.pkpmcloud.fileserver.protocol.tracker.request.GetGroupListRequest;
+import com.pkpmcloud.fileserver.protocol.tracker.response.GetGroupListResponse;
 import org.cleverframe.fastdfs.model.GroupState;
 import org.cleverframe.fastdfs.protocol.tracker.request.GetGroupListRequest;
 import org.cleverframe.fastdfs.protocol.tracker.response.GetGroupListResponse;

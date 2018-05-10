@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs.protocol.storage.request;
+package com.pkpmcloud.fileserver.protocol.storage.request;
 
 import org.cleverframe.fastdfs.constant.CmdConstants;
 import org.cleverframe.fastdfs.protocol.BaseRequest;

@@ -1,4 +1,4 @@
-package org.cleverframe.fastdfs;
+package com.pkpmcloud.fileserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
