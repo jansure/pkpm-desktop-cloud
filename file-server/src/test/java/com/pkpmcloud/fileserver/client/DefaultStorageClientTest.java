@@ -103,7 +103,7 @@ public class DefaultStorageClientTest {
 
     @Test
     public void queryFileInfoTest() {
-        FileInfo fileInfo = storageClient.queryFileInfo("group1", "M00/00/00/wKg4i1gxzYWAJiwjAATA4WNjQT42751.jpg");
+        FileInfo fileInfo = storageClient.queryFileInfo("group2", "M00/00/00/wKgA3lrz4xmEMEJVAAAAAJIl9Sw87.java");
         logger.info("#####===== " + fileInfo);
     }
 
@@ -115,17 +115,18 @@ public class DefaultStorageClientTest {
 
     @Test
     public void downloadFileTest() {
-        DownloadFileWriter downloadFileWriter = new DownloadFileWriter("F:\\123.xlsx");
-        String filePath = storageClient.downloadFile("group1", "M00/00/00/wKgKgFg02TaAY3mTADCUhuWQdRc53.xlsx", downloadFileWriter);
+        DownloadFileWriter downloadFileWriter = new DownloadFileWriter("G:\\1234.xlsx");
+        String filePath = storageClient.downloadFile("group2", "M00/00/00/wKgA3lrzslKAZhcGAAAbu6bFmJg15.conf", downloadFileWriter);
         logger.info("#####===== " + filePath);
+        System.out.println(filePath);
     }
 
     @Test
     public void downloadFileTest2() {
         long fileOffset = 50;
         long fileSize = 0;
-        DownloadFileWriter downloadFileWriter = new DownloadFileWriter("F:\\QAZXSW.txt");
-        String filePath = storageClient.downloadFile("group1", "M00/00/00/wKgKgFgzb3iAErG9AAAAbjxjgS8801.txt", fileOffset, fileSize, downloadFileWriter);
+        DownloadFileWriter downloadFileWriter = new DownloadFileWriter("G:\\dddd.conf");
+        String filePath = storageClient.downloadFile("group2", "M00/00/00/wKgA3lrzslKAZhcGAAAbu6bFmJg15.conf", fileOffset, fileSize, downloadFileWriter);
         logger.info("#####===== " + filePath);
     }
 
@@ -133,6 +134,11 @@ public class DefaultStorageClientTest {
     public void Test() {
 //        boolean flag = storageClient. ;
 //        logger.info("#####===== " + flag);
+    	String url = "M00/00/00/wKgA3lrzslKAZhcGAAAbu6bFmJg15.conf";
+    	String str = url.substring(url.lastIndexOf("/") + 1, url.length());
+    	System.out.println(str);
     }
+    
+    
 
 }
