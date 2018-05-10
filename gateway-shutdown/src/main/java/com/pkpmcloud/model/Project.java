@@ -14,9 +14,13 @@ public class Project {
 
     private Integer id;
     private String projectId;
-    private String projectDesc;
+    private String areaName;
+    private String areaDesc;
     private String adminName;
     private String adminPassword;
     private Boolean valid;
     private Date createTime;
+    private Date updateTime;
+
+
 }

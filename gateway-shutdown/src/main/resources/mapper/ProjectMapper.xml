@@ -2,21 +2,24 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper>
-    <resultMap id="BaseResultMapper" type="com.pkpmcloud.dao.ProjectDAO">
-        <constructor>
-            <idArg name="id" column="id"/>
-            <arg name="projectId" column="project_id"/>
-            <arg name="projectDesc" column="project_desc"/>
-            <arg name="adminName" column="admin_name"/>
-            <arg name="adminPassword" column="admin_password"/>
-            <arg name="valid" column="valid"/>
-            <arg name="createTime" column="create_time"/>
-        </constructor>
+<mapper namespace="com.pkpmcloud.dao.ProjectDAO">
+
+    <resultMap id="BaseResultMap" type="com.pkpmcloud.model.Project">
+            <id property="id" column="id"/>
+            <result property="projectId" column="project_id"/>
+            <result property="areaName" column="area_name"/>
+            <result property="areaDesc" column="area_desc"/>
+            <result property="adminName" column="admin_name"/>
+            <result property="adminPassword" column="admin_password"/>
+            <result property="valid" column="valid"/>
+            <result property="createTime" column="create_time"/>
+            <result property="updateTime" column="update_time"/>
     </resultMap>
 
     <select id="listValidProject" resultMap="BaseResultMap">
-        SELECT * FROM pkpm_shutdown_
+        SELECT *
+        FROM pkpm_shutdown_project AS  project
+        WHERE project.valid = 1
     </select>
 
 </mapper>

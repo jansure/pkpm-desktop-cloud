@@ -4,15 +4,15 @@
 package com.pkpmcloud.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.pkpmcloud.constants.ApiConst;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
- * Auto-generated: 2018-03-07 18:32:56
  *
- * @author bejson.com (i@bejson.com)
- * @website http://www.bejson.com/java2pojo/
+ * @author xuhe
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
@@ -20,13 +20,13 @@ public class Record {
 
 
     private String user_name;
-    private String terminal_type;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private Date connection_start_time;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private Date connection_setup_time;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private Date connection_end_time;
+
+    @JsonFormat(pattern = ApiConst.DATE_FORMAT)
+    private LocalDateTime connection_start_time;
+    @JsonFormat(pattern = ApiConst.DATE_FORMAT)
+    private LocalDateTime connection_setup_time;
+    @JsonFormat(pattern = ApiConst.DATE_FORMAT)
+    private LocalDateTime connection_end_time;
 
 
 }

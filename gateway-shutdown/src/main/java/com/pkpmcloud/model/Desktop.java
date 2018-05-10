@@ -17,6 +17,8 @@ public class Desktop {
 
     private String desktop_id;
 
+    private String computer_name;
+
     private String status;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
