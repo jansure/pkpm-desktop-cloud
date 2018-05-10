@@ -40,7 +40,8 @@ public class DefaultTrackerClientTest {
         conf.setMaxIdlePerKey(100);
         connectionPool = new ConnectionPool(pooledConnectionFactory, conf);
         Set<String> trackerSet = new HashSet<String>();
-        trackerSet.add("192.168.10.128:22122");
+        trackerSet.add("139.159.254.232:22122");
+        trackerSet.add("139.159.254.106:22122");
         DefaultCommandExecutor commandExecutor = new DefaultCommandExecutor(trackerSet, connectionPool);
         trackerClient = new DefaultTrackerClient(commandExecutor);
     }

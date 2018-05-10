@@ -61,7 +61,12 @@ public class FastDFSController {
 	       return ResultObject.failure("上传文件失败,请重新尝试!");
 	  }
 	  
-	  
+	  @GetMapping
+	  public ResultObject download(@RequestParam String fileUrl,HttpServletResponse response){
+		  response.setHeader("Access-Control-Allow-Origin", "*");
+		  return null;
+		  
+	  }
 	  
 	  @GetMapping("/")
 	  public String test1(){

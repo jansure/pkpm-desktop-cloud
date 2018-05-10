@@ -114,17 +114,18 @@ public class DefaultStorageClientTest {
 
     @Test
     public void downloadFileTest() {
-        DownloadFileWriter downloadFileWriter = new DownloadFileWriter("F:\\123.xlsx");
-        String filePath = storageClient.downloadFile("group1", "M00/00/00/wKgKgFg02TaAY3mTADCUhuWQdRc53.xlsx", downloadFileWriter);
+        DownloadFileWriter downloadFileWriter = new DownloadFileWriter("G:\\1234.xlsx");
+        String filePath = storageClient.downloadFile("group2", "M00/00/00/wKgA3lrzslKAZhcGAAAbu6bFmJg15.conf", downloadFileWriter);
         logger.info("#####===== " + filePath);
+        System.out.println(filePath);
     }
 
     @Test
     public void downloadFileTest2() {
         long fileOffset = 50;
         long fileSize = 0;
-        DownloadFileWriter downloadFileWriter = new DownloadFileWriter("F:\\QAZXSW.txt");
-        String filePath = storageClient.downloadFile("group1", "M00/00/00/wKgKgFgzb3iAErG9AAAAbjxjgS8801.txt", fileOffset, fileSize, downloadFileWriter);
+        DownloadFileWriter downloadFileWriter = new DownloadFileWriter("G:a.conf");
+        String filePath = storageClient.downloadFile("group2", "M00/00/00/wKgA3lrzslKAZhcGAAAbu6bFmJg15.conf", fileOffset, fileSize, downloadFileWriter);
         logger.info("#####===== " + filePath);
     }
 
