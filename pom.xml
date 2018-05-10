@@ -15,12 +15,15 @@
 		<module>puller</module>
 		<module>gateway-common</module>
 		<module>gateway-id-server</module>
+		<module>pkpm-cloud-business</module>
 		<module>api-gateway</module>
 		<module>auth-server</module>
 		<module>config-server</module>
 		<module>eureka-server</module>
 		<module>pkpm-redis-util</module>
 		<module>message-server</module>
+		<module>file-server</module>
+		<module>gateway-shutdown</module>
 	</modules>
 
 	<!-- 统一版本号依赖 -->
