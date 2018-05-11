@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@SpringBootApplication()
 @ComponentScan(basePackages={"com.pkpmcloud.fileserver","com.desktop.utils"})
 @Configuration
 public class FastdfsApplication {

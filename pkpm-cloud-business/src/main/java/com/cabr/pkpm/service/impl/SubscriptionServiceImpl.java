@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 
 import com.desktop.constant.AdConstant;
 import com.desktop.constant.DesktopConstant;
+import com.desktop.constant.SubscriptionConstants;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -72,17 +73,6 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	
 	@Value("${server.host}")
 	private String serverHost;
-	@Value("${ouName}")
-	private String ouName;
-	@Value("${userEmail}")
-	private String userEmail;
-	@Value("${status}")
-	private String status;
-	@Value("${invalidStatus}")
-	private String invalidStatus;
-	@Value("${dataVolumeSize}")
-	private Integer dataVolumeSize;
-	
 	
 	/**
 	 * 1、保存订单，保存订单明细
@@ -91,6 +81,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	 */
 	@SuppressWarnings({ "unused", "unchecked" })
 	@Override
+	@Transactional
 	public PkpmOperatorStatus saveSubsDetails(UserInfo userInfo,WorkOrderVO wo) {
 		
 		
@@ -99,7 +90,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	try {
 		//a、保存订单之前先查询有没有 初始化的订单
 		Integer userId = userInfo.getUserID();
-		Integer invalidCount = subscriptionMapper.selectCount(userId,invalidStatus);
+		Integer invalidCount = subscriptionMapper.selectCount(userId,SubscriptionConstants.INVALID_STATUS);
 		/*   
 		 * 测试阶段注掉
 		 * if(invalidCount >= 1){
@@ -133,14 +124,14 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		subscription.setSubsId(subsId);
 		LocalDateTime date = LocalDateTime.now();
 		subscription.setCreateTime(date);
-		subscription.setPayChannel("0");
+		subscription.setPayChannel(SubscriptionConstants.DEFAULT_PAY_CHANNEL);
 		subscription.setUserId(userId);
 		subscription.setProjectId(projectId);
 		subscription.setAdId(Integer.parseInt(adId));
-		subscription.setStatus(invalidStatus);
+		subscription.setStatus(SubscriptionConstants.INVALID_STATUS);
 		subscription.setAreaCode(areaCode);
-		Integer subscriptionCount = subscriptionMapper.saveSubscription(subscription);
-		if(subscriptionCount<1){
+		Integer SubscriptionCount = subscriptionMapper.saveSubscription(subscription);
+		if(SubscriptionCount<1){
 			throw  Exceptions.newBusinessException("保存订单失败,请您重试!");
 		}
 		
@@ -166,7 +157,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		commonRequestBean.setUserId(userId);
 		commonRequestBean.setUserName(userInfo.getUserName());
 		commonRequestBean.setUserLoginPassword(userInfo.getUserLoginPassword());
-		commonRequestBean.setDataVolumeSize(dataVolumeSize);
+		commonRequestBean.setDataVolumeSize(SubscriptionConstants.DEFAULT_DATA_VLOUME_SIZE);
 		commonRequestBean.setSubsId(subsId);   
 		commonRequestBean.setOperatorStatusId(null);  
 		
@@ -175,7 +166,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		String hwProductId = hostConfigcomponentInfo.getHwProductId();
 		commonRequestBean.setHwProductId(hwProductId);   // workspace.c2.large.windows
 		
-		commonRequestBean.setUserEmail(userEmail);
+		commonRequestBean.setUserEmail(SubscriptionConstants.USER_EMAIL);
 		commonRequestBean.setProjectId(projectId);   
 		commonRequestBean.setAdId(Integer.parseInt(adId));
 		commonRequestBean.setImageId(StringUtils.isBlank(
@@ -185,7 +176,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		//根据user_id和status查询计算机名
 		String userName = userInfo.getUserName();
 		productName = getAvailableComputerName(productId,projectId, Integer.parseInt(adId));
-		//查询成功的条数
+		//查询成功和正在创建中的条数      //查询订单表中
 		Integer nextNum = 1 + subscriptionMapper.selectTotalById(userId);
 		if(nextNum >= 1 + DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT)
 			throw Exceptions.newBusinessException(

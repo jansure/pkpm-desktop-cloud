@@ -78,7 +78,7 @@
 		FROM
 			pkpm_cloud_subscription
 		WHERE
-			user_id = #{userId}
+			user_id = #{userId} and status != 'FAILED';
 	</select>
 	<select id="selectSubscriptionBySubsId"  parameterType="java.lang.Long" resultMap="BaseResultMap">
 		SELECT

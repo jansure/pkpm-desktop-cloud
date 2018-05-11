@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import com.pkpmcloud.fileserver.dao.PkpmFileInfoDao;
@@ -31,7 +30,7 @@ public class PkpmFileInfoDaoImpl implements PkpmFileInfoDao{
 		fileInfo.setMd5(md5);
 		
 		List<PkpmFileInfo> list = fileInfoMapper.select(fileInfo );
-		if(CollectionUtils.isNotEmpty(list)) {
+		if( list!= null && list.size() > 0) {
 			return list.get(0);
 		}
 		
@@ -48,8 +47,7 @@ public class PkpmFileInfoDaoImpl implements PkpmFileInfoDao{
 	 */  
 	@Override
 	public Integer insert(PkpmFileInfo fileInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		return fileInfoMapper.insert(fileInfo);
 	}
 
 	  
@@ -62,8 +60,7 @@ public class PkpmFileInfoDaoImpl implements PkpmFileInfoDao{
 	 */  
 	@Override
 	public Integer update(PkpmFileInfo fileInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		return fileInfoMapper.update(fileInfo);
 	}
      
 	
