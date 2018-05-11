@@ -23,11 +23,16 @@ public class ClientDemo {
      * 构造函数
      */
     public ClientDemo() {
+//        CloudAccount cloudAccount = new CloudAccount(
+//                "liboxi",
+//                "caBr905",
+//                "liboxi",
+//                "cn-north-1");
         CloudAccount cloudAccount = new CloudAccount(
-                "liboxi",
-                "caBr905",
-                "liboxi",
-                "cn-north-1");
+        		"BroadCloud",
+        		"Broad_Cloud",
+        		"BroadCloud",
+        		"cn-south-1");
 
 //        aksk authentication
 //        CloudAccount cloudAccount = new CloudAccount("access key id",
@@ -60,11 +65,11 @@ public class ClientDemo {
 
     public static void main(String[] args) {
         ClientDemo clientDemo = new ClientDemo();
-        clientDemo.publishMsgWithTemplate();
-        clientDemo.listTopics();
-       // clientDemo.smsPublish();
-        clientDemo.listMessageTemplate();
-        clientDemo.listSubscriptions();
+//        clientDemo.publishMsgWithTemplate();
+//        clientDemo.listTopics();
+        clientDemo.smsPublish("15517156082","测试");
+//        clientDemo.listMessageTemplate();
+//        clientDemo.listSubscriptions();
     }
 
     /**
@@ -79,7 +84,8 @@ public class ClientDemo {
         // 短信内容
      //   String message = "您的验证码是:5678，请查收";
         // 短信签名必填,需要在消息通知服务的自助页面申请签名，申请办理时间约2天
-        String signId = "af6cb8f5a6954290b6f5f0819f12018f";
+       // String signId = "af6cb8f5a6954290b6f5f0819f12018f";  // pkpm
+        String signId = "c451d662a2f346f5a239c2f8b98c2399";  //远大住工
 
         // 设置手机号码
         smsPublishRequest.setEndpoint(phone);
