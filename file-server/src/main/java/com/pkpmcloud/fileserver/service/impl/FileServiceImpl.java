@@ -1,6 +1,7 @@
 package com.pkpmcloud.fileserver.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -112,6 +113,22 @@ public class FileServiceImpl implements IFileService {
 	        return String.valueOf((size / 100)) + "."  
 	                + String.valueOf((size % 100)) + "GB";  
 	    }  
+	}
+
+
+	public List<PkpmFileInfo> fileListByName(String fileName) {
+		
+		List<PkpmFileInfo> pkpmFileInfoList = fileInfoDao.fileListByName(fileName);
+		
+		return pkpmFileInfoList;
+	}
+
+
+	public List<PkpmFileInfo> fileList() {
+		
+		List<PkpmFileInfo> pkpmFileInfoList = fileInfoDao.fileList();
+		
+		return pkpmFileInfoList;
 	}
 	
 }

@@ -1,5 +1,7 @@
 package com.pkpmcloud.fileserver.service;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.pkpmcloud.fileserver.domain.PkpmFileInfo;
@@ -30,6 +32,13 @@ public interface IFileService {
 	 * @return PkpmFileInfo    返回类型  
 	 * @throws  
 	 */  
+    
 	PkpmFileInfo getPkpmFileInfo(MultipartFile multipartFile);
+
+	List<PkpmFileInfo> fileListByName(String fileName);
+
+	List<PkpmFileInfo> fileList();
+
+	
 
 }

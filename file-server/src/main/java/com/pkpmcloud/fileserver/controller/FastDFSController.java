@@ -176,4 +176,21 @@ public class FastDFSController {
 	public String test1() {
 		return "test1";
 	}
+	
+	
+	/**
+	 * 1、传文件名根据文件名查询
+	 * 2、不传入文件名,按照上传时间倒序查询
+	 * @param fileName
+	 * @return
+	 */
+	@GetMapping("/fileList")
+	public ResultObject fileList(String fileName){
+		
+		if(StringUtils.isNotBlank(fileName)){
+			List<PkpmFileInfo> list = fileService.fileListByName(fileName);
+		}
+		List<PkpmFileInfo> list = fileService.fileList();
+		return ResultObject.success(list);
+	}
 }

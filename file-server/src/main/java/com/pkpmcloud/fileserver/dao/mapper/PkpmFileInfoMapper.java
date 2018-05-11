@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Lang;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -28,5 +29,14 @@ public interface PkpmFileInfoMapper {
     @Update("update pkpm_file_info (#{fileInfo}) WHERE md5 = #{md5}")
     @Lang(SimpleUpdateLangDriver.class)
     Integer update(PkpmFileInfo fileInfo);
+   
+    //@Select("select * from pkpm_file_info where origin_file_name like '%'#{fileInfo}'%'")
+  //  @Select("select * from pkpm_file_info where origin_file_name like concat(concat('%',?),'%') ")
+    @Select("select * from pkpm_file_info where origin_file_name like CONCAT('%','${fileName}','%')")
+	List<PkpmFileInfo> fileListByName(@Param("fileName") String  fileName);
+    
+    @Select("select * from pkpm_file_info order by create_time desc")
+	List<PkpmFileInfo> fileList();
+    
 
 }

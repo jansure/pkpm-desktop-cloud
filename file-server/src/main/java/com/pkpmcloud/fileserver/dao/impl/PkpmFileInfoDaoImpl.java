@@ -1,11 +1,16 @@
 package com.pkpmcloud.fileserver.dao.impl;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Repository;
 
+import com.desktop.utils.StringOrDate;
 import com.pkpmcloud.fileserver.dao.PkpmFileInfoDao;
 import com.pkpmcloud.fileserver.dao.mapper.PkpmFileInfoMapper;
 import com.pkpmcloud.fileserver.domain.PkpmFileInfo;
@@ -62,6 +67,23 @@ public class PkpmFileInfoDaoImpl implements PkpmFileInfoDao{
 	public Integer update(PkpmFileInfo fileInfo) {
 		return fileInfoMapper.update(fileInfo);
 	}
-     
+
+
+	@Override
+	public List<PkpmFileInfo> fileListByName(String fileName) {
+		
+		List<PkpmFileInfo> list = fileInfoMapper.fileListByName(fileName);
+		
+		return list;
+	}
+
+
+	@Override
+	public List<PkpmFileInfo> fileList() {
+		
+		List<PkpmFileInfo> list = fileInfoMapper.fileList();
+		return list;
+	}
+
 	
 }

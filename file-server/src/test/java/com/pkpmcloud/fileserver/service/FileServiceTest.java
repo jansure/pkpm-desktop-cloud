@@ -2,6 +2,7 @@ package com.pkpmcloud.fileserver.service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -33,7 +34,7 @@ public class FileServiceTest {
     	fileInfo.setGroupName(1);
     	fileInfo.setMd5("123456");
     	fileInfo.setOriginFileName("test.mp4");
-    	fileInfo.setDestFileName("jklfdsjlgjdslfds.mp4");
+    	fileInfo.setDestFileName("jklfdsjlgjdslfd.mp4");
     	fileInfo.setPostfix("mp4");
 		int num = fileService.insert(fileInfo );
 		Assert.assertTrue(num == 1);
@@ -54,6 +55,23 @@ public class FileServiceTest {
     	fileInfo.setFileSize("200MB");
     	int num = fileService.update(fileInfo);
     	Assert.assertTrue(num == 1);
+    }
+    
+    
+    @Test
+    public void fileListByName(){
+    	
+    	String fileName = ".mp4";
+    	List<PkpmFileInfo> pkpmFileInfoList = fileService.fileListByName(fileName);
+    	System.out.println(pkpmFileInfoList);
+    }
+    
+    @Test
+    public void fileList(){
+    	
+    	List<PkpmFileInfo> pkpmFileInfoList = fileService.fileList();
+    	System.out.println(pkpmFileInfoList);
+    			
     }
 
 }

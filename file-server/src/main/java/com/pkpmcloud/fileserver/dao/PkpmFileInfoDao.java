@@ -18,4 +18,8 @@ public interface PkpmFileInfoDao {
 
     Integer update(PkpmFileInfo fileInfo);
 
+	List<PkpmFileInfo> fileListByName(String fileName);
+
+	List<PkpmFileInfo> fileList();
+
 }

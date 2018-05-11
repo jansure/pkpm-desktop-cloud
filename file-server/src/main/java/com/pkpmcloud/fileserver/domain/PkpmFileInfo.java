@@ -30,5 +30,6 @@ public class PkpmFileInfo {
 
     /** 文件后缀*/
     private String postfix;
+    
 
 }
