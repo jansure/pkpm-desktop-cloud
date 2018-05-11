@@ -10,7 +10,6 @@ import java.util.Set;
  * @description
  * @date 2018/5/10
  */
-@Component
 @Mapper
 public interface WhiteListDAO {
     Set<String> listProjectWhiteList(String projectId);

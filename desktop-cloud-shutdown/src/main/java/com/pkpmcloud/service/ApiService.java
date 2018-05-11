@@ -11,4 +11,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ApiService {
 
+    void invokeDesktopShutdownShell(Project project);
 }

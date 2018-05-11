@@ -16,7 +16,7 @@ import com.pkpmcloud.model.*;
 import com.pkpmcloud.service.ApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -30,7 +30,7 @@ import java.util.Set;
  * @description
  * @date 2018/5/10
  */
-@Component
+@Service
 @Slf4j
 public class ApiServiceImpl implements ApiService {
 
@@ -62,6 +62,7 @@ public class ApiServiceImpl implements ApiService {
         log.info("====>>项目启动：项目信息{}/{} {}/{}", adminName, project.getAreaDesc(), projectId, areaName);
     }
 
+    @Override
     public void invokeDesktopShutdownShell(Project project) {
         init(project);
         List<Desktop> desktops = listActiveDesktop();

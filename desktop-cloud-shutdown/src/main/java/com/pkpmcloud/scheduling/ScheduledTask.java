@@ -1,6 +1,5 @@
 package com.pkpmcloud.scheduling;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.pkpmcloud.constants.ApiConst;
 import com.pkpmcloud.dao.ProjectDAO;
 import com.pkpmcloud.model.Project;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.*;
 
 /**
  * @author xuhe
@@ -29,12 +27,8 @@ public class ScheduledTask {
     @Autowired
     private ProjectDAO projectDAO;
 
-    /*@Autowired
-    private WhiteListDAO whiteListDAO;*/
-
-
-    /*@Autowired
-    ApiServiceImpl apiService;*/
+    @Autowired
+    ApiServiceImpl apiService;
 
     private static String[] projects;
 
@@ -58,20 +52,12 @@ public class ScheduledTask {
 
     @Scheduled(fixedRate = TIME_INTERVAL)
     private void shutdown() {
+
         String now = LocalDateTime.now().format(ApiConst.DATE_TIME_FORMATTER);
         log.info(">>>>>>定时任务 启动时间{}", now);
-        ThreadFactory namedFactory =new ThreadFactoryBuilder()
-                .setNameFormat("pool-%d").build();
-        ExecutorService poolExecutor = new ThreadPoolExecutor(corePoolSize,maxPoolSize,keepAlive,TimeUnit.MICROSECONDS, new SynchronousQueue<Runnable>(),namedFactory);
+        log.info("进入定时任务");
         List<Project> projects = projectDAO.listValidProject();
-        for (Project project : projects) {
-            poolExecutor.execute(() -> {
-                ApiServiceImpl apiService = new ApiServiceImpl();
-                System.out.println(apiService);
-                apiService.invokeDesktopShutdownShell(project);
-            });
-
-        }
+        apiService.invokeDesktopShutdownShell(projects.get(0));
 
 
     }

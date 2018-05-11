@@ -11,7 +11,6 @@ import java.util.List;
  * @description
  * @date 2018/5/9
  */
-@Component
 @Mapper
 public interface ProjectDAO {
 
