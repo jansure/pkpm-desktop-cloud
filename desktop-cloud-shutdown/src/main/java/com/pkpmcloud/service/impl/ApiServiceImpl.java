@@ -122,7 +122,7 @@ public class ApiServiceImpl implements ApiService {
 
     private List<Desktop> listActiveDesktop() {
         String url = workspaceUrlPrefix + ApiConst.LIST_ACTIVE_DESKTOP;
-        System.out.println(url);
+        
         try {
             String response = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfig(url, "", token, 5, null, 10000).method(HttpMethods.GET));
             MyHttpResponse myHttpResponse = JsonUtil.deserialize(response, MyHttpResponse.class);

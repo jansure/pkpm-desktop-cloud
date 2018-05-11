@@ -32,13 +32,6 @@ public class ScheduledTask {
 
     private static String[] projects;
 
-    private static int corePoolSize = 4;//线程池维护线程的最少数量
-    private static int maxPoolSize = 10;//线程池维护线程的最大数量
-    private static long keepAlive = 60L;//允许的空闲时间
-
-    private static int queueCapacity = 8; //缓存队列
-
-
     static {
         String projectList = System.getProperty("projectId");
         if (!StringUtils.isEmpty(projectList)) {
@@ -55,9 +48,10 @@ public class ScheduledTask {
 
         String now = LocalDateTime.now().format(ApiConst.DATE_TIME_FORMATTER);
         log.info(">>>>>>定时任务 启动时间{}", now);
-        log.info("进入定时任务");
         List<Project> projects = projectDAO.listValidProject();
-        apiService.invokeDesktopShutdownShell(projects.get(0));
+        for (Project project : projects) {
+            apiService.invokeDesktopShutdownShell(project);
+        }
 
 
     }

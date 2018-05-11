@@ -10,6 +10,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface ApiService {
-
+    //自动关机脚本
     void invokeDesktopShutdownShell(Project project);
 }

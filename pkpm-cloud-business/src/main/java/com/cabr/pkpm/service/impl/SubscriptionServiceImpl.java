@@ -194,12 +194,12 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 
 		//productName.length < 15
 		if(DesktopConstant.DESKTOP_NAME_MAX_LEN > productName.length()) {
-			commonRequestBean.setGloryProductName(productName );
 			if(productName.length() >DesktopConstant.DESKTOP_NAME_MAX_LEN) {
-				
+
 				commonRequestBean.setGloryProductName(productName.substring(0,
 						DesktopConstant.DESKTOP_NAME_MAX_LEN));
 			}
+			commonRequestBean.setGloryProductName(productName );
 
 		}
 		
