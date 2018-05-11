@@ -48,8 +48,7 @@ public class PkpmFileInfoDaoImpl implements PkpmFileInfoDao{
 	 */  
 	@Override
 	public Integer insert(PkpmFileInfo fileInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		return fileInfoMapper.insert(fileInfo);
 	}
 
 	  
@@ -62,8 +61,7 @@ public class PkpmFileInfoDaoImpl implements PkpmFileInfoDao{
 	 */  
 	@Override
 	public Integer update(PkpmFileInfo fileInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		return fileInfoMapper.update(fileInfo);
 	}
      
 	

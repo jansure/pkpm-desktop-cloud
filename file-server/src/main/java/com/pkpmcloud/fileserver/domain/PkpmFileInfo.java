@@ -1,6 +1,6 @@
 package com.pkpmcloud.fileserver.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import lombok.Data;
 
@@ -23,7 +23,7 @@ public class PkpmFileInfo {
     private String fileSize;
 
     /**创建日期 */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /** 文件后缀*/
     private String postfix;
