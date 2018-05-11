@@ -55,12 +55,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
-        
         <dependency>
-			<groupId>pkpm-desktop-cloud</groupId>
-			<artifactId>gateway-utils</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
+            <groupId>pkpm-desktop-cloud</groupId>
+            <artifactId>desktop-cloud-utils</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 

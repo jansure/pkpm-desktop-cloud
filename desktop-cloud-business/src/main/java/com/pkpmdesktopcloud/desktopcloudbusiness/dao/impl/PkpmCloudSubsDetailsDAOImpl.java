@@ -10,10 +10,12 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudSubsDetailsDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper.PkpmCloudSubsDetailsMapper;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubsDetails;
 
+import javax.annotation.Resource;
+
 @Repository
 public class PkpmCloudSubsDetailsDAOImpl implements PkpmCloudSubsDetailsDAO{
 	
-	@Autowired
+	@Resource
 	private PkpmCloudSubsDetailsMapper subsDetailsMapper;
 	
 	/* (非 Javadoc)  

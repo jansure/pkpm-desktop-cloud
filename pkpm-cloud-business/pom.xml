@@ -271,7 +271,7 @@
 
 		<dependency>
 			<groupId>pkpm-desktop-cloud</groupId>
-			<artifactId>gateway-utils</artifactId>
+			<artifactId>desktop-cloud-utils</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
@@ -345,7 +345,7 @@
 		</dependency>
 		<dependency>
 			<groupId>pkpm-desktop-cloud</groupId>
-			<artifactId>gateway-utils</artifactId>
+			<artifactId>desktop-cloud-utils</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>

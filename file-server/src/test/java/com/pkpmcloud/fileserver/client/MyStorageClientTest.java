@@ -59,7 +59,7 @@ public class MyStorageClientTest {
     		
     		File file = new File("G:\\\\centos7_1.vdi");
     		FileInputStream fileInputStream = FileUtils.openInputStream(file);
-    		StorePath storePath = storageClient.uploadAppenderFile("group1", fileInputStream, file.length(), "mkv");
+    		StorePath storePath = storageClient.uploadAppenderFile("group1", fileInputStream, file.length(), "vdi");
     		fileInputStream.close();
     		logger.info("#####===== " + storePath);
     	}

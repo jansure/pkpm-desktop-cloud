@@ -9,7 +9,7 @@
 	<packaging>pom</packaging>
 	<version>1.0-SNAPSHOT</version>
 	<modules>
-		<module>gateway-utils</module>
+		<module>desktop-cloud-utils</module>
 		<module>gateway-server</module>
 		<module>http-client-util</module>
 		<module>puller</module>
@@ -23,7 +23,7 @@
 		<module>pkpm-redis-util</module>
 		<module>message-server</module>
 		<module>file-server</module>
-		<module>gateway-shutdown</module>
+		<module>desktop-cloud-shutdown</module>
 	</modules>
 
 	<!-- 统一版本号依赖 -->
