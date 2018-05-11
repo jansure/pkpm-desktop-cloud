@@ -17,7 +17,6 @@ import com.pkpmcloud.fileserver.domain.PkpmFileInfo;
 @Mapper
 public interface PkpmFileInfoMapper {
 	
-
     @Select("select * from pkpm_file_info (#{fileInfo})")
     @Lang(SimpleSelectLangDriver.class)
     List<PkpmFileInfo> select(PkpmFileInfo fileInfo );

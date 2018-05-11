@@ -95,8 +95,6 @@ public class FastDFSController {
 			//插入
 			if(!isUpdate) {
 				
-				fileInfo = new PkpmFileInfo();
-				
 				//获取组名中的数字
 				List<Integer> numList = StringUtil.getIntegerByStr(groupName);
 				
