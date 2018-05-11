@@ -121,11 +121,11 @@ public class FastDFSController {
 			e.printStackTrace();
 
 		} finally {
-			try {
-				inputStream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+//			try {
+//				inputStream.close();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 		}
 		return ResultObject.failure("上传文件失败,请重新尝试!");
 	}
