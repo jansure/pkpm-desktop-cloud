@@ -11,7 +11,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +24,7 @@ import com.pkpmcloud.fileserver.client.StorageClient;
 import com.pkpmcloud.fileserver.client.TrackerClient;
 import com.pkpmcloud.fileserver.model.StorageNode;
 import com.pkpmcloud.fileserver.model.StorePath;
+import com.pkpmcloud.fileserver.service.IFileService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,8 +35,13 @@ public class FastDFSController {
 
 	@Resource
 	private TrackerClient trackerClient;
+	
 	@Resource
 	private StorageClient storageClient;
+	
+	@Resource
+	private IFileService fileService;
+	
 	@Value("${nginx.url}")
 	private String url;
 
@@ -99,8 +104,6 @@ public class FastDFSController {
 	 * @param response
 	 * @return
 	 */
-
-	@SuppressWarnings("unused")
 	@RequestMapping(value = "/download", method = RequestMethod.GET)
 	public ResultObject download(StorePath storePath, HttpServletRequest request,
 			HttpServletResponse response) {

@@ -1,9 +1,14 @@
 package com.desktop.utils;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class StringUtil {
 
@@ -87,4 +92,43 @@ public class StringUtil {
         }
         return str;
     }
+	
+	/**
+	 * 
+	 * @Title: getIntegerByStr  
+	 * @Description: 获取字符串中的数字，如group1->1
+	 * @param strInput 输入字符串
+	 * @return List<Integer>    返回数字集合
+	 */
+	public static List<Integer> getIntegerByStr(String strInput){
+		
+		List<Integer> resultList = new ArrayList<Integer>();
+		
+        String regEx = "[^0-9]";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(strInput);
+
+        //将输入的字符串中非数字部分用空格取代并存入一个字符串
+        String string = m.replaceAll(" ").trim();
+
+        //以空格为分割符在讲数字存入一个字符串数组中
+        String[] strArr = string.split(" ");
+
+        //遍历数组转换数据类型
+        for(String s:strArr){
+        	if(StringUtils.isEmpty(s)) {
+        		continue;
+        	}
+        	
+            resultList.add(new Integer(s));
+        }
+		
+		return resultList;
+	}
+	
+	public static void main(String[] args) {
+		
+		String str="love23next234csdn3423javaeye";
+		System.out.println(getIntegerByStr(str));
+	}
 }
