@@ -15,16 +15,16 @@ public interface PkpmCloudSubscriptionDAO {
 	List<Long> findSubsId(int userId);
 
 	/**
-	 * 根据用户Id查subscription
+	 * 根据用户Id查Subscription
 	 * 
 	 * @param userId
 	 * @return
 	 */
-	List<PkpmCloudSubscription> findSubsCriptionByUserId(int userId);
+	List<PkpmCloudSubscription> findSubscriptionByUserId(int userId);
 
-	Integer updateSubsCriptionBySubsId(PkpmCloudSubscription subsCription);
+	Integer updateSubscriptionBySubsId(PkpmCloudSubscription Subscription);
 
-	Integer saveSubscription(PkpmCloudSubscription subscription);
+	Integer saveSubscription(PkpmCloudSubscription Subscription);
 
 	Integer selectCount(Integer userId,  String status);
 	

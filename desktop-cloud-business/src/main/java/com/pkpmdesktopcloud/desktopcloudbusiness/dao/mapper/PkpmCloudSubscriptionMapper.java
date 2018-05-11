@@ -16,17 +16,17 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubscription;
 @Mapper
 public interface PkpmCloudSubscriptionMapper {
 	
-	@Select("select * from pkpm_cloud_subscription (#{subsCription})")
+	@Select("select * from pkpm_cloud_Subscription (#{Subscription})")
     @Lang(SimpleSelectLangDriver.class)
-    List<PkpmCloudSubscription> getSubsCriptionList(PkpmCloudSubscription subsCription );
+    List<PkpmCloudSubscription> getSubscriptionList(PkpmCloudSubscription Subscription );
     
-    @Insert("insert into pkpm_cloud_subscription (#{subsCription})")
+    @Insert("insert into pkpm_cloud_Subscription (#{Subscription})")
     @Lang(SimpleInsertLangDriver.class)
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    Integer insert(PkpmCloudSubscription subsCription);
+    Integer insert(PkpmCloudSubscription Subscription);
 
-    @Update("update pkpm_cloud_subscription (#{subsCription}) WHERE id = #{id}")
+    @Update("update pkpm_cloud_Subscription (#{Subscription}) WHERE id = #{id}")
     @Lang(SimpleUpdateLangDriver.class)
-    Integer update(PkpmCloudSubscription subsCription);
+    Integer update(PkpmCloudSubscription Subscription);
 
 }

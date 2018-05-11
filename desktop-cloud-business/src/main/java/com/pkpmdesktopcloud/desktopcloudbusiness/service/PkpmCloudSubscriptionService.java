@@ -12,14 +12,14 @@ public interface PkpmCloudSubscriptionService {
 
 	PkpmOperatorStatus saveSubsDetails(PkpmCloudUserInfo userInfo,WorkOrderVO wo);
 
-	List<PkpmCloudSubscription> findSubsCriptionByUserId(Integer userId);
+	List<PkpmCloudSubscription> findSubscriptionByUserId(Integer userId);
 	
 	/**
 	 *根据subsId更新订单状态
 	 *
 	 * @author xuhe
-	 * @param subsCription
+	 * @param Subscription
 	 * @return java.lang.String
 	 */
-	String updateSubsCriptionBySubsId(PkpmCloudSubscription subsCription);
+	String updateSubscriptionBySubsId(PkpmCloudSubscription Subscription);
 }

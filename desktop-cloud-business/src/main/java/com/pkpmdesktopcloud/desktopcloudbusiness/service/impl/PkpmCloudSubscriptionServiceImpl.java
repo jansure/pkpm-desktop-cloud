@@ -46,10 +46,10 @@ import com.pkpmdesktopcloud.redis.RedisCache;
 @Transactional
 public class PkpmCloudSubscriptionServiceImpl implements PkpmCloudSubscriptionService {
 	
-	private static final String SUBSCRIPTION_USERID_ID = "subsCriptionByUserId";
+	private static final String Subscription_USERID_ID = "SubscriptionByUserId";
 	
 	@Resource
-	private PkpmCloudSubscriptionDAO subscriptionMapper;
+	private PkpmCloudSubscriptionDAO SubscriptionMapper;
 	
 	@Resource
 	private PkpmCloudSubsDetailsDAO subsDetailsMapper;
@@ -89,7 +89,7 @@ public class PkpmCloudSubscriptionServiceImpl implements PkpmCloudSubscriptionSe
 	try {
 		//a、保存订单之前先查询有没有 初始化的订单
 		Integer userId = userInfo.getUserId();
-		Integer invalidCount = subscriptionMapper.selectCount(userId,invalidStatus);
+		Integer invalidCount = SubscriptionMapper.selectCount(userId,invalidStatus);
 		if(invalidCount >= 1){
 			throw  Exceptions.newBusinessException("您有正在创建中的桌面,请重新尝试!");
 		}
@@ -128,18 +128,18 @@ public class PkpmCloudSubscriptionServiceImpl implements PkpmCloudSubscriptionSe
 		adId = map.get("adId");
 		projectId = map.get("projectId");
 		
-		PkpmCloudSubscription subscription = new PkpmCloudSubscription();
+		PkpmCloudSubscription Subscription = new PkpmCloudSubscription();
 		long subsId = IDUtil.genOrderId();
-		subscription.setSubsId(subsId);
+		Subscription.setSubsId(subsId);
 		LocalDateTime date = LocalDateTime.now();
-		subscription.setCreateTime(date);
-		subscription.setPayChannel("0");
-		subscription.setUserId(userId);
-		subscription.setProjectId(projectId);
-		subscription.setAdId(Integer.parseInt(adId));
-		subscription.setStatus(invalidStatus);
-		Integer subscriptionCount = subscriptionMapper.saveSubscription(subscription);
-		if(subscriptionCount<1){
+		Subscription.setCreateTime(date);
+		Subscription.setPayChannel("0");
+		Subscription.setUserId(userId);
+		Subscription.setProjectId(projectId);
+		Subscription.setAdId(Integer.parseInt(adId));
+		Subscription.setStatus(invalidStatus);
+		Integer SubscriptionCount = SubscriptionMapper.saveSubscription(Subscription);
+		if(SubscriptionCount<1){
 			throw  Exceptions.newBusinessException("保存订单失败,请您重试!");
 		}
 		
@@ -188,7 +188,7 @@ public class PkpmCloudSubscriptionServiceImpl implements PkpmCloudSubscriptionSe
 
 		String userName = userInfo.getUserName();
 		//查询成功的条数
-		Integer nextNum = 1 + subscriptionMapper.selectTotalById(userId);
+		Integer nextNum = 1 + SubscriptionMapper.selectTotalById(userId);
 		if(nextNum >= 1 + DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT)
 			throw Exceptions.newBusinessException(
 					String.format("您购买的桌面数量已经达到%d个上限，请重新注册账号进行购买!",
@@ -253,34 +253,34 @@ public class PkpmCloudSubscriptionServiceImpl implements PkpmCloudSubscriptionSe
 	}
 
 	@Override
-	public List<PkpmCloudSubscription> findSubsCriptionByUserId(Integer userId) {
+	public List<PkpmCloudSubscription> findSubscriptionByUserId(Integer userId) {
 		
-		RedisCache cache = new RedisCache(SUBSCRIPTION_USERID_ID);
-		List<PkpmCloudSubscription> subsCriptionList = (List<PkpmCloudSubscription>)cache.getObject(userId);
+		RedisCache cache = new RedisCache(Subscription_USERID_ID);
+		List<PkpmCloudSubscription> SubscriptionList = (List<PkpmCloudSubscription>)cache.getObject(userId);
 		
 		// 若存在Redis缓存，从缓存中读取
-		if(subsCriptionList != null) {
+		if(SubscriptionList != null) {
 			
-			return subsCriptionList;
+			return SubscriptionList;
 		}
 		
 		// 若不存在对应的Redis缓存，从数据库查询
-		subsCriptionList = subscriptionMapper.findSubsCriptionByUserId(userId);
+		SubscriptionList = SubscriptionMapper.findSubscriptionByUserId(userId);
 		// 写入Redis缓存
-		cache.putObject(userId, subsCriptionList);
-		return subsCriptionList;
+		cache.putObject(userId, SubscriptionList);
+		return SubscriptionList;
 	}
 	/**
 	 *根据subsId更新订单状态
 	 *
 	 * @author xuhe
-	 * @param subsCription
+	 * @param Subscription
 	 * @return java.lang.String
 	 */
 	@Override
-	public String  updateSubsCriptionBySubsId(PkpmCloudSubscription subsCription) {
+	public String  updateSubscriptionBySubsId(PkpmCloudSubscription Subscription) {
 
-		int result =subscriptionMapper.updateSubsCriptionBySubsId(subsCription);
+		int result =SubscriptionMapper.updateSubscriptionBySubsId(Subscription);
 		Preconditions.checkArgument(result == 1,"订单更新失败");
 		return "更新状态成功";
 	}

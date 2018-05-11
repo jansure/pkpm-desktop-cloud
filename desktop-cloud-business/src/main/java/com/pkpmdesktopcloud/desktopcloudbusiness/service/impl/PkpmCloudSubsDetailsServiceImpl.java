@@ -39,7 +39,7 @@ import com.pkpmdesktopcloud.redis.RedisCache;
 public class PkpmCloudSubsDetailsServiceImpl implements PkpmCloudSubsDetailsService {
 	
 	@Resource
-	private PkpmCloudSubscriptionDAO subscriptionMapper;
+	private PkpmCloudSubscriptionDAO SubscriptionMapper;
 	
 	@Resource
 	private PkpmCloudSubsDetailsDAO subsDetailsMapper;
@@ -82,11 +82,11 @@ public class PkpmCloudSubsDetailsServiceImpl implements PkpmCloudSubsDetailsServ
 			this.result.set("读取成功", 1, myProducts.size()+"", myProducts);
 			return this.result;
 		} else {*/
-			List<PkpmCloudSubscription> subsCriptionList = subscriptionMapper.findSubsCriptionByUserId(userId);
+			List<PkpmCloudSubscription> SubscriptionList = SubscriptionMapper.findSubscriptionByUserId(userId);
 			
-			for (PkpmCloudSubscription subsCription : subsCriptionList) {
+			for (PkpmCloudSubscription Subscription : SubscriptionList) {
 				
-				Long subsId = subsCription.getSubsId();
+				Long subsId = Subscription.getSubsId();
 				List<PkpmCloudSubsDetails> subsDetails = subsDetailsMapper.findSubsDetailsList(subsId);
 				
 				for (PkpmCloudSubsDetails subs : subsDetails) {
@@ -128,14 +128,14 @@ public class PkpmCloudSubsDetailsServiceImpl implements PkpmCloudSubsDetailsServ
 					myProduct.setProductDesc(productDesc);
 					myProduct.setFlagTime(flagTime);
 					
-					String status2 = subsCription.getStatus();
-					String areaCode = subsCription.getAreaCode();
+					String status2 = Subscription.getStatus();
+					String areaCode = Subscription.getAreaCode();
 					
 					//add projectid、subsid、adid、areacode
-					String projectId = subsCription.getProjectId();
+					String projectId = Subscription.getProjectId();
 					
 					myProduct.setSubsId(subsId);
-					myProduct.setAdId(subsCription.getAdId());
+					myProduct.setAdId(Subscription.getAdId());
 					myProduct.setProjectId(projectId);
 					myProduct.setAreaCode(areaCode);
 					try {

@@ -24,11 +24,11 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudUserInfoServic
 import com.pkpmdesktopcloud.redis.RedisCache;
 
 @RestController
-@RequestMapping("/subscription")
+@RequestMapping("/Subscription")
 public class SubscriptionController {
 	
 	@Resource
-	private PkpmCloudSubscriptionService subscription;
+	private PkpmCloudSubscriptionService subscriptionService;
 	
 	@Resource
 	private PkpmCloudUserInfoService userService;
@@ -58,7 +58,7 @@ public class SubscriptionController {
 		}
 		
 		try {
-			PkpmOperatorStatus pkpmOperatorStatus = subscription.saveSubsDetails(userInfo, wo);
+			PkpmOperatorStatus pkpmOperatorStatus = subscriptionService.saveSubsDetails(userInfo, wo);
 			return ResultObject.success(pkpmOperatorStatus, "恭喜您申请免费使用成功,请稍等,马上为您开通！");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -69,8 +69,8 @@ public class SubscriptionController {
 	}
 
 	@PostMapping(value = "/setSubsStatus")
-	public ResultObject updateSubscription(@RequestBody PkpmCloudSubscription subsCription){
-		String response = subscription.updateSubsCriptionBySubsId(subsCription);
+	public ResultObject updateSubscription(@RequestBody PkpmCloudSubscription subscription){
+		String response = subscriptionService.updateSubscriptionBySubsId(subscription);
 		return ResultObject.success(response);
 	}
 }

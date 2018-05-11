@@ -54,7 +54,7 @@ public class OAuth2Configuration {
                     .antMatchers("/uaa/**").permitAll()
                     .antMatchers("/pkpmcloud/**").permitAll()
                     .antMatchers("/pkpmcloud/user/**").permitAll()
-                    .antMatchers("/pkpmcloud/subscription/**").permitAll()
+                    .antMatchers("/pkpmcloud/Subscription/**").permitAll()
                     .antMatchers("/api/profile-info").permitAll()
                     .antMatchers("/api/**").authenticated()
                     .antMatchers("/pkpmcloud/**").authenticated()

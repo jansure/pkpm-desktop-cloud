@@ -562,14 +562,14 @@ public class PullerBusiness {
 	}
 	
 	/**  
-	 * @Title: updateCloudSubscription  
+	 * @Title: updateCloudSubscription
 	 * @Description: 更新云平台订单表
 	 * @param detail 任务详情
 	 * @throws  
 	 */   
 	private void updateCloudSubscription(JobDetail detail) {
 
-		String url = BUSINESS_HOST + "/subscription/setSubsStatus";
+		String url = BUSINESS_HOST + "/Subscription/setSubsStatus";
 		
 		//设置请参数
 		Map<String, Object> jsonMap = new HashMap<String, Object>();

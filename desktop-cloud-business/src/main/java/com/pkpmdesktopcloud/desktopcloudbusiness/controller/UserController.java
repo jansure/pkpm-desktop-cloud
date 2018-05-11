@@ -39,14 +39,14 @@ public class UserController {
 	private PkpmCloudUserInfoService userService;
 	
 	@Autowired
-	private PkpmCloudSubscriptionService subscriptionService;
+	private PkpmCloudSubscriptionService SubscriptionService;
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
 	/**
 	 * 用户注册
 	 * 
-	 * @param userInfo(user_name,password,user_mobile_number)
+	 * @param
 	 * @return 注册成功的页面
 	 */
 	@RequestMapping(value = "/regist", method = RequestMethod.POST)
@@ -114,7 +114,7 @@ public class UserController {
     
 	/**
 	 * 
-	 * @param session
+	 * @param
 	 * @return ResultObject
 	 */
 	@SuppressWarnings("unused")
@@ -138,7 +138,7 @@ public class UserController {
 	/**
 	 * 发送验证码短信
 	 * 
-	 * @param user_mobile_number
+	 * @param
 	 * @return ResultObject
 	 */
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
@@ -170,7 +170,7 @@ public class UserController {
 	/**
 	 * 异步校验邮箱，是否存在
 	 * 
-	 * @param userEmailOrMobileNumber
+	 * @param
 	 */
 	@RequestMapping(value = "/findByEmailOrUserMobileNumber", method = RequestMethod.POST)
 	public ResultObject findByEmailOrUserMobileNumber(String userName, Integer type, HttpServletResponse response) {
@@ -195,7 +195,7 @@ public class UserController {
 	/**
 	 * 完善个人信息,获取会员名称和联系方式
 	 * 
-	 * @param session
+	 * @param
 	 * @return ResultObject
 	 */
 	@RequestMapping(value = "/perfectInfoInit", method = RequestMethod.POST)
@@ -271,7 +271,7 @@ public class UserController {
 	/**
 	 * 修改手机号码
 	 * 
-	 * @param session
+	 * @param
 	 * @return ResultObject
 	 */
 	@RequestMapping(value = "/changMobileNumber", method = RequestMethod.POST)
@@ -329,7 +329,7 @@ public class UserController {
 	/**
 	 * 找回密码
 	 * 
-	 * @param session
+	 * @param
 	 * @throws Exception 
 	 * @return ResultObject
 	 */
@@ -376,7 +376,7 @@ public class UserController {
 	/**
 	 * 修改密码
 	 *
-	 * @param session
+	 * @param
 	 * @throws Exception
 	 * @return ResultObject
 	 */
@@ -384,10 +384,10 @@ public class UserController {
 	public ResultObject changPassword(@RequestBody UserInfoForChangePassword newUserInfo) throws Exception {
 		
 		Integer userId = newUserInfo.getUserId();
-		List<PkpmCloudSubscription> subsCriptionList = subscriptionService.findSubsCriptionByUserId(userId);
+		List<PkpmCloudSubscription> SubscriptionList = SubscriptionService.findSubscriptionByUserId(userId);
 		
-		logger.info(subsCriptionList);
-		userService.changeUserPassword(newUserInfo, subsCriptionList);
+		logger.info(SubscriptionList);
+		userService.changeUserPassword(newUserInfo, SubscriptionList);
 		
 		return ResultObject.success("密码修改成功");
 	}
