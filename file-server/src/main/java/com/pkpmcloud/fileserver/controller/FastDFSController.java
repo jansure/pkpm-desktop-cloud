@@ -19,14 +19,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.desktop.utils.FileUtil;
+import com.desktop.utils.Md5CaculateUtil;
 import com.desktop.utils.page.ResultObject;
 import com.pkpmcloud.fileserver.client.StorageClient;
 import com.pkpmcloud.fileserver.client.TrackerClient;
 import com.pkpmcloud.fileserver.model.StorageNode;
 import com.pkpmcloud.fileserver.model.StorePath;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/fast")
+@Slf4j
 public class FastDFSController {
 
 	@Resource
@@ -44,6 +48,11 @@ public class FastDFSController {
 		}
 		InputStream inputStream = null;
 		try {
+			
+			//获取文件Md5
+			String md5 = Md5CaculateUtil.MD5ByMultipartFile(multipartFile);
+			log.debug("md5:" + md5);
+			
 			StorageNode storageNode = trackerClient.getStorageNode();
 			String groupName = storageNode.getGroupName();
 
