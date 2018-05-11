@@ -1,6 +1,6 @@
-package com.cabr.pkpm.mapper.subscription;
+package com.cabr.pkpm.mapper.Subscription;
 
-import com.cabr.pkpm.entity.subscription.SubsCription;
+import com.cabr.pkpm.entity.Subscription.Subscription;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +27,11 @@ public class SubscriptionMapperTest {
      * @author xuhe
      */
     @Test
-    public void updateSubsCriptionBySubsId() throws Exception {
-        SubsCription subsCription = new SubsCription();
-        subsCription.setSubsId(152403125739259L);
-        subsCription.setStatus("Invalid");
-        Integer result = mapper.updateSubsCriptionBySubsId(subsCription);
+    public void updateSubscriptionBySubsId() throws Exception {
+        Subscription Subscription = new Subscription();
+        Subscription.setSubsId(152403125739259L);
+        Subscription.setStatus("Invalid");
+        Integer result = mapper.updateSubscriptionBySubsId(Subscription);
         System.out.println(result);
     }
 

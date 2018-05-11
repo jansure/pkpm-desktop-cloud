@@ -1,4 +1,4 @@
-package com.cabr.pkpm.controller.subscription;
+package com.cabr.pkpm.controller.Subscription;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -73,7 +73,7 @@ public class SubscriptionControllerTest {
     	String productMapStr = JSON.toJSONString(productNameVOList);
     	System.out.println(productMapStr);
           System.out.println(this.mockMvc  
-          .perform((post("/subscription/immediatelyUse")).session((MockHttpSession)getLoginSession())  
+          .perform((post("/Subscription/immediatelyUse")).session((MockHttpSession)getLoginSession())
                   .contentType(MediaType.APPLICATION_FORM_URLENCODED).accept(MediaType.APPLICATION_JSON)  
                   .param("productId", "10001")
       			.param("productName", "基础班套餐")

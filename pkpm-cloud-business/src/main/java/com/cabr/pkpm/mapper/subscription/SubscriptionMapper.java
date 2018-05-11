@@ -1,11 +1,11 @@
-package com.cabr.pkpm.mapper.subscription;
+package com.cabr.pkpm.mapper.Subscription;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.cabr.pkpm.entity.subscription.SubsCription;
+import com.cabr.pkpm.entity.Subscription.Subscription;
 @Mapper
 public interface SubscriptionMapper {
 	/**
@@ -17,16 +17,16 @@ public interface SubscriptionMapper {
 	List<Long> findSubsId(int userId);
 
 	/**
-	 * 根据用户Id查subscription
+	 * 根据用户Id查Subscription
 	 * 
 	 * @param userId
 	 * @return
 	 */
-	List<SubsCription> findSubsCriptionByUserId(int userId);
+	List<Subscription> findSubscriptionByUserId(int userId);
 
-	Integer updateSubsCriptionBySubsId(SubsCription subsCription);
+	Integer updateSubscriptionBySubsId(Subscription Subscription);
 
-	Integer saveSubscription(SubsCription subscription);
+	Integer saveSubscription(Subscription Subscription);
 
 	Integer selectCount(@Param("userId") Integer userId, @Param("status") String status);
 
@@ -36,6 +36,6 @@ public interface SubscriptionMapper {
 
 	Integer selectTotalById(@Param("userId") Integer userId);
 
-	SubsCription selectSubscriptionBySubsId(Long subsId);
+	Subscription selectSubscriptionBySubsId(Long subsId);
 
 }

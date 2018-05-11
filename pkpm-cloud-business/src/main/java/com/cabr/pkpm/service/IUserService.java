@@ -1,6 +1,6 @@
 package com.cabr.pkpm.service;
 
-import com.cabr.pkpm.entity.subscription.SubsCription;
+import com.cabr.pkpm.entity.Subscription.Subscription;
 import com.cabr.pkpm.entity.user.UserInfo;
 import com.gateway.common.dto.user.UserInfoForChangePassword;
 
@@ -16,7 +16,7 @@ public interface IUserService {
 	 * @return
 	 * @author xuhe
 	 */
-	String changeUserPassword(UserInfoForChangePassword newUserInfo, List<SubsCription> subsList);
+	String changeUserPassword(UserInfoForChangePassword newUserInfo, List<Subscription> subsList);
 	
 	public UserInfo findUser(Integer userID);
 

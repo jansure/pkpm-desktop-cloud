@@ -6,7 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.cabr.pkpm.entity.subscription.SubsCription;
+import com.cabr.pkpm.entity.Subscription.Subscription;
 import com.cabr.pkpm.utils.ResultObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +21,11 @@ import com.cabr.pkpm.vo.MyProduct;
 import com.gateway.common.domain.PkpmOperatorStatus;
 
 @RestController
-@RequestMapping("/subscription")
+@RequestMapping("/Subscription")
 public class SubscriptionController {
 	
 	@Autowired
-	private ISubscriptionService subscription;
+	private ISubscriptionService Subscription;
 	@Autowired
 	private IUserService userService;
 	@Autowired
@@ -49,7 +49,7 @@ public class SubscriptionController {
 		}
 		
 		try {
-			PkpmOperatorStatus pkpmOperatorStatus = subscription.saveSubsDetails(userInfo,wo);
+			PkpmOperatorStatus pkpmOperatorStatus = Subscription.saveSubsDetails(userInfo,wo);
 			this.result.set("恭喜您申请免费使用成功,请稍等,马上为您开通！", 1, pkpmOperatorStatus);
 			return this.result;
 		} catch (Exception e) {
@@ -62,8 +62,8 @@ public class SubscriptionController {
 	}
 
 	@PostMapping(value = "/setSubsStatus")
-	public ResultObject updateSubscription(@RequestBody SubsCription subsCription){
-		String response = subscription.updateSubsCriptionBySubsId(subsCription);
+	public ResultObject updateSubscription(@RequestBody Subscription Subscription){
+		String response = Subscription.updateSubscriptionBySubsId(Subscription);
 		return ResultObject.success(response);
 	}
 }

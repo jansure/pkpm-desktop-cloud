@@ -1,7 +1,7 @@
 package com.cabr.pkpm.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.cabr.pkpm.entity.subscription.SubsCription;
+import com.cabr.pkpm.entity.Subscription.Subscription;
 import com.cabr.pkpm.entity.user.UserInfo;
 import com.cabr.pkpm.mapper.user.UserMapper;
 import com.cabr.pkpm.service.IUserService;
@@ -94,7 +94,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     //0428 新增事务管理，若gateway请求失败，则数据库回滚，保证密码一致性
-    public String changeUserPassword(UserInfoForChangePassword newUserInfo, List<SubsCription> subsList) {
+    public String changeUserPassword(UserInfoForChangePassword newUserInfo, List<Subscription> subsList) {
 
         Integer userID = newUserInfo.getUserId();
         String oldPassword = newUserInfo.getOldPassword();
@@ -125,7 +125,7 @@ public class UserServiceImpl implements IUserService {
             String url = serverHost + "/ad/user/update";
             CommonRequestBean requestBean = new CommonRequestBean();
             requestBean.setUserName(userName);
-            for (SubsCription subInfo : subsList) {
+            for (Subscription subInfo : subsList) {
                 BeanUtil.copyPropertiesIgnoreNull(subInfo,requestBean);
                 requestBean.setUserLoginPassword(newPassword);
                 String jsonStr = JsonUtil.serialize(requestBean);

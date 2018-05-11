@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cabr.pkpm.entity.subscription.SubsCription;
+import com.cabr.pkpm.entity.Subscription.Subscription;
 import com.cabr.pkpm.entity.user.UserInfo;
 import com.cabr.pkpm.entity.workorder.WorkOrder;
 import com.cabr.pkpm.service.ISubscriptionService;
@@ -52,7 +52,7 @@ public class UserController {
 	@Autowired
 	private IWorkOrderService workOrderService;
 	@Autowired
-	private ISubscriptionService subscriptionService;
+	private ISubscriptionService SubscriptionService;
 	
 	
 	@Value("${server.host}")
@@ -485,9 +485,9 @@ public class UserController {
 	@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
 	public ResultObject changePassword(@RequestBody UserInfoForChangePassword newUserInfo) throws Exception {
 		Integer userId = newUserInfo.getUserId();
-		List<SubsCription> subsCriptionList = subscriptionService.findSubsCriptionByUserId(userId);
-		logger.info(subsCriptionList);
-		userService.changeUserPassword(newUserInfo, subsCriptionList);
+		List<Subscription> SubscriptionList = SubscriptionService.findSubscriptionByUserId(userId);
+		logger.info(SubscriptionList);
+		userService.changeUserPassword(newUserInfo, SubscriptionList);
 		return ResultObject.success(null,"密码修改成功");
 	}
 }

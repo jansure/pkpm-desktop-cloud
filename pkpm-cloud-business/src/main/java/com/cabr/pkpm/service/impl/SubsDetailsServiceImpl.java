@@ -13,11 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.cabr.pkpm.entity.product.ProductInfo;
-import com.cabr.pkpm.entity.subscription.SubsCription;
+import com.cabr.pkpm.entity.Subscription.Subscription;
 import com.cabr.pkpm.entity.subsdetails.SubsDetails;
 import com.cabr.pkpm.mapper.component.ComponentMapper;
 import com.cabr.pkpm.mapper.product.ProductMapper;
-import com.cabr.pkpm.mapper.subscription.SubscriptionMapper;
+import com.cabr.pkpm.mapper.Subscription.SubscriptionMapper;
 import com.cabr.pkpm.mapper.subsdetails.SubsDetailsMapper;
 import com.cabr.pkpm.mapper.workorder.WorkOrderMapper;
 import com.cabr.pkpm.service.ISubsDetailsService;
@@ -42,7 +42,7 @@ import com.pkpm.httpclientutil.exception.HttpProcessException;
 public class SubsDetailsServiceImpl implements ISubsDetailsService {
 	
 	@Resource
-	private SubscriptionMapper subscriptionMapper;
+	private SubscriptionMapper SubscriptionMapper;
 	
 	@Resource
 	private SubsDetailsMapper subsDetailsMapper;
@@ -92,11 +92,11 @@ public class SubsDetailsServiceImpl implements ISubsDetailsService {
 			return this.result;
 		} else {*/
 			
-			List<SubsCription> subsCriptionList = subscriptionMapper.findSubsCriptionByUserId(userId);
+			List<Subscription> SubscriptionList = SubscriptionMapper.findSubscriptionByUserId(userId);
 			
-			for (SubsCription subsCription : subsCriptionList) {
+			for (Subscription Subscription : SubscriptionList) {
 				
-				Long subsId = subsCription.getSubsId();
+				Long subsId = Subscription.getSubsId();
 				List<SubsDetails> subsDetails = subsDetailsMapper.findSubsDetailsList(subsId);
 				
 				for (SubsDetails subs : subsDetails) {
@@ -138,14 +138,14 @@ public class SubsDetailsServiceImpl implements ISubsDetailsService {
 					myProduct.setProductDesc(productDesc);
 					myProduct.setFlagTime(flagTime);
 					
-					String status2 = subsCription.getStatus();
-					String areaCode = subsCription.getAreaCode();
+					String status2 = Subscription.getStatus();
+					String areaCode = Subscription.getAreaCode();
 					
 					//add projectid、subsid、adid、areacode
-					String projectId = subsCription.getProjectId();
+					String projectId = Subscription.getProjectId();
 					
 					myProduct.setSubsId(subsId);
-					myProduct.setAdId(subsCription.getAdId());
+					myProduct.setAdId(Subscription.getAdId());
 					myProduct.setProjectId(projectId);
 					myProduct.setAreaCode(areaCode);
 					try {

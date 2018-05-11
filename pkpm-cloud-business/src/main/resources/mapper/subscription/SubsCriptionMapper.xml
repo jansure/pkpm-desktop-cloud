@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cabr.pkpm.mapper.subscription.SubscriptionMapper">
-	<resultMap id="BaseResultMap" type="com.cabr.pkpm.entity.subscription.SubsCription">
+<mapper namespace="com.cabr.pkpm.mapper.Subscription.SubscriptionMapper">
+	<resultMap id="BaseResultMap" type="com.cabr.pkpm.entity.Subscription.Subscription">
 			<id property="id" column="id" jdbcType="INTEGER"/>
    	      	<result property="subsId" column="subs_id" jdbcType="BIGINT"/>
             <result property="userId" column="user_id" jdbcType="INTEGER"/>
@@ -15,26 +15,26 @@
             <result property="status" column="status" jdbcType="INTEGER"/>
 	</resultMap>
 	
-	<select id="findSubsCriptionByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	<select id="findSubscriptionByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
 		select *
-		from pkpm_cloud_subscription
+		from pkpm_cloud_Subscription
 		where user_id = #{userId,jdbcType=INTEGER} order by create_time desc
 	</select>
 
-	<update id="updateSubsCriptionBySubsId" parameterType="com.cabr.pkpm.entity.subscription.SubsCription">
-		UPDATE pkpm_cloud_subscription
-			SET pkpm_cloud_subscription.status = #{status}
-		WHERE pkpm_cloud_subscription.subs_id = #{subsId};
+	<update id="updateSubscriptionBySubsId" parameterType="com.cabr.pkpm.entity.Subscription.Subscription">
+		UPDATE pkpm_cloud_Subscription
+			SET pkpm_cloud_Subscription.status = #{status}
+		WHERE pkpm_cloud_Subscription.subs_id = #{subsId};
 	</update>
 
 
 	<select id="findSubsId" parameterType="java.lang.Integer" resultType="java.lang.Long">
 		select subs_id
-		from pkpm_cloud_subscription
+		from pkpm_cloud_Subscription
 		where user_id = #{userId,jdbcType=INTEGER} order by create_time
 	</select>
-	<insert id="saveSubscription"  parameterType="com.cabr.pkpm.entity.subscription.SubsCription" useGeneratedKeys="true" keyProperty="id">
-	    insert into pkpm_cloud_subscription(area_code,subs_id,user_id,create_time,pay_channel,ad_id,project_id,status) values
+	<insert id="saveSubscription"  parameterType="com.cabr.pkpm.entity.Subscription.Subscription" useGeneratedKeys="true" keyProperty="id">
+	    insert into pkpm_cloud_Subscription(area_code,subs_id,user_id,create_time,pay_channel,ad_id,project_id,status) values
 	    (#{areaCode},#{subsId},#{userId},#{createTime},#{payChannel},#{adId},#{projectId},#{status});
 	</insert>
 	
@@ -42,7 +42,7 @@
 	    SELECT
 			count(1)
 		FROM
-			pkpm_cloud_subscription
+			pkpm_cloud_Subscription
 		WHERE
 			user_id = #{userId}
 		AND STATUS = #{status};
@@ -52,7 +52,7 @@
 		SELECT
 			COUNT(*)
 		FROM
-			pkpm_cloud_subscription AS sub,
+			pkpm_cloud_Subscription AS sub,
 			pkpm_cloud_subs_details AS subDetail
 		WHERE
 			sub.subs_id = subDetail.subs_id
@@ -64,7 +64,7 @@
 		SELECT
 		COUNT(*)
 		FROM
-		pkpm_cloud_subscription AS sub,
+		pkpm_cloud_Subscription AS sub,
 		pkpm_cloud_subs_details AS subDetail
 		WHERE
 		sub.subs_id = subDetail.subs_id
@@ -76,7 +76,7 @@
 	    SELECT
 			count(1)
 		FROM
-			pkpm_cloud_subscription
+			pkpm_cloud_Subscription
 		WHERE
 			user_id = #{userId}
 	</select>
@@ -84,7 +84,7 @@
 		SELECT
 			*
 		FROM
-			pkpm_cloud_subscription
+			pkpm_cloud_Subscription
 		WHERE
 			subs_id = #{subsId}
 	</select>

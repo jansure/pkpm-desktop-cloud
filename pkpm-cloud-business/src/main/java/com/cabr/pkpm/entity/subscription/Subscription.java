@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j  
 @Data 
-public class SubsCription implements Serializable {
+public class Subscription implements Serializable {
 	private Integer id;
 	private String areaCode;
 	private Long subsId;

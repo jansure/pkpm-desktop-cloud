@@ -22,13 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSON;
 import com.cabr.pkpm.entity.component.ComponentInfo;
 import com.cabr.pkpm.entity.product.ProductInfo;
-import com.cabr.pkpm.entity.subscription.SubsCription;
+import com.cabr.pkpm.entity.Subscription.Subscription;
 import com.cabr.pkpm.entity.subsdetails.SubsDetails;
 import com.cabr.pkpm.entity.user.UserInfo;
 import com.cabr.pkpm.entity.workorder.WorkOrderVO;
 import com.cabr.pkpm.mapper.component.ComponentMapper;
 import com.cabr.pkpm.mapper.product.ProductMapper;
-import com.cabr.pkpm.mapper.subscription.SubscriptionMapper;
+import com.cabr.pkpm.mapper.Subscription.SubscriptionMapper;
 import com.cabr.pkpm.mapper.subsdetails.SubsDetailsMapper;
 import com.cabr.pkpm.service.ISubscriptionService;
 import com.cabr.pkpm.utils.IDUtil;
@@ -52,7 +52,7 @@ import com.pkpm.httpclientutil.exception.HttpProcessException;
 public class SubscriptionServiceImpl implements ISubscriptionService {
 	
 	@Resource
-	private SubscriptionMapper subscriptionMapper;
+	private SubscriptionMapper SubscriptionMapper;
 	@Resource
 	private SubsDetailsMapper subsDetailsMapper;
 	@Resource
@@ -99,7 +99,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	try {
 		//a、保存订单之前先查询有没有 初始化的订单
 		Integer userId = userInfo.getUserID();
-		Integer invalidCount = subscriptionMapper.selectCount(userId,invalidStatus);
+		Integer invalidCount = SubscriptionMapper.selectCount(userId,invalidStatus);
 		/*   
 		 * 测试阶段注掉
 		 * if(invalidCount >= 1){
@@ -128,19 +128,19 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		adId = map.get("adId");
 		projectId = map.get("projectId");
 		
-		SubsCription subscription = new SubsCription();
+		Subscription Subscription = new Subscription();
 		long subsId = IDUtil.genOrderId();
-		subscription.setSubsId(subsId);
+		Subscription.setSubsId(subsId);
 		LocalDateTime date = LocalDateTime.now();
-		subscription.setCreateTime(date);
-		subscription.setPayChannel("0");
-		subscription.setUserId(userId);
-		subscription.setProjectId(projectId);
-		subscription.setAdId(Integer.parseInt(adId));
-		subscription.setStatus(invalidStatus);
-		subscription.setAreaCode(areaCode);
-		Integer subscriptionCount = subscriptionMapper.saveSubscription(subscription);
-		if(subscriptionCount<1){
+		Subscription.setCreateTime(date);
+		Subscription.setPayChannel("0");
+		Subscription.setUserId(userId);
+		Subscription.setProjectId(projectId);
+		Subscription.setAdId(Integer.parseInt(adId));
+		Subscription.setStatus(invalidStatus);
+		Subscription.setAreaCode(areaCode);
+		Integer SubscriptionCount = SubscriptionMapper.saveSubscription(Subscription);
+		if(SubscriptionCount<1){
 			throw  Exceptions.newBusinessException("保存订单失败,请您重试!");
 		}
 		
@@ -186,7 +186,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		String userName = userInfo.getUserName();
 		productName = getAvailableComputerName(productId,projectId, Integer.parseInt(adId));
 		//查询成功的条数
-		Integer nextNum = 1 + subscriptionMapper.selectTotalById(userId);
+		Integer nextNum = 1 + SubscriptionMapper.selectTotalById(userId);
 		if(nextNum >= 1 + DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT)
 			throw Exceptions.newBusinessException(
 					String.format("您购买的桌面数量已经达到%d个上限，请重新注册账号进行购买!",
@@ -194,13 +194,21 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 
 		//productName.length < 15
 		if(DesktopConstant.DESKTOP_NAME_MAX_LEN > productName.length()) {
-			commonRequestBean.setGloryProductName(productName );
-			if(productName.length() >DesktopConstant.DESKTOP_NAME_MAX_LEN) {
-				
+			commonRequestBean.setGloryProductName(productName + nextNum);
+			if(productName.length() + nextNum.toString().length() >
+					DesktopConstant.DESKTOP_NAME_MAX_LEN) {
+				Integer minus = nextNum.toString().length() -
+						(DesktopConstant.DESKTOP_NAME_MAX_LEN - productName.length());
 				commonRequestBean.setGloryProductName(productName.substring(0,
-						DesktopConstant.DESKTOP_NAME_MAX_LEN));
+						DesktopConstant.DESKTOP_NAME_MAX_LEN - minus
+				) + nextNum);
 			}
 
+		}
+		else {
+			commonRequestBean.setGloryProductName(productName.substring(0,
+					DesktopConstant.DESKTOP_NAME_MAX_LEN - nextNum.toString().length())
+					+ nextNum);
 		}
 		
 		commonRequestBean.setAreaCode(areaCode);
@@ -244,36 +252,36 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	}
 
 	@Override
-	public List<SubsCription> findSubsCriptionByUserId(Integer userId) {
+	public List<Subscription> findSubscriptionByUserId(Integer userId) {
 		
-		String str = stringRedisTemplate.opsForValue().get("subsCriptionByUserId:" + userId);
+		String str = stringRedisTemplate.opsForValue().get("SubscriptionByUserId:" + userId);
 		
 		// 若存在Redis缓存，从缓存中读取
 		if (StringUtils.isNotBlank(str)) {
-			List<SubsCription> subsCription = JSON.parseArray(str, SubsCription.class);
-			return subsCription;
+			List<Subscription> Subscription = JSON.parseArray(str, Subscription.class);
+			return Subscription;
 		} else {
 			// 若不存在对应的Redis缓存，从数据库查询
-			List<SubsCription> subsCription = subscriptionMapper.findSubsCriptionByUserId(userId);
+			List<Subscription> Subscription = SubscriptionMapper.findSubscriptionByUserId(userId);
 			// 写入Redis缓存
 			//fixme 解决JSON序列化问题
-			/*stringRedisTemplate.opsForValue().set("subsCriptionByUserId:" + userId, JSON.toJSONString(subsCription));*/
-			return subsCription;
+			/*stringRedisTemplate.opsForValue().set("SubscriptionByUserId:" + userId, JSON.toJSONString(Subscription));*/
+			return Subscription;
 		}
 	}
 	/**
 	 *根据subsId更新订单状态
 	 *
 	 * @author xuhe
-	 * @param subsCription
+	 * @param Subscription
 	 * @return java.lang.String
 	 */
 	@Override
 
-	public String  updateSubsCriptionBySubsId(SubsCription sub) {
+	public String  updateSubscriptionBySubsId(Subscription sub) {
 
 		//根据subsId获取完整信息;
-		SubsCription oldSub = subscriptionMapper.selectSubscriptionBySubsId(sub.getSubsId());
+		Subscription oldSub = SubscriptionMapper.selectSubscriptionBySubsId(sub.getSubsId());
 		Preconditions.checkNotNull(oldSub, "订单信息不存在，输入错误");
 
 		//清空缓存
@@ -285,28 +293,28 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		}
 
 		//更新数据库状态
-		int result =subscriptionMapper.updateSubsCriptionBySubsId(sub);
+		int result =SubscriptionMapper.updateSubscriptionBySubsId(sub);
 
 		Preconditions.checkArgument(result==1,"订单更新失败");
 		return String.format("状态更新成功 %s更新至%s",oldSub.getStatus(),sub.getStatus());
 	}
 
 	@Override
-	public List<SubsCription> findSubsCriptionByProductName(Integer userId) {
+	public List<Subscription> findSubscriptionByProductName(Integer userId) {
 
-		String str = stringRedisTemplate.opsForValue().get("subsCriptionByUserId:" + userId);
+		String str = stringRedisTemplate.opsForValue().get("SubscriptionByUserId:" + userId);
 
 		// 若存在Redis缓存，从缓存中读取
 		if (StringUtils.isNotBlank(str)) {
-			List<SubsCription> subsCription = JSON.parseArray(str, SubsCription.class);
-			return subsCription;
+			List<Subscription> Subscription = JSON.parseArray(str, Subscription.class);
+			return Subscription;
 		} else {
 			// 若不存在对应的Redis缓存，从数据库查询
-			List<SubsCription> subsCription = subscriptionMapper.findSubsCriptionByUserId(userId);
+			List<Subscription> Subscription = SubscriptionMapper.findSubscriptionByUserId(userId);
 			// 写入Redis缓存
 			//fixme 解决JSON序列化问题
-			/*stringRedisTemplate.opsForValue().set("subsCriptionByUserId:" + userId, JSON.toJSONString(subsCription));*/
-			return subsCription;
+			/*stringRedisTemplate.opsForValue().set("SubscriptionByUserId:" + userId, JSON.toJSONString(Subscription));*/
+			return Subscription;
 		}
 	}
 	/**
@@ -320,7 +328,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	public String getAvailableComputerName(Integer productId, String projectId,Integer adId) {
 
 		//adId+productId对应的产品总数
-		Integer productCount = subscriptionMapper.selectProductCountByProjectId(productId,projectId);
+		Integer productCount = SubscriptionMapper.selectProductCountByProjectId(productId,projectId);
 		//count自增，返回对应的可用计算机名
 		productCount++;
 		String productName = productMapper.getProductByProductId(productId).get(0).getProductName();
