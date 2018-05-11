@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.pkpmcloud</groupId>
-	<artifactId>gateway-shutdown</artifactId>
+	<artifactId>desktop-cloud-shutdown</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>gateway-shutdown</name>
+	<name>desktop-cloud-shutdown</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>

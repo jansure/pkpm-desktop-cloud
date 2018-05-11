@@ -3,7 +3,6 @@ package com.pkpmcloud.scheduling;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.pkpmcloud.constants.ApiConst;
 import com.pkpmcloud.dao.ProjectDAO;
-import com.pkpmcloud.dao.WhiteListDAO;
 import com.pkpmcloud.model.Project;
 import com.pkpmcloud.service.impl.ApiServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -11,12 +10,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.*;
 
 /**
