@@ -1,11 +1,11 @@
-package com.cabr.pkpm.mapper.Subscription;
+package com.cabr.pkpm.mapper.subscription;
 
 import java.util.List;
 
+import com.cabr.pkpm.entity.subscription.Subscription;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.cabr.pkpm.entity.Subscription.Subscription;
 @Mapper
 public interface SubscriptionMapper {
 	/**

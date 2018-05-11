@@ -3,11 +3,9 @@ package com.cabr.pkpm.service.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.function.IntToDoubleFunction;
 
 import javax.annotation.Resource;
 
-import com.desktop.constant.AdConstant;
 import com.desktop.constant.DesktopConstant;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
@@ -17,18 +15,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.cabr.pkpm.entity.component.ComponentInfo;
 import com.cabr.pkpm.entity.product.ProductInfo;
-import com.cabr.pkpm.entity.Subscription.Subscription;
+import com.cabr.pkpm.entity.subscription.Subscription;
 import com.cabr.pkpm.entity.subsdetails.SubsDetails;
 import com.cabr.pkpm.entity.user.UserInfo;
 import com.cabr.pkpm.entity.workorder.WorkOrderVO;
 import com.cabr.pkpm.mapper.component.ComponentMapper;
 import com.cabr.pkpm.mapper.product.ProductMapper;
-import com.cabr.pkpm.mapper.Subscription.SubscriptionMapper;
+import com.cabr.pkpm.mapper.subscription.SubscriptionMapper;
 import com.cabr.pkpm.mapper.subsdetails.SubsDetailsMapper;
 import com.cabr.pkpm.service.ISubscriptionService;
 import com.cabr.pkpm.utils.IDUtil;
@@ -273,11 +270,10 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 	 *根据subsId更新订单状态
 	 *
 	 * @author xuhe
-	 * @param Subscription
+	 * @param sub
 	 * @return java.lang.String
 	 */
 	@Override
-
 	public String  updateSubscriptionBySubsId(Subscription sub) {
 
 		//根据subsId获取完整信息;
