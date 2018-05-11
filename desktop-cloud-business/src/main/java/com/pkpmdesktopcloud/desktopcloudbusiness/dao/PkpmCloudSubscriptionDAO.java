@@ -27,6 +27,11 @@ public interface PkpmCloudSubscriptionDAO {
 	Integer saveSubscription(PkpmCloudSubscription subscription);
 
 	Integer selectCount(Integer userId,  String status);
+	/**
+	 * @author xuhe
+	 *查询adid下的订单总数
+	*/
+	Integer countByAdId(Integer adId);
 	
 	Integer selectTotalById(Integer userId);
 

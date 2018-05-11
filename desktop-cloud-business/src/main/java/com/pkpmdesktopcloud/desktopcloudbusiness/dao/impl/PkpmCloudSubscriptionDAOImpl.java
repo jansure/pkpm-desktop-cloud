@@ -99,7 +99,15 @@ public class PkpmCloudSubscriptionDAOImpl implements PkpmCloudSubscriptionDAO{
 		
 		return 0;
 	}
-	
+
+	@Override
+	public Integer countByAdId(Integer adId) {
+		PkpmCloudSubscription subscription = new PkpmCloudSubscription();
+		subscription.setAdId(adId);
+		List<PkpmCloudSubscription> subs = subscriptionMapper.getSubsCriptionList(subscription);
+		return subs.size();
+	}
+
 	@Override
 	public Integer selectTotalById(Integer userId) {
 		

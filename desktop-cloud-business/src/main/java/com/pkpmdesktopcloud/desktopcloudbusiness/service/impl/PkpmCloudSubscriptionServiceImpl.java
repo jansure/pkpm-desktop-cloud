@@ -194,23 +194,30 @@ public class PkpmCloudSubscriptionServiceImpl implements PkpmCloudSubscriptionSe
 					String.format("您购买的桌面数量已经达到%d个上限，请重新注册账号进行购买!",
 							DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT));
 
-		//productName.length < 15
+
+		/**
+		 * 获取计算机名
+		*/
+		//获取某个adid下的订单 序号从1开始
+		Integer countByAdId = subscriptionMapper.countByAdId(Integer.parseInt(adId));
+		countByAdId++;
+		//总长共计15位 如果位数超过15位，则自动缩减产品名 如PKPM-BIM-DESIGN100 缩减为PKPM-BIM-DES100(末尾IGN被删除)
 		if(DesktopConstant.DESKTOP_NAME_MAX_LEN > productName.length()) {
-			commonRequestBean.setGloryProductName(productName + nextNum);
-			if(productName.length() + nextNum.toString().length() >
+			commonRequestBean.setGloryProductName(productName + countByAdId);
+			if(productName.length() + countByAdId.toString().length() >
 					DesktopConstant.DESKTOP_NAME_MAX_LEN) {
-				Integer minus = nextNum.toString().length() -
+				Integer minus = countByAdId.toString().length() -
 						(DesktopConstant.DESKTOP_NAME_MAX_LEN - productName.length());
 				commonRequestBean.setGloryProductName(productName.substring(0,
 						DesktopConstant.DESKTOP_NAME_MAX_LEN - minus
-				) + nextNum);
+				) + countByAdId);
 			}
 
 		}
 		else {
 			commonRequestBean.setGloryProductName(productName.substring(0,
-					DesktopConstant.DESKTOP_NAME_MAX_LEN - nextNum.toString().length())
-					+ nextNum);
+					DesktopConstant.DESKTOP_NAME_MAX_LEN - countByAdId.toString().length())
+					+ countByAdId);
 		}
 
 
