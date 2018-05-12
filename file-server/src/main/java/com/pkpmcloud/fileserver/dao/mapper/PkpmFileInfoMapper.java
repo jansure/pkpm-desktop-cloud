@@ -32,7 +32,7 @@ public interface PkpmFileInfoMapper {
    
     //@Select("select * from pkpm_file_info where origin_file_name like '%'#{fileInfo}'%'")
   //  @Select("select * from pkpm_file_info where origin_file_name like concat(concat('%',?),'%') ")
-    @Select("select * from pkpm_file_info where origin_file_name like CONCAT('%','${fileName}','%')")
+    @Select("select * from pkpm_file_info where origin_file_name like CONCAT('%','${fileName}','%') order by create_time desc")
 	List<PkpmFileInfo> fileListByName(@Param("fileName") String  fileName);
     
     @Select("select * from pkpm_file_info order by create_time desc")
