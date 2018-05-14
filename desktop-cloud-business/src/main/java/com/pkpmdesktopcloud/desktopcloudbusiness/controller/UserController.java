@@ -16,12 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.desktop.constant.MessageTypeEnum;
 import com.desktop.utils.Base64Util;
-import com.desktop.utils.SmsUtil;
 import com.desktop.utils.StringUtil;
 import com.desktop.utils.page.ResultObject;
 import com.gateway.common.dto.user.UserInfoForChangePassword;
 import com.google.common.base.Preconditions;
+import com.messageserver.messageserver.service.Message;
+import com.messageserver.messageserver.service.MessageSender;
+import com.messageserver.messageserver.service.impl.SmsMessageSenderImpl;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudSubscription;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudUserInfo;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudSubscriptionService;
@@ -155,8 +158,17 @@ public class UserController {
 			cache.putObject(userMobileNumber, checkCode);
 			
 			String message = "您的短信验证码是:" + checkCode + "，请注意查收";
-			SmsUtil clientDemo = new SmsUtil();
-			clientDemo.smsPublish(userMobileNumber, message);
+			
+			Message sendMessage = new Message();
+	    	//消息类型为短信
+			sendMessage.setMessageType(MessageTypeEnum.sms.toString());
+	    	//消息接收人
+			sendMessage.setTo(userMobileNumber);
+	    	//消息内容
+			sendMessage.setContent(message);
+			
+	    	MessageSender sender = new SmsMessageSenderImpl();
+			sender.sendMessage(sendMessage);
 			
 			return ResultObject.success("发送短信成功");
 		} catch (Exception e) {
@@ -361,9 +373,18 @@ public class UserController {
 		try {
 			String password = Base64Util.stringFromB64(user.getUserLoginPassword());
 			String message = "您的密码是:" + password + "，请记住密码";
-			SmsUtil clientDemo = new SmsUtil();
-			clientDemo.smsPublish(mobileNumber, message);
-
+			
+			Message sendMessage = new Message();
+	    	//消息类型为短信
+			sendMessage.setMessageType(MessageTypeEnum.sms.toString());
+	    	//消息接收人
+			sendMessage.setTo(mobileNumber);
+	    	//消息内容
+			sendMessage.setContent(message);
+			
+	    	MessageSender sender = new SmsMessageSenderImpl();
+			sender.sendMessage(sendMessage);
+			
 			return ResultObject.success("您的密码将以短信的形式发送到您的手机上，请注意查收");
 		} catch (Exception e) {
 			e.printStackTrace();

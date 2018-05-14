@@ -40,6 +40,9 @@ public class Message implements Serializable{
                 Preconditions.checkArgument(!StringUtils.isEmpty(content), "消息内容不能为空");
                 break;
             case sms:
+            	Preconditions.checkArgument(!StringUtils.isEmpty(to), "短信接收人不能为空");
+            	Preconditions.checkArgument(!StringUtils.isEmpty(content), "短信内容不能为空");
+                break;
             case message:
                 break;
             default:
