@@ -49,7 +49,7 @@ public class UserControllerTest {
 	public void sendMessageTest() throws Exception{
     	
     	mockMvc.perform(post("/user/sendMessage").contentType(MediaType.APPLICATION_FORM_URLENCODED)
-     		   .accept(MediaType.APPLICATION_JSON_UTF8).param("userMobileNumber", "15311445882")
+     		   .accept(MediaType.APPLICATION_JSON_UTF8).param("userMobileNumber", "15517156082")
      		   .param("userLoginPassword", "123"))
 		    	.andExpect(status().isOk())  
 		        .andReturn(); 

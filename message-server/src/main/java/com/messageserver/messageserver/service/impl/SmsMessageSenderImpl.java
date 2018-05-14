@@ -31,7 +31,7 @@ public class SmsMessageSenderImpl implements MessageSender{
 	/**
 	 * 获取短信配置参数
 	 */
-	private static final Properties SMS_CONFIG = PropertiesUtil.getProperties("application.properties");
+	private static final Properties SMS_CONFIG = PropertiesUtil.getProperties("smsconfig.properties");
 
 	private static SmnClient smnClient;
 	

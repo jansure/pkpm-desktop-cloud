@@ -116,7 +116,6 @@ public class UserController {
 		if(!password.equals(realUserInfo.getUserLoginPassword())){
 			return ResultObject.failure("密码有误");
 		}
-		
 		return ResultObject.success(realUserInfo.getUserId(), "登陆成功");
 	}
     

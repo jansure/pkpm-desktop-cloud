@@ -1,15 +1,13 @@
-package com.cabr.pkpm.controller;
+ package com.cabr.pkpm.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import com.cabr.pkpm.utils.ResultObject;
-import com.gateway.common.dto.user.UserInfoForChangePassword;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -17,7 +15,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,14 +29,13 @@ import com.cabr.pkpm.service.IWorkOrderService;
 import com.cabr.pkpm.utils.Base64Utils;
 //import com.cabr.pkpm.utils.AESUtil;
 import com.cabr.pkpm.utils.ResponseResult;
+import com.cabr.pkpm.utils.ResultObject;
 import com.cabr.pkpm.utils.StringUtil;
 import com.cabr.pkpm.utils.sdk.ClientDemo;
-import com.desktop.utils.HttpConfigBuilder;
-import com.desktop.utils.JsonUtil;
-import com.gateway.common.domain.CommonRequestBean;
-import com.pkpm.httpclientutil.HttpClientUtil;
-import com.pkpm.httpclientutil.MyHttpResponse;
-import com.pkpm.httpclientutil.common.HttpMethods;
+import com.desktop.constant.MessageTypeEnum;
+import com.gateway.common.dto.user.UserInfoForChangePassword;
+import com.messageserver.messageserver.service.Message;
+import com.messageserver.messageserver.service.impl.SmsMessageSenderImpl;
 
 @RestController
 @RequestMapping("/user")
@@ -57,7 +53,10 @@ public class UserController {
 	
 	@Value("${server.host}")
 	private String serverHost;
-
+	
+   @Resource
+   private SmsMessageSenderImpl smsMessageSender;
+  
 	protected ResponseResult result = new ResponseResult();
 	
 	protected final Log logger = LogFactory.getLog(getClass());
@@ -145,10 +144,6 @@ public class UserController {
 		
 		password = Base64Utils.b64FromString(password);
 		if(realUserInfo!=null&&password.equals(realUserInfo.getUserLoginPassword())){
-			/*Map<String,String> mapInfo = new HashMap<String,String>();
-			mapInfo.put("userId", realUserInfo.getUserID().toString());
-			mapInfo.put("username", realUserInfo.getUserName());
-			this.result.set("登陆成功", 1,mapInfo );*/
 			this.result.set("登陆成功", 1,realUserInfo.getUserID() );
 		} else {
 			this.result.set("您输入的用户名或密码有误", 0);
