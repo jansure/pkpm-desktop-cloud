@@ -189,7 +189,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		 * 获取计算机名
 		 */
 		//获取某个adid下的订单 序号从1开始
-		Integer countByAdId = subscriptionMapper.countByAdId(Integer.parseInt(adId));
+		Integer countByAdId = subscriptionMapper.selectProductCountByAdId(productId,Integer.parseInt(adId));
 		countByAdId++;
 		//总长共计15位 如果位数超过15位，则自动缩减产品名 如PKPM-BIM-DESIGN100 缩减为PKPM-BIM-DES100(末尾IGN被删除)
 		if(DesktopConstant.DESKTOP_NAME_MAX_LEN > productName.length()) {

@@ -99,13 +99,15 @@ public class PkpmCloudSubscriptionDAOImpl implements PkpmCloudSubscriptionDAO{
 		
 		return 0;
 	}
-
+//查询非失败订单并自增
 	@Override
-	public Integer countByAdId(Integer adId) {
+	public Integer countByAdIdExceptFailedSubs(Integer adId) {
+		int count=0;
 		PkpmCloudSubscription subscription = new PkpmCloudSubscription();
 		subscription.setAdId(adId);
-		List<PkpmCloudSubscription> subs = subscriptionMapper.getSubsCriptionList(subscription);
-		return subs.size();
+		List<PkpmCloudSubscription> invalidSubs = subscriptionMapper.countSubsExceptFailed(subscription);
+		count+= invalidSubs.size();
+		return count;
 	}
 
 	@Override

@@ -18,8 +18,8 @@ spring:
     #url: jdbc:mysql://192.168.0.12:3306/mydb?useUnicode=true&characterEncoding=utf8&useSSL=false&useAffectedRows=true
     #username: root
     #password: Broad=123
-    url: jdbc:mysql://114.115.159.245:3306/pkpmmydb?useUnicode=true&characterEncoding=utf8&useSSL=false&useAffectedRows=true
-    username: pkpm1
+    url: jdbc:mysql://114.115.146.100:3306/pkpmmydb?useUnicode=true&characterEncoding=utf8&useSSL=false&useAffectedRows=true
+    username: root
     password: Pkpm=123
   mail:
     from: fly_free@yeah.net

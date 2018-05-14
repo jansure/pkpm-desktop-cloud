@@ -19,7 +19,11 @@ public interface PkpmCloudSubscriptionMapper {
 	@Select("select * from pkpm_cloud_subscription (#{subsCription})")
     @Lang(SimpleSelectLangDriver.class)
     List<PkpmCloudSubscription> getSubsCriptionList(PkpmCloudSubscription subsCription );
-    
+
+    @Select("select * from pkpm_cloud_subscription where ad_id=#{adId} AND status !='FAILED'")
+    List<PkpmCloudSubscription> countSubsExceptFailed(PkpmCloudSubscription subsCription );
+
+
     @Insert("insert into pkpm_cloud_subscription (#{subsCription})")
     @Lang(SimpleInsertLangDriver.class)
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
