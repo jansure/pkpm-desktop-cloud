@@ -1,7 +1,8 @@
+/*
 package com.pkpmcloud.scheduling;
 
 import com.pkpmcloud.constants.ApiConst;
-import com.pkpmcloud.dao.ProjectDAO;
+import com.pkpmcloud.dao.ProjectDao;
 import com.pkpmcloud.model.Project;
 import com.pkpmcloud.service.impl.ApiServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -14,18 +15,20 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.List;
 
+*/
 /**
  * @author xuhe
  * @description 自动定时任务
  * @date 2018/5/9
- */
+ *//*
+
 @Component
 @EnableScheduling
 @Slf4j
 public class ScheduledTask {
 
     @Autowired
-    private ProjectDAO projectDAO;
+    private ProjectDao projectDao;
 
     @Autowired
     ApiServiceImpl apiService;
@@ -48,7 +51,7 @@ public class ScheduledTask {
 
         String now = LocalDateTime.now().format(ApiConst.DATE_TIME_FORMATTER);
         log.info(">>>>>>定时任务 启动时间{}", now);
-        List<Project> projects = projectDAO.listValidProject();
+        List<Project> projects = projectDao.listValidProject();
         for (Project project : projects) {
             apiService.invokeDesktopShutdownShell(project);
         }
@@ -58,3 +61,4 @@ public class ScheduledTask {
 
 
 }
+*/

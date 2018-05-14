@@ -1,6 +1,6 @@
 package com.pkpmcloud.dao;
 
-import com.pkpmcloud.model.Project;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Set;
+
+import static org.junit.Assert.*;
 
 /**
  * @author xuhe
@@ -16,15 +19,15 @@ import java.util.List;
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class ProjectDAOTest {
-
+@Slf4j
+public class WhitelistDaoTest {
     @Autowired
-    ProjectDAO projectDAO;
+    WhitelistDao dao;
 
     @Test
-    public void listValidProject() throws Exception {
-        List<Project> projects = projectDAO.listValidProject();
-        System.out.println(projects);
+    public void listProjectWhitelist() throws Exception {
+        Set<String > result =dao.listComputersInWhitelist("3e6d7eda4094efc92d31aa010945980");
+        System.out.println(result);
     }
 
 }

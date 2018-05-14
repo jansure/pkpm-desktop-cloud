@@ -20,6 +20,8 @@ public class ApiConst {
     public static final int QUERY_BEFORE_HOUR= Integer.parseInt(PropertiesUtil.getProperty("shell.yml","query.interval.hour"));
     public static final int SHUTDOWN_OVER_MINUTE=Integer.parseInt(PropertiesUtil.getProperty("shell.yml","shutdown.over.minute"));
     public static final String DATE_FORMAT="yyyy-MM-dd'T'HH:mm'Z'";
+    public static final String NANO_DATE_FORMAT="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT);
-    public static final String DISCONNECTED_STATUS = "DISCONNECTED";
+    public static final DateTimeFormatter NANO_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(NANO_DATE_FORMAT);
+    public static final String CONNECTED_STATUS = "CONNECTED";
 }

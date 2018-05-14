@@ -18,7 +18,7 @@ public class Project {
     private String areaDesc;
     private String adminName;
     private String adminPassword;
-    private Boolean valid;
+    private Integer valid;
     private Date createTime;
     private Date updateTime;
 

@@ -11,8 +11,7 @@ import java.util.List;
  * @description
  * @date 2018/5/9
  */
-@Mapper
-public interface ProjectDAO {
+public interface ProjectDao {
 
     List<Project> listValidProject();
 }
