@@ -25,8 +25,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * @author xuhe
@@ -66,7 +65,7 @@ public class ShutdownMainThread  {
         log.info("====>>项目启动：项目信息{}/{} {}/{}", adminName, project.getAreaDesc(), projectId, areaName);
     }
 
-    public void invokeDesktopShutdownShell(Project project) {
+    public void invokeDesktopShutdownShell(Project project) throws ExecutionException, InterruptedException {
         init(project);
         List<Desktop> desktops = listActiveDesktop();
         log.info(desktops+"");
@@ -91,7 +90,9 @@ public class ShutdownMainThread  {
             fromIndex+=ThreadConst.REQUEST_PER_THREAD;
             toIndex+=ThreadConst.REQUEST_PER_THREAD;
             ShutdownWorkThread workThread =new ShutdownWorkThread(token,workspaceUrlPrefix,whiteList,threadDesktopList);
-            service.execute(workThread);
+            Thread.setDefaultUncaughtExceptionHandler((t, e) -> e.printStackTrace());
+            Future future=service.submit(workThread);
+            System.out.println(future.get());
         }
 
     }
