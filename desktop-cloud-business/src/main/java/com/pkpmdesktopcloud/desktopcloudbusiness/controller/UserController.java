@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -43,6 +44,10 @@ public class UserController {
 	
 	@Autowired
 	private PkpmCloudSubscriptionService subscriptionService;
+	
+	@Resource
+	private SmsMessageSenderImpl smsMessageSender;
+	
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
@@ -111,7 +116,6 @@ public class UserController {
 		if(!password.equals(realUserInfo.getUserLoginPassword())){
 			return ResultObject.failure("密码有误");
 		}
-		
 		return ResultObject.success(realUserInfo.getUserId(), "登陆成功");
 	}
     
@@ -167,8 +171,8 @@ public class UserController {
 	    	//消息内容
 			sendMessage.setContent(message);
 			
-	    	MessageSender sender = new SmsMessageSenderImpl();
-			sender.sendMessage(sendMessage);
+//	    	MessageSender smsMessageSender = new SmsMessageSenderImpl();
+			smsMessageSender.sendMessage(sendMessage);
 			
 			return ResultObject.success("发送短信成功");
 		} catch (Exception e) {
@@ -382,8 +386,8 @@ public class UserController {
 	    	//消息内容
 			sendMessage.setContent(message);
 			
-	    	MessageSender sender = new SmsMessageSenderImpl();
-			sender.sendMessage(sendMessage);
+//	    	MessageSender smsMessageSender = new SmsMessageSenderImpl();
+			smsMessageSender.sendMessage(sendMessage);
 			
 			return ResultObject.success("您的密码将以短信的形式发送到您的手机上，请注意查收");
 		} catch (Exception e) {

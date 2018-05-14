@@ -2,8 +2,6 @@ package com.messageserver.messageserver.service.impl;
 
 import java.util.Properties;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import com.desktop.constant.MessageTypeEnum;
@@ -33,51 +31,32 @@ public class SmsMessageSenderImpl implements MessageSender{
 	/**
 	 * 获取短信配置参数
 	 */
-//	private static final Properties SMS_CONFIG = PropertiesUtil.getProperties("config.properties");
- 
-	@Value("message.sms.username")
-	private String username;
-	
-	@Value("message.sms.password")
-	private String password;
-	
-	@Value("message.sms.domainName")
-	private String domainName;
-	
-	@Value("message.sms.areaName")
-	private String areaName;
-	
-	@Value("message.sms.signId")
-	private String signId;
-	
-	private SmnClient smnClient;
-	
+	private static final Properties SMS_CONFIG = PropertiesUtil.getProperties("smsconfig.properties");
+
+	private static SmnClient smnClient;
 	
 	/**
-	 * 初始化
+	 * 使用构造函数初始化
 	 */
-	@Bean
-	public int init() {
-		 
+	static {
+		Preconditions.checkNotNull(SMS_CONFIG, "短信配置参数不能为空！");
 		CloudAccount cloudAccount = new CloudAccount(
-				 username,
-				 password,
-				 domainName,
-				 areaName);
+				 SMS_CONFIG.getProperty("message.sms.username", ""),
+				 SMS_CONFIG.getProperty("message.sms.password", ""),
+				 SMS_CONFIG.getProperty("message.sms.domainName", ""),
+				 SMS_CONFIG.getProperty("message.sms.areaName", ""));
 		 
 		 smnClient = cloudAccount.getSmnClient();
-		 
-		 return 200;
-	}
-	
+    }
 	
     @Override
     public Boolean sendMessage(Message message) {
-    	init();
-    	
     	 // 构造请求对象
         SmsPublishRequest smsPublishRequest = new SmsPublishRequest();
         
+        // 短信签名必填,需要在消息通知服务的自助页面申请签名，申请办理时间约2天
+        String signId =  SMS_CONFIG.getProperty("message.sms.signId", "");
+
         // 设置手机号码
         smsPublishRequest.setEndpoint(message.getTo());
         // 设置短信内容，短信内容中不要出现【】或者[]
@@ -92,5 +71,19 @@ public class SmsMessageSenderImpl implements MessageSender{
         return true;
     }
     
-   
+    public static void main(String[] args) {
+    	Message message = new Message();
+    	
+    	//消息类型为短信
+    	message.setMessageType(MessageTypeEnum.sms.toString());
+    	//消息接收人
+    	message.setTo("15311445882");
+    	//消息内容
+    	message.setContent("这是一个测试短信，请勿回复。");
+    	//验证
+//    	message.eval();
+    	
+    	MessageSender sender = new SmsMessageSenderImpl();
+		sender.sendMessage(message);
+    }
 }

@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages={"com.pkpmdesktopcloud","com.desktop.utils"})
+@ComponentScan(basePackages={"com.pkpmdesktopcloud","com.desktop.utils","com.messageserver.messageserver.service"})
 public class DesktopCloudBusinessApplication {
 
 	public static void main(String[] args) {
