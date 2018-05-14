@@ -1,6 +1,7 @@
 package com.pkpmcloud.fileserver.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -8,6 +9,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.desktop.utils.StringOrDate;
+import com.pkpmcloud.fileserver.VO.PkpmFileInfoVO;
 import com.pkpmcloud.fileserver.dao.PkpmFileInfoDao;
 import com.pkpmcloud.fileserver.domain.PkpmFileInfo;
 import com.pkpmcloud.fileserver.service.IFileService;
@@ -116,19 +119,52 @@ public class FileServiceImpl implements IFileService {
 	}
 
 
-	public List<PkpmFileInfo> fileListByName(String fileName) {
+	@SuppressWarnings("unused")
+	public List<PkpmFileInfoVO> fileListByName(String fileName) {
 		
 		List<PkpmFileInfo> pkpmFileInfoList = fileInfoDao.fileListByName(fileName);
 		
-		return pkpmFileInfoList;
+		List<PkpmFileInfoVO> showFileInfoVOList = showFileInfoVOList(pkpmFileInfoList);
+		
+		
+		return showFileInfoVOList;
+		//return pkpmFileInfoList;
+	}
+			
+	public List<PkpmFileInfoVO> fileList() {
+			
+			List<PkpmFileInfo> pkpmFileInfoList = fileInfoDao.fileList();
+			
+			List<PkpmFileInfoVO> showFileInfoVOList = showFileInfoVOList(pkpmFileInfoList);
+			
+			return showFileInfoVOList;
+			//return pkpmFileInfoList;
+	}
+    
+    /**
+     *  把查询出来的列表转换成前端需要的包装类型
+     * @param pkpmFileInfoList
+     * @return
+     */
+	private List<PkpmFileInfoVO> showFileInfoVOList(List<PkpmFileInfo> pkpmFileInfoList) {
+		List<PkpmFileInfoVO> pkpmFileInfoVoList = new ArrayList<>();
+		for (PkpmFileInfo fileInfo : pkpmFileInfoList) {
+			
+			PkpmFileInfoVO pkpmFileInfoVO = new PkpmFileInfoVO();
+			LocalDateTime createTime = fileInfo.getCreateTime();
+			String dateToString = StringOrDate.dateToString(createTime, "yyyy年MM月dd日  HH:mm:ss");
+			
+			pkpmFileInfoVO.setCreateTime(dateToString); 
+			pkpmFileInfoVO.setFileSize(fileInfo.getFileSize());
+			pkpmFileInfoVO.setGroupName(fileInfo.getGroupName());
+			pkpmFileInfoVO.setOriginFileName(fileInfo.getOriginFileName());
+			
+			pkpmFileInfoVoList.add(pkpmFileInfoVO);
+		}
+		return pkpmFileInfoVoList;
 	}
 
 
-	public List<PkpmFileInfo> fileList() {
-		
-		List<PkpmFileInfo> pkpmFileInfoList = fileInfoDao.fileList();
-		
-		return pkpmFileInfoList;
-	}
+	
 	
 }

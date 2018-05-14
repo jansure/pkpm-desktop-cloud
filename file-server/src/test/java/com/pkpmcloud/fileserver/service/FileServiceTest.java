@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.pkpmcloud.fileserver.VO.PkpmFileInfoVO;
 import com.pkpmcloud.fileserver.domain.PkpmFileInfo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -61,16 +62,16 @@ public class FileServiceTest {
     @Test
     public void fileListByName(){
     	
-    	String fileName = ".mp4";
-    	List<PkpmFileInfo> pkpmFileInfoList = fileService.fileListByName(fileName);
-    	System.out.println(pkpmFileInfoList);
+    	String fileName = ".png";
+    	List<PkpmFileInfoVO>  list = fileService.fileListByName(fileName);
+    	System.out.println(list);
     }
     
     @Test
     public void fileList(){
     	
-    	List<PkpmFileInfo> pkpmFileInfoList = fileService.fileList();
-    	System.out.println(pkpmFileInfoList);
+    	List<PkpmFileInfoVO>  list = fileService.fileList();
+    	System.out.println(list);
     			
     }
 

@@ -23,6 +23,7 @@ import com.desktop.utils.FileUtil;
 import com.desktop.utils.Md5CaculateUtil;
 import com.desktop.utils.StringUtil;
 import com.desktop.utils.page.ResultObject;
+import com.pkpmcloud.fileserver.VO.PkpmFileInfoVO;
 import com.pkpmcloud.fileserver.client.StorageClient;
 import com.pkpmcloud.fileserver.client.TrackerClient;
 import com.pkpmcloud.fileserver.domain.PkpmFileInfo;
@@ -188,9 +189,10 @@ public class FastDFSController {
 	public ResultObject fileList(String fileName){
 		
 		if(StringUtils.isNotBlank(fileName)){
-			List<PkpmFileInfo> list = fileService.fileListByName(fileName);
+			List<PkpmFileInfoVO>  list= fileService.fileListByName(fileName);
+			return ResultObject.success(list);
 		}
-		List<PkpmFileInfo> list = fileService.fileList();
+		List<PkpmFileInfoVO>  list= fileService.fileList();
 		return ResultObject.success(list);
 	}
 }

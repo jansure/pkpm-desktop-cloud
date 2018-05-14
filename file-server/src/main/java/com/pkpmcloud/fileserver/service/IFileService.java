@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.pkpmcloud.fileserver.VO.PkpmFileInfoVO;
 import com.pkpmcloud.fileserver.domain.PkpmFileInfo;
 
 public interface IFileService {
@@ -35,9 +36,9 @@ public interface IFileService {
     
 	PkpmFileInfo getPkpmFileInfo(MultipartFile multipartFile);
 
-	List<PkpmFileInfo> fileListByName(String fileName);
+	List<PkpmFileInfoVO> fileListByName(String fileName);
 
-	List<PkpmFileInfo> fileList();
+	List<PkpmFileInfoVO> fileList();
 
 	
 
