@@ -55,12 +55,11 @@
 			<artifactId>spring-context-support</artifactId>
 			<version>5.0.4.RELEASE</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>com.sun.mail</groupId>
 			<artifactId>javax.mail</artifactId>
 		</dependency>
+		
 	</dependencies>
-
 
 </project>
