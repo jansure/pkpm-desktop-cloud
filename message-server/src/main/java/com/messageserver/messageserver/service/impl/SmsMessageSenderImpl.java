@@ -33,7 +33,6 @@ public class SmsMessageSenderImpl implements MessageSender{
 	 */
 	private static final Properties SMS_CONFIG = PropertiesUtil.getProperties("application.properties");
 
-	
 	private static SmnClient smnClient;
 	
 	/**
