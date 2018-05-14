@@ -189,10 +189,11 @@ public class PkpmCloudSubscriptionServiceImpl implements PkpmCloudSubscriptionSe
 		String userName = userInfo.getUserName();
 		//查询成功的条数
 		Integer nextNum = 1 + subscriptionMapper.selectTotalById(userId);
-		if(nextNum >= 1 + DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT)
+		if(nextNum >= 1 + DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT) {
 			throw Exceptions.newBusinessException(
 					String.format("您购买的桌面数量已经达到%d个上限，请重新注册账号进行购买!",
 							DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT));
+		}
 
 
 		/**
