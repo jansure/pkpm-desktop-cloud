@@ -1,4 +1,4 @@
-package com.messageserver.messageserver.service;
+package com.messageserver.messageserver.service.message;
 
 import com.desktop.constant.MessageTypeEnum;
 import com.desktop.utils.exception.Exceptions;
@@ -25,6 +25,9 @@ public class Message implements Serializable{
     private String messageType;
     private Boolean withAttachment;
     private Map<String,String> attachments;
+    
+    //发送状态
+    private String status;
 
     public void eval() {
         Preconditions.checkArgument(!StringUtils.isEmpty(from), "消息发送人不能为空");

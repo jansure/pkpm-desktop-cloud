@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 
 import com.desktop.constant.MessageTypeEnum;
 import com.google.common.base.Preconditions;
-import com.messageserver.messageserver.service.Message;
-import com.messageserver.messageserver.service.MessageSender;
+import com.messageserver.messageserver.service.message.Message;
+import com.messageserver.messageserver.service.message.MessageSender;
 import com.pkpm.httpclientutil.common.util.PropertiesUtil;
 import com.smn.account.CloudAccount;
 import com.smn.client.SmnClient;
