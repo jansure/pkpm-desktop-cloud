@@ -91,8 +91,9 @@ public class ShutdownMainThread  {
             toIndex+=ThreadConst.REQUEST_PER_THREAD;
             ShutdownWorkThread workThread =new ShutdownWorkThread(token,workspaceUrlPrefix,whiteList,threadDesktopList);
             Thread.setDefaultUncaughtExceptionHandler((t, e) -> e.printStackTrace());
-            Future future=service.submit(workThread);
-            System.out.println(future.get());
+            service.execute(workThread);
+            /*service.execute(workThread);
+            System.out.println(future.get());*/
         }
 
     }

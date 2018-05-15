@@ -29,7 +29,7 @@ import java.util.concurrent.Callable;
  * @date 2018/5/10
  */
 @Slf4j
-public class ShutdownWorkThread implements Callable {
+public class ShutdownWorkThread implements Runnable {
 
 
     private String token;
@@ -45,7 +45,7 @@ public class ShutdownWorkThread implements Callable {
     }
 
     @Override
-    public Object call() {
+    public void run() {
         log.info("###>{}线程启动 处理{}个请求", Thread.currentThread().getName(), desktops.size());
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> e.printStackTrace());
         int order = 0;
@@ -60,16 +60,15 @@ public class ShutdownWorkThread implements Callable {
                 System.out.println(ifShutdown);
                 Boolean lessThan = !findLoginRecordLessThan(computerName);
                 System.out.println("LessThan" + lessThan);
-                ifShutdown = ifShutdown && lessThan;
+                ifShutdown = ifShutdown;
                 if (ifShutdown) {
                     log.info("###-{}-发起关机请求:{}", ++order, computerName);
                     /*shutDown(desktopId);*/
                 }
             }
         } catch (HttpProcessException|IOException e) {
-            return Exceptions.newBusinessException(e.getMessage());
+            throw  Exceptions.newBusinessException(e.getMessage());
         }
-        return "SUCCESS";
     }
 
 
