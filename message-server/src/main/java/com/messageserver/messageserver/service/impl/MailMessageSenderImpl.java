@@ -26,7 +26,7 @@ import java.util.Date;
  * @since 5/5/2018
  */
 @Slf4j
-//@Service("mailMessageSender")
+@Service("mailMessageSender")
 public class MailMessageSenderImpl implements MessageSender {
     @Resource
     private JavaMailSender mailSender;
