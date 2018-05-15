@@ -31,8 +31,8 @@ public class MessageController {
 	 * 发送消息
 	 */
     @PostMapping(value = "/sendMessage")
-    public ResultObject sendMessage(Message message) throws Exception {
-
+    public ResultObject sendMessage(Message message) {
+    	
     	// 发送消息
 		String jobId = messageService.sendMessage(message);
 		

@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-//@ComponentScan(basePackages={"com.messageserver.messageserver.service", "com.desktop.utils"})
+@ComponentScan(basePackages={"com.messageserver.messageserver.service", "com.desktop.utils"})
 public class MessageServerApplication {
 
 	public static void main(String[] args) {
