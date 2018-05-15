@@ -26,4 +26,15 @@ public class ProjectDaoImpl implements ProjectDao {
         List<Project> projects = mapper.select(project);
         return projects;
     }
+
+    @Override
+    public Project getProject(String projectId) {
+        Project project = new Project();
+        project.setProjectId(projectId);
+        List<Project> projects = mapper.select(project);
+        if (projects!=null) {
+            return projects.get(0);
+        }
+        return null;
+    }
 }

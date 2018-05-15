@@ -1,7 +1,6 @@
 package com.pkpmcloud.thread;
 
 import com.desktop.utils.HttpConfigBuilder;
-import com.desktop.utils.exception.Exceptions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
 import com.pkpm.httpclientutil.HttpClientUtil;
@@ -11,6 +10,7 @@ import com.pkpm.httpclientutil.common.util.JsonUtil;
 import com.pkpm.httpclientutil.exception.HttpProcessException;
 import com.pkpmcloud.constants.ApiConst;
 import com.pkpmcloud.constants.RequestConst;
+import com.pkpmcloud.model.BootProperty;
 import com.pkpmcloud.model.Desktop;
 import com.pkpmcloud.model.Record;
 import com.pkpmcloud.model.RecordRootBean;
@@ -39,13 +39,15 @@ public class ShutdownWorkerThread implements Runnable {
     private String projectDesc;
     private Set<String> whitelist;
     private List<Desktop> desktops;
+    private BootProperty bootProperty;
 
-    public ShutdownWorkerThread(String token, String projectDesc, String workspaceUrlPrefix, Set<String> whitelist, List<Desktop> desktops) {
+    public ShutdownWorkerThread(String token, String projectDesc, String workspaceUrlPrefix, Set<String> whitelist, List<Desktop> desktops,BootProperty bootProperty) {
         this.token = token;
         this.projectDesc = projectDesc;
         this.workspaceUrlPrefix = workspaceUrlPrefix;
         this.whitelist = whitelist;
         this.desktops = desktops;
+        this.bootProperty=bootProperty;
     }
 
     @Override
@@ -75,15 +77,15 @@ public class ShutdownWorkerThread implements Runnable {
     private Boolean findLoginRecordLessThan(String computerName) throws HttpProcessException, IOException {
         ZoneId utc = ZoneId.of("UTC");
         ZoneId local = ZoneId.of("UTC+8");
-        ZonedDateTime startDateTime = ZonedDateTime.now(utc).minusHours(ApiConst.QUERY_BEFORE_HOUR);
-        LocalDateTime shutdownBefore = LocalDateTime.now().minusMinutes(ApiConst.SHUTDOWN_OVER_MINUTE);
+        ZonedDateTime startDateTime = ZonedDateTime.now(utc).minusHours(bootProperty.getRecordQueryInterval());
+        LocalDateTime shutdownBefore = LocalDateTime.now().minusMinutes(bootProperty.getShutdownOver());
         String startTime = startDateTime.format(ApiConst.DATE_TIME_FORMATTER);
 
         String url = workspaceUrlPrefix + ApiConst.LIST_LOGIN_RECORD;
         url = url.replace("{startTime}", startTime);
         url = url.replace("{computerName}", computerName);
 
-        String response = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfig(url, "", token, 5, null, ApiConst.HTTP_CONNECTION_TIMEOUT).method(HttpMethods.GET));
+        String response = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfig(url, "", token, 5, null, bootProperty.getHttpConnectionTimeout()).method(HttpMethods.GET));
         MyHttpResponse myHttpResponse = JsonUtil.deserialize(response, MyHttpResponse.class);
         //判断状态码 OK(200)
         Integer statusCode = myHttpResponse.getStatusCode();
@@ -111,7 +113,7 @@ public class ShutdownWorkerThread implements Runnable {
         String url = workspaceUrlPrefix + ApiConst.SHUTDOW_DESKTOP;
         url = url.replace("{desktopId}", desktopId);
 
-        String response = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfig(url, RequestConst.shutdownJson, token, 5, null, 10000).method(HttpMethods.POST));
+        String response = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfig(url, RequestConst.shutdownJson, token, 5, null, bootProperty.getHttpConnectionTimeout()).method(HttpMethods.POST));
         MyHttpResponse myHttpResponse = JsonUtil.deserialize(response, MyHttpResponse.class);
         //判断状态码 ACCEPTED(202)
         Integer statusCode = myHttpResponse.getStatusCode();

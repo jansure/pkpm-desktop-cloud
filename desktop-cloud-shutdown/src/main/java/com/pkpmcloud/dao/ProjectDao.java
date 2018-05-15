@@ -14,4 +14,6 @@ import java.util.List;
 public interface ProjectDao {
 
     List<Project> listValidProject();
+
+    Project getProject(String projectId);
 }
