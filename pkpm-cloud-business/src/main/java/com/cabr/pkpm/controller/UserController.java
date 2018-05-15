@@ -34,8 +34,8 @@ import com.cabr.pkpm.utils.StringUtil;
 import com.cabr.pkpm.utils.sdk.ClientDemo;
 import com.desktop.constant.MessageTypeEnum;
 import com.gateway.common.dto.user.UserInfoForChangePassword;
-import com.messageserver.messageserver.service.Message;
 import com.messageserver.messageserver.service.impl.SmsMessageSenderImpl;
+import com.messageserver.messageserver.service.message.Message;
 
 @RestController
 @RequestMapping("/user")
