@@ -1,10 +1,9 @@
-/*
 package com.pkpmcloud.scheduling;
 
 import com.pkpmcloud.constants.ApiConst;
 import com.pkpmcloud.dao.ProjectDao;
 import com.pkpmcloud.model.Project;
-import com.pkpmcloud.service.impl.ApiServiceImpl;
+import com.pkpmcloud.thread.ShutdownMainThread;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +13,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-*/
-/**
- * @author xuhe
- * @description 自动定时任务
- * @date 2018/5/9
- *//*
 
 @Component
 @EnableScheduling
@@ -31,34 +25,30 @@ public class ScheduledTask {
     private ProjectDao projectDao;
 
     @Autowired
-    ApiServiceImpl apiService;
+    ShutdownMainThread mainThread;
 
-    private static String[] projects;
-
+    private static String projectId;
+    private static int shutDownOver;
+    private static int recordQueryInterval;
     static {
-        String projectList = System.getProperty("projectId");
-        if (!StringUtils.isEmpty(projectList)) {
-            projects = projectList.split(",");
-        }
+        String proj = System.getProperty("projectId");
 
     }
 
 
-    public static final long TIME_INTERVAL = 5 * 60 * 1000;
+    public static final long TIME_INTERVAL = 60* 1000;
 
     @Scheduled(fixedRate = TIME_INTERVAL)
-    private void shutdown() {
+    private void shutdown() throws ExecutionException, InterruptedException {
 
         String now = LocalDateTime.now().format(ApiConst.DATE_TIME_FORMATTER);
-        log.info(">>>>>>定时任务 启动时间{}", now);
+        log.info("");
+        log.info("====>>>>>>定时任务 启动时间{} 启动间隔{}ns", now,TIME_INTERVAL);
         List<Project> projects = projectDao.listValidProject();
-        for (Project project : projects) {
-            apiService.invokeDesktopShutdownShell(project);
+        for (int i = 0; i < projects.size(); i++) {
+            mainThread.invokeDesktopShutdownShell(projects.get(i));
         }
-
-
     }
 
 
 }
-*/

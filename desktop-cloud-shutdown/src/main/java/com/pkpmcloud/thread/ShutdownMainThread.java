@@ -1,9 +1,11 @@
-package com.pkpmcloud.scheduling;
+package com.pkpmcloud.thread;
 
 import com.desktop.utils.HttpConfigBuilder;
+import com.desktop.utils.StringUtil;
 import com.desktop.utils.exception.Exceptions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.pkpm.httpclientutil.HttpClientUtil;
 import com.pkpm.httpclientutil.MyHttpResponse;
 import com.pkpm.httpclientutil.common.HttpMethods;
@@ -43,6 +45,7 @@ public class ShutdownMainThread  {
     private String areaName;
     private String adminName;
     private String adminPassword;
+    private String projectDesc;
 
     private String workspaceUrlPrefix;
 
@@ -56,44 +59,43 @@ public class ShutdownMainThread  {
     //强制project信息赋值
     private void init(Project project) {
         projectId = project.getProjectId();
+        projectDesc=project.getProjectDesc();
         areaName = project.getAreaName();
         adminName = project.getAdminName();
         adminPassword = project.getAdminPassword();
+
         workspaceUrlPrefix = ApiConst.WORKSPACE_PREFIX;
         workspaceUrlPrefix = workspaceUrlPrefix.replace("{areaName}", areaName).replace("{projectId}", projectId);
         setToken();
-        log.info("====>>项目启动：项目信息{}/{} {}/{}", adminName, project.getAreaDesc(), projectId, areaName);
+        log.info("====>>项目启动：项目信息{} {}/{} {}", project.getProjectDesc(), adminName, areaName, projectId);
     }
 
-    public void invokeDesktopShutdownShell(Project project) throws ExecutionException, InterruptedException {
+    public void invokeDesktopShutdownShell(Project project) {
         init(project);
         List<Desktop> desktops = listActiveDesktop();
-        log.info(desktops+"");
         Set<String> whiteList = whiteListDao.listComputersInWhitelist(projectId);
-        Preconditions.checkNotNull(desktops);
-        Preconditions.checkNotNull(whiteList);
-        if (desktops.size() == 0) {
-            log.info("无开机桌面");
+        if (null==desktops||desktops.size()==0){
+            log.info("###{}项目无开机桌面",projectDesc);
             return;
         }
+        Preconditions.checkNotNull(whiteList);
         int nThreads =desktops.size()/ThreadConst.REQUEST_PER_THREAD;
         nThreads = desktops.size()%ThreadConst.REQUEST_PER_THREAD==0?nThreads:nThreads+1;
-        log.info("当前状态：开机桌面{}台,线程数{} 处理任务{}/线程",desktops.size(),nThreads,ThreadConst.REQUEST_PER_THREAD);
-        ExecutorService service = Executors.newFixedThreadPool(nThreads);
+        log.info("###{} 当前：开机桌面{}台,启用线程{} 分配任务{}/线程",projectDesc,ThreadConst.REQUEST_PER_THREAD,desktops.size(),nThreads);
+        ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("thread-%d").build();
+        ExecutorService service = new ThreadPoolExecutor(nThreads,nThreads,60,TimeUnit.SECONDS,new LinkedBlockingDeque<Runnable>(),namedThreadFactory);
 
         int fromIndex =0;
         int toIndex=ThreadConst.REQUEST_PER_THREAD;
         for (int i=0;i<nThreads;i++) {
             toIndex = Math.min(toIndex, desktops.size());
             List<Desktop> threadDesktopList = desktops.subList(fromIndex, toIndex);
-            log.info("切分{}至{}--{}",fromIndex,toIndex,threadDesktopList.size());
             fromIndex+=ThreadConst.REQUEST_PER_THREAD;
             toIndex+=ThreadConst.REQUEST_PER_THREAD;
-            ShutdownWorkThread workThread =new ShutdownWorkThread(token,workspaceUrlPrefix,whiteList,threadDesktopList);
+            ShutdownWorkerThread workThread =new ShutdownWorkerThread(token,projectDesc,workspaceUrlPrefix,whiteList,threadDesktopList);
             Thread.setDefaultUncaughtExceptionHandler((t, e) -> e.printStackTrace());
             service.execute(workThread);
-            /*service.execute(workThread);
-            System.out.println(future.get());*/
+
         }
 
     }
@@ -110,7 +112,7 @@ public class ShutdownMainThread  {
                 .replaceAll("\\{projectId\\}", projectId);
         //发送请求 获取Token;
         try {
-            String response = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfig(url, authJson, token, 5, null, 10000).method(HttpMethods.POST));
+            String response = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfig(url, authJson, token, 5, null, 120000).method(HttpMethods.POST));
             MyHttpResponse myHttpResponse = JsonUtil.deserialize(response, MyHttpResponse.class);
             //判断状态码 Created(201)
             Integer statusCode = myHttpResponse.getStatusCode();

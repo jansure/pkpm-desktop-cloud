@@ -1,4 +1,4 @@
-package com.pkpmcloud.scheduling;
+package com.pkpmcloud.thread;
 
 import com.desktop.utils.HttpConfigBuilder;
 import com.desktop.utils.exception.Exceptions;
@@ -19,9 +19,11 @@ import org.apache.http.HttpStatus;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author xuhe
@@ -29,16 +31,18 @@ import java.util.concurrent.Callable;
  * @date 2018/5/10
  */
 @Slf4j
-public class ShutdownWorkThread implements Runnable {
+public class ShutdownWorkerThread implements Runnable {
 
 
     private String token;
     private String workspaceUrlPrefix;
+    private String projectDesc;
     private Set<String> whitelist;
     private List<Desktop> desktops;
 
-    public ShutdownWorkThread(String token, String workspaceUrlPrefix, Set<String> whitelist, List<Desktop> desktops) {
+    public ShutdownWorkerThread(String token, String projectDesc, String workspaceUrlPrefix, Set<String> whitelist, List<Desktop> desktops) {
         this.token = token;
+        this.projectDesc = projectDesc;
         this.workspaceUrlPrefix = workspaceUrlPrefix;
         this.whitelist = whitelist;
         this.desktops = desktops;
@@ -46,9 +50,8 @@ public class ShutdownWorkThread implements Runnable {
 
     @Override
     public void run() {
-        log.info("###>{}线程启动 处理{}个请求", Thread.currentThread().getName(), desktops.size());
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> e.printStackTrace());
-        int order = 0;
+        AtomicInteger order = new AtomicInteger(0);
         try {
             for (Desktop desktop : desktops) {
                 String desktopId = desktop.getDesktop_id();
@@ -56,24 +59,23 @@ public class ShutdownWorkThread implements Runnable {
                 String loginStatus = desktop.getLogin_status();
 
                 Boolean ifShutdown = (!ApiConst.CONNECTED_STATUS.equals(loginStatus))
-                        && (!whitelist.contains(computerName));
-                System.out.println(ifShutdown);
-                Boolean lessThan = !findLoginRecordLessThan(computerName);
-                System.out.println("LessThan" + lessThan);
-                ifShutdown = ifShutdown;
+                        && (!whitelist.contains(computerName))
+                        && (!findLoginRecordLessThan(computerName));
                 if (ifShutdown) {
-                    log.info("###-{}-发起关机请求:{}", ++order, computerName);
-                    /*shutDown(desktopId);*/
+                    log.info("###{}/{}-{}-发起关机请求:{}",projectDesc, Thread.currentThread().getName(), order.addAndGet(1), computerName);
+                    shutDown(desktopId);
                 }
             }
-        } catch (HttpProcessException|IOException e) {
-            throw  Exceptions.newBusinessException(e.getMessage());
+        } catch (HttpProcessException | IOException e) {
+            log.error("!!!异常:"+e.getMessage());
         }
     }
 
 
     private Boolean findLoginRecordLessThan(String computerName) throws HttpProcessException, IOException {
-        LocalDateTime startDateTime = LocalDateTime.now().minusHours(8L).minusHours(ApiConst.QUERY_BEFORE_HOUR);
+        ZoneId utc = ZoneId.of("UTC");
+        ZoneId local = ZoneId.of("UTC+8");
+        ZonedDateTime startDateTime = ZonedDateTime.now(utc).minusHours(ApiConst.QUERY_BEFORE_HOUR);
         LocalDateTime shutdownBefore = LocalDateTime.now().minusMinutes(ApiConst.SHUTDOWN_OVER_MINUTE);
         String startTime = startDateTime.format(ApiConst.DATE_TIME_FORMATTER);
 
@@ -81,31 +83,27 @@ public class ShutdownWorkThread implements Runnable {
         url = url.replace("{startTime}", startTime);
         url = url.replace("{computerName}", computerName);
 
-        log.info("发起请求{}", url);
-        String response = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfig(url, "", token, 5, null, 10000).method(HttpMethods.GET));
-        log.info("收到反馈{}", response);
+        String response = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfig(url, "", token, 5, null, ApiConst.HTTP_CONNECTION_TIMEOUT).method(HttpMethods.GET));
         MyHttpResponse myHttpResponse = JsonUtil.deserialize(response, MyHttpResponse.class);
         //判断状态码 OK(200)
         Integer statusCode = myHttpResponse.getStatusCode();
-        log.info(statusCode + "StatusCode");
         Preconditions.checkState(HttpStatus.SC_OK == statusCode, "登陆记录获取失败，返回状态码" + statusCode);
 
         //body反序列化为桌面列表
         ObjectMapper mapper = new ObjectMapper();
         RecordRootBean recordRootBean = mapper.readValue(myHttpResponse.getBody(), RecordRootBean.class);
-        log.info(recordRootBean.getRecords() + "");
         for (Record record : recordRootBean.getRecords()) {
-            LocalDateTime endTime = LocalDateTime.parse(record.getConnection_end_time(), ApiConst.NANO_DATE_TIME_FORMATTER);
+            String endTime = record.getConnection_end_time();
             if (null == endTime) {
                 continue;
             }
-            log.info(endTime + "----");
-            if (endTime.isAfter(shutdownBefore)) {
+            ZonedDateTime utcEndTime = ZonedDateTime.parse(endTime, ApiConst.NANO_DATE_TIME_FORMATTER.withZone(utc));
+            LocalDateTime localEndTime = utcEndTime.withZoneSameInstant(local).toLocalDateTime();
+            if (localEndTime.isAfter(shutdownBefore)) {
                 log.info("****{}存在小于{}分钟记录 不关机", computerName, ApiConst.SHUTDOWN_OVER_MINUTE);
                 return Boolean.TRUE;
             }
         }
-        log.info("返回false");
         return Boolean.FALSE;
     }
 
