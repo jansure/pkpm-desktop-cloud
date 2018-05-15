@@ -3,8 +3,9 @@ package com.messageserver.messageserver.service.impl;
 import com.desktop.constant.MessageTypeEnum;
 import com.desktop.utils.exception.Exceptions;
 import com.google.common.base.Preconditions;
-import com.messageserver.messageserver.service.Message;
-import com.messageserver.messageserver.service.MessageSender;
+import com.messageserver.messageserver.service.message.Message;
+import com.messageserver.messageserver.service.message.MessageSender;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
