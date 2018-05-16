@@ -28,7 +28,7 @@ public class ApiConst {
     public static final int RECORD_QUERY_INTERVAL = 12;
     public static final int SHUTDOWN_OVER_MINUTE=5;
     public static final int HTTP_CONNECTION_TIMEOUT=120000;
-    public static final int TASK_PER_THREAD=3;
-    public static final int CORE_POOL_SIZE=12;
+    public static final int TASK_PER_THREAD=4;
+    public static final int CORE_POOL_SIZE=3;
     public static final int MAXIMUM_POOL_SIZE=5;
 }

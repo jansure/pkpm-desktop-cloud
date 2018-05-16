@@ -37,17 +37,15 @@ public class ShutdownWorkerThread implements Runnable {
     private String token;
     private String workspaceUrlPrefix;
     private String projectDesc;
-    private Set<String> whitelist;
     private List<Desktop> desktops;
     private BootProperty bootProperty;
 
-    public ShutdownWorkerThread(String token, String projectDesc, String workspaceUrlPrefix, Set<String> whitelist, List<Desktop> desktops,BootProperty bootProperty) {
+    public ShutdownWorkerThread(String token, String projectDesc, String workspaceUrlPrefix, List<Desktop> desktops, BootProperty bootProperty) {
         this.token = token;
         this.projectDesc = projectDesc;
         this.workspaceUrlPrefix = workspaceUrlPrefix;
-        this.whitelist = whitelist;
         this.desktops = desktops;
-        this.bootProperty=bootProperty;
+        this.bootProperty = bootProperty;
     }
 
     @Override
@@ -58,18 +56,15 @@ public class ShutdownWorkerThread implements Runnable {
             for (Desktop desktop : desktops) {
                 String desktopId = desktop.getDesktop_id();
                 String computerName = desktop.getComputer_name();
-                String loginStatus = desktop.getLogin_status();
 
-                Boolean ifShutdown = (!ApiConst.CONNECTED_STATUS.equals(loginStatus))
-                        && (!whitelist.contains(computerName))
-                        && (!findLoginRecordLessThan(computerName));
+                Boolean ifShutdown = (!findLoginRecordLessThan(computerName));
                 if (ifShutdown) {
-                    log.info("###{}/{}-{}-发起关机请求:{}",projectDesc, Thread.currentThread().getName(), order.addAndGet(1), computerName);
+                    log.info("###{}/{}-{}-发起关机请求:{}", projectDesc, Thread.currentThread().getName(), order.addAndGet(1), computerName);
                     shutDown(desktopId);
                 }
             }
         } catch (HttpProcessException | IOException e) {
-            log.error("!!!异常:"+e.getMessage());
+            log.error("!!!异常:" + e.getMessage());
         }
     }
 

@@ -16,6 +16,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * @author xuhe
+ * @implNote 定时任务类
+ */
 
 @Component
 @EnableScheduling
@@ -66,14 +70,18 @@ public class ScheduledTask {
         }
 
     }
-
+    /**
+     * 添加启动参数的脚本
+     */
     private void shutdownWithBootParameters() {
         Project project = projectDao.getProject(projectId);
         Preconditions.checkNotNull(project, "projectId不存在，请添加数据库记录");
 
         mainThread.invokeDesktopShutdownShell(project, bootProperty);
     }
-
+    /**
+     * 无启动参数关机脚本，采用ApiConstant中默认的常量设置
+     */
     private void shutdownWithAutoParameters() {
         List<Project> projects = projectDao.listValidProject();
         for (int i = 0; i < projects.size(); i++) {
