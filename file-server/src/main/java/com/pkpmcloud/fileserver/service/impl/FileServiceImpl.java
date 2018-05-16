@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.desktop.utils.StringOrDate;
+import com.desktop.utils.TimeConverterUtil;
 import com.pkpmcloud.fileserver.VO.PkpmFileInfoVO;
 import com.pkpmcloud.fileserver.dao.PkpmFileInfoDao;
 import com.pkpmcloud.fileserver.domain.PkpmFileInfo;
@@ -152,7 +153,7 @@ public class FileServiceImpl implements IFileService {
 			
 			PkpmFileInfoVO pkpmFileInfoVO = new PkpmFileInfoVO();
 			LocalDateTime createTime = fileInfo.getCreateTime();
-			String dateToString = StringOrDate.dateToString(createTime, "yyyy年MM月dd日  HH:mm:ss");
+			String dateToString = TimeConverterUtil.dateToString(createTime, "yyyy年MM月dd日  HH:mm:ss");
 			
 			pkpmFileInfoVO.setCreateTime(dateToString); 
 			pkpmFileInfoVO.setFileSize(fileInfo.getFileSize());

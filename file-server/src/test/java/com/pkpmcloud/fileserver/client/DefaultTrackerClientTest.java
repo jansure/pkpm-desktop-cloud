@@ -55,6 +55,7 @@ public class DefaultTrackerClientTest {
     @Test
     public void getStorageNodeTest() {
         StorageNode storageNode = trackerClient.getStorageNode();
+        System.out.println(storageNode.toString());
         logger.info("####===== " + storageNode);
     }
 
@@ -70,6 +71,7 @@ public class DefaultTrackerClientTest {
     @Test
     public void getFetchStorageTest() {
         StorageNodeInfo storageNodeInfo = trackerClient.getFetchStorage("group1", "M00/00/00/wKg4i1gxz_6AIPPsAAiCQSk77jI661.png");
+        System.out.println(storageNodeInfo.toString());
         logger.info("#####===== " + storageNodeInfo);
     }
 
@@ -84,6 +86,7 @@ public class DefaultTrackerClientTest {
         List<GroupState> list = trackerClient.getGroupStates();
         for (GroupState groupState : list) {
             logger.info("#####===== " + groupState);
+            System.out.println(groupState.toString());
         }
     }
 
@@ -99,9 +102,11 @@ public class DefaultTrackerClientTest {
     public void getStorageStateTest() {
         StorageState storageState = trackerClient.getStorageState("group1", "192.168.10.128");
         logger.info("#####===== " + storageState);
+        System.out.println(storageState.toString());
 
         storageState = trackerClient.getStorageState("group1", "192.168.56.139");
         logger.info("#####===== " + storageState);
+        System.out.println(storageState.toString());
     }
 
     @Test

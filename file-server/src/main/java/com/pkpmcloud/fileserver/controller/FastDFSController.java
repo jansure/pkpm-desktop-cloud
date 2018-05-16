@@ -2,7 +2,6 @@ package com.pkpmcloud.fileserver.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -27,15 +26,20 @@ import com.pkpmcloud.fileserver.VO.PkpmFileInfoVO;
 import com.pkpmcloud.fileserver.client.StorageClient;
 import com.pkpmcloud.fileserver.client.TrackerClient;
 import com.pkpmcloud.fileserver.domain.PkpmFileInfo;
+import com.pkpmcloud.fileserver.model.GroupState;
 import com.pkpmcloud.fileserver.model.StorageNode;
 import com.pkpmcloud.fileserver.model.StorePath;
 import com.pkpmcloud.fileserver.service.IFileService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/fast")
 @Slf4j
+@Api(description = "FastDFS文件接口")
 public class FastDFSController {
 
 	@Resource
@@ -49,9 +53,11 @@ public class FastDFSController {
 	
 	@Value("${nginx.url}")
 	private String url;
-
+	
+	@ApiOperation(value = "文件上传")
 	@PostMapping("/upload")
-	public ResultObject upload(@RequestParam("file") MultipartFile multipartFile, HttpServletResponse response) {
+	//public ResultObject upload(@RequestParam("file")  @ApiParam(value = "文件,小于1024M")MultipartFile multipartFile, HttpServletResponse response) {
+	public ResultObject upload(@RequestParam("file")  MultipartFile multipartFile, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		
 		if (multipartFile.isEmpty()) {
@@ -175,7 +181,7 @@ public class FastDFSController {
 
 	@GetMapping("/")
 	public String test1() {
-		return "test1";
+		return "测试请求test1";
 	}
 	
 	
@@ -185,9 +191,11 @@ public class FastDFSController {
 	 * @param fileName
 	 * @return
 	 */
+	@ApiOperation(value = "文件列表")
 	@GetMapping("/fileList")
-	public ResultObject fileList(String fileName){
-		
+	public ResultObject fileList(String fileName  ,HttpServletResponse response){
+	//public ResultObject fileList(@RequestParam("fileName") @ApiParam(value = "文件组名")   String fileName){
+		response.setHeader("Access-Control-Allow-Origin", "*");
 		if(StringUtils.isNotBlank(fileName)){
 			List<PkpmFileInfoVO>  list= fileService.fileListByName(fileName);
 			return ResultObject.success(list);
@@ -195,4 +203,16 @@ public class FastDFSController {
 		List<PkpmFileInfoVO>  list= fileService.fileList();
 		return ResultObject.success(list);
 	}
+	
+	
+	@GetMapping("/getGroupStates")
+	public ResultObject getGroupStates(HttpServletResponse response) {
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		List<GroupState> list = trackerClient.getGroupStates();
+        if(null != list) {
+        	return ResultObject.success(list,"查询组列表成功!");
+        }
+        return ResultObject.success(list,"查询组列表失败!");
+	}
 }
+
