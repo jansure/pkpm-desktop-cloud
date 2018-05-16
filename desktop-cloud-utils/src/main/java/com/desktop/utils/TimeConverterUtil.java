@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -301,6 +303,18 @@ public class TimeConverterUtil {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    /**
+     * LocalDateTime 转换成指定格式的转换形式
+     * @param dateTime
+     * @param partern
+     * @return
+     */
+    public static String dateToString(LocalDateTime dateTime, String partern) {
+    	if(partern.isEmpty()) return null;
+    	DateTimeFormatter df = DateTimeFormatter.ofPattern(partern);
+    	return df.format(dateTime);
     }
 
 }
