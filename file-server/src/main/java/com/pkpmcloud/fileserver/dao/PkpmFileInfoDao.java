@@ -22,4 +22,6 @@ public interface PkpmFileInfoDao {
 
 	List<PkpmFileInfo> fileList();
 
+	PkpmFileInfo select(PkpmFileInfo fileInfo);
+
 }

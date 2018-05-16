@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/fast")
 @Slf4j
-@Api(description = "FastDFS文件接口")
+@Api("FastDFS文件接口")
 public class FastDFSController {
 
 	@Resource
@@ -56,9 +56,8 @@ public class FastDFSController {
 	
 	@ApiOperation(value = "文件上传")
 	@PostMapping("/upload")
-	//public ResultObject upload(@RequestParam("file")  @ApiParam(value = "文件,小于1024M")MultipartFile multipartFile, HttpServletResponse response) {
-	public ResultObject upload(@RequestParam("file")  MultipartFile multipartFile, HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
+	public ResultObject upload(@RequestParam("file")  @ApiParam(value = "文件,小于1024M") MultipartFile multipartFile, HttpServletResponse response) {
+	//public ResultObject upload(@RequestParam("file")  MultipartFile multipartFile, HttpServletResponse response) {
 		
 		if (multipartFile.isEmpty()) {
 			return ResultObject.failure("请选择上传文件!");
@@ -156,21 +155,40 @@ public class FastDFSController {
 	 * @param response
 	 * @return
 	 */
+	@ApiOperation(value = "文件下载")
 	@RequestMapping(value = "/download", method = RequestMethod.GET)
 	public ResultObject download(StorePath storePath, HttpServletRequest request,
 			HttpServletResponse response) {
 
-		response.setHeader("Access-Control-Allow-Origin", "*");
 		String path = storePath.getPath();
 		String group = storePath.getGroup();
+		
 		if (StringUtils.isEmpty(path) || StringUtils.isEmpty(group)) {
 			return ResultObject.failure("请选择您要下载的文件名！");
 		}
+		
+		//数据库存的组名是 Integer类型，前端传过来的是group1 字符串类型的,需要截取一下
+		String str = StringUtils.substring(group, 5, group.length());
+		if(StringUtils.isEmpty(str)) {
+			return ResultObject.failure("请重新输入文件所属的组名!");
+		}
+		PkpmFileInfo fileInfo = new PkpmFileInfo();
+		fileInfo.setGroupName(Integer.parseInt(str));
+		fileInfo.setDestFileName(path);
+		PkpmFileInfo pkpmFileInfo = fileService.selectFile(fileInfo);
+		
+		if( null == pkpmFileInfo) {
+			return ResultObject.failure("您下载的文件不存在!");
+		}
+		//获取文件的原始名字,下载的时候将 服务器的base64编码后的文件名 替换为 原始名字
+		String originFileName = pkpmFileInfo.getOriginFileName();
+		
+		
 		String fullPath = storePath.getFullPath();
 		String fileUrl = url + fullPath;
 		try {
 			
-			FileUtil.downloadFile(fileUrl, false, request, response);
+			FileUtil.downloadFile(fileUrl,originFileName, false, request, response);
 			return ResultObject.success("下载成功!");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -178,12 +196,7 @@ public class FastDFSController {
 		return ResultObject.success("下载失败,请重新尝试!");
 
 	}
-
-	@GetMapping("/")
-	public String test1() {
-		return "测试请求test1";
-	}
-	
+    
 	
 	/**
 	 * 1、传文件名根据文件名查询
@@ -193,9 +206,8 @@ public class FastDFSController {
 	 */
 	@ApiOperation(value = "文件列表")
 	@GetMapping("/fileList")
-	public ResultObject fileList(String fileName  ,HttpServletResponse response){
-	//public ResultObject fileList(@RequestParam("fileName") @ApiParam(value = "文件组名")   String fileName){
-		response.setHeader("Access-Control-Allow-Origin", "*");
+	//public ResultObject fileList(String fileName  ,HttpServletResponse response){
+	public ResultObject fileList(@RequestParam(value ="fileName",required =false) @ApiParam(value = "文件名")   String fileName,HttpServletResponse response){
 		if(StringUtils.isNotBlank(fileName)){
 			List<PkpmFileInfoVO>  list= fileService.fileListByName(fileName);
 			return ResultObject.success(list);
@@ -204,10 +216,10 @@ public class FastDFSController {
 		return ResultObject.success(list);
 	}
 	
-	
+	@ApiOperation(value = "获取组")
 	@GetMapping("/getGroupStates")
 	public ResultObject getGroupStates(HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
+		
 		List<GroupState> list = trackerClient.getGroupStates();
         if(null != list) {
         	return ResultObject.success(list,"查询组列表成功!");
