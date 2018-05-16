@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -88,8 +89,9 @@ public class ShutdownMainThread {
         int countWhitelist = 0;
         //开机不属于白名单但处于连接中桌面总数
         int countConnected = 0;
-        //过滤白名单和连接桌面
-        for (int i=0;i<countActive;i++) {
+        //过滤白名单和连接桌面 ,倒叙删除
+        List<Desktop> toDealDesktops = new ArrayList<>();
+        for (int i=countActive-1;i>=0;i--) {
             String computerName = desktops.get(i).getComputer_name();
             String loginStatus = desktops.get(i).getLogin_status();
             //判断是否在白名单，不处理
