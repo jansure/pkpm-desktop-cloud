@@ -1,5 +1,6 @@
 package com.pkpmcloud.fileserver;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,16 +16,19 @@ public class Test {
 
     @org.junit.Test
     public void test01() {
-        logger.info("232");
-        logger.info("232");
-        logger.info("232");
-        logger.info("232");
-        logger.info("232");
-        logger.info("232");
-        logger.info("232");
-        logger.info("232");
-        logger.info("232");
-        logger.info("232");
+//        logger.info("232");
+//        logger.info("232");
+//        logger.info("232");
+//        logger.info("232");
+//        logger.info("232");
+//        logger.info("232");
+//        logger.info("232");
+//        logger.info("232");
+//        logger.info("232");
+//        logger.info("232");
+    	String s = "group1";
+    	System.out.println(s.length());
+    	System.out.println(StringUtils.substring(s, 5, s.length()));
     }
     
 }

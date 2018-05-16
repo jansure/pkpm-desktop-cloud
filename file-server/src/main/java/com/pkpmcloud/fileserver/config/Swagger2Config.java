@@ -28,7 +28,7 @@ public class Swagger2Config {
 	                .title("FastDFS")
 	                .description("基于FastDFS的文件上传与下载")
 	                .version("1.0")
-	                .contact(new Contact("pkpm", null, "test@test.com"))
+	                .contact(new Contact("pkpm", null, "kbp@qq.com"))
 	                .build();
 	    }
 }

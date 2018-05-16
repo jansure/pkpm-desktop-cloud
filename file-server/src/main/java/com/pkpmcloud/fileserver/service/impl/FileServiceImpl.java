@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -159,11 +160,22 @@ public class FileServiceImpl implements IFileService {
 			pkpmFileInfoVO.setFileSize(fileInfo.getFileSize());
 			pkpmFileInfoVO.setGroupName(fileInfo.getGroupName());
 			pkpmFileInfoVO.setOriginFileName(fileInfo.getOriginFileName());
+			pkpmFileInfoVO.setDestFileName(fileInfo.getDestFileName());
 			
 			pkpmFileInfoVoList.add(pkpmFileInfoVO);
 		}
 		return pkpmFileInfoVoList;
 	}
+
+
+	@Override
+	public PkpmFileInfo selectFile(PkpmFileInfo fileInfo) {
+		
+		PkpmFileInfo pkpmFileInfo = fileInfoDao.select(fileInfo);
+		return pkpmFileInfo;
+	}
+
+
 
 
 	

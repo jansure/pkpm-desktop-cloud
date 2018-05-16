@@ -40,6 +40,9 @@ public interface IFileService {
 
 	List<PkpmFileInfoVO> fileList();
 
+	PkpmFileInfo selectFile(PkpmFileInfo fileInfo);
+
+
 	
 
 }
