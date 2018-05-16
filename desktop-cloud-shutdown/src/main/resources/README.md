@@ -11,7 +11,7 @@
 **参数说明**  
 可以手动配置参数，指定某一项目id；
 否则使用自动配置参数，处理数据库中所有项目；  
-java -jar **.jar   
+java -jar -DprojectId=**** **.jar   
  项目Id必填
 -DprojectId=58cd927978ff4f85b16ee64468da0e53 
  用户登陆记录查询间隔
