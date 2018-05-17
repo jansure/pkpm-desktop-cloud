@@ -17,11 +17,18 @@ public class ApiConst {
     public static final String LIST_LOGIN_RECORD = "/desktop-users/login-records?start_time={startTime}&computer_name={computerName}";
     public static final String SHUTDOW_DESKTOP="/desktops/{desktopId}/action";
 
-    public static final int QUERY_BEFORE_HOUR= Integer.parseInt(PropertiesUtil.getProperty("shell.yml","query.interval.hour"));
-    public static final int SHUTDOWN_OVER_MINUTE=Integer.parseInt(PropertiesUtil.getProperty("shell.yml","shutdown.over.minute"));
     public static final String DATE_FORMAT="yyyy-MM-dd'T'HH:mm'Z'";
     public static final String NANO_DATE_FORMAT="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT);
     public static final DateTimeFormatter NANO_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(NANO_DATE_FORMAT);
     public static final String CONNECTED_STATUS = "CONNECTED";
+    /**
+     * 配置参数默认值
+     */
+    public static final int RECORD_QUERY_INTERVAL = 12;
+    public static final int SHUTDOWN_OVER_MINUTE=5;
+    public static final int HTTP_CONNECTION_TIMEOUT=120000;
+    public static final int TASK_PER_THREAD=4;
+    public static final int CORE_POOL_SIZE=3;
+    public static final int MAXIMUM_POOL_SIZE=5;
 }

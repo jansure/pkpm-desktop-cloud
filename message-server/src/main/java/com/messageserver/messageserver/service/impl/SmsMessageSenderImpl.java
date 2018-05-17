@@ -2,12 +2,13 @@ package com.messageserver.messageserver.service.impl;
 
 import java.util.Properties;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.desktop.constant.MessageTypeEnum;
 import com.google.common.base.Preconditions;
-import com.messageserver.messageserver.service.Message;
-import com.messageserver.messageserver.service.MessageSender;
+import com.messageserver.messageserver.service.message.Message;
+import com.messageserver.messageserver.service.message.MessageSender;
 import com.pkpm.httpclientutil.common.util.PropertiesUtil;
 import com.smn.account.CloudAccount;
 import com.smn.client.SmnClient;
@@ -65,10 +66,14 @@ public class SmsMessageSenderImpl implements MessageSender{
         smsPublishRequest.setSignId(signId);
 
         // 发送短信
+        //res = "httpCode=200, body={message_id=995ac318ac1c4c52afd81dd629025117, request_id=c835025f88694b6bac648bcab0da302c}"
         HttpResponse res = smnClient.smsPublish(smsPublishRequest);
         
-        System.out.println(res);
-        return true;
+        if(res != null && res.getHttpCode() == HttpStatus.OK.value()) {
+        	return true;
+        }
+        
+        return false;
     }
     
     public static void main(String[] args) {

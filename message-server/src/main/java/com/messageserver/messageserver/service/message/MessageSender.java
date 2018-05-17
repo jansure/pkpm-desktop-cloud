@@ -1,5 +1,4 @@
-package com.messageserver.messageserver.service;
-
+package com.messageserver.messageserver.service.message;
 
 /**
  * EmailMessageSenderImpl

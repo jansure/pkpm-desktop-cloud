@@ -85,5 +85,16 @@ public class PkpmFileInfoDaoImpl implements PkpmFileInfoDao{
 		return list;
 	}
 
+
+	@Override
+	public PkpmFileInfo select(PkpmFileInfo fileInfo) {
+		
+		List<PkpmFileInfo> list = fileInfoMapper.select(fileInfo );
+		if( list!= null && list.size() > 0) {
+			return list.get(0);
+		}
+		return null;
+	}
+
 	
 }

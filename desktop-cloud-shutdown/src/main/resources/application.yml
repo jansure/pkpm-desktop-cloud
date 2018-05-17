@@ -8,3 +8,5 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+server:
+  port: 1234

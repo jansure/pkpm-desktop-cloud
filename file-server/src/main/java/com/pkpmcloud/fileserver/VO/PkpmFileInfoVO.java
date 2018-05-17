@@ -20,5 +20,7 @@ public class PkpmFileInfoVO {
      private String fileSize;
      /**原文件名 */
      private String originFileName;
+     /**目标文件名 */
+     private String destFileName;
      
 }
