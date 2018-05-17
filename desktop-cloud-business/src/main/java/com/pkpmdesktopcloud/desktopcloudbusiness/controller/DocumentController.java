@@ -5,6 +5,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,12 +25,14 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmSysConfigService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
+@Api(description = "文件管理")
 @Slf4j
 @RequestMapping(value = "/document")
 public class DocumentController {
     @Resource
     private PkpmSysConfigService sysConfigService;
 
+    @ApiOperation("文件下载")
     @ResponseBody
 	@RequestMapping(value = "/downloads", method = RequestMethod.GET)
     public ResultObject getHelp(String filename, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -80,6 +84,7 @@ public class DocumentController {
 	 * @return
 	 */
 	@ResponseBody
+	@ApiOperation("法律条款下载")
 	@RequestMapping(value = "/legalTerms", method = RequestMethod.GET)
 	public ResultObject getLegalTerms(HttpServletResponse response) {
 		// 允许跨域调用
@@ -103,6 +108,7 @@ public class DocumentController {
 	 * @return
 	 */
 	@ResponseBody
+	@ApiOperation("教程下载")
 	@RequestMapping(value = "/manual", method = RequestMethod.GET)
 	public ResultObject getManual(HttpServletResponse response) {
 		// 允许跨域调用

@@ -3,6 +3,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,7 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.page.PageBean;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudSubsDetailsService;
 
 @RestController
+@Api(description ="订单详情操作")
 @RequestMapping("/subsdetails")
 public class SubsDetailsController {
 	
@@ -24,6 +27,7 @@ public class SubsDetailsController {
 	/**
 	 * 获取我的产品列表
 	 */
+	@ApiOperation("获取我的产品列表")
 	@RequestMapping(value = "/getList", method = RequestMethod.POST)
 	public ResultObject getList(Integer userID, Integer currentPage, Integer pageSize, HttpServletResponse response){
 		//允许跨域访问

@@ -34,7 +34,7 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-  mapper-locations: com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper
+
     
 #配置分页插件pagehelper
 pagehelper:

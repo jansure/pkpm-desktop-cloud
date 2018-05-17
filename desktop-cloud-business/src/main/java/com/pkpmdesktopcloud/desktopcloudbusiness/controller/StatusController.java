@@ -1,5 +1,7 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,12 +14,14 @@ import com.gateway.common.domain.CommonRequestBean;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.StatusService;
 
 @RestController
+@Api(description ="桌面操作")
 @RequestMapping("/status")
 public class StatusController {
 	
 	@Autowired
 	private StatusService statusService;
-	
+
+	@ApiOperation("获取桌面状态")
 	@PostMapping("/desktopStatus")
 	public ResultObject desktopStatus(@RequestBody CommonRequestBean commonRequestBean){
 		
@@ -35,6 +39,7 @@ public class StatusController {
 	 * @param commonRequestBean
 	 * @return ResultObject
 	 */
+	@ApiOperation("获取桌面操作状态")
 	@PostMapping("/operateStatus")
 	public ResultObject operateStatus(@RequestBody CommonRequestBean commonRequestBean){
 		
