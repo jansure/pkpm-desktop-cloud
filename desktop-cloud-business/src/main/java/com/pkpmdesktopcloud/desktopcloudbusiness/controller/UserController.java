@@ -45,9 +45,9 @@ public class UserController {
 	@Autowired
 	private PkpmCloudSubscriptionService subscriptionService;
 	
-//	@Resource
-//	private SmsMessageSenderImpl smsMessageSender;
-//
+	@Resource
+	private SmsMessageSenderImpl smsMessageSender;
+
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
@@ -163,7 +163,7 @@ public class UserController {
 			
 			String message = "您的短信验证码是:" + checkCode + "，请注意查收";
 			
-			/*Message sendMessage = new Message();
+			Message sendMessage = new Message();
 	    	//消息类型为短信
 			sendMessage.setMessageType(MessageTypeEnum.sms.toString());
 	    	//消息接收人
@@ -172,7 +172,7 @@ public class UserController {
 			sendMessage.setContent(message);
 			
 //	    	MessageSender smsMessageSender = new SmsMessageSenderImpl();
-			smsMessageSender.sendMessage(sendMessage);*/
+			smsMessageSender.sendMessage(sendMessage);
 			
 			return ResultObject.success("发送短信成功");
 		} catch (Exception e) {
@@ -386,8 +386,8 @@ public class UserController {
 	    	//消息内容
 			sendMessage.setContent(message);
 			
-//	    	MessageSender smsMessageSender = new SmsMessageSenderImpl();
-//			smsMessageSender.sendMessage(sendMessage);
+	    	MessageSender smsMessageSender = new SmsMessageSenderImpl();
+			smsMessageSender.sendMessage(sendMessage);
 			
 			return ResultObject.success("您的密码将以短信的形式发送到您的手机上，请注意查收");
 		} catch (Exception e) {
