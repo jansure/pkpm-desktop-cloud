@@ -106,11 +106,8 @@ public class PkpmFileInfoDaoImpl implements PkpmFileInfoDao{
 	 */  
 	@Override
 	public long countByName(String fileName) {
-		// TODO Auto-generated method stub
-		return 0;
+		return fileInfoMapper.countByName(fileName);
 	}
-
-
 	  
 	/* (非 Javadoc)  
 	 *   
@@ -121,11 +118,9 @@ public class PkpmFileInfoDaoImpl implements PkpmFileInfoDao{
 	 * @return  
 	 * @see com.pkpmcloud.fileserver.dao.PkpmFileInfoDao#filePageListByName(java.lang.String, java.lang.Integer, java.lang.Integer)  
 	 */  
-	    
 	@Override
 	public List<PkpmFileInfo> filePageListByName(String fileName, Integer beginPos, Integer pageSize) {
-		// TODO Auto-generated method stub
-		return null;
+		return fileInfoMapper.filePageListByName(fileName, beginPos, pageSize);
 	}
 
 	
