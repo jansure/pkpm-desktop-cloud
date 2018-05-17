@@ -24,7 +24,7 @@ import com.pkpmdesktopcloud.redis.RedisCache;
 //fixme
 @Slf4j
 @RestController
-@RequestMapping(value = "sysconfig")
+@RequestMapping(value = "/sysconfig")
 public class SystemConfigContoller {
 	// fixme
 

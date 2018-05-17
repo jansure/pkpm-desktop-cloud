@@ -21,14 +21,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration //标记配置类
 @EnableSwagger2
-public class Swagger2Config {
+public class Swagger2 {
 
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.pkpmdesktopcloud.desktopcloudbusiness"))
+                .apis(RequestHandlerSelectors.basePackage("com.pkpmdesktopcloud.desktopcloudbusiness.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }

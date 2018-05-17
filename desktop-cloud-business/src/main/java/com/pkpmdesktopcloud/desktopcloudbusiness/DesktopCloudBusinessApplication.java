@@ -8,14 +8,16 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
 @SpringBootApplication
-@EnableScheduling
-@EnableEurekaClient
-@EnableFeignClients
-@ComponentScan(basePackages={"com.desktop.utils","com.messageserver.messageserver.service"})
-@MapperScan(basePackages = "com.pkpmdesktopcloud.desktopcloudbusiness.dao", annotationClass = Mapper.class)
+@EnableSwagger2
+//@EnableScheduling
+//@EnableEurekaClient
+//@EnableFeignClients
+@ComponentScan(basePackages={"com.pkpmdesktopcloud.desktopcloudbusiness","com.desktop.utils"})
+@MapperScan(basePackages = "com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper", annotationClass = Mapper.class)
 public class DesktopCloudBusinessApplication {
 
 	public static void main(String[] args) {
