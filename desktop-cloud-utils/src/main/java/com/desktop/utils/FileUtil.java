@@ -99,7 +99,8 @@ public class FileUtil {
 						response.setContentType("application/x-msdownload");
 						// 客户使用目标另存为对话框保存指定文件
 						response.setHeader("Content-Type","text/plain");
-						response.addHeader("Content-Disposition","attachment;filename=" + new String(originFileName.getBytes(),"utf-8"));
+						response.addHeader("Content-Disposition","attachment;filename=" + new String(originFileName.getBytes("UTF-8"), "ISO-8859-1"));
+
 					}
 					OutputStream outs = response.getOutputStream();
 					// 保存文件
