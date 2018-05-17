@@ -16,7 +16,7 @@ import javax.annotation.Resource;
 @Repository
 public class PkpmCloudComponentDefImpl implements PkpmCloudComponentDefDAO{
 	
-	@Resource
+	@Autowired
 	private PkpmCloudComponentDefMapper componentMapper;
 	
 	/**

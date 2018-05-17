@@ -1,10 +1,9 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.service;
 
-import java.util.List;
-import java.util.Map;
-
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudComponentDef;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
+
+import java.util.List;
 
 /**
  * 产品接口类

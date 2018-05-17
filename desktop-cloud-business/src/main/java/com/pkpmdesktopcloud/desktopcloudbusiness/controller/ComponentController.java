@@ -1,28 +1,24 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.controller;
 
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-
+import com.desktop.utils.page.ResultObject;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudComponentDefService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.desktop.utils.page.ResultObject;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
-import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudComponentDefService;
-
-import lombok.extern.slf4j.Slf4j;
-
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 @Slf4j
 @RestController
+/*@Api("产品详情信息")*/
 @RequestMapping(value = "component")
 public class ComponentController {
 	
@@ -35,6 +31,7 @@ public class ComponentController {
 	 * @param productType
 	 * @return
 	 */
+/*	@ApiOperation("根据id获取产品详情信息")*/
 	@ResponseBody
 	@RequestMapping(value = "/subComponents", method = RequestMethod.POST)
 	public ResultObject getComponentByProductType(Integer productType, HttpServletResponse response) {
