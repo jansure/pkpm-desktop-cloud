@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.desktop.utils.Md5CalculateUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.desktop.utils.FileUtil;
-import com.desktop.utils.Md5CaculateUtil;
 import com.desktop.utils.StringUtil;
 import com.desktop.utils.page.Page;
 import com.desktop.utils.page.PageUtils;
@@ -73,7 +73,7 @@ public class FastDFSController {
 		try {
 			
 			//获取文件Md5
-			String md5 = Md5CaculateUtil.MD5ByMultipartFile(multipartFile);
+			String md5 = Md5CalculateUtil.MD5ByMultipartFile(multipartFile);
 			PkpmFileInfo fileInfo = fileService.selectByMd5(md5);
 			
 			//文件存在
