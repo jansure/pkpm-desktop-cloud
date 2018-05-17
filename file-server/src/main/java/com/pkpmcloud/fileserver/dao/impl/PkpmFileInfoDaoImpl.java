@@ -96,5 +96,32 @@ public class PkpmFileInfoDaoImpl implements PkpmFileInfoDao{
 		return null;
 	}
 
+	  
+	/* (非 Javadoc)  
+	 *   
+	 *   
+	 * @param fileName
+	 * @return  
+	 * @see com.pkpmcloud.fileserver.dao.PkpmFileInfoDao#countByName(java.lang.String)  
+	 */  
+	@Override
+	public long countByName(String fileName) {
+		return fileInfoMapper.countByName(fileName);
+	}
+	  
+	/* (非 Javadoc)  
+	 *   
+	 *   
+	 * @param fileName
+	 * @param beginPos
+	 * @param pageSize
+	 * @return  
+	 * @see com.pkpmcloud.fileserver.dao.PkpmFileInfoDao#filePageListByName(java.lang.String, java.lang.Integer, java.lang.Integer)  
+	 */  
+	@Override
+	public List<PkpmFileInfo> filePageListByName(String fileName, Integer beginPos, Integer pageSize) {
+		return fileInfoMapper.filePageListByName(fileName, beginPos, pageSize);
+	}
+
 	
 }

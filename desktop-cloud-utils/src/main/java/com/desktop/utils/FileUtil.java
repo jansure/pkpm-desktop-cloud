@@ -17,6 +17,7 @@ import java.net.URLEncoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -84,6 +85,10 @@ public class FileUtil {
 					response.reset();
 					// 允许跨域调用
 					response.setHeader("Access-Control-Allow-Origin", "*");
+
+					if(StringUtils.isBlank(originFileName) && StringUtils.isNotBlank(fileName))
+						originFileName = fileName;
+
 					// 在线打开方式
 					if (isOnLine) {
 						URL u = new URL(filePath);
@@ -93,9 +98,8 @@ public class FileUtil {
 						// 纯下载方式
 						response.setContentType("application/x-msdownload");
 						// 客户使用目标另存为对话框保存指定文件
-						response.setHeader("Content-Type","text/plain");  
-						response.addHeader("Content-Disposition","attachment;filename=" + new String(originFileName.getBytes(),"utf-8"));  
-						//response.setHeader("Content-Disposition", "attachment; filename=" + originFileName);
+						response.setHeader("Content-Type","text/plain");
+						response.addHeader("Content-Disposition","attachment;filename=" + new String(originFileName.getBytes(),"utf-8"));
 					}
 					OutputStream outs = response.getOutputStream();
 					// 保存文件

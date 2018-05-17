@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * MD5计算工具
  */
-public class Md5CaculateUtil {
+public class Md5CalculateUtil {
 
 	/**
 	 * 获取一个文件的md5值(可处理大文件)

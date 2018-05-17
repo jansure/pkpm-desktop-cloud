@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.desktop.utils.StringOrDate;
 import com.desktop.utils.TimeConverterUtil;
+import com.desktop.utils.page.Page;
 import com.pkpmcloud.fileserver.VO.PkpmFileInfoVO;
 import com.pkpmcloud.fileserver.dao.PkpmFileInfoDao;
 import com.pkpmcloud.fileserver.domain.PkpmFileInfo;
@@ -176,8 +177,39 @@ public class FileServiceImpl implements IFileService {
 	}
 
 
+	  
+	/* (非 Javadoc)  
+	 *   
+	 *   
+	 * @param fileName
+	 * @param beginPos
+	 * @param pageSize
+	 * @return  
+	 * @see com.pkpmcloud.fileserver.service.IFileService#filePageListByName(java.lang.String, java.lang.Integer, java.lang.Integer)  
+	 */  
+	@Override
+	public Page<PkpmFileInfoVO> filePageListByName(String fileName, Integer beginPos, Integer pageSize) {
+		
+		Page<PkpmFileInfoVO> result = new Page<PkpmFileInfoVO>();
+		
+		fileName = fileName == null ? "" : fileName;
+		
+		//获取总条数
+		long count = fileInfoDao.countByName(fileName);
+		result.setTotal(count);
+		
+		if(count == 0) {//没有数据，不需要查询
+			return result;
+		}
+		
+		
+		//检索数据
+		List<PkpmFileInfo> pkpmFileInfoList = fileInfoDao.filePageListByName(fileName, beginPos, pageSize);
+		
+		List<PkpmFileInfoVO> showFileInfoVOList = showFileInfoVOList(pkpmFileInfoList);
+		result.setPageData(showFileInfoVOList);
+		
+		return result;
+	}
 
-
-	
-	
 }

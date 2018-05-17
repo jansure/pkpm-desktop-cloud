@@ -37,6 +37,28 @@ public interface PkpmFileInfoMapper {
     
     @Select("select * from pkpm_file_info order by create_time desc")
 	List<PkpmFileInfo> fileList();
+
+	  
+    /**  
+	 * @Title: countByName  
+	 * @Description: 获取总条数
+	 * @param @param fileName 文件名
+	 * @return long    总条数
+	 */ 
+    @Select("select count(*) from pkpm_file_info where origin_file_name like CONCAT('%','${fileName}','%')")
+	long countByName(@Param("fileName")String fileName);
+	  
+    /**  
+	 * @Title: filePageListByName  
+	 * @Description: 获取文件分页列表  
+	 * @param @param fileName 文件名
+	 * @param @param beginPos 开始
+	 * @param @param pageSize 条数
+	 * @return List<PkpmFileInfo>    文件分页列表  
+	 * @throws  
+	 */ 
+    @Select("select * from pkpm_file_info where origin_file_name like CONCAT('%','${fileName}','%') order by create_time desc limit #{beginPos},#{pageSize} ")
+	List<PkpmFileInfo> filePageListByName(@Param("fileName")String fileName, @Param("beginPos")Integer beginPos, @Param("pageSize")Integer pageSize);
     
 
 }
