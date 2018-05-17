@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.desktop.utils.page.Page;
 import com.pkpmcloud.fileserver.VO.PkpmFileInfoVO;
 import com.pkpmcloud.fileserver.domain.PkpmFileInfo;
 
@@ -33,7 +34,6 @@ public interface IFileService {
 	 * @return PkpmFileInfo    返回类型  
 	 * @throws  
 	 */  
-    
 	PkpmFileInfo getPkpmFileInfo(MultipartFile multipartFile);
 
 	List<PkpmFileInfoVO> fileListByName(String fileName);
@@ -42,7 +42,15 @@ public interface IFileService {
 
 	PkpmFileInfo selectFile(PkpmFileInfo fileInfo);
 
-
-	
+	  
+	/**  
+	 * @Title: filePageListByName  
+	 * @Description: 获取文件分页列表
+	 * @param @param fileName 文件名
+	 * @param @param beginPos 记录起始
+	 * @param @param pageSize 记录条数
+	 * @return Page<PkpmFileInfoVO>    返回分页信息
+	 */  
+	Page<PkpmFileInfoVO> filePageListByName(String fileName, Integer beginPos, Integer pageSize);
 
 }
