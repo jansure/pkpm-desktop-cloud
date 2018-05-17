@@ -20,4 +20,12 @@ public interface MessageService {
      */
     Message findMessage(String jobId);
 
+	  
+	/**  
+	 * @Title: messageTask  
+	 * @Description: 消息定时任务，实现消息发送并更新状态 
+	 * @throws  
+	 */  
+	void messageTask();
+
 }

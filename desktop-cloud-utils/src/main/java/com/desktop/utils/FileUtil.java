@@ -36,7 +36,7 @@ public class FileUtil {
 	 * @param response
 	 * @throws IOException
 	 */
-	public static final void downloadFile(String filePath, boolean isOnLine, HttpServletRequest request, HttpServletResponse response)
+	public static final void downloadFile(String filePath,String originFileName, boolean isOnLine, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		InputStream inputStream = null;
 		try {
@@ -88,12 +88,14 @@ public class FileUtil {
 					if (isOnLine) {
 						URL u = new URL(filePath);
 						response.setContentType(u.openConnection().getContentType());
-						response.setHeader("Content-Disposition", "inline; filename=" + fileName);
+						response.setHeader("Content-Disposition", "inline; filename=" + originFileName);
 					} else {
 						// 纯下载方式
 						response.setContentType("application/x-msdownload");
 						// 客户使用目标另存为对话框保存指定文件
-						response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+						response.setHeader("Content-Type","text/plain");  
+						response.addHeader("Content-Disposition","attachment;filename=" + new String(originFileName.getBytes(),"utf-8"));  
+						//response.setHeader("Content-Disposition", "attachment; filename=" + originFileName);
 					}
 					OutputStream outs = response.getOutputStream();
 					// 保存文件

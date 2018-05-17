@@ -30,11 +30,13 @@ public class Message implements Serializable{
     private String status;
 
     public void eval() {
-        Preconditions.checkArgument(!StringUtils.isEmpty(from), "消息发送人不能为空");
-        Preconditions.checkArgument(!StringUtils.isEmpty(to), "消息接收人不能为空");
-        Preconditions.checkArgument(!StringUtils.isEmpty(subject), "消息主题不能为空");
+        
         switch (MessageTypeEnum.eval(messageType)) {
             case email:
+            	Preconditions.checkArgument(!StringUtils.isEmpty(from), "消息发送人不能为空");
+                Preconditions.checkArgument(!StringUtils.isEmpty(to), "消息接收人不能为空");
+                Preconditions.checkArgument(!StringUtils.isEmpty(subject), "消息主题不能为空");
+                
                 Preconditions.checkArgument(null != withAttachment, "是否有附件不能为空");
                 Preconditions.checkArgument(Boolean.FALSE == withAttachment ||
                         (Boolean.TRUE == withAttachment &&

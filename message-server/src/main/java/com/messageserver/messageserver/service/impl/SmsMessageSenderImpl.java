@@ -2,6 +2,7 @@ package com.messageserver.messageserver.service.impl;
 
 import java.util.Properties;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.desktop.constant.MessageTypeEnum;
@@ -65,10 +66,14 @@ public class SmsMessageSenderImpl implements MessageSender{
         smsPublishRequest.setSignId(signId);
 
         // 发送短信
+        //res = "httpCode=200, body={message_id=995ac318ac1c4c52afd81dd629025117, request_id=c835025f88694b6bac648bcab0da302c}"
         HttpResponse res = smnClient.smsPublish(smsPublishRequest);
         
-        System.out.println(res);
-        return true;
+        if(res != null && res.getHttpCode() == HttpStatus.OK.value()) {
+        	return true;
+        }
+        
+        return false;
     }
     
     public static void main(String[] args) {

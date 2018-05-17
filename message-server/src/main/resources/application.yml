@@ -1,3 +1,17 @@
 server:
   port: 8095
   
+spring:
+  mail:
+    host : smtp.xxx.com
+    username : xxx@xxx.com
+    password : xxxxx
+    
+  properties:
+    mail:
+      smtp:
+        auth : true
+        starttls:
+          enable : false
+          required : false
+    
