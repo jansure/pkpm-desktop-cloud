@@ -54,7 +54,7 @@ public class DocumentController {
                 if (fileServerResponse.getFiles().contains(filename)) {
                     // 若存在该文件名，则开启下载；若不存在，抛出异常
                     String filePath = fileUrl + "/" + filename;
-                    FileUtil.downloadFile(filePath, isOnLine, request, response);
+                    FileUtil.downloadFile(filePath,null,isOnLine, request, response);
                     log.debug("FileUtil.downloadFile:" + filePath);
                     return ResultObject.success(filePath, "下载成功！");
                 }

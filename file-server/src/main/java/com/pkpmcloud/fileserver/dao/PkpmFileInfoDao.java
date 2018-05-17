@@ -24,4 +24,25 @@ public interface PkpmFileInfoDao {
 
 	PkpmFileInfo select(PkpmFileInfo fileInfo);
 
+	  
+	/**  
+	 * @Title: countByName  
+	 * @Description: 获取总条数
+	 * @param @param fileName 文件名
+	 * @return long    总条数
+	 */  
+	long countByName(String fileName);
+
+	  
+	/**  
+	 * @Title: filePageListByName  
+	 * @Description: 获取文件分页列表  
+	 * @param @param fileName 文件名
+	 * @param @param beginPos 开始
+	 * @param @param pageSize 条数
+	 * @return List<PkpmFileInfo>    文件分页列表  
+	 * @throws  
+	 */  
+	List<PkpmFileInfo> filePageListByName(String fileName, Integer beginPos, Integer pageSize);
+
 }
