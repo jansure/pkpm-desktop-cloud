@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.desktop.utils.Md5CalculateUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.desktop.utils.FileUtil;
+import com.desktop.utils.Md5CalculateUtil;
 import com.desktop.utils.StringUtil;
 import com.desktop.utils.page.Page;
 import com.desktop.utils.page.PageUtils;
@@ -32,6 +32,7 @@ import com.pkpmcloud.fileserver.model.GroupState;
 import com.pkpmcloud.fileserver.model.StorageNode;
 import com.pkpmcloud.fileserver.model.StorePath;
 import com.pkpmcloud.fileserver.service.IFileService;
+import com.pkpmcloud.fileserver.utils.BytesUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -67,13 +68,13 @@ public class FastDFSController {
 		
 		boolean isUpdate = false;
 		StorePath storePath = null;
-		InputStream inputStream = null;
 		String groupName = null;
 		
 		try {
 			
 			//获取文件Md5
 			String md5 = Md5CalculateUtil.MD5ByMultipartFile(multipartFile);
+			BytesUtil.threadLocalMd5.set(md5);
 			PkpmFileInfo fileInfo = fileService.selectByMd5(md5);
 			
 			//文件存在
@@ -126,13 +127,8 @@ public class FastDFSController {
 		} catch (IOException e) {
 			e.printStackTrace();
 
-		} finally {
-//			try {
-//				inputStream.close();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-		}
+		} 
+		
 		return ResultObject.failure("上传文件失败,请重新尝试!");
 	}
 
