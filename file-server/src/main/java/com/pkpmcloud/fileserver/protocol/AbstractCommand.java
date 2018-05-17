@@ -1,16 +1,17 @@
 package com.pkpmcloud.fileserver.protocol;
 
-import com.pkpmcloud.fileserver.conn.Connection;
-import com.pkpmcloud.fileserver.exception.FastDfsIOException;
-import com.pkpmcloud.fileserver.conn.Connection;
-import com.pkpmcloud.fileserver.exception.FastDfsIOException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.desktop.utils.Md5CalculateUtil;
+import com.pkpmcloud.fileserver.conn.Connection;
+import com.pkpmcloud.fileserver.exception.FastDfsIOException;
+import com.pkpmcloud.fileserver.utils.BytesUtil;
 
 /**
  * FastDFS命令操执行抽象类
@@ -83,7 +84,11 @@ public abstract class AbstractCommand<T> implements BaseCommand<T> {
      */
     private void sendFileContent(InputStream ins, long size, OutputStream ous) throws IOException {
         logger.debug("开始上传文件流, 大小为[{}]", size);
+        String md5 = BytesUtil.threadLocalMd5.get();
+        
         long remainBytes = size;
+        long uploadBytes = 0;//总上传数
+        
         byte[] buff = new byte[256 * 1024];
         int bytes;
         while (remainBytes > 0) {
@@ -93,9 +98,15 @@ public abstract class AbstractCommand<T> implements BaseCommand<T> {
             ous.write(buff, 0, bytes);
             remainBytes -= bytes;
             logger.debug("剩余上传数据量[{}]", remainBytes);
+            
+            uploadBytes += bytes;
+            
+            
+	        BytesUtil.fileLenghMap.put(md5, (int) (uploadBytes * 100 /size));
+	        logger.debug("上传进度[{}]%", BytesUtil.fileLenghMap.get(md5));
         }
     }
-
+    
     /**
      * 接收相应数据,这里只能解析报文头
      * 报文内容(参数+文件)只能靠接收对象(对应的Response对象)解析
