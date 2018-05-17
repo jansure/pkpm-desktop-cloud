@@ -3,6 +3,8 @@ package com.idserver.controller;
 import com.desktop.utils.page.ResultObject;
 import com.google.common.base.Preconditions;
 import com.idserver.service.IdentifyService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @description
  * @date 2018/5/7
  */
-@RequestMapping("/idserver")
+@RequestMapping("/test")
+@Api("TEST")
 @RestController
 public class IdentifyController {
 
@@ -28,5 +31,11 @@ public class IdentifyController {
         Preconditions.checkArgument(adId!=0);
         String newName= identifyService.getAvailableIdentity(productName, adId);
         return ResultObject.success(null, newName);
+    }
+
+    @ApiOperation("INDEX")
+    @GetMapping("/index")
+    public String index(){
+        return "Hello";
     }
 }
