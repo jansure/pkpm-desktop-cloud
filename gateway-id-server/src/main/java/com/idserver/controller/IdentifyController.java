@@ -33,7 +33,7 @@ public class IdentifyController {
         return ResultObject.success(null, newName);
     }
 
-    @ApiOperation(value = "INDEX",httpMethod = "POST",notes = "Note",response = "java.lang.String")
+    @ApiOperation(value = "INDEX",httpMethod = "POST",notes = "Note")
     @GetMapping("/index")
     public String index(){
         return "Hello";
