@@ -2,6 +2,8 @@ package com.pkpmcloud.fileserver.utils;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Java与C服务端数据交换时byte数组与int,long转换的工具类
@@ -10,6 +12,13 @@ import java.util.Arrays;
  * 创建时间：2016/11/20 1:14 <br/>
  */
 public class BytesUtil {
+	
+	public static ThreadLocal<String> threadLocalMd5 = new ThreadLocal<String>();
+	
+	/**
+	 * 存储文件上传进度
+	 */
+	public static Map<String, Integer> fileLenghMap = new HashMap<String, Integer>();
 
     /**
      * long convert to buff (big-endian)
