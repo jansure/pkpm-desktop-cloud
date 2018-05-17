@@ -1,20 +1,13 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.dao.mapper;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Lang;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-
 import com.desktop.utils.mybatis.SimpleInsertLangDriver;
 import com.desktop.utils.mybatis.SimpleSelectLangDriver;
 import com.desktop.utils.mybatis.SimpleUpdateLangDriver;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudComponentDef;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 @Mapper
 public interface PkpmCloudComponentDefMapper {
