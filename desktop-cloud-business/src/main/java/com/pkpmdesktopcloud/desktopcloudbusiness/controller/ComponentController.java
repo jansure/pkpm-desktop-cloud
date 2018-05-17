@@ -20,8 +20,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 @Slf4j
 @RestController
-@Api("产品详情")
-@RequestMapping(value = "component")
+@Api(value = "/component",description = "产品详情")
+@RequestMapping(value = "/component")
 public class ComponentController {
 	
 	@Resource

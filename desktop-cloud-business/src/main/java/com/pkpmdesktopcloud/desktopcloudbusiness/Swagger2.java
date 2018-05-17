@@ -1,4 +1,4 @@
-package com.pkpmdesktopcloud.desktopcloudbusiness.config;
+package com.pkpmdesktopcloud.desktopcloudbusiness;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
 @Configuration //标记配置类
-public class Swagger2Config {
+@EnableSwagger2
+public class Swagger2 {
 
     @Bean
     public Docket createRestApi() {
@@ -33,10 +34,13 @@ public class Swagger2Config {
     }
 
     private ApiInfo apiInfo() {
+        String name = "desktop-cloud-business";
+        String url = "http://127.0.0.1:8083/desktop-cloud-business/swagger-ui.html";
+        String mail = "jansure@sina.com";
         return new ApiInfoBuilder()
-                .title("springboot利用swagger构建api文档")
-                .description("简单优雅的restfun风格，http://blog.csdn.net/saytime")
-                .termsOfServiceUrl("http://blog.csdn.net/saytime")
+                .title("glory cloud system")
+                .description("Restful APIs for UI")
+                .contact(new Contact(name,url,mail))
                 .version("1.0")
                 .build();
     }

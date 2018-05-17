@@ -24,6 +24,7 @@
 		<module>file-server</module>
 		<module>desktop-cloud-shutdown</module>
 		<module>eureka-server</module>
+		<module>desktop-cloud-business</module>
 	</modules>
 
 	<!-- 统一版本号依赖 -->

@@ -34,7 +34,7 @@ public class PkpmCloudProductDefServiceImpl implements PkpmCloudProductDefServic
 	
 	private static final String ALL_TYPE_REDIS_KEY = "allTypeRedisKey";
 	
-	@Autowired
+	@Resource
 	private PkpmCloudProductDefDAO productDAO;
 	
 	@Resource

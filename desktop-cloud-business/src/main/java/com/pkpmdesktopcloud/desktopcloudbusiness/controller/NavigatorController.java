@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "navigator")
+@RequestMapping(value = "/navigator")
 public class NavigatorController {
 	
 	private static final String ALL_NAVIGATION_ID = "allNavigation";

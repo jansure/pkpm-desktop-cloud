@@ -9,6 +9,8 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudNavigationDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudNavigation;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudNavigationService;
 
+import javax.annotation.Resource;
+
 /**
  * 产品接口实现类
  * 
@@ -18,7 +20,7 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudNavigationServ
 @Service
 public class PkpmCloudNavigationServiceImpl implements PkpmCloudNavigationService {
 	
-	@Autowired
+	@Resource
 	private PkpmCloudNavigationDAO pkpmCloudNavigationDAO;
 	
 	@Override

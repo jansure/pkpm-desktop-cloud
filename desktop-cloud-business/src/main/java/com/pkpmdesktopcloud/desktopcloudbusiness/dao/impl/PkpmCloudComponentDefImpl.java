@@ -1,9 +1,7 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.dao.impl;
 
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudComponentDefDAO;
@@ -16,7 +14,7 @@ import javax.annotation.Resource;
 @Repository
 public class PkpmCloudComponentDefImpl implements PkpmCloudComponentDefDAO{
 	
-	@Autowired
+	@Resource
 	private PkpmCloudComponentDefMapper componentMapper;
 	
 	/**
