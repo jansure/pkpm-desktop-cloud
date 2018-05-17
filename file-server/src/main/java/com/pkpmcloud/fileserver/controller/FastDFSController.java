@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.desktop.utils.FileUtil;
 import com.desktop.utils.StringUtil;
+import com.desktop.utils.page.Page;
+import com.desktop.utils.page.PageUtils;
 import com.desktop.utils.page.ResultObject;
 import com.pkpmcloud.fileserver.VO.PkpmFileInfoVO;
 import com.pkpmcloud.fileserver.client.StorageClient;
@@ -207,13 +209,15 @@ public class FastDFSController {
 	@ApiOperation(value = "文件列表")
 	@GetMapping("/fileList")
 	//public ResultObject fileList(String fileName  ,HttpServletResponse response){
-	public ResultObject fileList(@RequestParam(value ="fileName",required =false) @ApiParam(value = "文件名")   String fileName,HttpServletResponse response){
-		if(StringUtils.isNotBlank(fileName)){
-			List<PkpmFileInfoVO>  list= fileService.fileListByName(fileName);
-			return ResultObject.success(list);
-		}
-		List<PkpmFileInfoVO>  list= fileService.fileList();
-		return ResultObject.success(list);
+	public ResultObject fileList(@RequestParam(value ="fileName",required =false) @ApiParam(value = "文件名")   String fileName,
+			@RequestParam(value ="pageNo",required = true) @ApiParam(value = "页码") Integer pageNo,
+			@RequestParam(value ="pageSize",required = true) @ApiParam(value = "每面条数") Integer pageSize,HttpServletResponse response){
+		
+		//获取记录起始下标
+		Integer beginPos = PageUtils.getBeginPos(pageNo, pageSize);
+		
+		Page<PkpmFileInfoVO>  page = fileService.filePageListByName(fileName, beginPos, pageSize);
+		return ResultObject.success(page);
 	}
 	
 	@ApiOperation(value = "获取组")
