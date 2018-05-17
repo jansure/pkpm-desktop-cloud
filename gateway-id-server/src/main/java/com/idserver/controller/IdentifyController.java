@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2018/5/7
  */
 @RequestMapping("/test")
-@Api("TEST")
+@Api("API")
 @RestController
 public class IdentifyController {
 
@@ -33,7 +33,7 @@ public class IdentifyController {
         return ResultObject.success(null, newName);
     }
 
-    @ApiOperation("INDEX")
+    @ApiOperation(value = "INDEX",httpMethod = "POST",notes = "Note",response = "java.lang.String")
     @GetMapping("/index")
     public String index(){
         return "Hello";
