@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Bean;
 import javax.sql.DataSource;
 
 @Configurable
-@MapperScan("com.gateway-server.gateway-server.**.dao")
+@MapperScan("com.pkpmdesktopcloud.desktopcloudbusiness.dao")
 public class MybatisConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(MybatisConfiguration.class);

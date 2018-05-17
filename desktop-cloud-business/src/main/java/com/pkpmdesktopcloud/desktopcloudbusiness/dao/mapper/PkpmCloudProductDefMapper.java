@@ -5,14 +5,10 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Lang;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import com.desktop.utils.mybatis.SimpleSelectLangDriver;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudNavigation;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudProductDef;
-import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmSysConfig;
-import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 
 /**
  * 产品映射接口
