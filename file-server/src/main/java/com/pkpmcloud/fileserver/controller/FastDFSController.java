@@ -101,7 +101,7 @@ public class FastDFSController {
 	@ApiOperation(value = "文件上传")
 	@PostMapping("/upload")
 	public ResultObject upload(@RequestParam("file")  @ApiParam(value = "文件,小于1024M") MultipartFile multipartFile ,
-			                   @RequestParam("md5") @ApiParam(value = "md5值",required =false) String md5) {
+			                   @RequestParam(value="md5", required =false) @ApiParam(value = "md5值") String md5) {
 		
 		if (multipartFile.isEmpty()) {
 			return ResultObject.failure("请上传文件!");
