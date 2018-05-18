@@ -51,4 +51,9 @@ public final class OtherConstants {
     public static final long TRUNK_FILE_MARK_SIZE = 512 * 1024L * 1024 * 1024 * 1024 * 1024L;
     public static final long NORMAL_LOGIC_FILENAME_LENGTH = FDFS_FILE_PATH_LEN + FDFS_FILENAME_BASE64_LENGTH + FDFS_FILE_EXT_NAME_MAX_LEN + 1;
     public static final long TRUNK_LOGIC_FILENAME_LENGTH = NORMAL_LOGIC_FILENAME_LENGTH + FDFS_TRUNK_FILE_INFO_LEN;
+    
+    /**
+     * 文件上传进度Redis分组Key
+     */
+    public static final String FILE_UPLOAD_PERCENT_REDIS_KEY = "fileUploadPercentRedisKey";
 }

@@ -8,10 +8,11 @@ import java.nio.charset.Charset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.desktop.utils.Md5CalculateUtil;
 import com.pkpmcloud.fileserver.conn.Connection;
+import com.pkpmcloud.fileserver.constant.OtherConstants;
 import com.pkpmcloud.fileserver.exception.FastDfsIOException;
 import com.pkpmcloud.fileserver.utils.BytesUtil;
+import com.pkpmdesktopcloud.redis.RedisCache;
 
 /**
  * FastDFS命令操执行抽象类
@@ -100,14 +101,34 @@ public abstract class AbstractCommand<T> implements BaseCommand<T> {
             logger.debug("剩余上传数据量[{}]", remainBytes);
             
             uploadBytes += bytes;
+            int uploadPercent = (int) (uploadBytes * 100 /size);
             
+            //多人同时上传同一文件只保留最快进度
+            putMaxPercent(uploadPercent, md5);
             
-	        BytesUtil.fileLenghMap.put(md5, (int) (uploadBytes * 100 /size));
-	        logger.debug("上传进度[{}]%", BytesUtil.fileLenghMap.get(md5));
         }
     }
     
-    /**
+      
+	/**  
+	 * @Title: putMaxPercent  
+	 * @Description: 保存最大进度到Redis缓存
+	 * @param uploadPercent   进度  
+	 * @param md5    文件Md5
+	 * @throws  
+	 */  
+	private void putMaxPercent(int uploadPercent, String md5) {
+		
+		RedisCache cache = new RedisCache(OtherConstants.FILE_UPLOAD_PERCENT_REDIS_KEY);
+		Integer percent = (Integer)cache.getObject(md5);
+		if(percent == null || percent.intValue() < uploadPercent) {
+			cache.putObject(md5, uploadPercent);
+		}
+		
+		logger.debug("上传进度[{}]%", cache.getObject(md5));
+	}
+
+	/**
      * 接收相应数据,这里只能解析报文头
      * 报文内容(参数+文件)只能靠接收对象(对应的Response对象)解析
      */
