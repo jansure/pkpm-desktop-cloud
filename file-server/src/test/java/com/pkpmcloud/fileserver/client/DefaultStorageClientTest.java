@@ -45,6 +45,7 @@ public class DefaultStorageClientTest {
         connectionPool = new ConnectionPool(pooledConnectionFactory, conf);
         Set<String> trackerSet = new HashSet<String>();
         trackerSet.add("139.159.254.232:22122");
+        trackerSet.add("139.159.254.106:22122");
         DefaultCommandExecutor commandExecutor = new DefaultCommandExecutor(trackerSet, connectionPool);
         TrackerClient trackerClient = new DefaultTrackerClient(commandExecutor);
         storageClient = new DefaultStorageClient(commandExecutor, trackerClient);
@@ -76,16 +77,16 @@ public class DefaultStorageClientTest {
     @Test
     public void mergeMetadataTest() {
         Set<MateData> mateDataSet = new HashSet<MateData>();
-        mateDataSet.add(new MateData("key1", "value1"));
-        mateDataSet.add(new MateData("key2", "value2"));
-        mateDataSet.add(new MateData("key3", "value3"));
-        boolean flag = storageClient.mergeMetadata("group1", "M00/00/00/wKgKgFgzZxuATInzAACM0xlEIJM55.xlsx", mateDataSet);
+        mateDataSet.add(new MateData("width", "100"));
+        mateDataSet.add(new MateData("long", "200"));
+        boolean flag = storageClient.mergeMetadata("group1", "wKgAslr0Ms-EenO7AAAAAN_P6X4238.mkv", mateDataSet);
+        System.out.println(flag);
         logger.info("#####===== " + flag);
     }
 
     @Test
     public void getMetadataTest() {
-        Set<MateData> mateDataSet = storageClient.getMetadata("group1", "M00/00/00/wKgKgFgzZxuATInzAACM0xlEIJM55.xlsx");
+        Set<MateData> mateDataSet = storageClient.getMetadata("group1", "M00/00/00/wKgKgFgzZxuATInzAACM0xlEIJM55.mkv");
         for (MateData mateData : mateDataSet) {
             logger.info("#####===== " + mateData);
         }
