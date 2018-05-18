@@ -107,6 +107,9 @@ public abstract class AbstractCommand<T> implements BaseCommand<T> {
             putMaxPercent(uploadPercent, md5);
             
         }
+        
+        //清空
+        BytesUtil.threadLocalMd5.remove();
     }
     
       

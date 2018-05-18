@@ -28,12 +28,14 @@ import com.desktop.utils.page.ResultObject;
 import com.pkpmcloud.fileserver.VO.PkpmFileInfoVO;
 import com.pkpmcloud.fileserver.client.StorageClient;
 import com.pkpmcloud.fileserver.client.TrackerClient;
+import com.pkpmcloud.fileserver.constant.OtherConstants;
 import com.pkpmcloud.fileserver.domain.PkpmFileInfo;
 import com.pkpmcloud.fileserver.model.GroupState;
 import com.pkpmcloud.fileserver.model.StorageNode;
 import com.pkpmcloud.fileserver.model.StorePath;
 import com.pkpmcloud.fileserver.service.IFileService;
 import com.pkpmcloud.fileserver.utils.BytesUtil;
+import com.pkpmdesktopcloud.redis.RedisCache;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -186,15 +188,12 @@ public class FastDFSController {
 			return ResultObject.failure("请输入正确的md5值!");
 		}
 		
-		//map为空,还没有上传的文件记录      
-		//如果process为空,文件还没有开始上传
-		Map<String, Integer> fileLenghMap = BytesUtil.fileLenghMap;
-		Integer process = fileLenghMap.get("md5");
-		if( fileLenghMap.isEmpty() || null == process) {
-			return ResultObject.success(0);
-		}
+		//从Redis缓存中获取
+		RedisCache cache = new RedisCache(OtherConstants.FILE_UPLOAD_PERCENT_REDIS_KEY);
+		Integer percent = (Integer)cache.getObject(md5);
+		percent = percent == null ? 0 : percent;
 		
-		return ResultObject.success(process);
+		return ResultObject.success(percent);
 	}
 	
 	
