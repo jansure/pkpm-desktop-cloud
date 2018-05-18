@@ -122,13 +122,23 @@ public abstract class AbstractCommand<T> implements BaseCommand<T> {
 	 */  
 	private void putMaxPercent(int uploadPercent, String md5) {
 		
-		RedisCache cache = new RedisCache(OtherConstants.FILE_UPLOAD_PERCENT_REDIS_KEY);
-		Integer percent = (Integer)cache.getObject(md5);
-		if(percent == null || percent.intValue() < uploadPercent) {
-			cache.putObject(md5, uploadPercent);
+		try {
+			RedisCache cache = new RedisCache(OtherConstants.FILE_UPLOAD_PERCENT_REDIS_KEY);
+			Integer percent = (Integer)cache.getObject(md5);
+			if(percent == null || percent.intValue() < uploadPercent) {
+				
+//				if(uploadPercent == 100) {
+//					cache.setTimeOut(60);//1分钟后删除
+//				}
+				
+				cache.putObject(md5, uploadPercent);
+			}
+			
+			logger.debug("上传进度[{}]%", cache.getObject(md5));
+		} catch (Exception ex){
+			logger.error(ex.getMessage());
 		}
 		
-		logger.debug("上传进度[{}]%", cache.getObject(md5));
 	}
 
 	/**
