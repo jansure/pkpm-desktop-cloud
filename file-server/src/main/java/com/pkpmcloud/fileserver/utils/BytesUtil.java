@@ -15,11 +15,6 @@ public class BytesUtil {
 	
 	public static ThreadLocal<String> threadLocalMd5 = new ThreadLocal<String>();
 	
-	/**
-	 * 存储文件上传进度
-	 */
-	public static Map<String, Integer> fileLenghMap = new HashMap<String, Integer>();
-
     /**
      * long convert to buff (big-endian)
      *
