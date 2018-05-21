@@ -19,7 +19,6 @@ import com.cabr.pkpm.mapper.component.ComponentMapper;
 import com.cabr.pkpm.mapper.product.ProductMapper;
 import com.cabr.pkpm.mapper.subscription.SubscriptionMapper;
 import com.cabr.pkpm.mapper.subsdetails.SubsDetailsMapper;
-import com.cabr.pkpm.mapper.workorder.WorkOrderMapper;
 import com.cabr.pkpm.service.ISubsDetailsService;
 import com.cabr.pkpm.utils.ResponseResult;
 import com.cabr.pkpm.utils.sdk.PageBean;
@@ -52,9 +51,6 @@ public class SubsDetailsServiceImpl implements ISubsDetailsService {
 	
 	@Resource
 	private ComponentMapper componentMapper;
-	
-	@Resource
-	private WorkOrderMapper workOrderMapper;
 	
 	@Resource
 	private RedisCacheUtil<MyProduct> redisCacheUtil;
