@@ -6,6 +6,8 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +21,7 @@ import com.pkpmdesktopcloud.redis.RedisCache;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Api(description ="获取导航栏内容")
 @RestController
 @RequestMapping(value = "/navigator")
 public class NavigatorController {
@@ -34,6 +37,7 @@ public class NavigatorController {
 	 * @return
 	 */
 	@ResponseBody
+	@ApiOperation("获取全部导航列表")
 	@RequestMapping(value = "/subProducts", method = RequestMethod.GET)
 	public List<PkpmCloudNavigation> getNavigation(HttpServletResponse response) {
 		// 允许跨域调用

@@ -3,6 +3,7 @@ package com.pkpmcloud.fileserver.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -27,12 +28,14 @@ import com.desktop.utils.page.ResultObject;
 import com.pkpmcloud.fileserver.VO.PkpmFileInfoVO;
 import com.pkpmcloud.fileserver.client.StorageClient;
 import com.pkpmcloud.fileserver.client.TrackerClient;
+import com.pkpmcloud.fileserver.constant.OtherConstants;
 import com.pkpmcloud.fileserver.domain.PkpmFileInfo;
 import com.pkpmcloud.fileserver.model.GroupState;
 import com.pkpmcloud.fileserver.model.StorageNode;
 import com.pkpmcloud.fileserver.model.StorePath;
 import com.pkpmcloud.fileserver.service.IFileService;
 import com.pkpmcloud.fileserver.utils.BytesUtil;
+import com.pkpmdesktopcloud.redis.RedisCache;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -57,13 +60,51 @@ public class FastDFSController {
 	@Value("${nginx.url}")
 	private String url;
 	
-	@ApiOperation(value = "文件上传")
-	@PostMapping("/upload")
-	public ResultObject upload(@RequestParam("file")  @ApiParam(value = "文件,小于1024M") MultipartFile multipartFile, HttpServletResponse response) {
-	//public ResultObject upload(@RequestParam("file")  MultipartFile multipartFile, HttpServletResponse response) {
+	
+	
+	/**
+	 * 获取文件的MD5值
+	 * @param multipartFile
+	 * @return
+	 */
+	@ApiOperation(value = "获取MD5")
+	@PostMapping("/getMD5")
+	public ResultObject getMD5(@RequestParam("file")  @ApiParam(value = "文件,小于1024M") MultipartFile multipartFile) {
 		
 		if (multipartFile.isEmpty()) {
 			return ResultObject.failure("请选择上传文件!");
+		}
+		
+		try {
+			
+			//获取文件Md5
+			String md5 = Md5CalculateUtil.MD5ByMultipartFile(multipartFile);
+			BytesUtil.threadLocalMd5.set(md5);
+			return ResultObject.success(md5, "获取MD5成功");
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		} 
+		return ResultObject.failure("获取MD5失败,请重新获取!");
+	}
+	
+	
+	/**
+	 * 文件上传
+	 * 如果有传过来MD5,直接上传  ;如果没有MD5重新生成
+	 * @param multipartFile
+	 * @param response
+	 * @return
+	 */
+	
+	@ApiOperation(value = "文件上传")
+	@PostMapping("/upload")
+	public ResultObject upload(@RequestParam("file")  @ApiParam(value = "文件,小于1024M") MultipartFile multipartFile ,
+			                   @RequestParam(value="md5", required =false) @ApiParam(value = "md5值") String md5) {
+		
+		if (multipartFile.isEmpty()) {
+			return ResultObject.failure("请上传文件!");
 		}
 		
 		boolean isUpdate = false;
@@ -72,8 +113,10 @@ public class FastDFSController {
 		
 		try {
 			
-			//获取文件Md5
-			String md5 = Md5CalculateUtil.MD5ByMultipartFile(multipartFile);
+			//判断md5是否传过来
+			if( StringUtils.isEmpty(md5)) {			
+				md5 = Md5CalculateUtil.MD5ByMultipartFile(multipartFile);			
+			}
 			BytesUtil.threadLocalMd5.set(md5);
 			PkpmFileInfo fileInfo = fileService.selectByMd5(md5);
 			
@@ -100,22 +143,22 @@ public class FastDFSController {
 			}
 			
 			fileInfo = fileService.getPkpmFileInfo(multipartFile);
-
+			
 			//插入
 			if(!isUpdate) {
 				
 				//获取组名中的数字
 				List<Integer> numList = StringUtil.getIntegerByStr(groupName);
 				
-		    	fileInfo.setGroupName(numList.get(0));
-		    	fileInfo.setMd5(md5);
-		    	
+				fileInfo.setGroupName(numList.get(0));
+				fileInfo.setMd5(md5);
+				
 				int num = fileService.insert(fileInfo );
 			}
 			
 			//上传文件
 			storePath = storageClient.uploadAppenderFile(groupName, multipartFile.getInputStream(), 
-								multipartFile.getSize(), fileInfo.getPostfix());
+					multipartFile.getSize(), fileInfo.getPostfix());
 			
 			//上传成功，更新目标文件名
 			fileInfo = new PkpmFileInfo();
@@ -126,11 +169,34 @@ public class FastDFSController {
 			return ResultObject.success(storePath);
 		} catch (IOException e) {
 			e.printStackTrace();
-
+			
 		} 
 		
 		return ResultObject.failure("上传文件失败,请重新尝试!");
 	}
+	
+	
+	/**
+	 * 获取文件上传进度
+	 * @return
+	 */
+	@ApiOperation(value = "上传进度")
+	@GetMapping("/process")
+	public ResultObject getProcess(@RequestParam("md5") @ApiParam(value = "md5值",required =true) String md5) {
+		
+		if(StringUtils.isEmpty(md5)) {
+			return ResultObject.failure("请输入正确的md5值!");
+		}
+		
+		//从Redis缓存中获取
+		RedisCache cache = new RedisCache(OtherConstants.FILE_UPLOAD_PERCENT_REDIS_KEY);
+		Integer percent = (Integer)cache.getObject(md5);
+		percent = percent == null ? 0 : percent;
+		
+		return ResultObject.success(percent);
+	}
+	
+	
 
 	/**
 	 * 下载文件片段(断点续传)

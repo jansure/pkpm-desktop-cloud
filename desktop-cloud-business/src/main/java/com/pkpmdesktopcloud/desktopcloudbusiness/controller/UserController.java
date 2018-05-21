@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -33,6 +35,7 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudUserInfoServic
 import com.pkpmdesktopcloud.redis.RedisCache;
 
 @RestController
+@Api(description ="用户操作")
 @RequestMapping("/user")
 public class UserController {
 	
@@ -57,6 +60,7 @@ public class UserController {
 	 * @param userInfo(user_name,password,user_mobile_number)
 	 * @return 注册成功的页面
 	 */
+	@ApiOperation("用户注册")
 	@RequestMapping(value = "/regist", method = RequestMethod.POST)
 	public ResultObject regist(String checkCode, String userMobileNumber, String userName, String userLoginPassword,
 			 HttpServletResponse response) {
@@ -98,7 +102,7 @@ public class UserController {
 		
 		
 	}
-
+	@ApiOperation("用户登陆")
 	@RequestMapping(value = "/login", method = RequestMethod.POST,produces = {"application/json;charset=utf-8"})
 	public ResultObject login(String username, String password, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
@@ -125,6 +129,7 @@ public class UserController {
 	 * @return ResultObject
 	 */
 	@SuppressWarnings("unused")
+	@ApiOperation("获取用户名")
 	@RequestMapping(value = "/getUserName", method = RequestMethod.POST)
 	public ResultObject getUserName(HttpServletResponse response, Integer userId){
 	
@@ -148,6 +153,7 @@ public class UserController {
 	 * @param user_mobile_number
 	 * @return ResultObject
 	 */
+	@ApiOperation("发送短信")
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
 	public ResultObject sendMessage(String userMobileNumber, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
@@ -188,6 +194,7 @@ public class UserController {
 	 * 
 	 * @param userEmailOrMobileNumber
 	 */
+	@ApiOperation("异步邮箱校验")
 	@RequestMapping(value = "/findByEmailOrUserMobileNumber", method = RequestMethod.POST)
 	public ResultObject findByEmailOrUserMobileNumber(String userName, Integer type, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
@@ -214,6 +221,7 @@ public class UserController {
 	 * @param session
 	 * @return ResultObject
 	 */
+	@ApiOperation("完善用户信息")
 	@RequestMapping(value = "/perfectInfoInit", method = RequestMethod.POST)
 	public ResultObject perfectInfoInit(Integer userID, HttpServletResponse response) {
 
@@ -236,6 +244,7 @@ public class UserController {
 	 * @param userInfo(user_id,user_identification_card,user_identification_name,user_organization)
 	 * @return ResultObject
 	 */
+	@ApiOperation("更新用户信息")
 	@RequestMapping(value = "/perfectInfo", method = RequestMethod.POST)
 	public ResultObject perfectInfo(@RequestBody PkpmCloudUserInfo userInfo, HttpServletResponse response) {
 	// 允许跨域访问
@@ -290,6 +299,7 @@ public class UserController {
 	 * @param session
 	 * @return ResultObject
 	 */
+	@ApiOperation("更换手机号")
 	@RequestMapping(value = "/changMobileNumber", method = RequestMethod.POST)
 	public ResultObject changMobileNumber(@RequestBody Map<String, String> map, HttpServletResponse response) throws Exception {
 
@@ -349,6 +359,7 @@ public class UserController {
 	 * @throws Exception 
 	 * @return ResultObject
 	 */
+	@ApiOperation("获取加密密码")
 	@RequestMapping(value = "/getBackPassword", method = RequestMethod.POST)
 	public ResultObject getBackPassword(@RequestBody Map<String, String> map, HttpServletResponse response) throws Exception {	
 		// 允许跨域访问
@@ -405,6 +416,7 @@ public class UserController {
 	 * @throws Exception
 	 * @return ResultObject
 	 */
+	@ApiOperation("更新用户密码")
 	@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
 	public ResultObject changPassword(@RequestBody UserInfoForChangePassword newUserInfo) throws Exception {
 		

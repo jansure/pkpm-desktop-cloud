@@ -5,6 +5,8 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,7 @@ import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudUserInfoServic
 import com.pkpmdesktopcloud.redis.RedisCache;
 
 @RestController
+@Api(description ="订单操作")
 @RequestMapping("/subscription")
 public class SubscriptionController {
 	
@@ -37,6 +40,7 @@ public class SubscriptionController {
 	private PkpmCloudSubsDetailsService subsDetailsService;
 	
 	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
+	@ApiOperation("订单登陆状态检查")
 	@RequestMapping(value="/immediatelyUse",method=RequestMethod.POST)
 	public ResultObject immediatelyUse(@RequestBody WorkOrderVO wo,HttpServletResponse response){
 		response.setHeader("Access-Control-Allow-Origin", "*");
@@ -68,6 +72,7 @@ public class SubscriptionController {
 		
 	}
 
+	@ApiOperation("订单状态更改")
 	@PostMapping(value = "/setSubsStatus")
 	public ResultObject updateSubscription(@RequestBody PkpmCloudSubscription subsCription){
 		String response = subscription.updateSubsCriptionBySubsId(subsCription);

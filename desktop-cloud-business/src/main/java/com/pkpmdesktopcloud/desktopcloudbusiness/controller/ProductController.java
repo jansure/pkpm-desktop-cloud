@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @RestController
+@Api(description ="产品功能")
 @Slf4j
 @RequestMapping(value = "/product")
 public class ProductController {
@@ -45,6 +48,7 @@ public class ProductController {
 	 * @return
 	 */
 	@ResponseBody
+	@ApiOperation("获取产品套餐配置列表")
 	@RequestMapping(value = "/product-buy", method = RequestMethod.POST)
 	public ResultObject getProductTypeList(HttpServletResponse response) {
 		// 允许跨域调用
