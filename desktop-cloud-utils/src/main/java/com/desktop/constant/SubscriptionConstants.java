@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 public class SubscriptionConstants {
 	
 	
+	
 	public static String OU_NAME = "pkpm";
 	
 	public static String USER_EMAIL = "glory_cloud@163.com";
