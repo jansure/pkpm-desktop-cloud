@@ -84,11 +84,9 @@
 		SELECT
 			count(1)
 		FROM
-			pkpm_cloud_subscription subs left join
-			pkpm_cloud_subs_details subdetails
-		on
-			subs.subs_id = subdetails.subs_id
-		where (subs.ad_id = #{adId}  and  subdetails.product_id =#{productId} and subs.status != 'FAILED')
+			pkpm_cloud_subscription subs
+		WHERE
+			subs.user_id = #{userId}
 	</select>
 	
 	
