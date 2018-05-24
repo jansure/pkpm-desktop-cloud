@@ -1,13 +1,15 @@
  package com.cabr.pkpm.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-
+import com.cabr.pkpm.entity.subscription.SubsCription;
+import com.cabr.pkpm.entity.user.UserInfo;
+import com.cabr.pkpm.service.ISubscriptionService;
+import com.cabr.pkpm.service.IUserService;
+import com.cabr.pkpm.utils.Base64Utils;
+import com.cabr.pkpm.utils.ResponseResult;
+import com.cabr.pkpm.utils.ResultObject;
+import com.cabr.pkpm.utils.StringUtil;
+import com.cabr.pkpm.utils.sdk.ClientDemo;
+import com.gateway.common.dto.user.UserInfoForChangePassword;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -20,22 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cabr.pkpm.entity.subscription.SubsCription;
-import com.cabr.pkpm.entity.user.UserInfo;
-import com.cabr.pkpm.entity.workorder.WorkOrder;
-import com.cabr.pkpm.service.ISubscriptionService;
-import com.cabr.pkpm.service.IUserService;
-import com.cabr.pkpm.service.IWorkOrderService;
-import com.cabr.pkpm.utils.Base64Utils;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 //import com.cabr.pkpm.utils.AESUtil;
-import com.cabr.pkpm.utils.ResponseResult;
-import com.cabr.pkpm.utils.ResultObject;
-import com.cabr.pkpm.utils.StringUtil;
-import com.cabr.pkpm.utils.sdk.ClientDemo;
-import com.desktop.constant.MessageTypeEnum;
-import com.gateway.common.dto.user.UserInfoForChangePassword;
-import com.messageserver.messageserver.service.impl.SmsMessageSenderImpl;
-import com.messageserver.messageserver.service.message.Message;
 
 @RestController
 @RequestMapping("/user")
@@ -45,8 +38,9 @@ public class UserController {
 	private StringRedisTemplate stringRedisTemplate;
 	@Autowired
 	private IUserService userService;
-	@Autowired
-	private IWorkOrderService workOrderService;
+
+	/*@Autowired
+	private IWorkOrderService workOrderService;*/
 	@Autowired
 	private ISubscriptionService subscriptionService;
 	
@@ -54,8 +48,8 @@ public class UserController {
 	@Value("${server.host}")
 	private String serverHost;
 	
-   @Resource
-   private SmsMessageSenderImpl smsMessageSender;
+   /*@Resource
+   private SmsMessageSenderImpl smsMessageSender;*/
   
 	protected ResponseResult result = new ResponseResult();
 	
@@ -395,7 +389,7 @@ public class UserController {
 
 		user.setUserMobileNumber(newMobileNumber);
 		
-		List<WorkOrder> workOrders = workOrderService.findWorkOrderListByUserId(userID);
+		/*List<WorkOrder> workOrders = workOrderService.findWorkOrderListByUserId(userID);
 		
 		if(workOrders!=null && !workOrders.isEmpty()){
 			if (!userService.updateUserInfo(user) || !workOrderService.updatePasswordOrMobileNumber(userID, null, newMobileNumber)) {
@@ -407,7 +401,7 @@ public class UserController {
 				this.result.set("密码修改失败", 0);
 				return this.result;
 			}
-		}
+		}*/
 		
 		this.result.set("手机号修改成功", 1, user);
 		return this.result;

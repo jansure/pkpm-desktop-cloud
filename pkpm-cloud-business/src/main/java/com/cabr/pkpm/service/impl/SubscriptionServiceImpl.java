@@ -177,8 +177,8 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 		String userName = userInfo.getUserName();
 		productName = getAvailableComputerName(productId,projectId, Integer.parseInt(adId));
 		
-		//根据adid 和 productid 查询成功和正在创建中的条数     
-		Integer nextNum = 1 + subscriptionMapper.selectTotalById(adId,productId);
+		//
+		Integer nextNum = 1 + subscriptionMapper.selectTotalById(userId);
 		if(nextNum >= 1 + DesktopConstant.DESKTOP_OWN_MAX_ACCOUNT)
 			throw Exceptions.newBusinessException(
 					String.format("您购买的桌面数量已经达到%d个上限，请重新注册账号进行购买!",
