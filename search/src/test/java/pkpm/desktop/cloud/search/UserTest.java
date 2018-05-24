@@ -24,7 +24,7 @@ import pkpm.desktop.cloud.search.service.JestService;
 @SpringBootTest
 public class UserTest {
 
-	String pattern = "yyyy-MM-dd HH:mm:ss";
+	String pattern = "yyyy-MM-dd'T'HH:mm:ssZ";
 
 	private String indexName = "hwd";
 	private String typeName = "user";
@@ -39,23 +39,23 @@ public class UserTest {
 		System.out.println(result);
 	}
 
-	@Test
-	public void createIndexMapping() throws Exception {
-
-		String source = "{\"" + typeName + "\":{\"properties\":{" + "\"id\":{\"type\":\"integer\"}"
-				+ ",\"name\":{\"type\":\"string\",\"index\":\"not_analyzed\"}"
-				+ ",\"birth\":{\"type\":\"date\",\"format\":\"strict_date_optional_time||epoch_millis\"}" + "}}}";
-		System.out.println(source);
-		boolean result = jestService.createIndexMapping(indexName, typeName, source);
-		System.out.println(result);
-	}
-
-	@Test
-	public void getIndexMapping() throws Exception {
-
-		String result = jestService.getIndexMapping(indexName, typeName);
-		System.out.println(result);
-	}
+//	@Test
+//	public void createIndexMapping() throws Exception {
+//
+//		String source = "{\"" + typeName + "\":{\"properties\":{" + "\"id\":{\"type\":\"integer\"}"
+//				+ ",\"name\":{\"type\":\"string\",\"index\":\"not_analyzed\"}"
+//				+ ",\"birth\":{\"type\":\"date\",\"format\":\"yyyy-MM-dd'T'HH:mm:ssZ\"}" + "}}}";
+//		System.out.println(source);
+//		boolean result = jestService.createIndexMapping(indexName, typeName, source);
+//		System.out.println(result);
+//	}
+//
+//	@Test
+//	public void getIndexMapping() throws Exception {
+//
+//		String result = jestService.getIndexMapping(indexName, typeName);
+//		System.out.println(result);
+//	}
 
 	@Test
 	public void index() throws Exception {
@@ -63,6 +63,7 @@ public class UserTest {
 		List<Object> objs = new ArrayList<Object>();
 		objs.add(new User(1, "T:o\"m-", new Date()));
 		objs.add(new User(2, "J,e{r}r;y:", new Date()));
+		objs.add(new User(3, "test123", new Date()));
 		boolean result = jestService.index(indexName, typeName, objs);
 		System.out.println(result);
 	}
@@ -90,7 +91,9 @@ public class UserTest {
 	public void termQuery() throws Exception {
 
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		QueryBuilder queryBuilder = QueryBuilders.termQuery("name", "T:o\"m-");// 单值完全匹配查询
+//		QueryBuilder queryBuilder = QueryBuilders.termQuery("name", "T:o\"m-");// 单值完全匹配查询
+		QueryBuilder queryBuilder = QueryBuilders.termQuery("name", "test123");// 单值完全匹配查询
+		
 		searchSourceBuilder.query(queryBuilder);
 		searchSourceBuilder.size(10);
 		searchSourceBuilder.from(0);
@@ -109,7 +112,7 @@ public class UserTest {
 	public void termsQuery() throws Exception {
 
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		QueryBuilder queryBuilder = QueryBuilders.termsQuery("name", new String[] { "T:o\"m-", "J,e{r}r;y:" });// 多值完全匹配查询
+		QueryBuilder queryBuilder = QueryBuilders.termsQuery("name", new String[] { "T:o\\\"m-", "J,e{r}r;y:", "test123" });// 多值完全匹配查询
 		searchSourceBuilder.query(queryBuilder);
 		searchSourceBuilder.size(10);
 		searchSourceBuilder.from(0);
@@ -167,7 +170,7 @@ public class UserTest {
 
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 		QueryBuilder queryBuilder = QueryBuilders.rangeQuery("birth").gte("2016-09-01T00:00:00")
-				.lte("2016-10-01T00:00:00").includeLower(true).includeUpper(true);// 区间查询
+				.lte("2018-10-01T00:00:00").includeLower(true).includeUpper(true);// 区间查询
 		searchSourceBuilder.query(queryBuilder);
 		searchSourceBuilder.size(10);
 		searchSourceBuilder.from(0);
@@ -206,9 +209,10 @@ public class UserTest {
 
 		String[] name = new String[] { "T:o\"m-", "Jerry" };
 		String from = "2016-09-01T00:00:00";
-		String to = "2016-10-01T00:00:00";
+		String to = "2018-10-01T00:00:00";
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		QueryBuilder queryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.termsQuery("name", name))
+		QueryBuilder queryBuilder = QueryBuilders.boolQuery()
+//				.must(QueryBuilders.termsQuery("name", name))
 				.must(QueryBuilders.rangeQuery("birth").gte(from).lte(to));
 		searchSourceBuilder.query(queryBuilder);
 		String query = searchSourceBuilder.toString();

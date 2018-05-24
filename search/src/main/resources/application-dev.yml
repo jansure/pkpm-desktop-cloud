@@ -1,3 +1,5 @@
+server:
+  port: 8303
 spring:
   elasticsearch:
     jest:
