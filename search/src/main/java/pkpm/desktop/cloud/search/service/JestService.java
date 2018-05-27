@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Bulk;
@@ -92,6 +95,11 @@ public class JestService {
 			Index index = new Index.Builder(obj).build();
 			bulk.addAction(index);
 		}
+		String ELASTIC_SEARCH_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
+		Gson gson = new GsonBuilder()
+	            .setDateFormat(ELASTIC_SEARCH_DATE_FORMAT)
+	            .create();
+		String str = bulk.build().getData(gson);
 		BulkResult br = jestClient.execute(bulk.build());
 		return br.isSucceeded();
 	}
