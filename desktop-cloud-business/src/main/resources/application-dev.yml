@@ -1,0 +1,61 @@
+server:
+  port: 8083
+  #host: http://192.168.0.178:18030
+  host: http://localhost:18030
+  context-path: /desktop-cloud-business
+  
+userEmail: cherishpf@163.com
+status: VALID
+invalidStatus: INVALID
+dataVolumeSize: 100
+
+spring:
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://114.115.146.100:3306/pkpmmydb?useUnicode=true&characterEncoding=utf8&useSSL=false&useAffectedRows=true
+    username: root
+    password: Pkpm=123
+  mail:
+    from: fly_free@yeah.net
+    host: smtp.yeah.net
+    port: 25
+    username: fly_free
+    password: FLY_FREE
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: false
+      mail.smtp.starttls.required: false
+  redis:
+    host: 49.4.8.123
+    port: 26379
+    password: kongbaoping@cabrtech
+    timeout: 0
+    pool:
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+
+
+
+
+    
+#配置分页插件pagehelper
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+
+#SQL日志    
+
+
