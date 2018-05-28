@@ -41,13 +41,13 @@ public class PullerBusiness {
 	 * 设置getwayServer的主机地址
 	 */
 	@Value("${server_host}")
-	private String serverHost ;
+	private String serverHost;
 
 	/**
 	 * 设置pkpmCloud的主机地址
 	 */
 	@Value("${business_host}")
-	private String businessHost = "http://localhost:8083";
+	private String businessHost;
 
 	
 	/**
@@ -438,9 +438,9 @@ public class PullerBusiness {
 					//增加返回桌面Id
 					String desktopId = "";
 					try {
-						desktopId = huaweiResponse.getSub_jobs().getEntities().getDesktop_id();
+						desktopId = huaweiResponse.getSub_jobs().get(0).getEntities().getDesktop_id();
 					}catch(Exception ex) {
-						log.error(huaweiResponse.getJob_id());
+						log.error("获取桌面ID错误！" + huaweiResponse.getJob_id());
 					}
 					return JobStatusEnum.SUCCESS.toString() + COMMON_SEPARATOR + desktopId;
 				}else if(status.equals(ResponseStatusEnum.FAILED.toString())) {
@@ -607,7 +607,7 @@ public class PullerBusiness {
 	 * @param detail 任务详情
 	 * @throws  
 	 */   
-	private void updateCloudSubscription(JobDetail detail) {
+	public void updateCloudSubscription(JobDetail detail) {
 
 		String url = businessHost + "/subscription/setSubsStatus";
 		
@@ -657,11 +657,7 @@ public class PullerBusiness {
 	}
 	
 	public static void main(String[] args) {
-		JobDetail detail = new JobDetail();
-		detail.setSubsId(152387788450129l);
-		detail.setStatus(SubscriptionStatusEnum.VALID.toString());
-		detail.setDesktopId("123456");
-		new PullerBusiness().updateCloudSubscription(detail);
+		
 	}
 	
 }

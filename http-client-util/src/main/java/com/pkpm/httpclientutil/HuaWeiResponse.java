@@ -1,5 +1,8 @@
 package com.pkpm.httpclientutil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
@@ -19,7 +22,7 @@ public class HuaWeiResponse {
     private Desktop desktop;
     private String ext1;//扩展使用
     
-    private SubJobs sub_jobs;
+    private List<SubJobs> sub_jobs = new ArrayList<SubJobs>();
 
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -33,22 +36,6 @@ public class HuaWeiResponse {
 
     }
     
-    @Data
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public class SubJobs {
-
-        private Entities entities;
-
-    }
-    
-    @Data
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public class Entities {
-
-        private String desktop_id;
-
-    }
-
 }
 
 

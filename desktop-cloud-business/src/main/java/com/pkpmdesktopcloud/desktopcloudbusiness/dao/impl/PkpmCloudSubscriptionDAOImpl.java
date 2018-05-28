@@ -74,7 +74,8 @@ public class PkpmCloudSubscriptionDAOImpl implements PkpmCloudSubscriptionDAO{
 				subs.setId(subsCriptionItem.getId());
 				subs.setStatus(subsCription.getStatus());
 				subs.setDesktopId(subsCription.getDesktopId());
-				num += subscriptionMapper.update(subs);
+				subscriptionMapper.update(subs);
+				num ++;
 			}
 		}
 		
