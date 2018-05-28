@@ -64,6 +64,7 @@ public class PkpmCloudSubscriptionDAOImpl implements PkpmCloudSubscriptionDAO{
 		//先获取相关信息
 		PkpmCloudSubscription subs = new PkpmCloudSubscription();
 		subs.setSubsId(subsCription.getSubsId());
+		subs.setDesktopId(subsCription.getDesktopId());
 		List<PkpmCloudSubscription> list = subscriptionMapper.getSubsCriptionList(subs);
 		
 		//批量更新
