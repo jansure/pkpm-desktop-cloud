@@ -1,0 +1,10 @@
+server:
+  port: 8303
+spring:
+  elasticsearch:
+    jest:
+      uris: http://localhost:9200,http://localhost:9200
+      #username: elastic
+      #password: changeme
+      read-timeout: 20000 #读取超时    
+      connection-timeout: 20000 #连接超时
