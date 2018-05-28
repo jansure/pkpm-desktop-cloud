@@ -26,7 +26,7 @@
 		<module>eureka-server</module>
 		<module>desktop-cloud-business</module>
 		<module>search</module>
-	</modules>
+    </modules>
 
 	<!-- 统一版本号依赖 -->
 	<parent>
