@@ -80,7 +80,7 @@ public class PullerServiceImplTest {
 		String jobId = "ff80808262ddf7940162f070a4d701df";
 		String status = JobStatusEnum.SUCCESS.toString();
 		
-		int num = pullerService.updateJobDetail(jobId, status);
+		int num = pullerService.updateJobDetail(jobId, status, "123456");
 		log.info("num:{}", num);
 	}
 	
@@ -89,7 +89,7 @@ public class PullerServiceImplTest {
 		String jobId = "ff80808262ddf7940162f070a4d701df";
 		String status = JobStatusEnum.SUCCESS.toString();
 		
-		int num = pullerService.updateJobTask(jobId, status);
+		int num = pullerService.updateJobTask(jobId, status, "123456");
 		log.info("num:{}", num);
 	}
 

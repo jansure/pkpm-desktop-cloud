@@ -50,7 +50,7 @@ public interface PullerService {
      * @Title: updateJobTask
      * @Description: TODO(这里用一句话描述这个方法的作用)
      */
-    int updateJobTask(String jobId, String status);
+    int updateJobTask(String jobId, String status, String desktopId);
 
 
     /**
@@ -73,5 +73,5 @@ public interface PullerService {
      * @Title: updateJobDetail
      * @Description: 更新任务详情状态，同时插入任务更新日志
      */
-    int updateJobDetail(String jobId, String status);
+    int updateJobDetail(String jobId, String status, String desktopId);
 }

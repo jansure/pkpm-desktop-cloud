@@ -157,7 +157,7 @@ public class PullerController {
             return ResultObject.failure(ex.getMessage());
         }
 
-        int num = pullerService.updateJobTask(jobId, status);
+        int num = pullerService.updateJobTask(jobId, status, desktopId);
 
         if (num >= 1) {
             return ResultObject.success("操作成功!");
@@ -191,7 +191,7 @@ public class PullerController {
         } catch (Exception ex) {
             return ResultObject.failure(ex.getMessage());
         }
-        int num = pullerService.updateJobDetail(jobId, status);
+        int num = pullerService.updateJobDetail(jobId, status, desktopId);
 
         if (num >= 1) {
             return ResultObject.success("操作成功!");
