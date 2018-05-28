@@ -1,15 +1,17 @@
 package com.pkpmdesktopcloud.redis;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
 import org.apache.ibatis.cache.CacheException;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Properties;
 
 final class RedisConfigurationBuilder {
     /**
@@ -118,6 +120,13 @@ final class RedisConfigurationBuilder {
                         metaCache.setValue(name, Boolean.valueOf(value));
                     } else if (double.class == type || Double.class == type) {
                         metaCache.setValue(name, Double.valueOf(value));
+                    }  else if (Set.class == type) {
+                    	if(value != null && !value.trim().equals("")) {
+                    		String[] arrays = value.split(",");
+                    		Set<String> set = new HashSet<>(Arrays.asList(arrays));
+                    		metaCache.setValue(name, set);
+                    	}
+                    	
                     } else {
                         throw new CacheException("Unsupported property type: '" + name + "' of type " + type);
                     }

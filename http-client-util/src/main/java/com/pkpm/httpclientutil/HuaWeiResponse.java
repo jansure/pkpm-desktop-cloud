@@ -1,6 +1,7 @@
 package com.pkpm.httpclientutil;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 
 /**
@@ -17,6 +18,8 @@ public class HuaWeiResponse {
     private String status;
     private Desktop desktop;
     private String ext1;//扩展使用
+    
+    private SubJobs sub_jobs;
 
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -27,6 +30,22 @@ public class HuaWeiResponse {
         private String status;
         private String error_code;
         private String error_msg;
+
+    }
+    
+    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public class SubJobs {
+
+        private Entities entities;
+
+    }
+    
+    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public class Entities {
+
+        private String desktop_id;
 
     }
 

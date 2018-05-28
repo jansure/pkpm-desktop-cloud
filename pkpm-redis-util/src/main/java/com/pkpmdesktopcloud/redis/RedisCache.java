@@ -1,16 +1,22 @@
 package com.pkpmdesktopcloud.redis;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.locks.ReadWriteLock;
+
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.apache.ibatis.cache.Cache;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-
-import java.util.Map;
-import java.util.concurrent.locks.ReadWriteLock;
+import redis.clients.jedis.JedisSentinelPool;
 
 public class RedisCache implements Cache{
     private final ReadWriteLock readWriteLock = new DummyReadWriteLock();
     private String id;
     private static JedisPool pool;
+    private static JedisSentinelPool jSentinelPool;
     private  RedisConfig redisConfig;
     private Integer timeOut;
 
@@ -24,12 +30,41 @@ public class RedisCache implements Cache{
                     redisConfig.getSoTimeout(), redisConfig.getPassword(), redisConfig.getDatabase(), redisConfig.getClientName(),
                     redisConfig.isSsl(), redisConfig.getSslSocketFactory(), redisConfig.getSslParameters(),
                     redisConfig.getHostnameVerifier());
+            System.out.println(redisConfig.getHost());
             }
         catch (Exception e) {
             System.err.println(e.getStackTrace().toString());
         }
 
     }
+    
+    //通过哨兵获取可用主机
+//    public RedisCache(final String id) {
+//    	
+//    	try {
+//    		if (id == null)
+//    			throw new IllegalArgumentException("Cache instances require an ID");
+//    		this.id = id;
+//    		redisConfig = RedisConfigurationBuilder.getInstance().parseConfiguration();
+//	        
+//	        jSentinelPool=new JedisSentinelPool(redisConfig.getMaster(), redisConfig.getNodes(), redisConfig);
+//	        Jedis jedis = jSentinelPool.getResource();
+//	        System.out.println(redisConfig.getMaster() + "--" + jedis.getClient().getHost() + ":" + jedis.getClient().getPort());
+//	        
+//		    pool = new JedisPool(redisConfig, jedis.getClient().getHost(), jedis.getClient().getPort(), redisConfig.getConnectionTimeout(),
+//		    redisConfig.getSoTimeout(), redisConfig.getPassword(), redisConfig.getDatabase(), redisConfig.getClientName(),
+//		    redisConfig.isSsl(), redisConfig.getSslSocketFactory(), redisConfig.getSslParameters(),
+//		    redisConfig.getHostnameVerifier());
+//		    
+//		    jSentinelPool.close();
+//		    jSentinelPool.destroy();
+//	        
+//    	}catch (Exception e) {
+//          System.err.println(e.getStackTrace().toString());
+//      }
+//    }
+    
+    
     private Object execute(RedisCallback redisCallback) {
         Jedis jedis = pool.getResource();
         try {
@@ -106,5 +141,10 @@ public class RedisCache implements Cache{
 
     public void setTimeOut(Integer timeOut) {
         this.timeOut = timeOut;
+    }
+    
+    public void destroy() {
+    	pool.close();
+    	pool.destroy();
     }
 }

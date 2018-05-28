@@ -141,7 +141,7 @@ public class PullerController {
      * @Description: 更新Job任务表
      */
     @RequestMapping(value = "/updateJobTask", method = RequestMethod.POST)
-    public ResultObject updateJobTask(String jobId, String status) {
+    public ResultObject updateJobTask(String jobId, String status, String desktopId) {
         if (StringUtils.isEmpty(jobId)) {
             return ResultObject.failure("jobId不能为空！");
         }
@@ -176,7 +176,7 @@ public class PullerController {
      * @Description: 更新Job任务表
      */
     @RequestMapping(value = "/updateJobDetail", method = RequestMethod.POST)
-    public ResultObject updateJobDetail(String jobId, String status) {
+    public ResultObject updateJobDetail(String jobId, String status, String desktopId) {
         if (StringUtils.isEmpty(jobId)) {
             return ResultObject.failure("jobId不能为空！");
         }
