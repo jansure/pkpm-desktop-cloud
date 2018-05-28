@@ -47,7 +47,7 @@ public class PullerBusiness {
 	 * 设置pkpmCloud的主机地址
 	 */
 	@Value("${business_host}")
-	private String businessHost;
+	private String businessHost = "http://localhost:8083";
 
 	
 	/**
@@ -201,8 +201,8 @@ public class PullerBusiness {
 			String desktopId = null;
 			if(status.contains(COMMON_SEPARATOR)) {
 				int index = status.indexOf(COMMON_SEPARATOR);
-				String realStatus = status.substring(0, index - 1);
-				desktopId = status.substring(index);
+				String realStatus = status.substring(0, index);
+				desktopId = status.substring(index + 1);
 				status = realStatus;
 			}
 			
@@ -235,6 +235,7 @@ public class PullerBusiness {
 					detail.setStatus(SubscriptionStatusEnum.VALID.toString());
 				}
 				
+				detail.setDesktopId(desktopId);
 				updateCloudSubscription(detail);
 			}else if(status.equals(JobStatusEnum.FAILED.toString())
 					&& operatorType.equals(OperatoreTypeEnum.DESKTOP.toString())) {//创建桌面失败，返回失败状态
@@ -435,7 +436,12 @@ public class PullerBusiness {
 				}else if(status.equals(ResponseStatusEnum.SUCCESS.toString())) {
 					
 					//增加返回桌面Id
-					String desktopId = huaweiResponse.getSub_jobs().getEntities().getDesktop_id();
+					String desktopId = "";
+					try {
+						desktopId = huaweiResponse.getSub_jobs().getEntities().getDesktop_id();
+					}catch(Exception ex) {
+						log.error(huaweiResponse.getJob_id());
+					}
 					return JobStatusEnum.SUCCESS.toString() + COMMON_SEPARATOR + desktopId;
 				}else if(status.equals(ResponseStatusEnum.FAILED.toString())) {
 					return JobStatusEnum.FAILED.toString();
@@ -470,10 +476,17 @@ public class PullerBusiness {
 			}
 			
 		}else if(operatorType.equals(OperatoreTypeEnum.CLOSE.toString())){
-			String status = huaweiResponse.getDesktop().getStatus();
-			if(status.equals(ResponseStatusEnum.SHUTOFF.toString())) {
-				return JobStatusEnum.SUCCESS.toString();
-			}else {
+			
+			try {
+				String status = huaweiResponse.getDesktop().getStatus();
+				if(status.equals(ResponseStatusEnum.SHUTOFF.toString())) {
+					return JobStatusEnum.SUCCESS.toString();
+				}
+				
+				return JobStatusEnum.FAILED.toString();
+				
+			} catch(Exception ex) {
+				
 				return JobStatusEnum.FAILED.toString();
 			}
 			
@@ -602,7 +615,12 @@ public class PullerBusiness {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("subsId", detail.getSubsId());
 		jsonMap.put("status", detail.getStatus());
-		jsonMap.put("projectId", detail.getProjectId());
+		
+		String desktopId = detail.getDesktopId();
+		if(StringUtils.isNotEmpty(desktopId)) {
+			jsonMap.put("desktopId", desktopId);
+		}
+		
 		String jsonStr = JsonUtil.serialize(jsonMap);
 		
 		try {
@@ -640,9 +658,10 @@ public class PullerBusiness {
 	
 	public static void main(String[] args) {
 		JobDetail detail = new JobDetail();
-		detail.setSubsId(123456l);
+		detail.setSubsId(152387788450129l);
 		detail.setStatus(SubscriptionStatusEnum.VALID.toString());
-		new PullerBusiness().updateCloudSubscription(detail );
+		detail.setDesktopId("123456");
+		new PullerBusiness().updateCloudSubscription(detail);
 	}
 	
 }
