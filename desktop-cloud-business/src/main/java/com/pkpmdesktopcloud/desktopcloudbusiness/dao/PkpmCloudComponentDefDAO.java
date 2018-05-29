@@ -26,4 +26,20 @@ public interface PkpmCloudComponentDefDAO {
 	 * @throws  
 	 */  
 	List<PkpmCloudComponentDef> getList();
+	
+	/**  
+	 * @Title: getSoftwareTypeList  
+	 * @Description: 软件分类  
+	 * @param @return    参数  
+	 * @return List<PkpmCloudComponentDef>    返回类型  
+	 * @throws  
+	 */  
+	List<PkpmCloudComponentDef> getSoftwareTypeList();
+	
+	/**
+	 * 根据componentId获取PkpmCloudComponentDef
+	 * @param componentId
+	 * @return
+	 */
+	PkpmCloudComponentDef getComponentInfoById(Integer componentId);
 }

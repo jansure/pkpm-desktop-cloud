@@ -27,4 +27,10 @@ public interface PkpmCloudProductDefService {
      */
     List<PkpmCloudProductDef> getProductTypeList();
     
+    /**
+	 * 产品购买列表
+	 * @return
+	 */
+	Map<String, Object> getProductBuyMap();
+
 }

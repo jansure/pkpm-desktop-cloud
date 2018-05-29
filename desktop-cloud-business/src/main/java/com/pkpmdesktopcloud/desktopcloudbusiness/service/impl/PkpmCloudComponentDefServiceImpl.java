@@ -1,15 +1,22 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import com.pkpmdesktopcloud.desktopcloudbusiness.constants.SysConstant;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudComponentDefDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudProductDefDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudComponentDef;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudProductDef;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudComponentDefService;
 import com.pkpmdesktopcloud.redis.RedisCache;
@@ -26,6 +33,9 @@ public class PkpmCloudComponentDefServiceImpl implements PkpmCloudComponentDefSe
 	
 	@Resource
 	private PkpmCloudComponentDefDAO componentDAO;
+	
+	@Resource
+	private PkpmCloudProductDefDAO productDAO;
 
 	/* (非 Javadoc)  
 	 *   
@@ -52,4 +62,37 @@ public class PkpmCloudComponentDefServiceImpl implements PkpmCloudComponentDefSe
 		
 		return componentDAO.getList();
 	}
+
+
+	/* (non-Javadoc)
+	 * @see com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudComponentDefService#getSoftwareTypeList()
+	 */
+	@Override
+	public List<PkpmCloudComponentDef> getSoftwareTypeList() {
+
+		return componentDAO.getSoftwareTypeList();
+	}
+
+
+	/* (non-Javadoc)
+	 * @see com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudComponentDefService#getComponentDefListByProductType(java.lang.Integer)
+	 */
+	@Override
+	public Map<Integer, List<PkpmCloudComponentDef>> getComponentDefListByProductType(Integer productType) {
+		List<PkpmCloudComponentDef> componentDefList = new ArrayList<PkpmCloudComponentDef>();
+		Map<Integer, List<PkpmCloudComponentDef>> componentsMap = new LinkedHashMap<Integer, List<PkpmCloudComponentDef>>();
+		// 根据productType查询对应的product，得到component_id列表
+		List<PkpmCloudProductDef> productList = productDAO.getProductByType(productType);
+		// 循环component_id，找到对应的component_def
+		if(productList != null && productList.size() > 0) {
+			for (PkpmCloudProductDef product : productList) {
+				PkpmCloudComponentDef component = componentDAO.getComponentInfoById(product.getComponentId());
+				componentDefList.add(component);
+			}
+		}
+		// 按照ComponentType进行分组
+		componentsMap = componentDefList.stream().collect(Collectors.groupingBy(PkpmCloudComponentDef::getComponentType));
+		return componentsMap;
+	}
+
 }
