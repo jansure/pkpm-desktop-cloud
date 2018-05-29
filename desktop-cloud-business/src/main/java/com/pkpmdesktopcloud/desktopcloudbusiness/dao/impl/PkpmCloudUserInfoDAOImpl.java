@@ -105,4 +105,19 @@ public class PkpmCloudUserInfoDAOImpl implements PkpmCloudUserInfoDAO{
 		return null;
 	}
 
+	@Override
+	public List<PkpmCloudUserInfo> userList(PkpmCloudUserInfo userInfo) {
+
+		List<PkpmCloudUserInfo> userInfoList = userMapper.userList(userInfo);
+
+		return userInfoList;
+	}
+
+	@Override
+	public List<PkpmCloudUserInfo> userList() {
+
+		List<PkpmCloudUserInfo> userInfoList = userMapper.userList();
+		return userInfoList;
+	}
+
 }

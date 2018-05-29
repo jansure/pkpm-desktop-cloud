@@ -347,7 +347,8 @@ public class CommonRequestBeanBuilder {
         String areaName = projectDef.getAreaName();
         Preconditions.checkNotNull(StringUtils.isNotBlank(areaName), "areaName不能为空");
         PkpmWorkspaceUrl pkpmWorkspaceUrl = pkpmWorkspaceUrlDAO.selectByPriKey(projectId, areaName, DesktopServiceEnum.DETAIL.toString());
-        pkpmWorkspaceUrl.setDesktopId(requestBean.getDesktops().get(0).getDesktopId());
+        //pkpmWorkspaceUrl.setDesktopId(requestBean.getDesktops().get(0).getDesktopId());
+		pkpmWorkspaceUrl.setDesktopId(requestBean.getDesktopId());
         commonReq.setPkpmWorkspaceUrl(pkpmWorkspaceUrl);
         
         return commonReq;

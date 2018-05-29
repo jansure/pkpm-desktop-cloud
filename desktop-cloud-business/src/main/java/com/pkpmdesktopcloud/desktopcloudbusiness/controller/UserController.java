@@ -14,10 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.desktop.constant.MessageTypeEnum;
 import com.desktop.utils.Base64Util;
@@ -427,5 +424,27 @@ public class UserController {
 		userService.changeUserPassword(newUserInfo, subsCriptionList);
 		
 		return ResultObject.success("密码修改成功");
+	}
+
+	/**
+	 * 展示用户列表接口,支持过滤条件
+	 * @param userInfo
+	 * @return  ResultObject
+	 */
+	@ApiOperation("展示用户列表")
+	@GetMapping("/userList")
+	public ResultObject userList(@RequestBody PkpmCloudUserInfo userInfo){
+
+		List<PkpmCloudUserInfo> userInfoList = null;
+
+		if(userInfo != null){
+			userInfoList = userService.userList(userInfo);
+		}
+
+		userInfoList =  userService.userList();
+
+
+		return null;
+
 	}
 }

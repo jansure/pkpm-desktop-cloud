@@ -199,7 +199,7 @@ public class CommonRequestBeanUtil {
     public static void checkCommonQueryDesktopDetail(CommonRequestBean commonRequestBean) {
 
         checkCommonRequestProjectId(commonRequestBean);
-        String desktopId = commonRequestBean.getDesktops().get(0).getDesktopId();
+        String desktopId = commonRequestBean.getDesktopId();
         Preconditions.checkArgument(StringUtils.isNotBlank(desktopId), "请传入deskopId参数");
 
     }
@@ -217,4 +217,9 @@ public class CommonRequestBeanUtil {
         Preconditions.checkArgument(StringUtils.isNotBlank(querydesktopType), "请传入querydesktopType参数");
     }
 
+    public static void checkqueryComputerName(CommonRequestBean commonRequestBean) {
+        Preconditions.checkArgument(null != commonRequestBean, "请传入正确的参数");
+        String desktopId = commonRequestBean.getDesktopId();
+        Preconditions.checkArgument(StringUtils.isNotBlank(desktopId), "请传入desktopId参数");
+    }
 }
