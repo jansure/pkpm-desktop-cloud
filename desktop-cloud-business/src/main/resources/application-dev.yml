@@ -2,7 +2,7 @@ server:
   port: 8083
   #host: http://192.168.0.178:18030
   host: http://49.4.8.123:18030
-#  context-path: /desktop-cloud-business
+  context-path: /desktop-cloud-business
   
 userEmail: cherishpf@163.com
 status: VALID
