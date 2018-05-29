@@ -2,6 +2,7 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.controller;
 
 
 import com.desktop.utils.page.ResultObject;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudComponentDef;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.ComponentVO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudComponentDefService;
 import io.swagger.annotations.Api;
@@ -37,8 +38,8 @@ public class ComponentController {
 	 */
 	@ApiOperation("根据id获取产品详情信息")
 	@ResponseBody
-	@RequestMapping(value = "/subComponents", method = RequestMethod.POST)
-	public ResultObject getComponentByProductType(Integer productType, HttpServletResponse response) {
+	@RequestMapping(value = "/subComponentsOld", method = RequestMethod.POST)
+	public ResultObject getComponentByProductTypeOld(Integer productType, HttpServletResponse response) {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		
@@ -54,4 +55,21 @@ public class ComponentController {
 		return ResultObject.success(componentsMap);
 	}
 	
+	/**
+	 * 根据产品类型id获取自动配置的components
+	 * 
+	 * @param productType
+	 * @return
+	 */
+	@ApiOperation("根据id获取产品详情信息")
+	@ResponseBody
+	@RequestMapping(value = "/subComponents", method = RequestMethod.POST)
+	public ResultObject getComponentByProductType(Integer productType, HttpServletResponse response) {
+		// 允许跨域调用
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		
+		Map<Integer,List<PkpmCloudComponentDef>>  componentsMap = componentDefService.getComponentDefListByProductType(productType);
+		
+		return ResultObject.success(componentsMap);
+	}
 }

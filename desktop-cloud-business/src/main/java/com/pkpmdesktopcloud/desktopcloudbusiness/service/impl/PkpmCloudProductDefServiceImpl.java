@@ -1,7 +1,9 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.pkpmdesktopcloud.desktopcloudbusiness.constants.SysConstant;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudComponentDefDAO;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudProductDefDAO;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudComponentDef;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudNavigation;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudProductDef;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmSysConfig;
@@ -84,5 +87,39 @@ public class PkpmCloudProductDefServiceImpl implements PkpmCloudProductDefServic
 		// 写入Redis缓存
 		cache.putObject(ALL_TYPE_REDIS_KEY, productTypeList);
 		return productTypeList;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudProductDefService#getProductBuyMap()
+	 */
+	@Override
+	public Map<String, Object> getProductBuyMap() {
+		Map<String, Object> map = new HashMap<String, Object>(16);
+		// 产品套餐类型列表
+		List<PkpmCloudProductDef> productTypeList = this.getProductTypeList();
+		map.put(SysConstant.BUY_TYPE, productTypeList);
+		
+		List<PkpmCloudComponentDef> componentDefList = componentDAO.getList();
+		if (componentDefList != null && componentDefList.size() > 0) {
+			// 软件名称列表
+			Map<String, List<PkpmCloudComponentDef>> softwareTypeMap = componentDefList.stream().filter(PkpmCloudComponentDef->PkpmCloudComponentDef.getComponentType().equals(Integer.parseInt(SysConstant.BUY_APP)))
+					.collect(Collectors.groupingBy(PkpmCloudComponentDef::getComponentDesc));
+			map.put(SysConstant.BUY_APP, softwareTypeMap);
+		
+			// 地域列表
+			List<PkpmCloudComponentDef> areaList = componentDefList.stream().filter(PkpmCloudComponentDef->PkpmCloudComponentDef.getComponentType().equals(Integer.parseInt(SysConstant.BUY_AREA))).collect(Collectors.toList());
+			map.put(SysConstant.BUY_AREA, areaList);
+			
+			// 主机配置列表
+			List<PkpmCloudComponentDef> hostConfigList = componentDefList.stream().filter(PkpmCloudComponentDef->PkpmCloudComponentDef.getComponentType().equals(Integer.parseInt(SysConstant.BUY_HOST))).collect(Collectors.toList());
+			map.put(SysConstant.BUY_HOST, hostConfigList);
+			
+			// 云存储列表
+			List<PkpmCloudComponentDef> storageList = componentDefList.stream().filter(PkpmCloudComponentDef->PkpmCloudComponentDef.getComponentType().equals(Integer.parseInt(SysConstant.BUY_STORAGE))).collect(Collectors.toList());
+			map.put(SysConstant.BUY_STORAGE, storageList);
+		}
+
+		return map;
 	}
 }

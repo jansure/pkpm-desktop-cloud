@@ -53,10 +53,30 @@ public class ProductController {
 	public ResultObject getProductTypeList(HttpServletResponse response) {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
+		Map<String, Object> map = productService.getProductBuyMap();
+		log.debug("map ：" + map);
+		return ResultObject.success(map);
+	}
+	
+	/**
+	 * 返回默认的产品套餐配置列表
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@ApiOperation("获取产品套餐配置列表")
+	@RequestMapping(value = "/product-buyOld", method = RequestMethod.POST)
+	public ResultObject getProductTypeListOld(HttpServletResponse response) {
+		// 允许跨域调用
+		response.setHeader("Access-Control-Allow-Origin", "*");
 		Map<String, Object> map = new HashMap<String, Object>(16);
 		// 产品套餐类型列表，默认选项为全家桶类型
 		List<PkpmCloudProductDef> productTypeList = productService.getProductTypeList();
 		map.put(SysConstant.BUY_TYPE, productTypeList);
+		
+		List<PkpmCloudComponentDef> softwareTypeList = componentDefService.getSoftwareTypeList();
+		Map<String, List<PkpmCloudComponentDef>> softwareTypeMap = softwareTypeList.stream().collect(Collectors.groupingBy(PkpmCloudComponentDef::getComponentDesc));
+		map.put(SysConstant.BUY_APP, softwareTypeMap);
 		
 		// 配置类型列表
 		List<PkpmCloudComponentDef> componentDefList = componentDefService.getList();
