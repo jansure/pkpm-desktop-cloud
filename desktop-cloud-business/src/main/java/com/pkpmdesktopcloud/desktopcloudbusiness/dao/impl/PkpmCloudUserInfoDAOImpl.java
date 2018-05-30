@@ -1,7 +1,10 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
+import com.desktop.utils.DateUtils;
+import com.desktop.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -27,6 +30,18 @@ public class PkpmCloudUserInfoDAOImpl implements PkpmCloudUserInfoDAO{
 	public void saveUserInfo(PkpmCloudUserInfo userInfo) {
 		
 		userInfo.setUserId(null);
+
+
+		userInfo.setUserAccountId(0);
+		//普通用户
+		userInfo.setUserType(1);
+		userInfo.setUserEmail("");
+		userInfo.setUserIdentificationCard("");
+		userInfo.setUserCreateTime(DateUtils.getCurrentTime());
+		userInfo.setUserIdentificationCard("");
+		userInfo.setUserOrganization("");
+		userInfo.setUserArea("");
+
 		userMapper.insert(userInfo);
 	}
 

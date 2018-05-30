@@ -90,9 +90,10 @@ public class PkpmCloudSubscriptionServiceImpl implements PkpmCloudSubscriptionSe
 		//a、保存订单之前先查询有没有 初始化的订单
 		Integer userId = userInfo.getUserId();
 		Integer invalidCount = subscriptionMapper.selectCount(userId,invalidStatus);
-		if(invalidCount >= 1){
+		//测试阶段先注掉
+		/*if(invalidCount >= 1){
 			throw  Exceptions.newBusinessException("您有正在创建中的桌面,请重新尝试!");
-		}
+		}*/
 		Integer regionId = wo.getRegionId();
 		PkpmCloudComponentDef regionComponentInfo = componentMapper.getComponentInfo(regionId, ComponentTypeConstant.region_type);
 		String areaCode = regionComponentInfo.getComponentDesc();
@@ -138,6 +139,8 @@ public class PkpmCloudSubscriptionServiceImpl implements PkpmCloudSubscriptionSe
 		subscription.setProjectId(projectId);
 		subscription.setAdId(Integer.parseInt(adId));
 		subscription.setStatus(invalidStatus);
+		subscription.setAreaCode(areaCode);
+
 		Integer subscriptionCount = subscriptionMapper.saveSubscription(subscription);
 		if(subscriptionCount<1){
 			throw  Exceptions.newBusinessException("保存订单失败,请您重试!");
@@ -148,9 +151,19 @@ public class PkpmCloudSubscriptionServiceImpl implements PkpmCloudSubscriptionSe
 		Integer productId = (Integer) wo.getProductId();
 		subsDetails.setProductId(productId);
 		subsDetails.setCreateTime(date);
-		subsDetails.setCloudStorageTimeId(wo.getCloudStorageTimeId());
+		subsDetails.setValidTime(date);
+
+//		subsDetails.setCloudStorageTimeId(wo.getCloudStorageTimeId());
+//		String cloudStorageName = componentMapper.getComponentName(wo.getCloudStorageTimeId(), ComponentTypeConstant.cloud_storage);
+//		subsDetails.setCloudStorageTime(Integer.parseInt(StringUtil.substr(cloudStorageName)));
+
+		//根据 云存储ID  查询  云存储时间
+		Integer cloudStorageTimeId = wo.getCloudStorageTimeId();
 		String cloudStorageName = componentMapper.getComponentName(wo.getCloudStorageTimeId(), ComponentTypeConstant.cloud_storage);
-		subsDetails.setCloudStorageTime(Integer.parseInt(StringUtil.substr(cloudStorageName)));
+		String str = StringUtil.substr(cloudStorageName);
+		long longStorageName = Long.parseLong(str);
+		subsDetails.setInvalidTime(date.plusMonths(longStorageName));
+
 		Integer subsDetailsCount = subsDetailsMapper.saveSubsDetails(subsDetails);
 		if(subsDetailsCount<1){
 			throw  Exceptions.newBusinessException("保存订单明细失败,请您重试!");
