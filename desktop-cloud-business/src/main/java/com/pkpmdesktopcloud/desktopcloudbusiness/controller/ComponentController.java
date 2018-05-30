@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -64,10 +66,10 @@ public class ComponentController {
 	@ApiOperation("根据id获取产品详情信息")
 	@ResponseBody
 	@RequestMapping(value = "/subComponents", method = RequestMethod.POST)
-	public ResultObject getComponentByProductType(Integer productType, HttpServletResponse response) {
+	public ResultObject getComponentByProductType(@RequestBody Map<String,String> map, HttpServletResponse response) {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		
+		Integer productType = Integer.valueOf(map.get("productType"));
 		Map<Integer,List<PkpmCloudComponentDef>>  componentsMap = componentDefService.getComponentDefListByProductType(productType);
 		
 		return ResultObject.success(componentsMap);
