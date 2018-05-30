@@ -30,4 +30,11 @@ public interface PkpmCloudUserInfoMapper {
     @Lang(SimpleUpdateLangDriver.class)
     Integer update(PkpmCloudUserInfo userInfo);
 
+   // @Select(" ")
+   // @Lang(SimpleSelectLangDriver.class)
+    List<PkpmCloudUserInfo> userList(PkpmCloudUserInfo userInfo);
+
+   // @Select("  ")
+   // @Lang(SimpleSelectLangDriver.class)
+    List<PkpmCloudUserInfo> userList();
 }
