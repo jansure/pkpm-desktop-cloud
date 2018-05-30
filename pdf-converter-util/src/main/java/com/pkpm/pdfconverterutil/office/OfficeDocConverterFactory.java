@@ -29,7 +29,7 @@ public class OfficeDocConverterFactory{
         OfficeDocConverter d;
         try {
             className = extension.substring(0, 1).toUpperCase() + extension.substring(1);
-            Class c = Class.forName("cc.abstra.trantor.pdfconverter.office."+className+"Converter");
+            Class c = Class.forName("com.pkpm.pdfconverterutil.office."+className+"Converter");
             d = (OfficeDocConverter) c.newInstance();
             d.setConverter(officeConverter);
             d.setDocument(officeFile);

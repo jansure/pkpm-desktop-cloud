@@ -10,9 +10,21 @@ import java.util.regex.Pattern;
 import org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration;
 import org.artofsolving.jodconverter.office.OfficeManager;
 
+import com.pkpm.httpclientutil.common.util.PropertiesUtil;
+
 
 public class OpenOfficeService {
 
+	/**
+	 * linux系统下libreoffice安装目录
+	 */
+	private static final String OFFICE_HOME_LINUX = PropertiesUtil.getProperty("config.properties", "office.home.linux");
+	
+	/**
+	 * windows系统下libreoffice安装目录
+	 */
+	private static final String OFFICE_HOME_WINDOWS = PropertiesUtil.getProperty("config.properties", "office.home.windows");
+	
     private static OfficeManager officeManager = null; //Couldn't make NullObject b/c of poor OfficeManager declaration
 
     public static void initialize(List<Long> listenAtPorts) {
@@ -43,20 +55,20 @@ public class OpenOfficeService {
     }
     
     /** 
-     * 打开libreOffice服务的方法 
-     * 
+     * 获取libreOffice安装目录
      * @return 
      */  
-    public static String getLibreOfficeHome() {  
-        String osName = System.getProperty("os.name");  
+    public static String getLibreOfficeHome() {
+        String osName = System.getProperty("os.name");
   
-        if (Pattern.matches("Linux.*", osName)) {  
-            //获取linux系统下libreoffice主程序的位置  
-            return "/opt/libreoffice 5/program/soffice";  
-        } else if (Pattern.matches("Windows.*", osName)) {  
-            //获取windows系统下libreoffice主程序的位置  
-            return "d:\\Program Files\\LibreOffice 5";  
-        }  
+        if (Pattern.matches("Linux.*", osName)) {
+            //获取linux系统下libreoffice主程序的位置 
+            return OFFICE_HOME_LINUX; 
+        } else if (Pattern.matches("Windows.*", osName)) { 
+            //获取windows系统下libreoffice主程序的位置 
+            return OFFICE_HOME_WINDOWS;
+        }
+        
         return null;  
     } 
 
