@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -47,9 +49,8 @@ public class ProductController {
 	 * @param response
 	 * @return
 	 */
-	@ResponseBody
 	@ApiOperation("获取产品套餐配置列表")
-	@RequestMapping(value = "/product-buy", method = RequestMethod.POST)
+	@PostMapping(value = "/product-buy")
 	public ResultObject getProductTypeList(HttpServletResponse response) {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
@@ -59,34 +60,34 @@ public class ProductController {
 	}
 	
 	/**
-	 * 返回默认的产品套餐配置列表
+	 * (不再使用)返回默认的产品套餐配置列表
 	 * @param response
 	 * @return
 	 */
-	@ResponseBody
-	@ApiOperation("获取产品套餐配置列表")
-	@RequestMapping(value = "/product-buyOld", method = RequestMethod.POST)
-	public ResultObject getProductTypeListOld(HttpServletResponse response) {
-		// 允许跨域调用
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		Map<String, Object> map = new HashMap<String, Object>(16);
-		// 产品套餐类型列表，默认选项为全家桶类型
-		List<PkpmCloudProductDef> productTypeList = productService.getProductTypeList();
-		map.put(SysConstant.BUY_TYPE, productTypeList);
-		
-		List<PkpmCloudComponentDef> softwareTypeList = componentDefService.getSoftwareTypeList();
-		Map<String, List<PkpmCloudComponentDef>> softwareTypeMap = softwareTypeList.stream().collect(Collectors.groupingBy(PkpmCloudComponentDef::getComponentDesc));
-		map.put(SysConstant.BUY_APP, softwareTypeMap);
-		
-		// 配置类型列表
-		List<PkpmCloudComponentDef> componentDefList = componentDefService.getList();
-		if(componentDefList != null && componentDefList.size() > 0) {
-			Map<Integer, List<PkpmCloudComponentDef>> componentDefMap = componentDefList.stream().collect(Collectors.groupingBy(PkpmCloudComponentDef::getComponentType));
-			map.put("componentDefMap",componentDefMap);
-		}
-				
-		log.debug("map ：" + map);
-		return ResultObject.success(map);
-	}
+//	@ResponseBody
+//	@ApiOperation("获取产品套餐配置列表")
+//	@RequestMapping(value = "/product-buyOld", method = RequestMethod.POST)
+//	public ResultObject getProductTypeListOld(HttpServletResponse response) {
+//		// 允许跨域调用
+//		response.setHeader("Access-Control-Allow-Origin", "*");
+//		Map<String, Object> map = new HashMap<String, Object>(16);
+//		// 产品套餐类型列表，默认选项为全家桶类型
+//		List<PkpmCloudProductDef> productTypeList = productService.getProductTypeList();
+//		map.put(SysConstant.BUY_TYPE, productTypeList);
+//		
+//		List<PkpmCloudComponentDef> softwareTypeList = componentDefService.getSoftwareTypeList();
+//		Map<String, List<PkpmCloudComponentDef>> softwareTypeMap = softwareTypeList.stream().collect(Collectors.groupingBy(PkpmCloudComponentDef::getComponentDesc));
+//		map.put(SysConstant.BUY_APP, softwareTypeMap);
+//		
+//		// 配置类型列表
+//		List<PkpmCloudComponentDef> componentDefList = componentDefService.getList();
+//		if(componentDefList != null && componentDefList.size() > 0) {
+//			Map<Integer, List<PkpmCloudComponentDef>> componentDefMap = componentDefList.stream().collect(Collectors.groupingBy(PkpmCloudComponentDef::getComponentType));
+//			map.put("componentDefMap",componentDefMap);
+//		}
+//				
+//		log.debug("map ：" + map);
+//		return ResultObject.success(map);
+//	}
 
 }

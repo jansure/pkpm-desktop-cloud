@@ -19,10 +19,10 @@ public interface PkpmCloudProductDefService {
 	 * @param productType 父类id
 	 * @return
 	 */
-	List<PkpmCloudProductDef> getProductByType(Integer productType);
+//	List<PkpmCloudProductDef> getProductByType(Integer productType);
 	
     /**
-     * 返回产品套餐类型列表
+     * 返回产品套餐类型列表，并指定默认选项
      * @return
      */
     List<PkpmCloudProductDef> getProductTypeList();

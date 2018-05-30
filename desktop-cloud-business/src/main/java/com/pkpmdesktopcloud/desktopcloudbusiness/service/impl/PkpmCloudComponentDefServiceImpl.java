@@ -31,6 +31,8 @@ import com.pkpmdesktopcloud.redis.RedisCache;
 @Slf4j
 public class PkpmCloudComponentDefServiceImpl implements PkpmCloudComponentDefService {
 	
+	private static final String PRODUCT_INFO_LIST_ID = "productInfoList";
+	
 	@Resource
 	private PkpmCloudComponentDefDAO componentDAO;
 	
@@ -79,8 +81,16 @@ public class PkpmCloudComponentDefServiceImpl implements PkpmCloudComponentDefSe
 	 */
 	@Override
 	public Map<Integer, List<PkpmCloudComponentDef>> getComponentDefListByProductType(Integer productType) {
+		RedisCache cache = new RedisCache(PRODUCT_INFO_LIST_ID);
+		Map<Integer, List<PkpmCloudComponentDef>> componentsMap = (Map<Integer, List<PkpmCloudComponentDef>>) cache.getObject(productType);
+		
+		// 若存在Redis缓存，从缓存中读取
+		if (componentsMap != null) {
+			return componentsMap;
+		}
+		
+		// 若不存在对应的Redis缓存，从数据库查询
 		List<PkpmCloudComponentDef> componentDefList = new ArrayList<PkpmCloudComponentDef>();
-		Map<Integer, List<PkpmCloudComponentDef>> componentsMap = new LinkedHashMap<Integer, List<PkpmCloudComponentDef>>();
 		// 根据productType查询对应的product，得到component_id列表
 		List<PkpmCloudProductDef> productList = productDAO.getProductByType(productType);
 		// 循环component_id，找到对应的component_def
@@ -92,6 +102,9 @@ public class PkpmCloudComponentDefServiceImpl implements PkpmCloudComponentDefSe
 		}
 		// 按照ComponentType进行分组
 		componentsMap = componentDefList.stream().collect(Collectors.groupingBy(PkpmCloudComponentDef::getComponentType));
+		
+		// 存入redis
+		cache.putObject(productType, componentsMap);
 		return componentsMap;
 	}
 
