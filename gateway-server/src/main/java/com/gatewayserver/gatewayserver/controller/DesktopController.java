@@ -2,7 +2,8 @@ package com.gatewayserver.gatewayserver.controller;
 
 import javax.annotation.Resource;
 
-import com.gateway.common.dto.DesktopParam;
+import com.desktop.utils.JsonUtil;
+import com.gateway.common.dto.*;
 import com.gatewayserver.gatewayserver.service.AdService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.desktop.utils.page.ResultObject;
 import com.gateway.common.domain.CommonRequestBean;
-import com.gateway.common.dto.DesktopCreation;
-import com.gateway.common.dto.DesktopRequest;
-import com.gateway.common.dto.JobBean;
 import com.gatewayserver.gatewayserver.service.DesktopService;
 import com.gatewayserver.gatewayserver.utils.CommonRequestBeanBuilder;
 import com.gatewayserver.gatewayserver.utils.CommonRequestBeanUtil;
@@ -170,8 +168,9 @@ public class DesktopController {
 	public ResultObject listDesktopDetail(@RequestBody List<CommonRequestBean> commonRequestBeanList) {
 
 		CommonRequestBeanUtil.checkCommonQueryDesktopDetailList(commonRequestBeanList);
-		DesktopRequest desktopRequest = desktopService.listDesktopDetail(commonRequestBeanList);
-		return ResultObject.success(desktopRequest, "查询桌面详情成功!");
+		List<Desktop> desktopList = desktopService.listDesktopDetail(commonRequestBeanList);
+		String strDesktopList = JsonUtil.serializeEx(desktopList);
+		return ResultObject.success(strDesktopList, "查询桌面详情成功!");
 
 	}
     /**

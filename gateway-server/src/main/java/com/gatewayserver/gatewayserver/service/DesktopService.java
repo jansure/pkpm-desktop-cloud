@@ -2,10 +2,7 @@ package com.gatewayserver.gatewayserver.service;
 
 import com.desktop.utils.page.ResultObject;
 import com.gateway.common.domain.CommonRequestBean;
-import com.gateway.common.dto.DesktopCreation;
-import com.gateway.common.dto.DesktopParam;
-import com.gateway.common.dto.DesktopRequest;
-import com.gateway.common.dto.JobBean;
+import com.gateway.common.dto.*;
 import com.gateway.common.dto.desktop.DesktopSpecResponse;
 
 import java.util.List;
@@ -66,12 +63,12 @@ public interface DesktopService {
     DesktopRequest queryDesktopDetail(CommonRequestBean commonRequestBean);
 
 	/**
-	 * 查询桌面详情
+	 * 查询桌面详情列表
 	 *
 	 * @param commonRequestBeanList
 	 * @return ResultObject
 	 */
-	DesktopRequest listDesktopDetail(List<CommonRequestBean> commonRequestBeanList);
+	List<Desktop>   listDesktopDetail(List<CommonRequestBean> commonRequestBeanList);
 
     /**
      * 重启、启动、关闭桌面
