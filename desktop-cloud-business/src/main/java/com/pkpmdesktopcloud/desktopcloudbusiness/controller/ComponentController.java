@@ -67,7 +67,7 @@ public class ComponentController {
 	 * @return
 	 */
 	@ApiOperation("根据产品套餐类型获取产品配置组件信息")
-	@PostMapping(value = "/subComponents", produces = "application/json")
+	@PostMapping(value = "/subComponents", consumes="application/json", produces = "application/json")
 	public ResultObject getComponentByProductType(@RequestBody Map<String, Integer> map, HttpServletResponse response) {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
