@@ -41,7 +41,7 @@ public class SysConstant {
 	/**
 	 * 产品套餐类型：PKPM至尊版
 	 */
-	public static final String PRODUCT_TYPE_ALL = "1000";
+	public static final String PRODUCT_TYPE_ALL = "800";
 	/**
 	 * "是"默认值
 	 */
