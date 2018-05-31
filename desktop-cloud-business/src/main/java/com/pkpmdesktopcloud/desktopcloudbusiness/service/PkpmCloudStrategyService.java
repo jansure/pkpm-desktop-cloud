@@ -12,6 +12,7 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.service;
 
 import java.util.List;
 
+import com.gateway.common.dto.strategy.Policies;
 import com.pkpmdesktopcloud.desktopcloudbusiness.dto.PkpmCloudStrategyVO;
 
 /**  
@@ -33,7 +34,15 @@ public interface PkpmCloudStrategyService {
 	 * @return List<PkpmCloudStrategyVO>    返回用户策略信息
 	 */
 	List<PkpmCloudStrategyVO> getStrategyByQuery(String userName, int pageSize, int pageNo);
-	
-	
 
+	  
+	/**  
+	 * @Title: getStrategyByDesktopId  
+	 * @Description: 通过桌面Id获取桌面策略详情  
+	 * @param desktopIds 多个桌面Id用逗号分割
+	 * @return Policies    返回策略信息
+	 * @throws  
+	 */
+	Policies getStrategyByDesktopId(String desktopIds);
+	
 }
