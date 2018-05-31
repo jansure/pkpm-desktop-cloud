@@ -20,8 +20,8 @@ import com.pkpm.pay.common.core.dao.BaseDao;
 
 /**
  * 结算记录附件dao
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public interface RpSettRecordAnnexDao  extends BaseDao<RpSettRecordAnnex> {
 }

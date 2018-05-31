@@ -29,7 +29,7 @@ import com.pkpm.pay.reconciliation.fileDown.service.ReconciliationFactory;
 /**
  * 对账文件下载业务逻辑.
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

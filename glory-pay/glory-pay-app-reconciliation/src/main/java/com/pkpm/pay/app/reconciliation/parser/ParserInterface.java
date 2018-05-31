@@ -26,7 +26,7 @@ import com.pkpm.pay.reconciliation.vo.ReconciliationEntityVo;
 /**
  * 定义一个解析的接口，实现着必须override接口中的parser方法.
  * 
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

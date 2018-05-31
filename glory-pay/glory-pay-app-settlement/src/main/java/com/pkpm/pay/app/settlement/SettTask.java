@@ -23,8 +23,8 @@ import com.pkpm.pay.app.settlement.scheduled.SettScheduled;
 
 /**
  * 结算定时任务.(分商户统计账户历史进行汇总)
- * 龙果学院：www.roncoo.com
- * @author zenghao
+ * glory-cloud
+ * @author
  */
 public class SettTask {
 	

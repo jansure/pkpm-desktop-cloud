@@ -354,7 +354,7 @@ public class CommonRequestBeanBuilder {
         return commonReq;
     }
 
-    public CommonRequestBean buildBeanForQueryqueryDesktopListOrDetail(CommonRequestBean requestBean) {
+    public CommonRequestBean buildBeanForQueryDesktopListOrDetail(CommonRequestBean requestBean) {
         PkpmWorkspaceUrl pkpmWorkspaceUrl = null;
         CommonRequestBean commonReq = new CommonRequestBean();
 

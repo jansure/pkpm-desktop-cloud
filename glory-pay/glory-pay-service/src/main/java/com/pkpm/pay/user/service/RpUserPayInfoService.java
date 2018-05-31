@@ -21,8 +21,8 @@ import com.pkpm.pay.user.entity.RpUserPayInfo;
 
 /**
  * 用户第三方支付信息service接口
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public interface RpUserPayInfoService{
 	

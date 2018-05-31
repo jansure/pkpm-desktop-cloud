@@ -22,8 +22,8 @@ import java.util.Map;
 
 /**
  * 证件类型
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public enum CardTypeEnum {
 

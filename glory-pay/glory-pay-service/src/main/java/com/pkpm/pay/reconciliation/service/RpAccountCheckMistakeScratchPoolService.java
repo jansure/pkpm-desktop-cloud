@@ -25,7 +25,7 @@ import com.pkpm.pay.reconciliation.entity.RpAccountCheckMistakeScratchPool;
 /**
  * 对账暂存池接口 .
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

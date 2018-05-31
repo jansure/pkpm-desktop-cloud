@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * @功能说明:
- * @创建者: Peter
+ * @创建者: jansure
  * @创建时间: 16/6/1  下午6:36
  * @公司名称:广州市领课网络科技有限公司 龙果学院(www.roncoo.com)
  * @版本:V1.0

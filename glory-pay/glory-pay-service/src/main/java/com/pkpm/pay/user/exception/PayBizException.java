@@ -22,8 +22,8 @@ import com.pkpm.pay.common.core.exception.BizException;
 
 /**
  * 支付业务异常类
- * 龙果学院：www.roncoo.com
- * @author：Peter
+ * glory-cloud
+ * @author：jansure
  */
 public class PayBizException extends BizException {
 

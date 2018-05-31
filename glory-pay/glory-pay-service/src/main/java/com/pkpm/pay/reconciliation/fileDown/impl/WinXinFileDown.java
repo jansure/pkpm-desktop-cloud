@@ -38,7 +38,7 @@ import com.pkpm.pay.trade.utils.WeixinConfigUtil;
 /**
  * 微信文件下载类
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

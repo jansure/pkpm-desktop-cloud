@@ -32,8 +32,8 @@ import com.pkpm.pay.user.service.RpUserInfoService;
 
 /**
  * 用户信息
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 @Controller
 @RequestMapping("/user/info")

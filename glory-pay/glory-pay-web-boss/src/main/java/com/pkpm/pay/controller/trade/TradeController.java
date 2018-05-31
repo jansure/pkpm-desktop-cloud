@@ -36,8 +36,8 @@ import com.pkpm.pay.user.enums.FundInfoTypeEnum;
 
 /**
  * 交易管理
- * 龙果学院：www.roncoo.com
- * @author：Peter
+ * glory-cloud
+ * @author：jansure
  */
 @Controller
 @RequestMapping("/trade")

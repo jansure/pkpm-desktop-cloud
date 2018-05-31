@@ -29,7 +29,7 @@ import com.pkpm.pay.reconciliation.utils.ReconciliationConfigUtil;
 /**
  * 文件下载factory
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

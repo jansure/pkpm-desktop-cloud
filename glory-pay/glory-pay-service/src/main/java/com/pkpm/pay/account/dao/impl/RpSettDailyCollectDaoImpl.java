@@ -23,8 +23,8 @@ import com.pkpm.pay.common.core.dao.impl.BaseDaoImpl;
 
 /**
  *  每日待结算汇总dao实现类
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 @Repository
 public class RpSettDailyCollectDaoImpl  extends BaseDaoImpl<RpSettDailyCollect> implements RpSettDailyCollectDao{

@@ -22,7 +22,7 @@ import org.springframework.context.ApplicationContextAware;
 /**
  * SpringContextUtil .
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

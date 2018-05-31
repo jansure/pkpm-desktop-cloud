@@ -50,7 +50,7 @@ import com.pkpm.pay.permission.utils.ValidateUtils;
 /**
  * 权限管理模块角色管理、.<br/>
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

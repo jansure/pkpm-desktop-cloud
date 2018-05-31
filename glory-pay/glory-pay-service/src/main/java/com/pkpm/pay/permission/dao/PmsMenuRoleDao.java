@@ -22,7 +22,7 @@ import com.pkpm.pay.permission.entity.PmsMenuRole;
 /**
  * 菜单角色关联表
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

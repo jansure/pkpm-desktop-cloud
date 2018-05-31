@@ -24,8 +24,8 @@ import com.pkpm.pay.user.enums.FundInfoTypeEnum;
 
 /**
  * 用户支付配置实体类
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public class RpUserPayConfig extends BaseEntity implements Serializable {
 

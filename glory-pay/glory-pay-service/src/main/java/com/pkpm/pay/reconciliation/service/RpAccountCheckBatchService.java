@@ -25,7 +25,7 @@ import com.pkpm.pay.reconciliation.entity.RpAccountCheckBatch;
 /**
  * 对账批次接口 .
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

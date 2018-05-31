@@ -31,8 +31,8 @@ import com.pkpm.pay.user.service.RpUserPayConfigService;
 
 /**
  * 结算业务逻辑类.
- * 龙果学院：www.roncoo.com
- * @author zenghao
+ * glory-cloud
+ * @author
  */
 @Component("settBiz")
 public class SettBiz {

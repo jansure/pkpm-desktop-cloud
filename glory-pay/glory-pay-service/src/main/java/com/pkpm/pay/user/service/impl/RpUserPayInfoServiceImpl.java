@@ -29,8 +29,8 @@ import com.pkpm.pay.user.service.RpUserPayInfoService;
 
 /**
  * 用户第三方支付信息service实现类
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 @Service("rpUserPayInfoService")
 public class RpUserPayInfoServiceImpl implements RpUserPayInfoService{

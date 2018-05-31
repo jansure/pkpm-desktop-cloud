@@ -21,7 +21,7 @@ import com.pkpm.pay.reconciliation.entity.RpAccountCheckMistake;
 /**
  * 对账差错dao接口
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

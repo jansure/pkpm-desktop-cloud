@@ -37,8 +37,8 @@ import com.pkpm.pay.trade.service.RpTradeReconciliationService;
 
 /**
  * <b>功能说明:交易模块对账差错实现</b>
- * @author  Peter
- * <a href="http://www.roncoo.com">龙果学院(www.roncoo.com)</a>
+ * @author  jansure
+ *
  */
 @Service("rpTradeReconciliationService")
 public class RpTradeReconciliationServiceImpl implements RpTradeReconciliationService {

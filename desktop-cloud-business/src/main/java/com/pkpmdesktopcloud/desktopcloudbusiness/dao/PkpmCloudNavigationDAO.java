@@ -23,4 +23,11 @@ public interface PkpmCloudNavigationDAO {
      */
     List<PkpmCloudNavigation> getNavByParentId(Integer parentNavId);
     
+    /**
+     * 获取全部导航
+     * @date 2018/5/31
+     * @return
+     */
+    List<PkpmCloudNavigation> getNavigation();
+    
 }

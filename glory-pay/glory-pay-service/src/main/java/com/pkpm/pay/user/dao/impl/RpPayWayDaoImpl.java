@@ -23,8 +23,8 @@ import com.pkpm.pay.user.entity.RpPayWay;
 
 /**
  * 支付方式dao实现类
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 @Repository
 public class RpPayWayDaoImpl  extends BaseDaoImpl<RpPayWay> implements RpPayWayDao{

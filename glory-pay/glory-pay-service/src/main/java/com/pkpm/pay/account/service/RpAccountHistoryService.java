@@ -21,8 +21,8 @@ import com.pkpm.pay.common.core.page.PageParam;
 
 /**
  * 账户历史service接口
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public interface RpAccountHistoryService{
 	

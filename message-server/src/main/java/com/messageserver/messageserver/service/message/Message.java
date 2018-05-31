@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * EmailMessageSenderImpl
  *
- * author jansure.zhang
+ * author .zhang
  * @since 5/5/2018
  */
 @Data

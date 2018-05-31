@@ -24,8 +24,8 @@ import java.util.Properties;
 /**
  * <b>功能说明:微信属性文件工具类
  * </b>
- * @author  Peter
- * <a href="http://www.roncoo.com">龙果学院(www.roncoo.com)</a>
+ * @author  jansure
+ *
  */
 public class WeixinConfigUtil {
 

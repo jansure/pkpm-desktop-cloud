@@ -2,6 +2,7 @@ package com.pkpmcloud.fileserver.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -19,16 +20,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.desktop.constant.FileServerConstant;
+import com.desktop.constant.FileTypeEnum;
 import com.desktop.utils.FileUtil;
 import com.desktop.utils.Md5CalculateUtil;
 import com.desktop.utils.StringUtil;
 import com.desktop.utils.page.Page;
 import com.desktop.utils.page.PageUtils;
 import com.desktop.utils.page.ResultObject;
+import com.google.common.base.Preconditions;
 import com.pkpmcloud.fileserver.VO.PkpmFileInfoVO;
 import com.pkpmcloud.fileserver.client.StorageClient;
 import com.pkpmcloud.fileserver.client.TrackerClient;
 import com.pkpmcloud.fileserver.constant.OtherConstants;
+import com.pkpmcloud.fileserver.domain.PkpmFileConfig;
 import com.pkpmcloud.fileserver.domain.PkpmFileInfo;
 import com.pkpmcloud.fileserver.model.GroupState;
 import com.pkpmcloud.fileserver.model.StorageNode;
@@ -102,10 +107,17 @@ public class FastDFSController {
 	@PostMapping("/upload")
 	public ResultObject upload(@RequestParam("file")  @ApiParam(value = "文件,小于1024M") MultipartFile multipartFile ,
 			                   @RequestParam(value="md5", required =false) @ApiParam(value = "md5值") String md5) {
+
+		Preconditions.checkArgument(!multipartFile.isEmpty(), "请上传文件!");
 		
-		if (multipartFile.isEmpty()) {
-			return ResultObject.failure("请上传文件!");
-		}
+		//获取文件后缀
+		String fileName = multipartFile.getOriginalFilename();
+		String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
+		Preconditions.checkArgument(StringUtils.isNotEmpty(ext), "文件类型不能为空!");
+				
+		List<PkpmFileConfig> fileConfigList = fileService.selectAllFileConfig();
+		String fileType = checkAndGetType(fileConfigList, ext);
+		Preconditions.checkArgument(StringUtils.isNotEmpty(fileType), "配置信息出错！");
 		
 		boolean isUpdate = false;
 		StorePath storePath = null;
@@ -158,7 +170,7 @@ public class FastDFSController {
 			
 			//上传文件
 			storePath = storageClient.uploadAppenderFile(groupName, multipartFile.getInputStream(), 
-					multipartFile.getSize(), fileInfo.getPostfix());
+					multipartFile.getSize(), fileInfo.getPostFix());
 			
 			//上传成功，更新目标文件名
 			fileInfo = new PkpmFileInfo();
@@ -166,6 +178,8 @@ public class FastDFSController {
 			fileInfo.setDestFileName(storePath.getPath());
 			fileService.update(fileInfo);
 			
+			//上传完成，文件名放到缓存做转换处理
+			putRedis(fileType, storePath.getFullPath());
 			return ResultObject.success(storePath);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -174,8 +188,59 @@ public class FastDFSController {
 		
 		return ResultObject.failure("上传文件失败,请重新尝试!");
 	}
-	
-	
+	  
+	  
+	/**  
+	 * @Title: checkAndGetType  
+	 * @Description: 验证后缀并返回文件类型
+	 * @param @param fileConfigList
+	 * @param @param ext
+	 * @param @return    参数  
+	 * @return String    返回类型  
+	 * @throws  
+	 */  
+	private String checkAndGetType(List<PkpmFileConfig> fileConfigList, String ext) {
+		Preconditions.checkArgument(fileConfigList != null && fileConfigList.size() > 0, "没有配置文件配置信息！");
+		for(PkpmFileConfig config : fileConfigList) {
+			String[] fixArrays = config.getPostFix().split("、");
+			if(Arrays.asList(fixArrays).contains(ext)) {
+				return config.getFileType();
+			}
+		}
+		return null;
+	}
+
+
+	/**  
+	 * @Title: putRedis  
+	 * @Description: TODO(这里用一句话描述这个方法的作用)  
+	 * @param @param postFix
+	 * @param @param path    参数  
+	 * @return void    返回类型  
+	 * @throws  
+	 */  
+	private void putRedis(String postFix, String path) {
+		RedisCache cache = null;
+		
+		switch(FileTypeEnum.eval(postFix)) {
+			case IMAGE :
+				cache = new RedisCache(FileServerConstant.FILE_SERVER_UPLOAD_IMAGE_KEY);
+				break;
+			case VIDEO :
+				cache = new RedisCache(FileServerConstant.FILE_SERVER_UPLOAD_VIDEO_KEY);
+				break;
+			case DATUM :
+				cache = new RedisCache(FileServerConstant.FILE_SERVER_UPLOAD_DATUM_KEY);
+				break;
+			default :
+				log.error("文件类型错误：{}", postFix);
+		}
+		
+		cache.putObject(path, 1);
+		cache.destroy();
+	}
+
+
 	/**
 	 * 获取文件上传进度
 	 * @return

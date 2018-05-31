@@ -171,41 +171,41 @@ public class PkpmCloudSubsDetailsServiceImpl implements PkpmCloudSubsDetailsServ
 
 
 					// 根据desktopId  查询计算机名字
-					if(StringUtils.isNotEmpty(desktopId)){
-						
-						myProduct.setDesktopId(desktopId);
-						String urlGetComputerName = serverHost + "/operator/queryComputerName";
-						CommonRequestBean commonRequestBean = new CommonRequestBean();
-						commonRequestBean.setDesktopId(desktopId);
-						String jsonCommonRequestBean = JsonUtil.serializeEx(commonRequestBean);
-						try {
-							String computerNameResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(
-									urlGetComputerName,jsonCommonRequestBean,5,"utf-8", 10000).method(HttpMethods.POST));
-							MyHttpResponse computerNameHttpResponse = JsonUtil.deserialize(computerNameResponse, MyHttpResponse.class);
-							ResultObject result = getResultObject(computerNameHttpResponse);
-							String computerName = (String) result.getData();
-							if(StringUtils.isEmpty(computerName)){
-								myProduct.setComputerName(computerName);
-							}
-
-							//根据projectId和desktopId 查询 桌面运行状态
-							String urlDesktopStatus = serverHost + "/desktop/queryDesktopDetail";
-							commonRequestBean.setProjectId(projectId);
-							String desktopStatusResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(
-									urlDesktopStatus,jsonCommonRequestBean,5,"utf-8", 10000).method(HttpMethods.POST));
-							MyHttpResponse  desktopStatusHttpResponse = JsonUtil.deserialize(computerNameResponse, MyHttpResponse.class);
-							ResultObject desktopStatusResult = getResultObject(desktopStatusHttpResponse);
-							String  desktopStatusData = (String) desktopStatusResult.getData();
-							DesktopRequest desktopRequest = JsonUtil.deserialize(desktopStatusData, DesktopRequest.class);
-							List<Desktop> desktops = desktopRequest.getDesktops();
-							Desktop desktop = desktops.get(0);
-							String desktopStatus = desktop.getStatus();
-							myProduct.setDesktopStatus(desktopStatus);
-
-						} catch (HttpProcessException e) {
-							e.printStackTrace();
-						}
-					}
+//					if(StringUtils.isNotEmpty(desktopId)){
+//						
+//						myProduct.setDesktopId(desktopId);
+//						String urlGetComputerName = serverHost + "/operator/queryComputerName";
+//						CommonRequestBean commonRequestBean = new CommonRequestBean();
+//						commonRequestBean.setDesktopId(desktopId);
+//						String jsonCommonRequestBean = JsonUtil.serializeEx(commonRequestBean);
+//						try {
+//							String computerNameResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(
+//									urlGetComputerName,jsonCommonRequestBean,5,"utf-8", 10000).method(HttpMethods.POST));
+//							MyHttpResponse computerNameHttpResponse = JsonUtil.deserialize(computerNameResponse, MyHttpResponse.class);
+//							ResultObject result = getResultObject(computerNameHttpResponse);
+//							String computerName = (String) result.getData();
+//							if(StringUtils.isEmpty(computerName)){
+//								myProduct.setComputerName(computerName);
+//							}
+//
+//							//根据projectId和desktopId 查询 桌面运行状态
+//							String urlDesktopStatus = serverHost + "/desktop/queryDesktopDetail";
+//							commonRequestBean.setProjectId(projectId);
+//							String desktopStatusResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(
+//									urlDesktopStatus,jsonCommonRequestBean,5,"utf-8", 10000).method(HttpMethods.POST));
+//							MyHttpResponse  desktopStatusHttpResponse = JsonUtil.deserialize(computerNameResponse, MyHttpResponse.class);
+//							ResultObject desktopStatusResult = getResultObject(desktopStatusHttpResponse);
+//							String  desktopStatusData = (String) desktopStatusResult.getData();
+//							DesktopRequest desktopRequest = JsonUtil.deserialize(desktopStatusData, DesktopRequest.class);
+//							List<Desktop> desktops = desktopRequest.getDesktops();
+//							Desktop desktop = desktops.get(0);
+//							String desktopStatus = desktop.getStatus();
+//							myProduct.setDesktopStatus(desktopStatus);
+//
+//						} catch (HttpProcessException e) {
+//							e.printStackTrace();
+//						}
+//					}
 					//根据projectId和areacode 查询 destinationIp
 					try {
 
