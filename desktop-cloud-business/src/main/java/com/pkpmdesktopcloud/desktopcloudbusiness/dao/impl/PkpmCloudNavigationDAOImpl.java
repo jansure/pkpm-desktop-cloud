@@ -32,5 +32,12 @@ public class PkpmCloudNavigationDAOImpl implements PkpmCloudNavigationDAO{
 		return list;
 		
 	}
+
+
+	@Override
+	public List<PkpmCloudNavigation> getNavigation() {
+		PkpmCloudNavigation navigation = new PkpmCloudNavigation();
+		return pkpmCloudNavigationMapper.select(navigation);
+	}
 	  
 }

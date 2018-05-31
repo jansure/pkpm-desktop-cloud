@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.desktop.utils.page.ResultObject;
 import com.pkpmdesktopcloud.desktopcloudbusiness.constants.SysConstant;
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudNavigation;
 import com.pkpmdesktopcloud.desktopcloudbusiness.service.PkpmCloudNavigationService;
@@ -26,8 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(value = "/navigator")
 public class NavigatorController {
 	
-	private static final String ALL_NAVIGATION_ID = "allNavigation";
-	
 	@Resource
 	private PkpmCloudNavigationService pkpmCloudNavigationService;
 	
@@ -39,25 +38,12 @@ public class NavigatorController {
 	@ResponseBody
 	@ApiOperation("获取全部导航列表")
 	@RequestMapping(value = "/subProducts", method = RequestMethod.GET)
-	public List<PkpmCloudNavigation> getNavigation(HttpServletResponse response) {
+	public ResultObject getNavigation(HttpServletResponse response) {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		
-		RedisCache cache = new RedisCache(ALL_NAVIGATION_ID);
-		List<PkpmCloudNavigation> listNav = (List<PkpmCloudNavigation>)cache.getObject("all");
-		
-		// 若存在Redis缓存，从缓存中读取
-		if (listNav != null) {
-
-			return listNav;
-		}
-		
-		// 若不存在对应的Redis缓存，从数据库查询
-		listNav = pkpmCloudNavigationService.getNavByParentId(SysConstant.NAVIGATION_ID);
-		// 写入Redis缓存
-		cache.putObject("all", listNav);
-		return listNav;
+		List<PkpmCloudNavigation> listNav = pkpmCloudNavigationService.getNavTree();
+		return ResultObject.success(listNav);
 	}
 
-	//fixme 移到其他资源类里边
 }
