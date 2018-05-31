@@ -97,14 +97,4 @@ public interface DesktopService {
 	 * @time 2018年3月29日 下午5:00:00
 	 */
 	void updateOperatorStatus(String jobId, String userName, Integer adId, Long seconds);
-
-
-	/**
-	 * 查询计算机名字、计算机运行状态、destinationIp
-	 * @param desktopIds
-	 * @param statusFlag
-	 * @param ipFlag
-	 * @return List<DesktopParam>
-	 */
-    List<DesktopParam> queryComputerNameOrIpOrStatus(List<String> desktopIds, Boolean statusFlag, Boolean ipFlag);
 }

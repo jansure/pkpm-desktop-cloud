@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DesktopRequest implements Serializable {
-    private List<Desktop> desktops;
+    private List<Desktop> operatorStatusList;
     private Boolean emailNotification;
 
     //查询桌面详情,responsebody接收

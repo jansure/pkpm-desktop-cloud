@@ -152,13 +152,13 @@ public class DesktopController {
      * @return ResultObject
      */
     @PostMapping(value = "queryDesktopDetail")
-    public ResultObject queryDesktopDetail(@RequestBody CommonRequestBean commonRequestBean) {
+	public ResultObject queryDesktopDetail(@RequestBody CommonRequestBean commonRequestBean) {
 
-        CommonRequestBeanUtil.checkCommonQueryDesktopDetail(commonRequestBean);
-        DesktopRequest desktopRequest = desktopService.queryDesktopDetail(commonRequestBean);
-        return ResultObject.success(desktopRequest, "查询桌面详情成功!");
+		CommonRequestBeanUtil.checkCommonQueryDesktopDetail(commonRequestBean);
+		DesktopRequest desktopRequest = desktopService.queryDesktopDetail(commonRequestBean);
+		return ResultObject.success(desktopRequest, "查询桌面详情成功!");
 
-    }
+	}
 
     /**
      * 重启、启动、关闭桌面
@@ -190,28 +190,5 @@ public class DesktopController {
         return ResultObject.success(desktopRequest, "查询列表成功!");
 
     }
-
-
-
-	/**
-	 * 抽取公共接口 实现：
-	 *   1、根据desktopId查询计算机名字
-	 *   2、根据projectId,desktoId 桌面运行状态 (HW接口)
-	 *   3、根据projectId和areadCode 查询 destinationIp
-	 *
-	 * StatusFlag=true,查询计算机运行
-	 * ipFlag=true，查询 destinationIp
-	 */
-	@GetMapping(value = "/queryPublicParam")
-	public  ResultObject queryComputerNameOrIpOrStatus(List<String> desktopIds ,  Boolean statusFlag, Boolean ipFlag){
-
-		CommonRequestBeanUtil.checkStatusOrComputerNameOrIp(desktopIds, statusFlag, ipFlag);
-        List<DesktopParam> list = desktopService.queryComputerNameOrIpOrStatus(desktopIds, statusFlag, ipFlag);
-        if( null == list || list.size() ==0 ){
-        	return ResultObject.failure("查询失败，请重新尝试");
-		}
-
-		return ResultObject.success(list);
-	}
 
 }

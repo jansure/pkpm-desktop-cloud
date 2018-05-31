@@ -86,9 +86,6 @@ public class DesktopServiceImpl implements DesktopService {
 	@Resource
 	private PkpmOperatorStatusMapper pkpmOperatorStatusMapper;
 
-	@Resource
-	private PkpmOperatorStatusDAO  pkpmOperatorStatusDAO;
-
 	@Override
 	public String createToken(String projectId) {
 		try {
@@ -797,15 +794,5 @@ public class DesktopServiceImpl implements DesktopService {
 		} else {
 			log.info("没有需要更新状态的任务！");
 		}
-	}
-
-
-
-	@Override
-	public List<DesktopParam> queryComputerNameOrIpOrStatus(List<String> desktopIds, Boolean statusFlag, Boolean ipFlag) {
-
-		List<PkpmOperatorStatus>  operatorStatusList = pkpmOperatorStatusDAO.queryPkpmOperatorStatusByDesktopIds(desktopIds);
-
-		return null;
 	}
 }

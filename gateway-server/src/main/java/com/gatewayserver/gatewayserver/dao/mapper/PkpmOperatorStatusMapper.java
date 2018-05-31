@@ -31,11 +31,4 @@ public interface PkpmOperatorStatusMapper {
     @Lang(SimpleSelectLangDriver.class)
     PkpmOperatorStatus selectOperatorStatus(PkpmOperatorStatus pkpmOperatorStatus);
 
-    @Select("SELECT *  FROM  pkpm_operator_status" +
-            "WHERE  desktop_id IN (#{desktopIds,jdbcType=VARCHAR})"  +
-            "AND STATUS = #{operatoreType,jdbcType=VARCHAR}"    +
-            "and operator_type = #{jobStatus,jdbcType=VARCHAR} ")
-    @Lang(SimpleSelectLangDriver.class)
-    List<PkpmOperatorStatus> queryPkpmOperatorStatusByDesktopIds(@Param("desktopIds") String desktopIds,@Param("operatoreType") String operatoreType,@Param("jobStatus") String jobStatus);
-
 }
