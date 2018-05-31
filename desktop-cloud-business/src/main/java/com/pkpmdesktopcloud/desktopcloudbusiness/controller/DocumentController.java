@@ -35,7 +35,7 @@ public class DocumentController {
     @ApiOperation("文件下载")
     @ResponseBody
 	@RequestMapping(value = "/downloads", method = RequestMethod.GET)
-    public ResultObject getHelp(String filename, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ResultObject getDownloads(String filename, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 允许跨域调用
         response.setHeader("Access-Control-Allow-Origin", "*");
         boolean isOnLine = false;
@@ -114,6 +114,28 @@ public class DocumentController {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		String filename = "使用教程说明.txt";
+		String url = sysConfigService.getPkpmSysConfigByKey(SysConstant.FILE_BASE_URL).getValue() + "/" + filename;
+		String termsJson = FileUtil.getHttpResponse(url);
+		if (!StringUtils.isEmpty(termsJson)) {
+			return ResultObject.success(termsJson, "获取成功");
+		}
+		
+		return ResultObject.failure("获取失败");
+	}
+	
+	/**
+	 * 获取自助服务相关文档内容
+	 * @author yangpengfei
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@ApiOperation("自助服务相关文档")
+	@RequestMapping(value = "/help", method = RequestMethod.GET)
+	public ResultObject getHelp(String filename, HttpServletResponse response) {
+		// 允许跨域调用
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		filename = filename + ".txt";
 		String url = sysConfigService.getPkpmSysConfigByKey(SysConstant.FILE_BASE_URL).getValue() + "/" + filename;
 		String termsJson = FileUtil.getHttpResponse(url);
 		if (!StringUtils.isEmpty(termsJson)) {
