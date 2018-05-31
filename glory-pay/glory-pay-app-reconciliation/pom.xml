@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>pkpm-desktop-cloud</groupId>
+    <artifactId>glory-pay</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>glory-pay-app-reconciliation</artifactId>
+  
+  <dependencies>
+  	<dependency>
+  		<groupId>pkpm-desktop-cloud</groupId>
+  		<artifactId>glory-pay-common-core</artifactId>
+  		<version>1.0-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>pkpm-desktop-cloud</groupId>
+  		<artifactId>glory-pay-service</artifactId>
+  		<version>1.0-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<!-- 表示开发的时候引入，发布的时候不会加载此包 -->
+			<scope>test</scope>
+		</dependency>
+  </dependencies>
+</project>
