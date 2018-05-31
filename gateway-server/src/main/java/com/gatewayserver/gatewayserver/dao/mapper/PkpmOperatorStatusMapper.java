@@ -31,4 +31,22 @@ public interface PkpmOperatorStatusMapper {
     @Lang(SimpleSelectLangDriver.class)
     PkpmOperatorStatus selectOperatorStatus(PkpmOperatorStatus pkpmOperatorStatus);
 
+
+    @Select(("<script> " +
+            "SELECT * FROM pkpm_operator_status AS operator" +
+            " <where> operator.is_finished=1"+
+            //企业ID
+            " <if test =\"computerName != null \">" +
+            " and computer_name like concat ('%',#{computerName},'%')" +
+            " </if> test=\"createTime != null\"> " +
+            " and date_format(create_time,'%Y-%m-%d %H:%i:%S') " +
+            " <![CDATA[ >= ]]> date_format(#{createTime},'%Y-%m-%d %H:%i:%S') " +
+            " </if> test=\"updateTime != null\"> " +
+            " and date_format(update_time,'%Y-%m-%d %H:%i:%S') " +
+            " <![CDATA[ >= ]]> date_format(#{updateTime},'%Y-%m-%d %H:%i:%S') " +
+            " </if> " )
+
+    )
+    List<PkpmOperatorStatus> selectComputerList(PkpmOperatorStatus pkpmOperatorStatus);
+
 }

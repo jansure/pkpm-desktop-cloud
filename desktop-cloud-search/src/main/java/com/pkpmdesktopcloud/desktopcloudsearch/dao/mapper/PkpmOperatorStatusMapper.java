@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface PkpmOperatorStatusMapper {
 
-    /*@Select({"<script>",
+    @Select({"<script>",
             "SELECT * FROM tbl_order",
             "WHERE operator.is_finished=1",
             "<when test='title!=null'>",
@@ -21,8 +21,7 @@ public interface PkpmOperatorStatusMapper {
             "WHERE operator.is_finished=1" +
             "AND operator.computer_name=#{pkpmOperatorStatus.get}" +
             "AND operator.create_time=\n" +
-            "AND operator.finish_time=")*/
-    @SelectProvider(type = PkpmOperatorStatusProvider.class,method = "sqlSelect")
+            "AND operator.finish_time=")
     @Results({
             @Result(id=true, column="id", property="id"),
             @Result(column="job_id", property="jobId"),
@@ -33,24 +32,6 @@ public interface PkpmOperatorStatusMapper {
             @Result(column="finishTime", property="finishTime")
     })
     List<PkpmOperatorStatus> select(PkpmOperatorStatus pkpmOperatorStatus);
-
-     class PkpmOperatorStatusProvider {
-        public String sqlSelect(PkpmOperatorStatus pkpmOperatorStatus) {
-            SQL sql = new SQL().SELECT("*").FROM("pkpm_operator_status");
-            String computerName=pkpmOperatorStatus.getComputerName();
-            LocalDateTime createTime=pkpmOperatorStatus.getCreateTime();
-            LocalDateTime finishTime=pkpmOperatorStatus.getFinishTime();
-
-            sql.WHERE("is_finished=1");
-            if (computerName!=null){
-                sql.WHERE("computer_name=#{computerName}");
-            }
-            /*if (createTime != null) {
-                sql.WHERE("create_time > #{createTime}");
-            }*/
-            return sql.toString();
-        }
-    }
 
 
 }
