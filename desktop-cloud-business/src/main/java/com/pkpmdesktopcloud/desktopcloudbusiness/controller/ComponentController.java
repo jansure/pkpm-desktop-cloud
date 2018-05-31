@@ -67,11 +67,11 @@ public class ComponentController {
 	 * @return
 	 */
 	@ApiOperation("根据产品套餐类型获取产品配置组件信息")
-	@PostMapping(value = "/subComponents", consumes="application/json", produces = "application/json")
-	public ResultObject getComponentByProductType(@RequestBody Map<String, Integer> map, HttpServletResponse response) {
+	@PostMapping(value = "/subComponents", produces = "application/json")
+	public ResultObject getComponentByProductType(Integer productType, HttpServletResponse response) {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		Integer productType = map.get("productType");
+//		Integer productType = map.get("productType");
 		Preconditions.checkNotNull(productType, "产品套餐类型不可为空");
 		Map<Integer,List<PkpmCloudComponentDef>>  componentsMap = componentDefService.getComponentDefListByProductType(productType);
 		
