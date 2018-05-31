@@ -49,11 +49,11 @@ public class PkpmCloudUserInfo implements Serializable{
     /** 用户所属组织名称*/
     private String userOrganization;
 
-    /** 扩展字段1*/
-    private String userExtend1;
+    /** 用户状态*/
+    private String userStatus;
 
-    /** 扩展字段2*/
-    private String userExtend2;
+    /** 用户昵称*/
+    private String userNickname;
 
     /** 用户所属区域*/
     private String userArea;

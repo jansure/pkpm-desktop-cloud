@@ -33,10 +33,15 @@ import lombok.extern.slf4j.Slf4j;
 public class PullerBusiness {
 	
 	/**
+	 * 分隔符
+	 */
+	private static String COMMON_SEPARATOR = ",";
+	
+	/**
 	 * 设置getwayServer的主机地址
 	 */
 	@Value("${server_host}")
-	private String serverHost ;
+	private String serverHost;
 
 	/**
 	 * 设置pkpmCloud的主机地址
@@ -154,7 +159,7 @@ public class PullerBusiness {
 		JobDetail detail = getJobDetailByJobId(jobId);
 		if(detail == null) {
 			//更新任务表，设置状态为失败
-			updateJobTask(jobId, JobStatusEnum.FAILED.toString());
+			updateJobTask(jobId, JobStatusEnum.FAILED.toString(), null);
 			log.error("任务没有详细信息，设置任务状态为失败。任务ID:{}", jobId);
 			return;
 		}
@@ -193,6 +198,13 @@ public class PullerBusiness {
 			
 			//根据类型获取最终任务状态
 			String status = getFinalStatus(huaweiResponse, operatorType);
+			String desktopId = null;
+			if(status.contains(COMMON_SEPARATOR)) {
+				int index = status.indexOf(COMMON_SEPARATOR);
+				String realStatus = status.substring(0, index);
+				desktopId = status.substring(index + 1);
+				status = realStatus;
+			}
 			
 			//增加查询属性时失败状态后，根据检查最大时间判断最终是否失败
 			if(status.equals(JobStatusEnum.FAILED.toString())) {
@@ -205,12 +217,12 @@ public class PullerBusiness {
 			}
 					
 			//更新任务详情表,同时插入更新任务记录
-			updateJobDetail(jobId, status);
+			updateJobDetail(jobId, status, desktopId);
 			
 			//更新任务表为成功或失败，更新后此数据不在更新
 			if(status.equals(JobStatusEnum.SUCCESS.toString())
 					|| status.equals(JobStatusEnum.FAILED.toString())) {
-				updateJobTask(jobId, status);
+				updateJobTask(jobId, status, desktopId);
 			}
 			
 			//创建桌面或删除桌面成功，调用云平台订单更新接口
@@ -223,6 +235,7 @@ public class PullerBusiness {
 					detail.setStatus(SubscriptionStatusEnum.VALID.toString());
 				}
 				
+				detail.setDesktopId(desktopId);
 				updateCloudSubscription(detail);
 			}else if(status.equals(JobStatusEnum.FAILED.toString())
 					&& operatorType.equals(OperatoreTypeEnum.DESKTOP.toString())) {//创建桌面失败，返回失败状态
@@ -421,7 +434,15 @@ public class PullerBusiness {
 				if(status.equals(ResponseStatusEnum.RUNNING.toString())) {
 					return JobStatusEnum.CREATE.toString();
 				}else if(status.equals(ResponseStatusEnum.SUCCESS.toString())) {
-					return JobStatusEnum.SUCCESS.toString();
+					
+					//增加返回桌面Id
+					String desktopId = "";
+					try {
+						desktopId = huaweiResponse.getSub_jobs().get(0).getEntities().getDesktop_id();
+					}catch(Exception ex) {
+						log.error("获取桌面ID错误！" + huaweiResponse.getJob_id());
+					}
+					return JobStatusEnum.SUCCESS.toString() + COMMON_SEPARATOR + desktopId;
 				}else if(status.equals(ResponseStatusEnum.FAILED.toString())) {
 					return JobStatusEnum.FAILED.toString();
 				}
@@ -455,10 +476,17 @@ public class PullerBusiness {
 			}
 			
 		}else if(operatorType.equals(OperatoreTypeEnum.CLOSE.toString())){
-			String status = huaweiResponse.getDesktop().getStatus();
-			if(status.equals(ResponseStatusEnum.SHUTOFF.toString())) {
-				return JobStatusEnum.SUCCESS.toString();
-			}else {
+			
+			try {
+				String status = huaweiResponse.getDesktop().getStatus();
+				if(status.equals(ResponseStatusEnum.SHUTOFF.toString())) {
+					return JobStatusEnum.SUCCESS.toString();
+				}
+				
+				return JobStatusEnum.FAILED.toString();
+				
+			} catch(Exception ex) {
+				
 				return JobStatusEnum.FAILED.toString();
 			}
 			
@@ -475,7 +503,7 @@ public class PullerBusiness {
 	 * @param status    任务状态
 	 * @throws  
 	 */   
-	private void updateJobTask(String jobId, String status) {
+	private void updateJobTask(String jobId, String status, String desktopId) {
 		
 		String url = serverHost + "/puller/updateJobTask";
 		
@@ -483,6 +511,10 @@ public class PullerBusiness {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("jobId", jobId);
 		jsonMap.put("status", status);
+		if(desktopId != null) {
+			jsonMap.put("desktopId", desktopId);
+		}
+		
 		try {
 
 			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url, jsonMap, 5, "utf-8", 100000);
@@ -523,7 +555,7 @@ public class PullerBusiness {
 	 * @param status    任务状态
 	 * @throws  
 	 */  
-	private void updateJobDetail(String jobId, String status) {
+	private void updateJobDetail(String jobId, String status, String desktopId) {
 		
 		String url = serverHost + "/puller/updateJobDetail";
 		
@@ -531,6 +563,10 @@ public class PullerBusiness {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("jobId", jobId);
 		jsonMap.put("status", status);
+		
+		if(desktopId != null) {
+			jsonMap.put("desktopId", desktopId);
+		}
 		
 		try {
 			
@@ -571,7 +607,7 @@ public class PullerBusiness {
 	 * @param detail 任务详情
 	 * @throws  
 	 */   
-	private void updateCloudSubscription(JobDetail detail) {
+	public void updateCloudSubscription(JobDetail detail) {
 
 		String url = businessHost + "/subscription/setSubsStatus";
 		
@@ -579,7 +615,12 @@ public class PullerBusiness {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("subsId", detail.getSubsId());
 		jsonMap.put("status", detail.getStatus());
-		jsonMap.put("projectId", detail.getProjectId());
+		
+		String desktopId = detail.getDesktopId();
+		if(StringUtils.isNotEmpty(desktopId)) {
+			jsonMap.put("desktopId", desktopId);
+		}
+		
 		String jsonStr = JsonUtil.serialize(jsonMap);
 		
 		try {
@@ -616,10 +657,7 @@ public class PullerBusiness {
 	}
 	
 	public static void main(String[] args) {
-		JobDetail detail = new JobDetail();
-		detail.setSubsId(123456l);
-		detail.setStatus(SubscriptionStatusEnum.VALID.toString());
-		new PullerBusiness().updateCloudSubscription(detail );
+		
 	}
 	
 }

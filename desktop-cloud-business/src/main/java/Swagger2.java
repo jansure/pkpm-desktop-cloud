@@ -1,5 +1,3 @@
-package com.pkpmdesktopcloud;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -34,8 +32,9 @@ public class Swagger2 {
 
     private ApiInfo apiInfo() {
         String name = "desktop-cloud-business";
-        String url = "http://127.0.0.1:8083/desktop-cloud-business/swagger-ui.html";
-        String mail = "@sina.com";
+        //String url = "http://49.4.8.123:8083/desktop-cloud-business/swagger-ui.html";
+        String url = "http://127.0.0.1:8083/swagger-ui.html";
+        String mail = "jansure@sina.com";
         return new ApiInfoBuilder()
                 .title("glory cloud system")
                 .description("Restful APIs for UI")

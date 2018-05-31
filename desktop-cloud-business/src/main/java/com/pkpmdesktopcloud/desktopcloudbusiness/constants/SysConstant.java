@@ -39,9 +39,9 @@ public class SysConstant {
 	 */
 	public static final String BUY_STORAGE = "2";
 	/**
-	 * 全家桶类型
+	 * 产品套餐类型：PKPM至尊版
 	 */
-	public static final String PRODUCT_TYPE_ALL = "100";
+	public static final String PRODUCT_TYPE_ALL = "800";
 	/**
 	 * "是"默认值
 	 */

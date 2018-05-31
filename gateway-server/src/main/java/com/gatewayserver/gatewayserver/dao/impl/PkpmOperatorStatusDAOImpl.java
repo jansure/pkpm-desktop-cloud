@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.desktop.constant.JobStatusEnum;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
@@ -89,5 +90,23 @@ public class PkpmOperatorStatusDAOImpl implements PkpmOperatorStatusDAO {
 
         PkpmOperatorStatus operatorStatus = mapper.selectOperatorStatus(pkpmOperatorStatus);
         return operatorStatus;
+    }
+
+    @Override
+    public List<PkpmOperatorStatus> queryPkpmOperatorStatusByDesktopIds(List<String> desktopIds) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String desktopId : desktopIds) {
+            stringBuilder.append(desktopId).append(",");
+        }
+        String str = stringBuilder.toString();
+        String subStr = str.substring(0,str.length() -1);
+
+       //根据desktopIds、operateType、Status 查询
+        List<PkpmOperatorStatus> list = mapper.queryPkpmOperatorStatusByDesktopIds(subStr,operatoreType,jobStatus);
+        if(list.size() != 0){
+            return list;
+        }
+        return null;
     }
 }

@@ -94,6 +94,8 @@ public class PkpmCloudUserInfoServiceImpl implements PkpmCloudUserInfoService {
         return userDAO.findByUserNameOrTelephoneOrUserEmail(name, name, name);
     }
 
+
+
     @Override
     public String changeUserPassword(UserInfoForChangePassword newUserInfo, List<PkpmCloudSubscription> subsList) {
         Integer userID = newUserInfo.getUserId();
@@ -145,6 +147,29 @@ public class PkpmCloudUserInfoServiceImpl implements PkpmCloudUserInfoService {
             e.printStackTrace();
         }
         throw Exceptions.newBusinessException("密码修改失败");
+    }
+
+    /**
+     * 过滤查询
+     * @param userInfo
+     * @return
+     */
+    public List<PkpmCloudUserInfo> userList(PkpmCloudUserInfo userInfo) {
+
+        List<PkpmCloudUserInfo> userInfoList = userDAO.userList(userInfo);
+        return userInfoList;
+
+    }
+
+    /**
+     * 默认查询
+     * @return
+     */
+    public List<PkpmCloudUserInfo> userList() {
+
+        List<PkpmCloudUserInfo> userInfoList = userDAO.userList();
+        return userInfoList;
+
     }
     
 }

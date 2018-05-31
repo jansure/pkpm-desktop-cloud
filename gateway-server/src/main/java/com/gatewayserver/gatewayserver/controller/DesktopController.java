@@ -2,15 +2,11 @@ package com.gatewayserver.gatewayserver.controller;
 
 import javax.annotation.Resource;
 
+import com.gateway.common.dto.DesktopParam;
 import com.gatewayserver.gatewayserver.service.AdService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.desktop.utils.page.ResultObject;
 import com.gateway.common.domain.CommonRequestBean;
@@ -23,6 +19,9 @@ import com.gatewayserver.gatewayserver.utils.CommonRequestBeanUtil;
 import com.google.common.base.Preconditions;
 
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author yangpengfei
@@ -192,5 +191,27 @@ public class DesktopController {
 
     }
 
+
+
+	/**
+	 * 抽取公共接口 实现：
+	 *   1、根据desktopId查询计算机名字
+	 *   2、根据projectId,desktoId 桌面运行状态 (HW接口)
+	 *   3、根据projectId和areadCode 查询 destinationIp
+	 *
+	 * StatusFlag=true,查询计算机运行
+	 * ipFlag=true，查询 destinationIp
+	 */
+	@GetMapping(value = "/queryPublicParam")
+	public  ResultObject queryComputerNameOrIpOrStatus(List<String> desktopIds ,  Boolean statusFlag, Boolean ipFlag){
+
+		CommonRequestBeanUtil.checkStatusOrComputerNameOrIp(desktopIds, statusFlag, ipFlag);
+        List<DesktopParam> list = desktopService.queryComputerNameOrIpOrStatus(desktopIds, statusFlag, ipFlag);
+        if( null == list || list.size() ==0 ){
+        	return ResultObject.failure("查询失败，请重新尝试");
+		}
+
+		return ResultObject.success(list);
+	}
 
 }

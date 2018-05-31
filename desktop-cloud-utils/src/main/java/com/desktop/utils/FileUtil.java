@@ -71,11 +71,22 @@ public class FileUtil {
 					String userAgent = request.getHeader("User-Agent");
 					// 针对IE或者以IE为内核的浏览器：  
 		            if (userAgent.contains("MSIE") || userAgent.contains("Trident")) {  
-		            	fileName = URLEncoder.encode(fileName, "UTF-8");  
-		            } else {  
+		            	fileName = URLEncoder.encode(fileName, "UTF-8");
+
+		            	if(StringUtils.isNotEmpty(originFileName)){
+							originFileName = URLEncoder.encode(originFileName, "UTF-8");
+						}
+
+		            } else {
 		                // 非IE浏览器的处理：  
-		            	fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");  
-		            }
+		            	fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
+
+		            	if(StringUtils.isNotEmpty(originFileName)){
+							originFileName = new String(originFileName.getBytes("UTF-8"), "ISO-8859-1");
+						}
+
+
+					}
 					BufferedInputStream bins = new BufferedInputStream(inputStream);
 					// 输出文件用的字节数组，每次发送1024个字节到输出流
 					byte[] buf = new byte[1024];
@@ -99,7 +110,8 @@ public class FileUtil {
 						response.setContentType("application/x-msdownload");
 						// 客户使用目标另存为对话框保存指定文件
 						response.setHeader("Content-Type","text/plain");
-						response.addHeader("Content-Disposition","attachment;filename=" + new String(originFileName.getBytes("UTF-8"), "ISO-8859-1"));
+						//response.addHeader("Content-Disposition","attachment;filename=" + new String(originFileName.getBytes("UTF-8"), "ISO-8859-1"));
+						response.addHeader("Content-Disposition","attachment;filename=" + originFileName);
 
 					}
 					OutputStream outs = response.getOutputStream();

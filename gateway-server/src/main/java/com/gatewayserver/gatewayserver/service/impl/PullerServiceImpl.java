@@ -170,11 +170,16 @@ public class PullerServiceImpl implements PullerService {
      * @see com.gatewayserver.gatewayserver.service.IPullerService#updateJobTask(java.lang.String, java.lang.String)
      */
     @Override
-    public int updateJobTask(String jobId, String status) {
+    public int updateJobTask(String jobId, String status, String desktopId) {
 
         PkpmJobStatus pkpmJob = new PkpmJobStatus();
         pkpmJob.setJobId(jobId);
         pkpmJob.setStatus(status);
+        
+        //增加更新desktopId
+        if(StringUtils.isNotEmpty(desktopId)) {
+        	pkpmJob.setExt1(desktopId);
+        }
 
         try {
     		
@@ -365,7 +370,7 @@ public class PullerServiceImpl implements PullerService {
      */
     @Override
     @Transactional
-    public int updateJobDetail(String jobId, String status) {
+    public int updateJobDetail(String jobId, String status, String desktopId) {
         int num = 0;
         
         try {
@@ -388,6 +393,11 @@ public class PullerServiceImpl implements PullerService {
 	        pkpmOperatorStatus.setId(oldOperatorStatus.getId());
 	        pkpmOperatorStatus.setStatus(status);
 	        pkpmOperatorStatus.setUpdateTime(LocalDateTime.now());
+	      
+	        //增加更新desktopId
+	        if(StringUtils.isNotEmpty(desktopId)) {
+	        	pkpmOperatorStatus.setDesktopId(desktopId);
+	        }
 	
 	        if (isFinished) {
 	            pkpmOperatorStatus.setIsFinished(1);//设置已完成

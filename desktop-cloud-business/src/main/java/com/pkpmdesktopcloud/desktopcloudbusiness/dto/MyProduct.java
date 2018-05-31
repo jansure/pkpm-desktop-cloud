@@ -21,4 +21,11 @@ public class MyProduct implements Serializable {
 	private String projectId;
 	
 	private String areaCode;
+	private String desktopId;
+	private String computerName;
+	//桌面运行状态
+	private String desktopStatus;
+	//桌面配置信息
+	private String hostConfigName;
+
 }

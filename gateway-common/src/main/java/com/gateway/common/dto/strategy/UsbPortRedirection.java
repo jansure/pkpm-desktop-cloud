@@ -6,7 +6,9 @@ import java.io.Serializable;
 
 @Data
 public class UsbPortRedirection implements Serializable {
-    private boolean enable;
+    
+	//是否开启USB端口重定向。取值为：false：表示关闭。true：表示开启。
+	private boolean enable;
 
     private Options options;
 }

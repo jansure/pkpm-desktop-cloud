@@ -31,5 +31,16 @@ public class PkpmFileInfo {
     /** 文件后缀*/
     private String postfix;
     
+    /** pdf文件名字*/
+    private String  pdfName;
+    
+    /** 大缩略图文件名字*/
+    private String  imgBigName;
+    
+    /** 中缩略图文件名字*/
+    private String  imgMidName;
+    
+    /** 小缩略图文件名字*/
+    private String  imgSmallName;
 
 }

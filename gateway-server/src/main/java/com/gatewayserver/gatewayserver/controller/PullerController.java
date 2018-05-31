@@ -141,7 +141,7 @@ public class PullerController {
      * @Description: 更新Job任务表
      */
     @RequestMapping(value = "/updateJobTask", method = RequestMethod.POST)
-    public ResultObject updateJobTask(String jobId, String status) {
+    public ResultObject updateJobTask(String jobId, String status, String desktopId) {
         if (StringUtils.isEmpty(jobId)) {
             return ResultObject.failure("jobId不能为空！");
         }
@@ -157,7 +157,7 @@ public class PullerController {
             return ResultObject.failure(ex.getMessage());
         }
 
-        int num = pullerService.updateJobTask(jobId, status);
+        int num = pullerService.updateJobTask(jobId, status, desktopId);
 
         if (num >= 1) {
             return ResultObject.success("操作成功!");
@@ -176,7 +176,7 @@ public class PullerController {
      * @Description: 更新Job任务表
      */
     @RequestMapping(value = "/updateJobDetail", method = RequestMethod.POST)
-    public ResultObject updateJobDetail(String jobId, String status) {
+    public ResultObject updateJobDetail(String jobId, String status, String desktopId) {
         if (StringUtils.isEmpty(jobId)) {
             return ResultObject.failure("jobId不能为空！");
         }
@@ -191,7 +191,7 @@ public class PullerController {
         } catch (Exception ex) {
             return ResultObject.failure(ex.getMessage());
         }
-        int num = pullerService.updateJobDetail(jobId, status);
+        int num = pullerService.updateJobDetail(jobId, status, desktopId);
 
         if (num >= 1) {
             return ResultObject.success("操作成功!");

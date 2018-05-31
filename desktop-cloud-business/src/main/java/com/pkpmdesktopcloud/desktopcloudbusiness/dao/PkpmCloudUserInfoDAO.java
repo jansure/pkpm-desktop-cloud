@@ -2,6 +2,8 @@ package com.pkpmdesktopcloud.desktopcloudbusiness.dao;
 
 import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudUserInfo;
 
+import java.util.List;
+
 public interface PkpmCloudUserInfoDAO {
 
 	void saveUserInfo(PkpmCloudUserInfo userInfo);
@@ -22,4 +24,7 @@ public interface PkpmCloudUserInfoDAO {
 	 */
 	public PkpmCloudUserInfo getUserById(int userID); //通过userID获取对象
 
+    List<PkpmCloudUserInfo> userList(PkpmCloudUserInfo userInfo);
+
+	List<PkpmCloudUserInfo> userList();
 }

@@ -6,6 +6,11 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.desktop.constant.SubscriptionConstants;
+import com.gateway.common.domain.CommonRequestBean;
+import com.gateway.common.dto.Desktop;
+import com.gateway.common.dto.DesktopRequest;
+import com.pkpmdesktopcloud.desktopcloudbusiness.domain.PkpmCloudComponentDef;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -60,9 +65,9 @@ public class PkpmCloudSubsDetailsServiceImpl implements PkpmCloudSubsDetailsServ
 		
 		PageHelper.startPage(currentPage, pageSize);
 		
-		RedisCache cache = new RedisCache(MY_PRODUCT_ID);
-		List<MyProduct> myProducts = (List<MyProduct>)cache.getObject(userId);
-		
+		//RedisCache cache = new RedisCache(MY_PRODUCT_ID);
+		//List<MyProduct> myProducts = (List<MyProduct>)cache.getObject(userId);
+		List<MyProduct> myProducts = new ArrayList<>();
 		LocalDateTime nowTime = LocalDateTime.now();
 
 		// 若存在Redis缓存，从缓存中读取
@@ -90,7 +95,11 @@ public class PkpmCloudSubsDetailsServiceImpl implements PkpmCloudSubsDetailsServ
 				List<PkpmCloudSubsDetails> subsDetails = subsDetailsMapper.findSubsDetailsList(subsId);
 				
 				for (PkpmCloudSubsDetails subs : subsDetails) {
+
 					Integer productId = subs.getProductId();
+
+
+
 					LocalDateTime createTime = subs.getCreateTime();
 					String create = DateUtils.time2String(createTime, "yyyy年MM月dd日  HH:mm:ss");
 					LocalDateTime invalidTime = subs.getInvalidTime();
@@ -120,8 +129,29 @@ public class PkpmCloudSubsDetailsServiceImpl implements PkpmCloudSubsDetailsServ
 						componentNames.add(componentName);
 					}
 
+
+
+
+
+					String desktopId = subsCription.getDesktopId();
+
 					MyProduct myProduct = new MyProduct();
-					
+
+
+					//根据productId查询component_def中配置信息
+					for (PkpmCloudProductDef productInfo : products) {
+
+						Integer componentId = productInfo.getComponentId();
+						Integer componentType = 1;
+						PkpmCloudComponentDef pkpmCloudComponentDef = componentMapper.getComponentInfo(componentId, componentType);
+
+						if (pkpmCloudComponentDef == null ) {
+							continue;
+						}
+						String hostConfigName = pkpmCloudComponentDef.getComponentName();
+						myProduct.setHostConfigName(hostConfigName);
+					}
+
 					myProduct.setComponentName(componentNames);
 					myProduct.setCreateTime(create);
 					myProduct.setInvalidTime(invalid);
@@ -138,21 +168,51 @@ public class PkpmCloudSubsDetailsServiceImpl implements PkpmCloudSubsDetailsServ
 					myProduct.setAdId(subsCription.getAdId());
 					myProduct.setProjectId(projectId);
 					myProduct.setAreaCode(areaCode);
-					try {
+
+
+					// 根据desktopId  查询计算机名字
+					if(StringUtils.isNotEmpty(desktopId)){
 						
+						myProduct.setDesktopId(desktopId);
+						String urlGetComputerName = serverHost + "/operator/queryComputerName";
+						CommonRequestBean commonRequestBean = new CommonRequestBean();
+						commonRequestBean.setDesktopId(desktopId);
+						String jsonCommonRequestBean = JsonUtil.serializeEx(commonRequestBean);
+						try {
+							String computerNameResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(
+									urlGetComputerName,jsonCommonRequestBean,5,"utf-8", 10000).method(HttpMethods.POST));
+							MyHttpResponse computerNameHttpResponse = JsonUtil.deserialize(computerNameResponse, MyHttpResponse.class);
+							ResultObject result = getResultObject(computerNameHttpResponse);
+							String computerName = (String) result.getData();
+							if(StringUtils.isEmpty(computerName)){
+								myProduct.setComputerName(computerName);
+							}
+
+							//根据projectId和desktopId 查询 桌面运行状态
+							String urlDesktopStatus = serverHost + "/desktop/queryDesktopDetail";
+							commonRequestBean.setProjectId(projectId);
+							String desktopStatusResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(
+									urlDesktopStatus,jsonCommonRequestBean,5,"utf-8", 10000).method(HttpMethods.POST));
+							MyHttpResponse  desktopStatusHttpResponse = JsonUtil.deserialize(computerNameResponse, MyHttpResponse.class);
+							ResultObject desktopStatusResult = getResultObject(desktopStatusHttpResponse);
+							String  desktopStatusData = (String) desktopStatusResult.getData();
+							DesktopRequest desktopRequest = JsonUtil.deserialize(desktopStatusData, DesktopRequest.class);
+							List<Desktop> desktops = desktopRequest.getDesktops();
+							Desktop desktop = desktops.get(0);
+							String desktopStatus = desktop.getStatus();
+							myProduct.setDesktopStatus(desktopStatus);
+
+						} catch (HttpProcessException e) {
+							e.printStackTrace();
+						}
+					}
+					//根据projectId和areacode 查询 destinationIp
+					try {
+
 						String urlGetProjectDef =serverHost + "/params/getProjectDef?areaCode=" + areaCode + "&projectId=" +  projectId;
 						String adAndProjectResponse = HttpClientUtil.mysend(HttpConfigBuilder.buildHttpConfigNoToken(urlGetProjectDef,  5, "utf-8", 100000).method(HttpMethods.GET));
-						MyHttpResponse adAndProjectHttpResponse = JsonUtil.deserialize(adAndProjectResponse, MyHttpResponse.class);
-						Integer adStatusCode = adAndProjectHttpResponse.getStatusCode();
-						if(HttpStatus.OK.value() != adStatusCode){
-							throw  Exceptions.newBusinessException(adAndProjectHttpResponse.getMessage());
-						}
-						String body = adAndProjectHttpResponse.getBody();
-						ResultObject result = JsonUtil.deserialize(body, ResultObject.class);
-						Integer code = result.getCode();
-						if(HttpStatus.OK.value() != code){
-							throw  Exceptions.newBusinessException(result.getMessage());
-						}
+						  MyHttpResponse adAndProjectHttpResponse = JsonUtil.deserialize(adAndProjectResponse, MyHttpResponse.class);
+						ResultObject result = getResultObject(adAndProjectHttpResponse);
 						String str = (String) result.getData();
 						PkpmProjectDef pkpmProjectDef = JsonUtil.deserialize(str, PkpmProjectDef.class);
 						destinationIp = pkpmProjectDef.getDestinationIp();
@@ -161,11 +221,15 @@ public class PkpmCloudSubsDetailsServiceImpl implements PkpmCloudSubsDetailsServ
 						
 						e.printStackTrace();
 					}
+
+
 					if(StringUtils.isNotEmpty(status2) && SubscriptionStatusEnum.VALID.toString().equals(status2)){
-						myProduct.setStatus(1);
+						myProduct.setStatus(SubscriptionConstants.SUCCESS_STATUS);
 						myProduct.setHostIp(destinationIp);
+					}else if (StringUtils.isNotEmpty(status2) && SubscriptionStatusEnum.FAILED.toString().equals(status2)){
+						myProduct.setStatus(SubscriptionConstants.FAILD_STATUS);
 					}else{
-						myProduct.setStatus(0);
+						myProduct.setStatus(SubscriptionConstants.PROCESS_STATUS);
 					}
 					
 					myProducts.add(myProduct);
@@ -180,6 +244,20 @@ public class PkpmCloudSubsDetailsServiceImpl implements PkpmCloudSubsDetailsServ
 		pageData.setItems(myProducts);
 		
 		return pageData;
+	}
+
+	private ResultObject getResultObject(MyHttpResponse myHttpResponse) {
+		Integer adStatusCode = myHttpResponse.getStatusCode();
+		if(HttpStatus.OK.value() != adStatusCode){
+            throw  Exceptions.newBusinessException(myHttpResponse.getMessage());
+        }
+		String body = myHttpResponse.getBody();
+		ResultObject result = JsonUtil.deserialize(body, ResultObject.class);
+		Integer code = result.getCode();
+		if(HttpStatus.OK.value() != code){
+            throw  Exceptions.newBusinessException(result.getMessage());
+        }
+		return result;
 	}
 
 }
