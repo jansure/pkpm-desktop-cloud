@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.desktop.utils.page.Page;
 import com.pkpmcloud.fileserver.VO.PkpmFileInfoVO;
+import com.pkpmcloud.fileserver.domain.PkpmFileConfig;
 import com.pkpmcloud.fileserver.domain.PkpmFileInfo;
 
 public interface IFileService {
@@ -53,4 +54,13 @@ public interface IFileService {
 	 */  
 	Page<PkpmFileInfoVO> filePageListByName(String fileName, Integer beginPos, Integer pageSize);
 
+	
+	/**
+	 * 
+	 * @Title: selectAllFileConfig  
+	 * @Description: 获取所有文件配置信息
+	 * @return List<PkpmFileConfig>    返回文件配置信息集合
+	 * @throws
+	 */
+	public List<PkpmFileConfig> selectAllFileConfig();
 }
