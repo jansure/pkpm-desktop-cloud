@@ -69,6 +69,9 @@ public class PkpmCloudNavigationServiceImpl implements PkpmCloudNavigationServic
 		if (null != navigation && !navigation.isEmpty()) {
 			navTree = this.buildByRecursive(navigation);
 		}
+		
+		// 写入Redis缓存
+		cache.putObject("all", navTree);
 		return navTree;
 	}
  
