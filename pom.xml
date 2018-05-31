@@ -23,6 +23,7 @@
 		<module>message-server</module>
 		<module>file-server</module>
 		<module>desktop-cloud-shutdown</module>
+		<module>media-content-server</module>
 		<module>eureka-server</module>
 		<module>desktop-cloud-business</module>
 		<module>search</module>
