@@ -19,6 +19,7 @@ public class FastdfsApplication {
 		SpringApplication.run(FastdfsApplication.class, args);
 	}
 	
+	
     /**  
      * 文件上传配置  
      * @return  
