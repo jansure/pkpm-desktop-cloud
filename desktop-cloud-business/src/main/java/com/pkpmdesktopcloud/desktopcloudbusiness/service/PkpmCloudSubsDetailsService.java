@@ -10,4 +10,5 @@ public interface PkpmCloudSubsDetailsService {
 	//产品列表
 	PageBean<MyProduct> showList(int userId, Integer currentPage, Integer pageSize);
 
+	PageBean<MyProduct> showListtest(Integer userID, Integer currentPage, Integer pageSize);
 }
