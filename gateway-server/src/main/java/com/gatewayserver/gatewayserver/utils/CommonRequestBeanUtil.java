@@ -7,6 +7,8 @@ import com.google.common.base.Preconditions;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.List;
+
 public class CommonRequestBeanUtil {
     /**
      * 对DesktopInput的校验
@@ -221,5 +223,12 @@ public class CommonRequestBeanUtil {
         Preconditions.checkArgument(null != commonRequestBean, "请传入正确的参数");
         String desktopId = commonRequestBean.getDesktopId();
         Preconditions.checkArgument(StringUtils.isNotBlank(desktopId), "请传入desktopId参数");
+    }
+
+    public static void checkStatusOrComputerNameOrIp(List<String> desktopIds, Boolean statusFlag, Boolean ipFlag) {
+
+        Preconditions.checkArgument(null != desktopIds || desktopIds.size() == 0, "请传入正确desktopIds的参数");
+        Preconditions.checkArgument(null != statusFlag, "请传入statusFlag参数");
+        Preconditions.checkArgument(null != ipFlag, "请传入ipFlag参数");
     }
 }

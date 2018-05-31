@@ -46,4 +46,6 @@ public interface PkpmOperatorStatusDAO {
 
 
     PkpmOperatorStatus selectOperatorStatus(PkpmOperatorStatus pkpmOperatorStatus);
+
+    List<PkpmOperatorStatus> queryPkpmOperatorStatusByDesktopIds(List<String> desktopIds);
 }

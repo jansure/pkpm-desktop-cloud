@@ -21,8 +21,8 @@ public class PkpmCloudSubsDetails implements Serializable {
     
 	private LocalDateTime validTime;
 	private LocalDateTime invalidTime;
-	private Integer cloudStorageTimeId;
+	//private Integer cloudStorageTimeId;
 	
-	private Integer cloudStorageTime;
+	//private Integer cloudStorageTime;
 	
 }

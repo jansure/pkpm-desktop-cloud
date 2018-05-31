@@ -152,7 +152,13 @@ public class FileServiceImpl implements IFileService {
 	private List<PkpmFileInfoVO> showFileInfoVOList(List<PkpmFileInfo> pkpmFileInfoList) {
 		List<PkpmFileInfoVO> pkpmFileInfoVoList = new ArrayList<>();
 		for (PkpmFileInfo fileInfo : pkpmFileInfoList) {
-			
+
+			//如果没有上传成功，前端列表不展示
+			String originFileName = fileInfo.getDestFileName();
+			if(StringUtils.isEmpty(originFileName)){
+				continue;
+			}
+
 			PkpmFileInfoVO pkpmFileInfoVO = new PkpmFileInfoVO();
 			LocalDateTime createTime = fileInfo.getCreateTime();
 			String dateToString = TimeConverterUtil.dateToString(createTime, "yyyy年MM月dd日  HH:mm:ss");

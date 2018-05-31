@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.gateway.common.dto.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.Consts;
 import org.apache.http.Header;
@@ -39,10 +40,6 @@ import com.gateway.common.domain.PkpmJobStatus;
 import com.gateway.common.domain.PkpmOperatorStatus;
 import com.gateway.common.domain.PkpmProjectDef;
 import com.gateway.common.domain.PkpmToken;
-import com.gateway.common.dto.Desktop;
-import com.gateway.common.dto.DesktopCreation;
-import com.gateway.common.dto.DesktopRequest;
-import com.gateway.common.dto.JobBean;
 import com.gateway.common.dto.desktop.DesktopSpecResponse;
 import com.gatewayserver.gatewayserver.dao.PkpmJobStatusDAO;
 import com.gatewayserver.gatewayserver.dao.PkpmOperatorStatusDAO;
@@ -88,6 +85,9 @@ public class DesktopServiceImpl implements DesktopService {
 	private AdService adService;
 	@Resource
 	private PkpmOperatorStatusMapper pkpmOperatorStatusMapper;
+
+	@Resource
+	private PkpmOperatorStatusDAO  pkpmOperatorStatusDAO;
 
 	@Override
 	public String createToken(String projectId) {
@@ -797,5 +797,15 @@ public class DesktopServiceImpl implements DesktopService {
 		} else {
 			log.info("没有需要更新状态的任务！");
 		}
+	}
+
+
+
+	@Override
+	public List<DesktopParam> queryComputerNameOrIpOrStatus(List<String> desktopIds, Boolean statusFlag, Boolean ipFlag) {
+
+		List<PkpmOperatorStatus>  operatorStatusList = pkpmOperatorStatusDAO.queryPkpmOperatorStatusByDesktopIds(desktopIds);
+
+		return null;
 	}
 }

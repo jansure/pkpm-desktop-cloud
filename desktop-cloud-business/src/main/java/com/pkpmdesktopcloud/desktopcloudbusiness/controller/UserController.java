@@ -166,7 +166,7 @@ public class UserController {
 			
 			String message = "您的短信验证码是:" + checkCode + "，请注意查收";
 			
-			/*Message sendMessage = new Message();
+			Message sendMessage = new Message();
 	    	//消息类型为短信
 			sendMessage.setMessageType(MessageTypeEnum.sms.toString());
 	    	//消息接收人
@@ -174,8 +174,8 @@ public class UserController {
 	    	//消息内容
 			sendMessage.setContent(message);
 			
-//	    	MessageSender smsMessageSender = new SmsMessageSenderImpl();
-			smsMessageSender.sendMessage(sendMessage);*/
+	    	MessageSender smsMessageSender = new SmsMessageSenderImpl();
+			smsMessageSender.sendMessage(sendMessage);
 			
 			return ResultObject.success("发送短信成功");
 		} catch (Exception e) {
