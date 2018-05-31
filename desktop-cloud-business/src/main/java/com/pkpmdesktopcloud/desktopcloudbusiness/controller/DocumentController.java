@@ -1,6 +1,9 @@
 package com.pkpmdesktopcloud.desktopcloudbusiness.controller;
 
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -128,14 +131,15 @@ public class DocumentController {
 	 * @author yangpengfei
 	 * @param response
 	 * @return
+	 * @throws UnsupportedEncodingException 
 	 */
 	@ResponseBody
 	@ApiOperation("自助服务相关文档")
 	@RequestMapping(value = "/help", method = RequestMethod.GET)
-	public ResultObject getHelp(String filename, HttpServletResponse response) {
+	public ResultObject getHelp(String filename, HttpServletResponse response) throws UnsupportedEncodingException {
 		// 允许跨域调用
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		filename = filename + ".txt";
+		filename =  URLDecoder.decode(filename,"UTF-8") + ".txt";
 		String url = sysConfigService.getPkpmSysConfigByKey(SysConstant.FILE_BASE_URL).getValue() + "/" + filename;
 		String termsJson = FileUtil.getHttpResponse(url);
 		if (!StringUtils.isEmpty(termsJson)) {

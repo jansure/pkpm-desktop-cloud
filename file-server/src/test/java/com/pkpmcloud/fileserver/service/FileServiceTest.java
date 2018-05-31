@@ -36,7 +36,7 @@ public class FileServiceTest {
     	fileInfo.setMd5("123456");
     	fileInfo.setOriginFileName("test.mp4");
     	fileInfo.setDestFileName("jklfdsjlgjdslfd.mp4");
-    	fileInfo.setPostfix("mp4");
+    	fileInfo.setPostFix("mp4");
 		int num = fileService.insert(fileInfo );
 		Assert.assertTrue(num == 1);
     }

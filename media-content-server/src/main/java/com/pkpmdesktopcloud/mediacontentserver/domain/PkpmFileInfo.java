@@ -1,4 +1,4 @@
-package com.pkpmcloud.fileserver.domain;
+package com.pkpmdesktopcloud.mediacontentserver.domain;
 
 import java.time.LocalDateTime;
 
