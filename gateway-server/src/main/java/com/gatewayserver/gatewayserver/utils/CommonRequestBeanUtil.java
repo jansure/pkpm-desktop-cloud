@@ -206,6 +206,17 @@ public class CommonRequestBeanUtil {
 
     }
 
+    public static void checkCommonQueryDesktopDetailList(List<CommonRequestBean> commonRequestBeanList) {
+
+        commonRequestBeanList.forEach(
+                commonRequestBean-> {
+                    checkCommonRequestProjectId(commonRequestBean);
+                    String desktopId = commonRequestBean.getDesktopId();
+                    Preconditions.checkArgument(StringUtils.isNotBlank(desktopId), "请传入deskopId参数");
+                }
+        );
+    }
+
     public static void checkCommonRequestProjectId(CommonRequestBean commonRequestBean) {
         Preconditions.checkArgument(null != commonRequestBean, "请传入正确的参数");
         String projectId = commonRequestBean.getProjectId();

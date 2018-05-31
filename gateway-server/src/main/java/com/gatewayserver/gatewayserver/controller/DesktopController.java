@@ -160,6 +160,20 @@ public class DesktopController {
 
 	}
 
+	/**
+	 * 查询桌面详情列表
+	 *
+	 * @param commonRequestBeanList
+	 * @return ResultObject
+	 */
+	@PostMapping(value = "listDesktopDetail")
+	public ResultObject listDesktopDetail(@RequestBody List<CommonRequestBean> commonRequestBeanList) {
+
+		CommonRequestBeanUtil.checkCommonQueryDesktopDetailList(commonRequestBeanList);
+		DesktopRequest desktopRequest = desktopService.listDesktopDetail(commonRequestBeanList);
+		return ResultObject.success(desktopRequest, "查询桌面详情成功!");
+
+	}
     /**
      * 重启、启动、关闭桌面
      *

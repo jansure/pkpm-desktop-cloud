@@ -65,6 +65,14 @@ public interface DesktopService {
      */
     DesktopRequest queryDesktopDetail(CommonRequestBean commonRequestBean);
 
+	/**
+	 * 查询桌面详情
+	 *
+	 * @param commonRequestBeanList
+	 * @return ResultObject
+	 */
+	DesktopRequest listDesktopDetail(List<CommonRequestBean> commonRequestBeanList);
+
     /**
      * 重启、启动、关闭桌面
      *
