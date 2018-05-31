@@ -23,7 +23,7 @@ import com.pkpm.pay.common.core.exception.BizException;
 /**
  * 对账业务 .
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

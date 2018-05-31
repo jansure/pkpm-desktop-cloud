@@ -23,7 +23,7 @@ import com.pkpm.pay.common.core.entity.BaseEntity;
 /**
  * 对账暂存池.
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

@@ -18,7 +18,7 @@ package com.pkpm.pay.permission.service;
 /**
  * 菜单角色service接口
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

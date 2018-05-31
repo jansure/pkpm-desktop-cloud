@@ -39,8 +39,8 @@ import java.util.*;
  * <b>功能说明:龙果支付控制类
  * </b>
  *
- * @author Peter
- * <a href="http://www.roncoo.com">龙果学院(www.roncoo.com)</a>
+ * @author jansure
+ *
  */
 @Controller
 @RequestMapping(value = "/roncooPay")

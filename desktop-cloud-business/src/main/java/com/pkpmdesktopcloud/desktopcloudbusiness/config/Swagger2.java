@@ -34,7 +34,7 @@ public class Swagger2 {
     private ApiInfo apiInfo() {
         String name = "构力云桌面";
         String url = "http://localhost:8083/desktop-cloud-business/swagger-ui.html#";
-        String mail = "jansure@sina.com";
+        String mail = "@sina.com";
         return new ApiInfoBuilder()
                 .title("构力云桌面网页端API文档")
                 .description("内部资料，未经允许，严禁外传")

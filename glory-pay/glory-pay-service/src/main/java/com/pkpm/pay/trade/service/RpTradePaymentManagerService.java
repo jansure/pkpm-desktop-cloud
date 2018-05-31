@@ -24,8 +24,8 @@ import com.pkpm.pay.trade.vo.*;
 /**
  * <b>功能说明:交易模块管理接口</b>
  *
- * @author Peter
- * <a href="http://www.roncoo.com">龙果学院(www.roncoo.com)</a>
+ * @author jansure
+ *
  */
 public interface RpTradePaymentManagerService {
 

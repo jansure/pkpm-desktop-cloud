@@ -29,7 +29,7 @@ import com.pkpm.pay.permission.service.PmsMenuRoleService;
 /**
  * 菜单角色service接口实现
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

@@ -22,7 +22,7 @@ import java.util.Date;
 /**
  * 时间工具类 .
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

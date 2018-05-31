@@ -39,8 +39,8 @@ import com.pkpm.pay.user.service.RpUserPayConfigService;
 
 /**
  * 支付产品service实现类
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 @Service("rpPayProductService")
 public class RpPayProductServiceImpl implements RpPayProductService{

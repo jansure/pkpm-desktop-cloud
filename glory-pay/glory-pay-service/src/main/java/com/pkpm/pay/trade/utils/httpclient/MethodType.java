@@ -18,8 +18,8 @@ package com.pkpm.pay.trade.utils.httpclient;
 /**
  * <b>功能说明:http发送请求类型
  * </b>
- * @author  Peter
- * <a href="http://www.roncoo.com">龙果学院(www.roncoo.com)</a>
+ * @author  jansure
+ *
  */
 public enum MethodType {
 	

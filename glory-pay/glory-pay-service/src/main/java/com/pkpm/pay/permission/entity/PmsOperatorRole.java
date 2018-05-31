@@ -18,7 +18,7 @@
  * 
  * 权限管理-角色,操作员关联表..
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

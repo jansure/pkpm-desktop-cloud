@@ -38,7 +38,7 @@ import com.pkpm.pay.trade.enums.TradeStatusEnum;
 /**
  * 对账的核心业务biz.
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

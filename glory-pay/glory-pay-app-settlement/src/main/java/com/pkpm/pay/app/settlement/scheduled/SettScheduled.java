@@ -18,8 +18,8 @@ package com.pkpm.pay.app.settlement.scheduled;
 
 /**
  * 结算定时任务接口.
- * 龙果学院：www.roncoo.com
- * @author zenghao
+ * glory-cloud
+ * @author
  */
 public interface SettScheduled {
 

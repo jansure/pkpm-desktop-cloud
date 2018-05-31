@@ -20,8 +20,8 @@ import com.pkpm.pay.trade.entity.RpTradePaymentOrder;
 
 /**
  * <b>功能说明:商户支付订单,dao层接口</b>
- * @author  Peter
- * <a href="http://www.roncoo.com">龙果学院(www.roncoo.com)</a>
+ * @author  jansure
+ *
  */
 public interface RpTradePaymentOrderDao  extends BaseDao<RpTradePaymentOrder>{
 

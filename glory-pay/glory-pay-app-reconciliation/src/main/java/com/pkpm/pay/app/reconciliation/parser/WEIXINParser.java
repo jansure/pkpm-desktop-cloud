@@ -45,7 +45,7 @@ import com.pkpm.pay.reconciliation.vo.ReconciliationEntityVo;
 /**
  * 微信对账单解析器 .
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

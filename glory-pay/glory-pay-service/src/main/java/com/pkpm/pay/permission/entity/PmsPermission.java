@@ -19,7 +19,7 @@ package com.pkpm.pay.permission.entity;
 /**
  * 权限-权限表实体..
  * 
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

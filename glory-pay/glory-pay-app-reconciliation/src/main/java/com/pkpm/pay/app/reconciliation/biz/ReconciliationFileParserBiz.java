@@ -34,7 +34,7 @@ import com.pkpm.pay.reconciliation.vo.ReconciliationEntityVo;
 /**
  * 对账文件解析业务逻辑.
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

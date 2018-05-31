@@ -29,8 +29,8 @@ import com.pkpm.pay.trade.service.RpTradePaymentManagerService;
 /**
  * <b>功能说明:
  * </b>
- * @author  Peter
- * <a href="http://www.roncoo.com">龙果学院(www.roncoo.com)</a>
+ * @author  jansure
+ *
  */
 @Service("pollingPersist")
 public class PollingPersist {

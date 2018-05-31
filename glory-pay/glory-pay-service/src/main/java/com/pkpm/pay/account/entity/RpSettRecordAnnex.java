@@ -22,8 +22,8 @@ import com.pkpm.pay.common.core.enums.PublicEnum;
 
 /**
  * 结算附件表
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public class RpSettRecordAnnex extends BaseEntity implements Serializable {
 

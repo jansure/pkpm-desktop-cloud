@@ -22,8 +22,8 @@ import java.util.Map;
 
 /**
  * 银行枚举
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public enum BankCodeEnum {
 

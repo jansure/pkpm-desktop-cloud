@@ -30,7 +30,7 @@ import com.pkpm.pay.reconciliation.service.RpAccountCheckMistakeService;
 /**
  * 对账批次接口实现 .
  * 
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

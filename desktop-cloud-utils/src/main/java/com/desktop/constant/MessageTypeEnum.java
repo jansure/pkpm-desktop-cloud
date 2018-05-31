@@ -8,7 +8,7 @@ import java.util.Arrays;
 /**
  * MessageTypeEnum
  *
- * @author jansure.zhang
+ * @author .zhang
  * @since 5/05/2018
  */
 public enum MessageTypeEnum {

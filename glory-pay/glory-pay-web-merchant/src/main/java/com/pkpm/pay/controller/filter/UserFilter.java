@@ -35,8 +35,8 @@ import com.pkpm.pay.user.entity.RpUserInfo;
 
 /**
  * 粗粒度权限控制拦截过滤器
- * 龙果学院：www.roncoo.com
- * @author zenghao
+ * glory-cloud
+ * @author
  */
 public class UserFilter implements Filter {
     

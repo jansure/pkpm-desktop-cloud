@@ -43,7 +43,7 @@ import com.pkpm.pay.permission.service.PmsMenuService;
 import com.pkpm.pay.permission.service.PmsOperatorRoleService;
 
 /**
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：Along
  */

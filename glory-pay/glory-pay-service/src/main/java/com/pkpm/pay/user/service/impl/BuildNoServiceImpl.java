@@ -32,8 +32,8 @@ import com.pkpm.pay.user.service.BuildNoService;
 
 /**
  * 生成编号service实现类,每个编号前面都会有一个前缀用来方便区分是那种编号
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 @Service("buildNoService")
 public class BuildNoServiceImpl implements BuildNoService {

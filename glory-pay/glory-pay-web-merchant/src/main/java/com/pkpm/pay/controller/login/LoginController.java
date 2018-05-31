@@ -15,6 +15,7 @@
  */
 package com.pkpm.pay.controller.login;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +33,12 @@ import com.pkpm.pay.user.service.RpUserInfoService;
 
 /**
  * 登录
- * 龙果学院：www.roncoo.com
- * @author zenghao
+ * glory-cloud
+ * @author
  */
 @Controller
 public class LoginController extends BaseController {
-	@Autowired
+	@Resource
 	private RpUserInfoService rpUserInfoService;
 
 	/**

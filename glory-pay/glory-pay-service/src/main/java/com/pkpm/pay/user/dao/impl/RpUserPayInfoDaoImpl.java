@@ -26,8 +26,8 @@ import java.util.Map;
 
 /**
  * 用户第三方支付信息dao实现类
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 @Repository
 public class RpUserPayInfoDaoImpl  extends BaseDaoImpl<RpUserPayInfo> implements RpUserPayInfoDao{

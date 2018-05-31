@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * 支付类型枚举类
  * @company：广州领课网络科技有限公司（龙果学院 www.roncoo.com）.
- * @author Peter
+ * @author jansure
  */
 public enum PayTypeEnum {
 

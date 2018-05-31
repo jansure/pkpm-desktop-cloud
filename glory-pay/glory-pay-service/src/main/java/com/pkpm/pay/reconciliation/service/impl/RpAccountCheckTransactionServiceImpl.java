@@ -37,7 +37,7 @@ import com.pkpm.pay.trade.service.RpTradeReconciliationService;
 /**
  * 对账数据事务一致性service.
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

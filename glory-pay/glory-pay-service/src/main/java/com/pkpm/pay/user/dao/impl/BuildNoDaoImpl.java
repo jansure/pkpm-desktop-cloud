@@ -23,8 +23,8 @@ import com.pkpm.pay.user.entity.SeqBuild;
 
 /**
  *  生成编号dao实现类
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 @Repository
 public class BuildNoDaoImpl   extends BaseDaoImpl<SeqBuild> implements BuildNoDao {

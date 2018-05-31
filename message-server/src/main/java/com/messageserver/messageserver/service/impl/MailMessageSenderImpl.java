@@ -22,7 +22,7 @@ import java.util.Date;
 /**
  * EmailMessageSenderImpl
  *
- * author jansure.zhang
+ * author .zhang
  * @since 5/5/2018
  */
 @Slf4j

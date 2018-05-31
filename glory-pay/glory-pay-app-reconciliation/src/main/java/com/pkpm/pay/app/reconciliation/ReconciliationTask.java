@@ -40,7 +40,7 @@ import com.pkpm.pay.user.service.BuildNoService;
 /**
  * 对账处理(包括下载对账文件、转换对账文件、对账) .
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

@@ -21,8 +21,8 @@ import com.pkpm.pay.common.core.entity.BaseEntity;
 
 /**
  * 此实体没有关联的表，只作用于序列查找时传参使用 
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public class SeqBuild extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = 1L;

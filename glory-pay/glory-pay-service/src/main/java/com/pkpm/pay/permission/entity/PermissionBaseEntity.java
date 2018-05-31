@@ -21,7 +21,7 @@ import java.util.Date;
 /**
  * 权限基类
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

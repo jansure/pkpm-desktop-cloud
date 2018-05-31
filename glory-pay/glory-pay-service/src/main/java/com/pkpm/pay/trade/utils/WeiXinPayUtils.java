@@ -37,7 +37,7 @@ import java.util.*;
 /**
  * <b>功能说明:微信支付工具类 </b>
  *
- * @author Peter <a href="http://www.roncoo.com">龙果学院(www.roncoo.com)</a>
+ * @author jansure
  */
 public class WeiXinPayUtils {
 

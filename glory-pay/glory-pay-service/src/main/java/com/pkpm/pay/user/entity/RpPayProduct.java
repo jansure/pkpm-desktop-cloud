@@ -22,8 +22,8 @@ import com.pkpm.pay.common.core.enums.PublicEnum;
 
 /**
  * 支付产品实体类
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public class RpPayProduct extends BaseEntity implements Serializable {
 

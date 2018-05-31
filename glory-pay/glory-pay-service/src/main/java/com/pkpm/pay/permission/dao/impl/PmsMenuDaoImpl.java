@@ -27,7 +27,7 @@ import com.pkpm.pay.permission.entity.PmsMenu;
 /**
  * 权限菜单
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */
