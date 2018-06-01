@@ -345,6 +345,19 @@ public class MediaImpl implements IMediaService {
 		
 		log.error("获取上传路径出错:{}", response);
         return null;  
-    }  
+    }
+
+	  
+	/* (非 Javadoc)  
+	 *   
+	 *   
+	 * @param fileInfo
+	 * @return  
+	 * @see com.pkpmdesktopcloud.mediacontentserver.service.IMediaService#selectFile(com.pkpmdesktopcloud.mediacontentserver.domain.PkpmFileInfo)  
+	 */  
+	@Override
+	public PkpmFileInfo selectFile(PkpmFileInfo fileInfo) {
+		return fileInfoDao.selectOne(fileInfo);
+	}  
 
 }
