@@ -69,4 +69,29 @@ public class PkpmCloudComponentDefImpl implements PkpmCloudComponentDefDAO{
 		
 		return componentMapper.select(componentInfo );
 	}
+	
+	@Override
+	public List<PkpmCloudComponentDef> getSoftwareTypeList() {
+		
+		PkpmCloudComponentDef componentInfo = new PkpmCloudComponentDef();
+		componentInfo.setComponentType(0);
+		return componentMapper.select(componentInfo );
+	}
+
+	/* (non-Javadoc)
+	 * @see com.pkpmdesktopcloud.desktopcloudbusiness.dao.PkpmCloudComponentDefDAO#getComponentInfoById(java.lang.Integer)
+	 */
+	@Override
+	public PkpmCloudComponentDef getComponentInfoById(Integer componentId) {
+		PkpmCloudComponentDef componentInfo = new PkpmCloudComponentDef();
+		componentInfo.setComponentId(componentId);
+		
+		List<PkpmCloudComponentDef> list = componentMapper.select(componentInfo );
+		if(list != null && list.size() > 0) {
+			
+			return list.get(0);
+		}
+    	
+		return null;
+	}
 }

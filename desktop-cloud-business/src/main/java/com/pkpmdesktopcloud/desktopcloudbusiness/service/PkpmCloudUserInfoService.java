@@ -21,4 +21,8 @@ public interface PkpmCloudUserInfoService {
 	public PkpmCloudUserInfo findUser(Integer userID);
 
 	PkpmCloudUserInfo findByUserNameOrTelephoneOrUserEmail(String name);
+
+    List<PkpmCloudUserInfo> userList(PkpmCloudUserInfo userInfo);
+
+	List<PkpmCloudUserInfo> userList();
 }

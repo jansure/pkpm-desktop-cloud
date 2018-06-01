@@ -27,6 +27,8 @@
 		<module>desktop-cloud-business</module>
 		<module>search</module>
 		<module>glory-pay</module>
+		<module>pdf-converter-util</module>
+		
 	</modules>
 
 	<!-- 统一版本号依赖 -->

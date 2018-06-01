@@ -33,7 +33,7 @@ public class Swagger2 {
 
     private ApiInfo apiInfo() {
         String name = "构力云桌面";
-        String url = "http://localhost:8083/desktop-cloud-business/swagger-ui.html#";
+        String url = "http://49.4.8.123:8083/desktop-cloud-business/swagger-ui.html#";
         String mail = "jansure@sina.com";
         return new ApiInfoBuilder()
                 .title("构力云桌面网页端API文档")

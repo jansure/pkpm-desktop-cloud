@@ -14,10 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.desktop.constant.MessageTypeEnum;
 import com.desktop.utils.Base64Util;
@@ -48,9 +45,9 @@ public class UserController {
 	@Autowired
 	private PkpmCloudSubscriptionService subscriptionService;
 	
-	@Resource
-	private SmsMessageSenderImpl smsMessageSender;
-
+//	@Resource
+//	private SmsMessageSenderImpl smsMessageSender;
+//
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
@@ -177,7 +174,7 @@ public class UserController {
 	    	//消息内容
 			sendMessage.setContent(message);
 			
-//	    	MessageSender smsMessageSender = new SmsMessageSenderImpl();
+	    	MessageSender smsMessageSender = new SmsMessageSenderImpl();
 			smsMessageSender.sendMessage(sendMessage);
 			
 			return ResultObject.success("发送短信成功");
@@ -397,8 +394,8 @@ public class UserController {
 	    	//消息内容
 			sendMessage.setContent(message);
 			
-	    	MessageSender smsMessageSender = new SmsMessageSenderImpl();
-			smsMessageSender.sendMessage(sendMessage);
+//	    	MessageSender smsMessageSender = new SmsMessageSenderImpl();
+//			smsMessageSender.sendMessage(sendMessage);
 			
 			return ResultObject.success("您的密码将以短信的形式发送到您的手机上，请注意查收");
 		} catch (Exception e) {
@@ -427,5 +424,27 @@ public class UserController {
 		userService.changeUserPassword(newUserInfo, subsCriptionList);
 		
 		return ResultObject.success("密码修改成功");
+	}
+
+	/**
+	 * 展示用户列表接口,支持过滤条件
+	 * @param userInfo
+	 * @return  ResultObject
+	 */
+	@ApiOperation("展示用户列表")
+	@GetMapping("/userList")
+	public ResultObject userList(@RequestBody PkpmCloudUserInfo userInfo){
+
+		List<PkpmCloudUserInfo> userInfoList = null;
+
+		if(userInfo != null){
+			userInfoList = userService.userList(userInfo);
+		}
+
+		userInfoList =  userService.userList();
+
+
+		return null;
+
 	}
 }
