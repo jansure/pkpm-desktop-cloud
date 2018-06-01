@@ -54,6 +54,21 @@ public class DocumentController {
         return ResultObject.success(msg);
     }
     
+    @ApiOperation("文件预览")
+    @ResponseBody
+	@RequestMapping(value = "/preview", method = RequestMethod.GET)
+    public ResultObject getPreview(String filename, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // 允许跨域调用
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        //filename = "BIM协同设计管理云平台.pdf";
+        Preconditions.checkArgument(StringUtil.isNotEmpty(filename), "文件名不能为空");
+        
+        boolean isOnLine = true;
+        log.debug("filename:" + filename + "; isOnLine:" + isOnLine);
+        String msg = filename + documentService.downloadFile(filename, isOnLine, request, response);
+        return ResultObject.success(msg);
+    }
+    
 	/**
 	 * 获取法律条款说明
 	 * 
