@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.desktop.constant.FileServerConstant;
+import com.desktop.constant.FileTypeEnum;
 import com.desktop.utils.FileUtil;
 import com.desktop.utils.Md5CalculateUtil;
 import com.desktop.utils.StringUtil;
@@ -178,7 +179,7 @@ public class FastDFSController {
 			fileService.update(fileInfo);
 			
 			//上传完成，文件名放到缓存做转换处理
-			putRedis(fileType, storePath.getPath());
+			putRedis(fileType, storePath.getFullPath());
 			return ResultObject.success(storePath);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -221,18 +222,18 @@ public class FastDFSController {
 	private void putRedis(String postFix, String path) {
 		RedisCache cache = null;
 		
-		switch(postFix) {
-			case "IMAGE" :
+		switch(FileTypeEnum.eval(postFix)) {
+			case IMAGE :
 				cache = new RedisCache(FileServerConstant.FILE_SERVER_UPLOAD_IMAGE_KEY);
 				break;
-			case "VIDEO" :
+			case VIDEO :
 				cache = new RedisCache(FileServerConstant.FILE_SERVER_UPLOAD_VIDEO_KEY);
 				break;
-			case "DATUM" :
+			case DATUM :
 				cache = new RedisCache(FileServerConstant.FILE_SERVER_UPLOAD_DATUM_KEY);
 				break;
 			default :
-				System.out.println("错误类型");
+				log.error("文件类型错误：{}", postFix);
 		}
 		
 		cache.putObject(path, 1);
