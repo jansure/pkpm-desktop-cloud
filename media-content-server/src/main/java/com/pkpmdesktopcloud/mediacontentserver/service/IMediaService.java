@@ -3,17 +3,17 @@ package com.pkpmdesktopcloud.mediacontentserver.service;
 public interface IMediaService {
 	
 	/**
-	 * 
+	 * 转换pdf文件
 	 */
-	void convertPdf(String docName);
+	void convertPdf();
     
 	/**
-	 * 
+	 * 转换pdf缩略图
 	 */
-    void captureByPdf(String pdfName);
+    void captureByPdf();
 
     /**
-	 * 
+	 * 转换视频缩略图
 	 */
-    void captureByVideo(String videoName);
+    void captureByVideo();
 }

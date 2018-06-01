@@ -18,12 +18,12 @@ public class OpenOfficeService {
 	/**
 	 * linux系统下libreoffice安装目录
 	 */
-	private static final String OFFICE_HOME_LINUX = PropertiesUtil.getProperty("config.properties", "office.home.linux");
+	private static final String OFFICE_HOME_LINUX = PropertiesUtil.getProperty("converter.properties", "office.home.linux");
 	
 	/**
 	 * windows系统下libreoffice安装目录
 	 */
-	private static final String OFFICE_HOME_WINDOWS = PropertiesUtil.getProperty("config.properties", "office.home.windows");
+	private static final String OFFICE_HOME_WINDOWS = PropertiesUtil.getProperty("converter.properties", "office.home.windows");
 	
     private static OfficeManager officeManager = null; //Couldn't make NullObject b/c of poor OfficeManager declaration
 
