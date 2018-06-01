@@ -31,17 +31,20 @@ public class DocumentServiceImpl implements DocumentService {
 
 	@Override
 	public String getTxtContent(String filename) {
+		String txtContent = "";
 		try {
 			filename = URLDecoder.decode(filename, "UTF-8") + ".txt";
-			if (!existsFile(filename)) {
-				return "该文件不存在！";
+			if (existsFile(filename)) {
+				// 若存在文件返回文件内容
+				String url = sysConfigService.getPkpmSysConfigByKey(SysConstant.FILE_BASE_URL).getValue() + "/" + filename;
+				FileUtil.getHttpResponse(url);
+				return txtContent;
 			}
 		} catch (UnsupportedEncodingException e) {
 			log.error(e.getMessage());
 			e.printStackTrace();
 		}
-		String url = sysConfigService.getPkpmSysConfigByKey(SysConstant.FILE_BASE_URL).getValue() + "/" + filename;
-		String txtContent = FileUtil.getHttpResponse(url);
+		// 不存在文件返回空
 		return txtContent;
 	}
 
