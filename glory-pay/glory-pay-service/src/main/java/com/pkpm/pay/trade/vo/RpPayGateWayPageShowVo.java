@@ -23,8 +23,8 @@ import com.pkpm.pay.common.core.enums.PayWayEnum;
 /**
  * <b>功能说明:龙果支付网关页面展示实体
  * </b>
- * @author  Peter
- * <a href="http://www.roncoo.com">龙果学院(www.roncoo.com)</a>
+ * @author  jansure
+ *
  */
 public class RpPayGateWayPageShowVo {
 

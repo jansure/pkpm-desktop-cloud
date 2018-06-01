@@ -20,8 +20,8 @@ import com.pkpm.pay.user.entity.RpPayProduct;
 
 /**
  * 支付产品dao
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public interface RpPayProductDao  extends BaseDao<RpPayProduct> {
 }

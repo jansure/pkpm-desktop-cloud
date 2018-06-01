@@ -47,8 +47,8 @@ import com.pkpm.pay.user.service.RpPayWayService;
 
 /**
  * 支付方式管理
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 @Controller
 @RequestMapping("/pay/way")

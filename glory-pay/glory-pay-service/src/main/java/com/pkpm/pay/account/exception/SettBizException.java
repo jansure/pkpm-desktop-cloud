@@ -22,8 +22,8 @@ import com.pkpm.pay.common.core.exception.BizException;
 
 /**
  * 结算服务业务异常类,异常代码8位数字组成,前4位固定1001打头,后4位自定义
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public class SettBizException extends BizException {
 

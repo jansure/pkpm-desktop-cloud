@@ -47,8 +47,8 @@ import com.pkpm.pay.user.service.RpUserPayInfoService;
 
 /**
  * 用户支付设置管理
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 @Controller
 @RequestMapping("/pay/config")

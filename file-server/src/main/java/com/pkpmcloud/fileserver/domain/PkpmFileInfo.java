@@ -10,6 +10,9 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PkpmFileInfo {
 	
+	/** 自增主键 */
+	private Integer id;
+	
     /**组ID */
     private Integer groupName;
 
@@ -29,7 +32,6 @@ public class PkpmFileInfo {
     private LocalDateTime createTime;
 
     /** 文件后缀*/
-    private String postfix;
+    private String postFix;
     
-
 }

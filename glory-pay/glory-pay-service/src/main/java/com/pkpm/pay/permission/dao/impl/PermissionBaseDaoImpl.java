@@ -36,7 +36,7 @@ import com.pkpm.pay.permission.entity.PermissionBaseEntity;
 /**
  * 数据访问层基础支撑类.
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

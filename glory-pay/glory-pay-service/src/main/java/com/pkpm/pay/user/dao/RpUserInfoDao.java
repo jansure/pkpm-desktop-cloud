@@ -20,8 +20,8 @@ import com.pkpm.pay.user.entity.RpUserInfo;
 
 /**
  *   用户dao
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public interface RpUserInfoDao  extends BaseDao<RpUserInfo> {
 }

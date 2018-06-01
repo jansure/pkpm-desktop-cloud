@@ -22,7 +22,7 @@ import com.pkpm.pay.permission.entity.PmsPermission;
 /**
  * 权限点dao
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

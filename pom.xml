@@ -26,6 +26,7 @@
 		<module>eureka-server</module>
 		<module>desktop-cloud-business</module>
 		<module>search</module>
+		<module>media-content-server</module>
 		<module>glory-pay</module>
 		<module>pdf-converter-util</module>
 		

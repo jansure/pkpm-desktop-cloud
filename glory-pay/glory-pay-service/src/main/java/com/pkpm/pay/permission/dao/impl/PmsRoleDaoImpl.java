@@ -27,7 +27,7 @@ import com.pkpm.pay.permission.entity.PmsRole;
 /**
  * 权限角色dao实现
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

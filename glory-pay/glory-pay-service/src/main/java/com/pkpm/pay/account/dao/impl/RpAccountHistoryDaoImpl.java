@@ -28,8 +28,8 @@ import org.springframework.stereotype.Repository;
 
 /**
  * 账户历史dao实现类
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 @Repository
 public class RpAccountHistoryDaoImpl  extends BaseDaoImpl<RpAccountHistory> implements RpAccountHistoryDao{

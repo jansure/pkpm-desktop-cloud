@@ -10,11 +10,12 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.desktop.utils.StringOrDate;
 import com.desktop.utils.TimeConverterUtil;
 import com.desktop.utils.page.Page;
 import com.pkpmcloud.fileserver.VO.PkpmFileInfoVO;
+import com.pkpmcloud.fileserver.dao.PkpmFileConfigDao;
 import com.pkpmcloud.fileserver.dao.PkpmFileInfoDao;
+import com.pkpmcloud.fileserver.domain.PkpmFileConfig;
 import com.pkpmcloud.fileserver.domain.PkpmFileInfo;
 import com.pkpmcloud.fileserver.service.IFileService;
 
@@ -23,6 +24,11 @@ public class FileServiceImpl implements IFileService {
 
 	@Resource
 	private PkpmFileInfoDao fileInfoDao;
+	
+	@Resource
+	private PkpmFileConfigDao fileConfigDao;
+	
+	
 
 	  
 	/* (非 Javadoc)  
@@ -82,7 +88,7 @@ public class FileServiceImpl implements IFileService {
 	    	fileInfo.setCreateTime(LocalDateTime.now());
 	    	fileInfo.setFileSize(getSizeStr(multipartFile.getSize()));
 	    	fileInfo.setOriginFileName(fileName);
-	    	fileInfo.setPostfix(ext);
+	    	fileInfo.setPostFix(ext);
 	    	return fileInfo;
 		}
 		
@@ -216,6 +222,19 @@ public class FileServiceImpl implements IFileService {
 		result.setPageData(showFileInfoVOList);
 		
 		return result;
+	}
+
+
+	  
+	/* (非 Javadoc)  
+	 *   
+	 *   
+	 * @return  
+	 * @see com.pkpmcloud.fileserver.service.IFileService#selectAllFileConfig()  
+	 */  
+	@Override
+	public List<PkpmFileConfig> selectAllFileConfig() {
+		return fileConfigDao.selectAll();
 	}
 
 }

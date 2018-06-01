@@ -22,8 +22,8 @@ import java.util.Map;
 
 /**
  * 结算日汇总类型
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public enum SettDailyCollectTypeEnum {
 

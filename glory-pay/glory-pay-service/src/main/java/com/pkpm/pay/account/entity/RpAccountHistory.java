@@ -25,8 +25,8 @@ import com.pkpm.pay.trade.enums.TrxTypeEnum;
 
 /**
  * 账户历史信息
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public class RpAccountHistory extends BaseEntity implements Serializable {
 

@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * 对账状态枚举
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

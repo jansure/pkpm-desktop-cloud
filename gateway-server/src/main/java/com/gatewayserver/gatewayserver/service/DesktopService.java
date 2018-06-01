@@ -2,10 +2,7 @@ package com.gatewayserver.gatewayserver.service;
 
 import com.desktop.utils.page.ResultObject;
 import com.gateway.common.domain.CommonRequestBean;
-import com.gateway.common.dto.DesktopCreation;
-import com.gateway.common.dto.DesktopParam;
-import com.gateway.common.dto.DesktopRequest;
-import com.gateway.common.dto.JobBean;
+import com.gateway.common.dto.*;
 import com.gateway.common.dto.desktop.DesktopSpecResponse;
 
 import java.util.List;
@@ -65,6 +62,14 @@ public interface DesktopService {
      */
     DesktopRequest queryDesktopDetail(CommonRequestBean commonRequestBean);
 
+	/**
+	 * 查询桌面详情列表
+	 *
+	 * @param commonRequestBeanList
+	 * @return ResultObject
+	 */
+	List<Desktop>   listDesktopDetail(List<CommonRequestBean> commonRequestBeanList);
+
     /**
      * 重启、启动、关闭桌面
      *
@@ -97,14 +102,4 @@ public interface DesktopService {
 	 * @time 2018年3月29日 下午5:00:00
 	 */
 	void updateOperatorStatus(String jobId, String userName, Integer adId, Long seconds);
-
-
-	/**
-	 * 查询计算机名字、计算机运行状态、destinationIp
-	 * @param desktopIds
-	 * @param statusFlag
-	 * @param ipFlag
-	 * @return List<DesktopParam>
-	 */
-    List<DesktopParam> queryComputerNameOrIpOrStatus(List<String> desktopIds, Boolean statusFlag, Boolean ipFlag);
 }

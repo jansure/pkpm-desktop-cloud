@@ -33,8 +33,8 @@ import com.pkpm.pay.user.service.RpPayProductService;
 
 /**
  * 支付产品管理
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 @Controller
 @RequestMapping("/pay/product")

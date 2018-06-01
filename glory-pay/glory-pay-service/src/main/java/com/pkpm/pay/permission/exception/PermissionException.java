@@ -9,7 +9,7 @@ import com.pkpm.pay.common.core.exception.BizException;
 /**
  * 管理系统权限模块异常.
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

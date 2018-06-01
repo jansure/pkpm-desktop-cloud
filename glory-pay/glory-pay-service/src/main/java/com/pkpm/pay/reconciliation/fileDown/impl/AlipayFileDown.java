@@ -38,7 +38,7 @@ import com.pkpm.pay.trade.utils.AlipayConfigUtil;
 /**
  * 支付宝账单下载.
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

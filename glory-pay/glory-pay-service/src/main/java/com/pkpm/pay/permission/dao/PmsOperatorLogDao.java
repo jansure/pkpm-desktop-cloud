@@ -20,7 +20,7 @@ import com.pkpm.pay.permission.entity.PmsOperatorLog;
 /**
  * 操作员日志dao
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

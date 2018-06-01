@@ -28,8 +28,8 @@ import com.pkpm.pay.common.core.exception.BizException;
 
 /**
  * Spring异常拦截器.
- * 龙果学院：www.roncoo.com
- * @author zenghao
+ * glory-cloud
+ * @author
  */
 @ControllerAdvice
 public class WebExceptionHandler {

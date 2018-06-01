@@ -24,8 +24,8 @@ import org.apache.commons.logging.LogFactory;
 /**
  * <b>功能说明:支付宝属性文件加载工具.
  * </b>
- * @author  Peter
- * <a href="http://www.roncoo.com">龙果学院(www.roncoo.com)</a>
+ * @author  jansure
+ *
  */
 public class AlipayConfigUtil {
 

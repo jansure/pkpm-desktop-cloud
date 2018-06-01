@@ -26,8 +26,8 @@ import javax.servlet.http.HttpServletResponse;
  *      该控制类用来支撑商户查询订单结果
  * </b>
  *
- * @author Peter
- *         <a href="http://www.roncoo.com">龙果学院(www.roncoo.com)</a>
+ * @author jansure
+ *
  */
 @Controller
 @RequestMapping("merchantOrderQuery")

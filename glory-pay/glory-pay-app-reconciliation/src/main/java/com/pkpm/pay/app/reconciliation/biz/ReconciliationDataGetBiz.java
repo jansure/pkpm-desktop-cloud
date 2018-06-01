@@ -34,7 +34,7 @@ import com.pkpm.pay.trade.service.RpTradePaymentQueryService;
 /**
  * 平台数据获取biz业务类.
  * 
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

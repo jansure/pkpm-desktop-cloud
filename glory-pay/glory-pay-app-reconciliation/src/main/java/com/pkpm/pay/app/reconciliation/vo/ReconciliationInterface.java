@@ -24,7 +24,7 @@ import com.pkpm.pay.common.core.enums.PublicStatusEnum;
 /**
  * 对账接口实体
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

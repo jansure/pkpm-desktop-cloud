@@ -49,7 +49,7 @@ import com.pkpm.pay.permission.utils.ValidateUtils;
 /**
  * 权限管理模块操作员管理
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

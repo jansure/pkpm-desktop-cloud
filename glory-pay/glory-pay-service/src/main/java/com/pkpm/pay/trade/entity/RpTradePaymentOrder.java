@@ -24,8 +24,8 @@ import com.pkpm.pay.common.core.enums.PublicEnum;
 
 /**
  * <b>功能说明:商户支付订单实体类</b>
- * @author  Peter
- * <a href="http://www.roncoo.com">龙果学院(www.roncoo.com)</a>
+ * @author  jansure
+ *
  */
 public class RpTradePaymentOrder extends BaseEntity implements Serializable {
 

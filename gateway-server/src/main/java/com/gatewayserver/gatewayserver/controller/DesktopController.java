@@ -2,7 +2,8 @@ package com.gatewayserver.gatewayserver.controller;
 
 import javax.annotation.Resource;
 
-import com.gateway.common.dto.DesktopParam;
+import com.desktop.utils.JsonUtil;
+import com.gateway.common.dto.*;
 import com.gatewayserver.gatewayserver.service.AdService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.desktop.utils.page.ResultObject;
 import com.gateway.common.domain.CommonRequestBean;
-import com.gateway.common.dto.DesktopCreation;
-import com.gateway.common.dto.DesktopRequest;
-import com.gateway.common.dto.JobBean;
 import com.gatewayserver.gatewayserver.service.DesktopService;
 import com.gatewayserver.gatewayserver.utils.CommonRequestBeanBuilder;
 import com.gatewayserver.gatewayserver.utils.CommonRequestBeanUtil;
@@ -152,14 +150,29 @@ public class DesktopController {
      * @return ResultObject
      */
     @PostMapping(value = "queryDesktopDetail")
-    public ResultObject queryDesktopDetail(@RequestBody CommonRequestBean commonRequestBean) {
+	public ResultObject queryDesktopDetail(@RequestBody CommonRequestBean commonRequestBean) {
 
-        CommonRequestBeanUtil.checkCommonQueryDesktopDetail(commonRequestBean);
-        DesktopRequest desktopRequest = desktopService.queryDesktopDetail(commonRequestBean);
-        return ResultObject.success(desktopRequest, "查询桌面详情成功!");
+		CommonRequestBeanUtil.checkCommonQueryDesktopDetail(commonRequestBean);
+		DesktopRequest desktopRequest = desktopService.queryDesktopDetail(commonRequestBean);
+		return ResultObject.success(desktopRequest, "查询桌面详情成功!");
 
-    }
+	}
 
+	/**
+	 * 查询桌面详情列表
+	 *
+	 * @param commonRequestBeanList
+	 * @return ResultObject
+	 */
+	@PostMapping(value = "listDesktopDetail")
+	public ResultObject listDesktopDetail(@RequestBody List<CommonRequestBean> commonRequestBeanList) {
+
+		CommonRequestBeanUtil.checkCommonQueryDesktopDetailList(commonRequestBeanList);
+		List<Desktop> desktopList = desktopService.listDesktopDetail(commonRequestBeanList);
+		String strDesktopList = JsonUtil.serializeEx(desktopList);
+		return ResultObject.success(strDesktopList, "查询桌面详情成功!");
+
+	}
     /**
      * 重启、启动、关闭桌面
      *
@@ -190,28 +203,5 @@ public class DesktopController {
         return ResultObject.success(desktopRequest, "查询列表成功!");
 
     }
-
-
-
-	/**
-	 * 抽取公共接口 实现：
-	 *   1、根据desktopId查询计算机名字
-	 *   2、根据projectId,desktoId 桌面运行状态 (HW接口)
-	 *   3、根据projectId和areadCode 查询 destinationIp
-	 *
-	 * StatusFlag=true,查询计算机运行
-	 * ipFlag=true，查询 destinationIp
-	 */
-	@GetMapping(value = "/queryPublicParam")
-	public  ResultObject queryComputerNameOrIpOrStatus(List<String> desktopIds ,  Boolean statusFlag, Boolean ipFlag){
-
-		CommonRequestBeanUtil.checkStatusOrComputerNameOrIp(desktopIds, statusFlag, ipFlag);
-        List<DesktopParam> list = desktopService.queryComputerNameOrIpOrStatus(desktopIds, statusFlag, ipFlag);
-        if( null == list || list.size() ==0 ){
-        	return ResultObject.failure("查询失败，请重新尝试");
-		}
-
-		return ResultObject.success(list);
-	}
 
 }

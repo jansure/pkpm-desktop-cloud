@@ -22,8 +22,8 @@ import com.pkpm.pay.common.core.entity.BaseEntity;
 
 /**
  * 账户信息
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public class RpAccount extends BaseEntity implements Serializable {
 

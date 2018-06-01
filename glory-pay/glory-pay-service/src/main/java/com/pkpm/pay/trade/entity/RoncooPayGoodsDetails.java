@@ -4,8 +4,8 @@ package com.pkpm.pay.trade.entity;
  * <b>功能说明:龙果支付商品明细描述
  * </b>
  *
- * @author Peter
- *         <a href="http://www.roncoo.com">龙果学院(www.roncoo.com)</a>
+ * @author jansure
+ *
  */
 public class RoncooPayGoodsDetails {
 

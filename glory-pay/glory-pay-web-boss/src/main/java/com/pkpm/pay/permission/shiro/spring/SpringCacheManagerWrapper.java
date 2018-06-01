@@ -33,7 +33,7 @@ import org.springframework.cache.support.SimpleValueWrapper;
 /**
  * 包装Spring cache抽象.
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

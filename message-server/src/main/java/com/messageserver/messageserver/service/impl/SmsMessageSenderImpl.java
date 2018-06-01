@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * EmailMessageSenderImpl
  *
- * author jansure.zhang
+ * author .zhang
  * @since 5/5/2018
  */
 

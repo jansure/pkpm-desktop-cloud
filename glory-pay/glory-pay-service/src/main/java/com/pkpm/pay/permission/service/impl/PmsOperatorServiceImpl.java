@@ -38,7 +38,7 @@ import com.pkpm.pay.permission.service.PmsOperatorService;
 /**
  * 操作员service接口实现
  *
- * 龙果学院：www.roncoo.com
+ * glory-cloud
  * 
  * @author：shenjialong
  */

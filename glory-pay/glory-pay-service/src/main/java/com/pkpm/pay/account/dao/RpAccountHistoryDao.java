@@ -24,8 +24,8 @@ import com.pkpm.pay.common.core.dao.BaseDao;
 
 /**
  * 账户历史dao
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public interface RpAccountHistoryDao  extends BaseDao<RpAccountHistory> {
 	List<RpAccountHistory> listPageByParams(Map<String, Object> params);

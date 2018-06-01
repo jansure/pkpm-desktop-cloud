@@ -30,7 +30,6 @@ public class RedisCache implements Cache{
                     redisConfig.getSoTimeout(), redisConfig.getPassword(), redisConfig.getDatabase(), redisConfig.getClientName(),
                     redisConfig.isSsl(), redisConfig.getSslSocketFactory(), redisConfig.getSslParameters(),
                     redisConfig.getHostnameVerifier());
-            System.out.println(redisConfig.getHost());
             }
         catch (Exception e) {
             System.err.println(e.getStackTrace().toString());
@@ -110,6 +109,22 @@ public class RedisCache implements Cache{
                     return redisConfig.getSerializer().deserialize(
                             jedis.hget(id.getBytes(),key.toString().getBytes())
                     );
+                }
+        );
+    }
+    
+    /**
+     * 
+     * @Title: getAll  
+     * @Description: 获取所有的键值对
+     * @return Map<byte[],byte[]>    返回类型  
+     * @throws
+     */
+    public Map<byte[],byte[]> getAll() {
+        return (Map<byte[],byte[]>)this.execute(
+        		jedis -> {
+                    Map<byte[],byte[]> result = jedis.hgetAll(id.getBytes());
+                    return result;
                 }
         );
     }

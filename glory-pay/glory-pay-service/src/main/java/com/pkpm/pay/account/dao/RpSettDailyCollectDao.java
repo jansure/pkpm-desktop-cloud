@@ -20,8 +20,8 @@ import com.pkpm.pay.common.core.dao.BaseDao;
 
 /**
  * 每日待结算汇总dao
- * 龙果学院：www.roncoo.com
- * @author：zenghao
+ * glory-cloud
+ * @author：
  */
 public interface RpSettDailyCollectDao  extends BaseDao<RpSettDailyCollect> {
 }

@@ -1,10 +1,7 @@
 package com.gatewayserver.gatewayserver.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.annotation.Resource;
 
@@ -85,9 +82,6 @@ public class DesktopServiceImpl implements DesktopService {
 	private AdService adService;
 	@Resource
 	private PkpmOperatorStatusMapper pkpmOperatorStatusMapper;
-
-	@Resource
-	private PkpmOperatorStatusDAO  pkpmOperatorStatusDAO;
 
 	@Override
 	public String createToken(String projectId) {
@@ -386,6 +380,57 @@ public class DesktopServiceImpl implements DesktopService {
         throw Exceptions.newBusinessException("未能成功查询桌面详情任务,请从新查询");
     }
 
+
+	/**
+	 *  查询桌面详情列表
+	 * @param commonRequestBeanList
+	 * @return
+	 */
+	@Override
+	public List<Desktop>   listDesktopDetail(List<CommonRequestBean> commonRequestBeanList) {
+
+		List<DesktopRequest> desktopRequestList = null;
+		Set<String> set = new HashSet<>();
+		List<String> desktopIdList = new ArrayList<>();
+
+		commonRequestBeanList.forEach(
+				commonRequestBean ->{
+					//相同的projectId 过滤掉
+					set.add(commonRequestBean.getProjectId());
+					desktopIdList.add(commonRequestBean.getDesktopId());
+				}
+		);
+
+		//根据projectId 查询桌面
+		for (String projectId : set) {
+			CommonRequestBean newCommonRequestBean = new CommonRequestBean();
+			newCommonRequestBean.setProjectId(projectId);
+			newCommonRequestBean.setQueryDesktopType(DesktopServiceEnum.LIST_DESKTOP_DETAIL.toString());
+			DesktopRequest desktopRequest = queryDesktopListOrDetail(newCommonRequestBean);
+			desktopRequestList.add(desktopRequest);
+		}
+
+		//根据desktopId 过滤 查询出来的桌面
+		List<Desktop>  desktopList = new ArrayList<>();
+
+		//遍历集合取出每一个DesktopRequest
+		for (DesktopRequest desktopRequest : desktopRequestList) {
+			List<Desktop> desktops = desktopRequest.getDesktops();
+			for (Desktop desktop : desktops) {
+                //如果desktop中的desktopId 和传过来的  desktopId相同，此桌面就添加集合
+				for (String desktopId : desktopIdList) {
+                      if( desktopId == desktop.getDesktopId() ){
+						  desktopList.add(desktop);
+					  }
+				}
+
+			}
+
+		}
+
+		return desktopList;
+	}
+
 	@Override
 	public String changeDesktop(CommonRequestBean requestBean) {
 
@@ -632,7 +677,7 @@ public class DesktopServiceImpl implements DesktopService {
         Integer statusCode = null;
         String message = null;
         String jsonStr = "";
-        CommonRequestBean requestbean = commonRequestBeanBuilder.buildBeanForQueryqueryDesktopListOrDetail(requestBean);
+        CommonRequestBean requestbean = commonRequestBeanBuilder.buildBeanForQueryDesktopListOrDetail(requestBean);
 
         String token = requestbean.getPkpmToken().getToken();
         String url = requestbean.getPkpmWorkspaceUrl().getUrl()
@@ -690,7 +735,7 @@ public class DesktopServiceImpl implements DesktopService {
             
             if ( HttpStatus.OK.value() == statusCode ) {
                 String body = myHttpResponse.getBody();
-                DesktopRequest desktopRequest = JsonUtil.deserialize(body, DesktopRequest.class);
+				DesktopRequest desktopRequest = JsonUtil.deserialize(body, DesktopRequest.class);
                 return desktopRequest;
             }
         } catch (HttpProcessException e) {
@@ -797,15 +842,5 @@ public class DesktopServiceImpl implements DesktopService {
 		} else {
 			log.info("没有需要更新状态的任务！");
 		}
-	}
-
-
-
-	@Override
-	public List<DesktopParam> queryComputerNameOrIpOrStatus(List<String> desktopIds, Boolean statusFlag, Boolean ipFlag) {
-
-		List<PkpmOperatorStatus>  operatorStatusList = pkpmOperatorStatusDAO.queryPkpmOperatorStatusByDesktopIds(desktopIds);
-
-		return null;
 	}
 }
