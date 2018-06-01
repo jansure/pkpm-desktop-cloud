@@ -37,7 +37,7 @@ public class DocumentServiceImpl implements DocumentService {
 			if (existsFile(filename)) {
 				// 若存在文件返回文件内容
 				String url = sysConfigService.getPkpmSysConfigByKey(SysConstant.FILE_BASE_URL).getValue() + "/" + filename;
-				FileUtil.getHttpResponse(url);
+				txtContent = FileUtil.getHttpResponse(url);
 				return txtContent;
 			}
 		} catch (UnsupportedEncodingException e) {
