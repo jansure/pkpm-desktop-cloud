@@ -8,19 +8,20 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.client.HttpClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.desktop.constant.JobStatusEnum;
 import com.desktop.constant.OperatoreTypeEnum;
 import com.desktop.constant.ResponseStatusEnum;
+import com.desktop.constant.SubscriptionStatusEnum;
+import com.desktop.utils.HttpConfigBuilder;
 import com.desktop.utils.JsonUtil;
 import com.desktop.utils.page.ResultObject;
 import com.pkpm.httpclientutil.HttpClientUtil;
 import com.pkpm.httpclientutil.HuaWeiResponse;
 import com.pkpm.httpclientutil.MyHttpResponse;
-import com.pkpm.httpclientutil.builder.HCB;
 import com.pkpm.httpclientutil.common.HttpConfig;
 import com.pkpm.httpclientutil.common.HttpMethods;
 import com.pkpm.httpclientutil.common.util.PropertiesUtil;
@@ -32,25 +33,38 @@ import lombok.extern.slf4j.Slf4j;
 public class PullerBusiness {
 	
 	/**
+	 * 分隔符
+	 */
+	private static String COMMON_SEPARATOR = ",";
+	
+	/**
 	 * 设置getwayServer的主机地址
 	 */
-	private static final String serverHost = PropertiesUtil.getProperty("puller_config.properties", "server_host");
+	@Value("${server_host}")
+	private String serverHost;
 
 	/**
 	 * 设置pkpmCloud的主机地址
 	 */
-	private static final String cloudHost = PropertiesUtil.getProperty("puller_config.properties", "cloud_host");
+	@Value("${business_host}")
+	private String businessHost;
 
 	
 	/**
 	 * 设置任务更新条数
 	 */
-	private static final String jobSize = PropertiesUtil.getProperty("puller_config.properties", "job_size");
+	@Value("${job_size}")
+	private String jobSize;
 
 	/**
 	 * 存放启动参数中设置的监控类型参数
 	 */
 	private static Set<String> opTypeSet = new HashSet<String>();
+	
+	/**
+	 * 存放启动参数中设置的监控区域名称参数
+	 */
+	private static String areaCode = "";
 	
 	static {
 		String opType = System.getProperty("opType");
@@ -66,6 +80,12 @@ public class PullerBusiness {
 				}
 			}
 		}
+		
+		String areaCodeStr = System.getProperty("areaCode");
+		if(StringUtils.isNotEmpty(areaCodeStr)) {
+			areaCode = areaCodeStr.toLowerCase();
+		}
+		
 	}
 	
 	/**
@@ -75,19 +95,13 @@ public class PullerBusiness {
 	 * @return void    无返回
 	 */
 	public void updateJobStatus() {
-		String url = serverHost + "/puller/getJobTasks?jobSize=" + jobSize;
-		
+		log.info("areaCode:{}", areaCode);
+		String url = serverHost + "/puller/getJobTasks?jobSize={jobSize}&areaCode={areaCode}";
+		url = url.replace("{jobSize}", jobSize).replace("{areaCode}", areaCode);
+		log.info(url);
 		try {
-			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
-					.retry(5) // 重试5次
-			;
-			
-			HttpClient client = hcb.build();
-			// 插件式配置请求参数（网址、请求参数、编码、client）
-			HttpConfig config = HttpConfig.custom()
-					.client(client).url(url) // 设置请求的url
-					.encoding("utf-8"); // 设置请求和返回编码，默认就是Charset.defaultCharset()
 
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url,  5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.GET));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
@@ -145,7 +159,7 @@ public class PullerBusiness {
 		JobDetail detail = getJobDetailByJobId(jobId);
 		if(detail == null) {
 			//更新任务表，设置状态为失败
-			updateJobTask(jobId, JobStatusEnum.FAILED.toString());
+			updateJobTask(jobId, JobStatusEnum.FAILED.toString(), null);
 			log.error("任务没有详细信息，设置任务状态为失败。任务ID:{}", jobId);
 			return;
 		}
@@ -184,6 +198,13 @@ public class PullerBusiness {
 			
 			//根据类型获取最终任务状态
 			String status = getFinalStatus(huaweiResponse, operatorType);
+			String desktopId = null;
+			if(status.contains(COMMON_SEPARATOR)) {
+				int index = status.indexOf(COMMON_SEPARATOR);
+				String realStatus = status.substring(0, index);
+				desktopId = status.substring(index + 1);
+				status = realStatus;
+			}
 			
 			//增加查询属性时失败状态后，根据检查最大时间判断最终是否失败
 			if(status.equals(JobStatusEnum.FAILED.toString())) {
@@ -196,12 +217,12 @@ public class PullerBusiness {
 			}
 					
 			//更新任务详情表,同时插入更新任务记录
-			updateJobDetail(jobId, status);
+			updateJobDetail(jobId, status, desktopId);
 			
 			//更新任务表为成功或失败，更新后此数据不在更新
 			if(status.equals(JobStatusEnum.SUCCESS.toString())
 					|| status.equals(JobStatusEnum.FAILED.toString())) {
-				updateJobTask(jobId, status);
+				updateJobTask(jobId, status, desktopId);
 			}
 			
 			//创建桌面或删除桌面成功，调用云平台订单更新接口
@@ -209,10 +230,17 @@ public class PullerBusiness {
 					&& (operatorType.equals(OperatoreTypeEnum.DELETE.toString())
 							|| operatorType.equals(OperatoreTypeEnum.DESKTOP.toString()))) {
 				if(operatorType.equals(OperatoreTypeEnum.DELETE.toString())) {
-					detail.setStatus("");
+					detail.setStatus(SubscriptionStatusEnum.INVALID.toString());
 				}else {
-					detail.setStatus("");
+					detail.setStatus(SubscriptionStatusEnum.VALID.toString());
 				}
+				
+				detail.setDesktopId(desktopId);
+				updateCloudSubscription(detail);
+			}else if(status.equals(JobStatusEnum.FAILED.toString())
+					&& operatorType.equals(OperatoreTypeEnum.DESKTOP.toString())) {//创建桌面失败，返回失败状态
+				
+				detail.setStatus(SubscriptionStatusEnum.FAILED.toString());
 				updateCloudSubscription(detail);
 			}
 			
@@ -233,16 +261,8 @@ public class PullerBusiness {
 		String url = serverHost + "/puller/getJobDetail?jobId=" + jobId;
 		
 		try {
-			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
-					.retry(5) // 重试5次
-			;
-			
-			HttpClient client = hcb.build();
-			// 插件式配置请求参数（网址、请求参数、编码、client）
-			HttpConfig config = HttpConfig.custom()
-					.client(client).url(url) // 设置请求的url
-					.encoding("utf-8"); // 设置请求和返回编码，默认就是Charset.defaultCharset()
 
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url,  5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.GET));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
@@ -290,16 +310,8 @@ public class PullerBusiness {
 		url = url.replace("{jobId}", jobId).replace("{projectId}", projectId).replace("{operatorType}", operatorType);
 		log.info(url);
 		try {
-			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
-					.retry(5) // 重试5次
-			;
 			
-			HttpClient client = hcb.build();
-			// 插件式配置请求参数（网址、请求参数、编码、client）
-			HttpConfig config = HttpConfig.custom()
-					.client(client).url(url) // 设置请求的url
-					.encoding("utf-8"); // 设置请求和返回编码，默认就是Charset.defaultCharset()
-
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url,  5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.GET));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
@@ -372,16 +384,8 @@ public class PullerBusiness {
 		String url = serverHost + "/puller/getConfig";
 		
 		try {
-			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
-					.retry(5) // 重试5次
-			;
 			
-			HttpClient client = hcb.build();
-			// 插件式配置请求参数（网址、请求参数、编码、client）
-			HttpConfig config = HttpConfig.custom()
-					.client(client).url(url) // 设置请求的url
-					.encoding("utf-8"); // 设置请求和返回编码，默认就是Charset.defaultCharset()
-
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url,  5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.GET));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
@@ -430,7 +434,15 @@ public class PullerBusiness {
 				if(status.equals(ResponseStatusEnum.RUNNING.toString())) {
 					return JobStatusEnum.CREATE.toString();
 				}else if(status.equals(ResponseStatusEnum.SUCCESS.toString())) {
-					return JobStatusEnum.SUCCESS.toString();
+					
+					//增加返回桌面Id
+					String desktopId = "";
+					try {
+						desktopId = huaweiResponse.getSub_jobs().get(0).getEntities().getDesktop_id();
+					}catch(Exception ex) {
+						log.error("获取桌面ID错误！" + huaweiResponse.getJob_id());
+					}
+					return JobStatusEnum.SUCCESS.toString() + COMMON_SEPARATOR + desktopId;
 				}else if(status.equals(ResponseStatusEnum.FAILED.toString())) {
 					return JobStatusEnum.FAILED.toString();
 				}
@@ -464,10 +476,17 @@ public class PullerBusiness {
 			}
 			
 		}else if(operatorType.equals(OperatoreTypeEnum.CLOSE.toString())){
-			String status = huaweiResponse.getDesktop().getStatus();
-			if(status.equals(ResponseStatusEnum.SHUTOFF.toString())) {
-				return JobStatusEnum.SUCCESS.toString();
-			}else {
+			
+			try {
+				String status = huaweiResponse.getDesktop().getStatus();
+				if(status.equals(ResponseStatusEnum.SHUTOFF.toString())) {
+					return JobStatusEnum.SUCCESS.toString();
+				}
+				
+				return JobStatusEnum.FAILED.toString();
+				
+			} catch(Exception ex) {
+				
 				return JobStatusEnum.FAILED.toString();
 			}
 			
@@ -484,27 +503,21 @@ public class PullerBusiness {
 	 * @param status    任务状态
 	 * @throws  
 	 */   
-	private void updateJobTask(String jobId, String status) {
+	private void updateJobTask(String jobId, String status, String desktopId) {
 		
 		String url = serverHost + "/puller/updateJobTask";
 		
-		//设置请参数
+		//设置请求参数
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("jobId", jobId);
 		jsonMap.put("status", status);
+		if(desktopId != null) {
+			jsonMap.put("desktopId", desktopId);
+		}
 		
 		try {
-			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
-					.retry(5) // 重试5次
-			;
-			
-			HttpClient client = hcb.build();
-			// 插件式配置请求参数（网址、请求参数、编码、client）
-			HttpConfig config = HttpConfig.custom()
-					.client(client).url(url) // 设置请求的url
-					.map(jsonMap)
-					.encoding("utf-8"); // 设置请求和返回编码，默认就是Charset.defaultCharset()
 
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url, jsonMap, 5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.POST));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
@@ -542,7 +555,7 @@ public class PullerBusiness {
 	 * @param status    任务状态
 	 * @throws  
 	 */  
-	private void updateJobDetail(String jobId, String status) {
+	private void updateJobDetail(String jobId, String status, String desktopId) {
 		
 		String url = serverHost + "/puller/updateJobDetail";
 		
@@ -551,18 +564,13 @@ public class PullerBusiness {
 		jsonMap.put("jobId", jobId);
 		jsonMap.put("status", status);
 		
+		if(desktopId != null) {
+			jsonMap.put("desktopId", desktopId);
+		}
+		
 		try {
-			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
-					.retry(5) // 重试5次
-			;
 			
-			HttpClient client = hcb.build();
-			// 插件式配置请求参数（网址、请求参数、编码、client）
-			HttpConfig config = HttpConfig.custom()
-					.client(client).url(url) // 设置请求的url
-					.map(jsonMap)
-					.encoding("utf-8"); // 设置请求和返回编码，默认就是Charset.defaultCharset()
-
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url, jsonMap, 5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.POST));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
@@ -599,28 +607,25 @@ public class PullerBusiness {
 	 * @param detail 任务详情
 	 * @throws  
 	 */   
-	private void updateCloudSubscription(JobDetail detail) {
-		
-		String url = cloudHost + "/puller/updateJobTask";
+	public void updateCloudSubscription(JobDetail detail) {
+
+		String url = businessHost + "/subscription/setSubsStatus";
 		
 		//设置请参数
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("subsId", detail.getSubsId());
 		jsonMap.put("status", detail.getStatus());
-		jsonMap.put("projectId", detail.getProjectId());
+		
+		String desktopId = detail.getDesktopId();
+		if(StringUtils.isNotEmpty(desktopId)) {
+			jsonMap.put("desktopId", desktopId);
+		}
+		
+		String jsonStr = JsonUtil.serialize(jsonMap);
 		
 		try {
-			HCB hcb = HCB.custom().timeout(10000) // 超时，设置为1000时会报错
-					.retry(5) // 重试5次
-			;
-			
-			HttpClient client = hcb.build();
-			// 插件式配置请求参数（网址、请求参数、编码、client）
-			HttpConfig config = HttpConfig.custom()
-					.client(client).url(url) // 设置请求的url
-					.map(jsonMap)
-					.encoding("utf-8"); // 设置请求和返回编码，默认就是Charset.defaultCharset()
 
+			HttpConfig config = HttpConfigBuilder.buildHttpConfigNoToken(url, jsonStr, 5, "utf-8", 100000);
 			String responseStr = HttpClientUtil.mysend(config.method(HttpMethods.POST));
 			MyHttpResponse myHttpResponse = JsonUtil.deserialize(responseStr, MyHttpResponse.class);
 			Integer statusCode = myHttpResponse.getStatusCode();
@@ -650,5 +655,9 @@ public class PullerBusiness {
 		}
 		
 	}
-
+	
+	public static void main(String[] args) {
+		
+	}
+	
 }

@@ -7,4 +7,22 @@
 			where component_id = #{componentId,jdbcType=INTEGER}
 			and component_type = #{componentType,jdbcType=INTEGER}
 	</select>
+	
+	
+	<resultMap id="ComponentMap" type="com.cabr.pkpm.entity.component.ComponentInfo">
+		<id property="componentId" column="component_id" />
+		<result property="componentName" column="component_name" />
+		<result property="componentDesc" column="component_desc" />
+		<result property="componentType" column="component_type" />
+		<result property="componentTypeName" column="component_type_name" />
+		<result property="isDefault" column="is_default" />
+		<result property="hwProductId" column="hw_product_id" />
+	</resultMap>
+	
+	<select id="getComponentInfo" resultMap="ComponentMap" parameterType="java.lang.Integer">
+			select *
+			from pkpm_cloud_component_def
+			where component_id = #{componentId,jdbcType=INTEGER}
+			and component_type = #{componentType,jdbcType=INTEGER}
+	</select>
 </mapper>

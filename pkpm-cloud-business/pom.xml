@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>pkpm-cloud</groupId>
+	<groupId>pkpm-desktop-cloud</groupId>
 	<artifactId>pkpm-cloud-business</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -13,22 +13,11 @@
 	<description>Demo project for Spring Boot</description>
 
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.0.0.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<groupId>pkpm-desktop-cloud</groupId>
+		<artifactId>pkpm-desktop-cloud</artifactId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
-		<spring.cloud.version>Edgware.RELEASE</spring.cloud.version>
-		<mapstruct.version>1.2.0.Final</mapstruct.version>
-		<masterproject.version>the.appropriate.version</masterproject.version>
-		<fastjson.version>1.1.15</fastjson.version>
-		<commons-lang3.version>3.7</commons-lang3.version>
-	</properties>
 
 	<dependencies>
 		<dependency>
@@ -50,10 +39,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
 		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-security</artifactId> 
 			</dependency> -->
 		<!--thymeleaf -->
@@ -91,6 +76,7 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		
 		<!-- fastjson -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -110,29 +96,45 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
+		<!--   <dependency>
 			<groupId>com.huawei.apigateway</groupId>
 			<artifactId>java-sdk-core</artifactId>
 			<version>2.0.1</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/java-sdk-core-2.0.1.jar</systemPath>
-		</dependency>
-		<dependency>
+		</dependency>  -->
+	 	 <dependency>
+			<groupId>com.huawei</groupId>
+			<artifactId>java-sdk-core-2.0.1</artifactId>
+			<version>2.0.1</version>
+		</dependency>  
+	  <!--  <dependency>
 			<groupId>smn</groupId>
 			<artifactId>cloud-java-sdk-smn</artifactId>
 			<version>1.0.0</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/cloud-java-sdk-smn-1.0.0.jar</systemPath>
-		</dependency>
+		</dependency>  -->
+	  <dependency>
+			<groupId>com.huawei</groupId>
+			<artifactId>cloud-java-sdk-smn-1.0.0</artifactId>
+			<version>1.0.0</version>
+		</dependency> 
+		
 		<dependency>
+			<groupId>pkpm-desktop-cloud</groupId>
+			<artifactId>http-client-util</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<!-- <dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.5.3</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.9.4</version>
+			<version>2.8.10</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -172,7 +174,8 @@
 			<artifactId>log4j-api</artifactId>
 			<version>2.9.1</version>
 		</dependency>
-		<dependency>
+		<!--xuhe注释掉 与springboottest的新版2.1.5powermock冲突!-->
+		<!--<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-mockito</artifactId>
 			<version>1.6.6</version>
@@ -189,7 +192,7 @@
 			<artifactId>powermock-core</artifactId>
 			<version>1.6.6</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -201,7 +204,47 @@
 			<version>2.4</version>
 		</dependency>
 
+		<!-- mybatis -->
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>1.3.1</version>
+		</dependency>
 
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-typehandlers-jsr310</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+
+		 <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.18</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.1.6</version>
+		</dependency>
+		<!-- mybatis支持LocalDateTime -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-typehandlers-jsr310</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+		<!-- mysql -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>com.github.pagehelper</groupId>
@@ -227,8 +270,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>pkpm-desktop-gateway</groupId>
-			<artifactId>gateway-utils</artifactId>
+			<groupId>pkpm-desktop-cloud</groupId>
+			<artifactId>desktop-cloud-utils</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
@@ -237,8 +280,83 @@
 			<version>1.0</version>
 		</dependency>
 		<dependency>
-			<groupId>pkpm-desktop-gateway</groupId>
+			<groupId>pkpm-desktop-cloud</groupId>
 			<artifactId>gateway-common</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<!-- jackson jsr310 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-parameter-names</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jdk8</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
+		<!-- log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+
+		<!-- fastjson -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.1.15</version>
+		</dependency>
+
+		<!-- swagger -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+
+		<!-- apache poi -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.17</version>
+		</dependency>
+
+		<!-- apache poi-ooxml -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.17</version>
+		</dependency>
+
+		<!-- 分页插件 -->
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper-spring-boot-starter</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>pkpm-desktop-cloud</groupId>
+			<artifactId>desktop-cloud-utils</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>pkpm-desktop-cloud</groupId>
+			<artifactId>gateway-common</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pkpm-desktop-cloud</groupId>
+			<artifactId>message-server</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
@@ -253,7 +371,7 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
+		 <plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
 					<finalName>smsbatchsendtool</finalName>
@@ -268,7 +386,25 @@
 						<!-- <goals> <goal>single</goal> </goals> -->
 					</execution>
 				</executions>
-			</plugin>
+			</plugin> 
+			<!-- <plugin>  
+                <groupId>org.apache.maven.plugins</groupId>  
+                <artifactId>maven-dependency-plugin</artifactId>  
+                <executions>  
+                    <execution>  
+                        <id>copy</id>  
+                        <phase>package</phase>  
+                        <goals>  
+                            <goal>copy-dependencies</goal>  
+                        </goals>  
+                        <configuration>  
+                            <outputDirectory>  
+                                ${project.build.directory}/lib  
+                            </outputDirectory>  
+                        </configuration>  
+                    </execution>  
+                </executions>  
+            </plugin> -->
 		</plugins>
 
 	</build>

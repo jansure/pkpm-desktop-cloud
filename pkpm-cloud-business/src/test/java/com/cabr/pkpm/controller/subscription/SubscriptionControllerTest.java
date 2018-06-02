@@ -72,7 +72,6 @@ public class SubscriptionControllerTest {
     	
     	String productMapStr = JSON.toJSONString(productNameVOList);
     	System.out.println(productMapStr);
-    	System.out.println("====================================");
           System.out.println(this.mockMvc  
           .perform((post("/subscription/immediatelyUse")).session((MockHttpSession)getLoginSession())  
                   .contentType(MediaType.APPLICATION_FORM_URLENCODED).accept(MediaType.APPLICATION_JSON)  
@@ -86,7 +85,6 @@ public class SubscriptionControllerTest {
       			.param("cloudStorageTimeName", "6") 
       		.param("productNameVOList", productMapStr) 
                   ).andExpect(status().isOk()));
-          System.out.println(1111);
 	}
 	
     

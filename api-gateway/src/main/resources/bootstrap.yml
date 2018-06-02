@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: api-gateway
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+    #active: ${SPRING_PROFILES_ACTIVE:prod}
+  #redis:
+    #host: 192.168.32.128
+    #host: 192.168.20.4
+    #port: 6379
+  redis:
+    host: 49.4.8.123
+    port: 26379
+    password: kongbaoping@cabr
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8010/eureka/
+  instance:
+    prefer-ip-address: true
+
+logging.level.org.springframework.security: DEBUG
+logging.leve.org.springframework: DEBUG

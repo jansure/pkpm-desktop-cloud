@@ -1,34 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>pkpm-desktop-gateway</groupId>
-    <artifactId>pkpm-desktop-gateway.server</artifactId>
-    <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
-    <modules>
-        <module>gateway-utils</module>
-        <module>desktop-gateway-server</module>
-        <module>http-client-util</module>
-        <module>puller</module>
-        <module>desktop-request-bean</module>
-    </modules>
+	<groupId>pkpm-desktop-cloud</groupId>
+	<artifactId>pkpm-desktop-cloud</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<modules>
+		<module>desktop-cloud-utils</module>
+		<module>gateway-server</module>
+		<module>http-client-util</module>
+		<module>puller</module>
+		<module>gateway-common</module>
+		<module>gateway-id-server</module>
+		<module>pkpm-cloud-business</module>
+		<module>api-gateway</module>
+		<module>auth-server</module>
+		<module>config-server</module>
+		<module>pkpm-redis-util</module>
+		<module>message-server</module>
+		<module>file-server</module>
+		<module>desktop-cloud-shutdown</module>
+		<module>media-content-server</module>
+		<module>eureka-server</module>
+		<module>desktop-cloud-business</module>
+		<module>search</module>
+		<module>media-content-server</module>
+		<module>glory-pay</module>
+		<module>pdf-converter-util</module>
+		
+	</modules>
 
-    <!-- 统一版本号依赖 -->
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.0.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
+	<!-- 统一版本号依赖 -->
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.9.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <spring.cloud.version>Edgware.RELEASE</spring.cloud.version>
-        <mapstruct.version>1.2.0.Final</mapstruct.version>
-    </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<spring.cloud.version>Edgware.RELEASE</spring.cloud.version>
+		<mapstruct.version>1.2.0.Final</mapstruct.version>
+		<fastjson.version>1.1.15</fastjson.version>
+		<commons-lang3.version>3.7</commons-lang3.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+					<forceJavacCompilerUse>true</forceJavacCompilerUse>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>1.16.18</version>
+						</path>
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>${mapstruct.version}</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
 </project>

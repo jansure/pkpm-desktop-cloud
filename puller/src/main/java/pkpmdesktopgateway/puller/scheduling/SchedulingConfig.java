@@ -29,6 +29,6 @@ public class SchedulingConfig {
 
         //执行业务操作
         pullerBusiness.updateJobStatus();
-        ;
     }
+    
 }

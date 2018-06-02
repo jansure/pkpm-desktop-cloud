@@ -1,0 +1,17 @@
+server:
+  port: 18080
+zuul:
+  routes:
+    oauth-server:
+      path: /uaa/**
+      serviceId: auth-server
+      sensitiveHeaders:
+      strip-prefix: false
+    pkpmcloud-server:
+      path: /pkpm-desktop-cloud/**
+      #serviceId: pkpmcloud-server
+      serviceId: pkpmcloud
+      strip-prefix: true  ##当stripPrefix=true的时候 （http://127.0.0.1:8181/api/user/list -> http://192.168.1.100:8080/user/list）  
+  host:
+    connect-timeout-millis: 60000
+    socket-timeout-millis: 60000

@@ -7,10 +7,12 @@
 		<result property="productType" column="product_type" />
 		<result property="productDesc" column="product_desc" />
 		<result property="componentId" column="component_id" />
+		
+		<result property="imageId" column="image_id" />
 	</resultMap>
 
 	<select id="getProductByProductId" parameterType="int" resultMap="ProductMap">
-		SELECT DISTINCT(product_id), product_name, product_type, product_desc, component_id
+		SELECT DISTINCT(product_id), product_name, product_type, product_desc, component_id,image_id
 		FROM pkpm_cloud_product_def
 		WHERE product_id = #{productId}
 	</select>
